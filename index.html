@@ -1680,83 +1680,79 @@
       return await sha256(raw);
     }
 
-    // Vérifie ou enregistre l'empreinte de l'appareil dans localStorage
-    async function checkFingerprint(userName) {
-  const fp = await deviceFingerprint();
-  const ua = navigator.userAgent;
-
-  try {
-    // 1. Demande au serveur si cet appareil est déjà connu
-    const url = SCRIPT_URL
-      + '?action=check_device'
-      + '&name=' + encodeURIComponent(userName)
-      + '&fp='   + encodeURIComponent(fp);
-    const res  = await fetch(url);
-    const data = await res.json();
-
-    if (data.status === 'known') {
-      return { ok: true, firstLogin: false };
+    // Cache local de l'empreinte (évite l'appel GAS pour les appareils déjà enregistrés)
+    function getCachedFp(userName) {
+      return localStorage.getItem('mathsPremiere_fp_' + userName.toLowerCase());
+    }
+    function setCachedFp(userName, fp) {
+      localStorage.setItem('mathsPremiere_fp_' + userName.toLowerCase(), fp);
     }
 
-    if (data.status === 'full') {
-      return { ok: false, reason: 'full', limit: data.limit };
+    // Vérifie ou enregistre l'empreinte — court-circuite GAS si l'appareil est déjà connu
+    async function checkFingerprint(userName, fp) {
+      // ✅ Appareil déjà connu localement → pas d'appel réseau, instantané
+      if (getCachedFp(userName) === fp) {
+        return { ok: true, firstLogin: false };
+      }
+
+      // 🌐 Premier passage : on demande au serveur
+      try {
+        const url = SCRIPT_URL
+          + '?action=check_device'
+          + '&name=' + encodeURIComponent(userName)
+          + '&fp='   + encodeURIComponent(fp);
+        const data = await fetch(url).then(r => r.json());
+
+        if (data.status === 'full') return { ok: false, reason: 'full', limit: data.limit };
+
+        // 'new' → on enregistre l'appareil dans Google Sheets (fire-and-forget)
+        if (data.status === 'new') {
+          fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({
+              type: 'register_device', name: userName, fp,
+              browser: detectBrowser(navigator.userAgent),
+              os: detectOS(navigator.userAgent),
+              screen: screen.width + 'x' + screen.height
+            })
+          });
+        }
+
+        // 'known' ou 'new' → on met en cache pour les prochaines connexions
+        setCachedFp(userName, fp);
+        return { ok: true, firstLogin: data.status === 'new' };
+
+      } catch (e) {
+        // Réseau inaccessible : on accepte si l'empreinte a déjà été vue un jour
+        if (getCachedFp(userName)) return { ok: true, firstLogin: false };
+        return { ok: false };
+      }
     }
-
-    if (data.status === 'new') {
-      // 2. Enregistre l'appareil dans Google Sheets
-      await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          type:    'register_device',
-          name:    userName,
-          fp:      fp,
-          browser: detectBrowser(ua),
-          os:      detectOS(ua),
-          screen:  screen.width + 'x' + screen.height
-        })
-      });
-      return { ok: true, firstLogin: true };
-    }
-
-  } catch (e) {
-    // Fallback localStorage si le réseau est inaccessible
-    const fpKey  = 'mathsPremiere_fp_' + userName.toLowerCase();
-    const stored = localStorage.getItem(fpKey);
-    if (!stored) { localStorage.setItem(fpKey, fp); return { ok: true, firstLogin: true }; }
-    if (stored === fp) return { ok: true, firstLogin: false };
-  }
-
-  return { ok: false };
-}
 
     async function checkPassword() {
       const nameInput = document.getElementById('name-input');
-      const pwdInput = document.getElementById('pwd-input');
-      const errorEl = document.getElementById('auth-error');
-      const welcome = document.getElementById('auth-welcome');
-
+      const pwdInput  = document.getElementById('pwd-input');
       const enteredName = nameInput.value.trim();
-      const enteredPwd = pwdInput.value.trim();
+      const enteredPwd  = pwdInput.value.trim();
 
       if (!enteredName || !enteredPwd) {
         showError('❌ Remplis ton prénom et ton mot de passe.', nameInput, pwdInput);
         return;
       }
 
-      let users = FALLBACK_USERS;
+      // 🚀 passwords.json + sha256 + empreinte partent en parallèle dès le clic
+      const [usersData, enteredHash, fp] = await Promise.all([
+        fetch('passwords.json?v=' + Date.now())
+          .then(r => r.ok ? r.json() : null)
+          .catch(() => null),
+        sha256(enteredPwd),
+        deviceFingerprint()
+      ]);
 
-      try {
-        const res = await fetch('passwords.json?v=' + Date.now());
-        if (res.ok) {
-          const data = await res.json();
-          if (data.users && data.users.length > 0) users = data.users;
-        }
-      } catch (e) { }
+      const users = usersData?.users?.length ? usersData.users : FALLBACK_USERS;
 
-      // Option A — Vérification nom + hash mot de passe ensemble
-      const enteredHash = await sha256(enteredPwd);
       const match = users.find(u =>
         u.name.toLowerCase() === enteredName.toLowerCase() &&
         u.hash === enteredHash
@@ -1767,23 +1763,26 @@
         return;
       }
 
-      // Option B — Vérification empreinte de l'appareil
-      const fpResult = await checkFingerprint(match.name);
+      // fp est déjà calculé, on le passe directement (pas de double calcul)
+      const fpResult = await checkFingerprint(match.name, fp);
       if (!fpResult.ok) {
-        showError('🚫 Appareil non reconnu. Connecte-toi depuis ton appareil habituel.', nameInput, pwdInput);
+        const msg = fpResult.reason === 'full'
+          ? `🚫 Limite de ${fpResult.limit} appareils atteinte.`
+          : '🚫 Appareil non reconnu. Connecte-toi depuis ton appareil habituel.';
+        showError(msg, nameInput, pwdInput);
         return;
       }
 
       // ✅ Accès accordé
-      const msg = fpResult.firstLogin
+      const welcome = document.getElementById('auth-welcome');
+      welcome.textContent = fpResult.firstLogin
         ? '✅ Bienvenue, ' + match.name + ' ! Appareil enregistré.'
         : '✅ Bienvenue, ' + match.name + ' !';
-      welcome.textContent = msg;
       welcome.style.display = 'block';
-      errorEl.style.display = 'none';
+      document.getElementById('auth-error').style.display = 'none';
       sessionStorage.setItem('mathsPremiere_auth', 'true');
       sessionStorage.setItem('mathsPremiere_user', match.name);
-      logConnexion(match.name);
+      logConnexion(match.name); // fire-and-forget
       setTimeout(() => {
         document.getElementById('auth-overlay').style.display = 'none';
         if (typeof loadStats === 'function') loadStats();
