@@ -486,6 +486,87 @@
       color: var(--text-dim);
     }
 
+    /* ── Ajout élève ── */
+    .add-student-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .add-student-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      border-radius: 16px;
+      padding: 22px 24px;
+      margin-bottom: 28px;
+    }
+
+    .add-student-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .add-student-fields {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .add-student-fields input[type="text"],
+    .add-student-fields input[type="password"] {
+      width: auto;
+      flex: 1;
+      min-width: 140px;
+      margin: 0;
+      padding: 9px 14px;
+      font-size: 13px;
+      border-radius: 10px;
+    }
+
+    .btn-export {
+      background: rgba(201, 168, 76, 0.12);
+      color: var(--gold);
+      padding: 8px 18px;
+      font-size: 12px;
+      border: 1px solid rgba(201, 168, 76, 0.35);
+      border-radius: 40px;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-export:hover {
+      background: rgba(201, 168, 76, 0.22);
+      transform: translateY(-2px);
+    }
+
+    .nopassword-inline {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-dim);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .nopassword-inline input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+      margin: 0;
+      accent-color: var(--gold);
+    }
+
     .spinner {
       display: inline-block;
       width: 20px;
@@ -540,6 +621,34 @@
       </div>
     </div>
     <div id="tab-passwords" class="tab-panel">
+
+      <!-- Formulaire ajout élève -->
+      <div class="add-student-card">
+        <h3>➕ Ajouter un élève</h3>
+        <div class="add-student-fields">
+          <input type="text" id="new-student-name" placeholder="Prénom…" autocomplete="off"
+            onkeydown="if(event.key==='Enter') addStudent()">
+          <input type="password" id="new-student-pwd" placeholder="Mot de passe…" autocomplete="new-password"
+            onkeydown="if(event.key==='Enter') addStudent()">
+          <label class="nopassword-inline">
+            <input type="checkbox" id="new-student-nopwd" onchange="document.getElementById('new-student-pwd').disabled=this.checked;
+                        document.getElementById('new-student-pwd').style.opacity=this.checked?'0.3':'1';">
+            Sans mot de passe
+          </label>
+          <button class="btn btn-green" onclick="addStudent()">Ajouter</button>
+        </div>
+      </div>
+
+      <!-- Barre actions -->
+      <div class="add-student-bar">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.6">
+          Les modifications sont sauvegardées dans le Google Sheet.<br>
+          Exporte et committe <code style="color:var(--gold)">passwords.json</code> sur GitHub pour mettre à jour le
+          fallback.
+        </div>
+        <button class="btn-export" onclick="exportPasswordsJson()">⬇️ Exporter passwords.json</button>
+      </div>
+
       <div id="pwd-content">
         <div class="loading"><span class="spinner"></span>Chargement…</div>
       </div>
@@ -550,7 +659,7 @@
 
   <script>
     // ── Configuration ────────────────────────────────────────────────────────
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby76_LYKaWCjDMjK1UUHsDTNG_EPctmaJLnKyNAiGqD7VTC43LSKVMJsFVoDn0xmjEx/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOjJhuqlOlWyoplhXGxuP0_77pCUFbpWdkHIdMbXsThJGwmycSs3zadDSERth3LPw/exec';
     const ADMIN_TOKEN = 't20c10P+a101';
 
     let adminToken = null;
@@ -790,6 +899,70 @@
           : '🔒 Mot de passe réactivé pour ' + name);
         await loadData();
       } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+    }
+
+    // ── Ajouter un élève ──────────────────────────────────────────────────────
+    async function addStudent() {
+      const nameEl = document.getElementById('new-student-name');
+      const pwdEl = document.getElementById('new-student-pwd');
+      const noPassEl = document.getElementById('new-student-nopwd');
+
+      const name = nameEl.value.trim();
+      const pwd = pwdEl.value.trim();
+      const noPassword = noPassEl.checked;
+
+      if (!name) { toast('❌ Saisis un prénom.', true); nameEl.focus(); return; }
+      if (!noPassword && !pwd) { toast('❌ Saisis un mot de passe (ou coche "Sans mot de passe").', true); pwdEl.focus(); return; }
+
+      try {
+        const hash = noPassword ? '' : await sha256(pwd);
+
+        // Vérifier doublon côté client avant d'envoyer
+        const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
+        const current = await fetch(url).then(r => r.json());
+        const existing = current.passwords || {};
+        if (Object.keys(existing).some(k => k.toLowerCase() === name.toLowerCase())) {
+          toast('⚠️ Cet élève existe déjà. Utilise le formulaire ci-dessous pour modifier.', true);
+          return;
+        }
+
+        await apiPost({ type: 'admin_add_student', name, hash, noPassword });
+        nameEl.value = '';
+        pwdEl.value = '';
+        noPassEl.checked = false;
+        pwdEl.disabled = false;
+        pwdEl.style.opacity = '1';
+        toast('✅ Élève ' + name + ' ajouté avec succès !');
+        await loadData();
+      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+    }
+
+    // ── Exporter passwords.json ───────────────────────────────────────────────
+    async function exportPasswordsJson() {
+      try {
+        const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
+        const data = await fetch(url).then(r => r.json());
+        if (data.error) throw new Error(data.error);
+
+        const passwords = data.passwords || {};
+        const users = Object.entries(passwords)
+          .filter(([, v]) => v.hash || v.noPassword)
+          .map(([name, v]) => {
+            const entry = { name };
+            if (v.noPassword) entry.noPassword = true;
+            else entry.hash = v.hash;
+            return entry;
+          });
+
+        const json = JSON.stringify({ users }, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'passwords.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+        toast('✅ passwords.json exporté – committe-le sur GitHub !');
+      } catch (e) { toast('❌ Erreur export : ' + e.message, true); }
     }
 
     // ── Utilitaires ───────────────────────────────────────────────────────────
