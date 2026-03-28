@@ -1688,24 +1688,31 @@
       localStorage.setItem('mathsPremiere_fp_' + userName.toLowerCase(), fp);
     }
 
-    // Vérifie ou enregistre l'empreinte — court-circuite GAS si l'appareil est déjà connu
+    // Vérifie ou enregistre l'empreinte
+    // Stratégie :
+    //   • 1ère connexion de la session browser → toujours vérifier avec GAS (pour écrire dans le Sheet)
+    //   • Connexions suivantes dans la même session → cache sessionStorage (instantané)
+    //   • localStorage garde l'empreinte pour affichage hors-ligne uniquement
+    const FP_SESSION_KEY = 'mathsPremiere_fp_ok';
+
     async function checkFingerprint(userName, fp) {
-      // ✅ Appareil déjà connu localement → pas d'appel réseau, instantané
-      if (getCachedFp(userName) === fp) {
+      // ✅ Déjà vérifié côté serveur dans cette session → instantané
+      if (sessionStorage.getItem(FP_SESSION_KEY + '_' + userName.toLowerCase()) === fp) {
         return { ok: true, firstLogin: false };
       }
 
-      // 🌐 Premier passage : on demande au serveur
+      // 🌐 Toujours appeler GAS au moins une fois par session
+      //    (même si localStorage connaît l'empreinte)
       try {
         const url = SCRIPT_URL
           + '?action=check_device'
           + '&name=' + encodeURIComponent(userName)
-          + '&fp=' + encodeURIComponent(fp);
+          + '&fp='   + encodeURIComponent(fp);
         const data = await fetch(url).then(r => r.json());
 
         if (data.status === 'full') return { ok: false, reason: 'full', limit: data.limit };
 
-        // 'new' → on enregistre l'appareil dans Google Sheets (fire-and-forget)
+        // 'new' → appareil inconnu du Sheet, on l'enregistre
         if (data.status === 'new') {
           fetch(SCRIPT_URL, {
             method: 'POST',
@@ -1714,19 +1721,22 @@
             body: JSON.stringify({
               type: 'register_device', name: userName, fp,
               browser: detectBrowser(navigator.userAgent),
-              os: detectOS(navigator.userAgent),
-              screen: screen.width + 'x' + screen.height
+              os:      detectOS(navigator.userAgent),
+              screen:  screen.width + 'x' + screen.height
             })
           });
         }
 
-        // 'known' ou 'new' → on met en cache pour les prochaines connexions
+        // Mettre en cache session + localStorage
+        sessionStorage.setItem(FP_SESSION_KEY + '_' + userName.toLowerCase(), fp);
         setCachedFp(userName, fp);
         return { ok: true, firstLogin: data.status === 'new' };
 
       } catch (e) {
-        // Réseau inaccessible : on accepte si l'empreinte a déjà été vue un jour
-        if (getCachedFp(userName)) return { ok: true, firstLogin: false };
+        // Réseau inaccessible : on accepte si l'empreinte a déjà été vue un jour localement
+        if (getCachedFp(userName) === fp) {
+          return { ok: true, firstLogin: false };
+        }
         return { ok: false };
       }
     }
