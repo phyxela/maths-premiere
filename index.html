@@ -1255,88 +1255,226 @@
     }
 
     /* --------- Menu utilisateur (3 points) --------- */
-    .user-menu-wrap { position:fixed; top:16px; right:16px; z-index:8000; }
+    .user-menu-wrap {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 8000;
+    }
+
     .user-menu-btn {
-      background:var(--navy-mid); border:1px solid rgba(201,168,76,0.3);
-      border-radius:40px; padding:7px 14px; cursor:pointer;
-      display:flex; align-items:center; gap:8px; transition:all 0.2s;
-      color:var(--text); font-family:'JetBrains Mono',monospace; font-size:12px;
+      background: var(--navy-mid);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-radius: 40px;
+      padding: 7px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
     }
-    .user-menu-btn:hover { border-color:var(--gold); background:var(--navy-lt); }
-    .user-name-label { color:var(--gold); font-size:12px; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+    .user-menu-btn:hover {
+      border-color: var(--gold);
+      background: var(--navy-lt);
+    }
+
+    .user-name-label {
+      color: var(--gold);
+      font-size: 12px;
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .user-dropdown {
-      display:none; position:absolute; top:calc(100% + 8px); right:0;
-      background:var(--navy-lt); border:1px solid rgba(201,168,76,0.25);
-      border-radius:var(--r-md); padding:8px; min-width:210px;
-      box-shadow:var(--shadow); animation:fadeIn 0.2s ease;
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: var(--navy-lt);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      border-radius: var(--r-md);
+      padding: 8px;
+      min-width: 210px;
+      box-shadow: var(--shadow);
+      animation: fadeIn 0.2s ease;
     }
-    .user-dropdown.open { display:block; }
-    .user-dropdown-header { padding:8px 12px 10px; border-bottom:1px solid rgba(255,255,255,0.07); margin-bottom:6px; }
-    .user-dropdown-name { font-family:'Playfair Display',serif; color:var(--cream); font-size:15px; }
-    .user-dropdown-sub { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim); letter-spacing:1px; margin-top:2px; }
-    .user-mini-stats { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:8px 12px; border-bottom:1px solid rgba(255,255,255,0.07); margin-bottom:6px; }
-    .user-mini-stat { text-align:center; }
-    .user-mini-val { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--gold); line-height:1; }
-    .user-mini-lbl { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text-dim); text-transform:uppercase; margin-top:2px; }
-    .chapters-visited { display:flex; gap:4px; flex-wrap:wrap; padding:6px 12px 10px; border-bottom:1px solid rgba(255,255,255,0.07); margin-bottom:6px; }
-    .ch-visited-badge { font-size:10px; padding:2px 8px; border-radius:20px; font-family:'JetBrains Mono',monospace; }
-    .ch-visited-badge.seen { background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.25); color:var(--gold-lt); }
-    .ch-visited-badge.unseen { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); color:var(--text-dim); }
-    .dropdown-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:var(--r-sm); cursor:pointer; font-size:13px; color:var(--text); transition:background 0.15s; border:none; background:none; width:100%; text-align:left; }
-    .dropdown-item:hover { background:rgba(255,255,255,0.06); }
-    .dropdown-item.danger { color:var(--red); }
-    .dropdown-item.danger:hover { background:rgba(224,90,90,0.08); }
+
+    .user-dropdown.open {
+      display: block;
+    }
+
+    .user-dropdown-header {
+      padding: 8px 12px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      margin-bottom: 6px;
+    }
+
+    .user-dropdown-name {
+      font-family: 'Playfair Display', serif;
+      color: var(--cream);
+      font-size: 15px;
+    }
+
+    .user-dropdown-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    .user-mini-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      margin-bottom: 6px;
+    }
+
+    .user-mini-stat {
+      text-align: center;
+    }
+
+    .user-mini-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .user-mini-lbl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .chapters-visited {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      padding: 6px 12px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      margin-bottom: 6px;
+    }
+
+    .ch-visited-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .ch-visited-badge.seen {
+      background: rgba(201, 168, 76, 0.1);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      color: var(--gold-lt);
+    }
+
+    .ch-visited-badge.unseen {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-dim);
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text);
+      transition: background 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .dropdown-item.danger {
+      color: var(--red);
+    }
+
+    .dropdown-item.danger:hover {
+      background: rgba(224, 90, 90, 0.08);
+    }
   </style>
 </head>
 
 <body>
-<!-- Menu utilisateur flottant -->
-<div class="user-menu-wrap" id="user-menu-wrap" style="display:none">
-  <button class="user-menu-btn" onclick="toggleUserMenu()">
-    <span id="user-avatar">👤</span>
-    <span class="user-name-label" id="user-menu-name">—</span>
-    <span style="color:var(--text-dim)">···</span>
-  </button>
-  <div class="user-dropdown" id="user-dropdown">
-    <div class="user-dropdown-header">
-      <div class="user-dropdown-name" id="dd-name">—</div>
-      <div class="user-dropdown-sub">PROGRESSION SAUVEGARDÉE</div>
+  <!-- Menu utilisateur flottant -->
+  <div class="user-menu-wrap" id="user-menu-wrap" style="display:none">
+    <button class="user-menu-btn" onclick="toggleUserMenu()">
+      <span id="user-avatar">👤</span>
+      <span class="user-name-label" id="user-menu-name">—</span>
+      <span style="color:var(--text-dim)">···</span>
+    </button>
+    <div class="user-dropdown" id="user-dropdown">
+      <div class="user-dropdown-header">
+        <div class="user-dropdown-name" id="dd-name">—</div>
+        <div class="user-dropdown-sub">PROGRESSION SAUVEGARDÉE</div>
+      </div>
+      <!-- Mini stats -->
+      <div class="user-mini-stats">
+        <div class="user-mini-stat">
+          <div class="user-mini-val" id="dd-total">0</div>
+          <div class="user-mini-lbl">Exercices</div>
+        </div>
+        <div class="user-mini-stat">
+          <div class="user-mini-val" style="color:var(--green)" id="dd-ok">0</div>
+          <div class="user-mini-lbl">Bonne rép.</div>
+        </div>
+        <div class="user-mini-stat">
+          <div class="user-mini-val" id="dd-corr">0</div>
+          <div class="user-mini-lbl">Corrections</div>
+        </div>
+        <div class="user-mini-stat">
+          <div class="user-mini-val" style="color:#ff9800" id="dd-streak">0</div>
+          <div class="user-mini-lbl">🔥 Série max</div>
+        </div>
+      </div>
+      <!-- Chapitres visités -->
+      <div class="chapters-visited" id="dd-chapters">
+        <span class="ch-visited-badge unseen">Ch.1</span>
+        <span class="ch-visited-badge unseen">Ch.2</span>
+        <span class="ch-visited-badge unseen">Ch.3</span>
+        <span class="ch-visited-badge unseen">Ch.4</span>
+        <span class="ch-visited-badge unseen">Auto</span>
+      </div>
+      <!-- Actions -->
+      <button class="dropdown-item" onclick="resetUserStats()">🗑️ Réinitialiser ma progression</button>
+      <button class="dropdown-item danger" onclick="logout()">🚪 Se déconnecter</button>
     </div>
-    <!-- Mini stats -->
-    <div class="user-mini-stats">
-      <div class="user-mini-stat"><div class="user-mini-val" id="dd-total">0</div><div class="user-mini-lbl">Exercices</div></div>
-      <div class="user-mini-stat"><div class="user-mini-val" style="color:var(--green)" id="dd-ok">0</div><div class="user-mini-lbl">Bonne rép.</div></div>
-      <div class="user-mini-stat"><div class="user-mini-val" id="dd-corr">0</div><div class="user-mini-lbl">Corrections</div></div>
-      <div class="user-mini-stat"><div class="user-mini-val" style="color:#ff9800" id="dd-streak">0</div><div class="user-mini-lbl">🔥 Série max</div></div>
-    </div>
-    <!-- Chapitres visités -->
-    <div class="chapters-visited" id="dd-chapters">
-      <span class="ch-visited-badge unseen">Ch.1</span>
-      <span class="ch-visited-badge unseen">Ch.2</span>
-      <span class="ch-visited-badge unseen">Ch.3</span>
-      <span class="ch-visited-badge unseen">Ch.4</span>
-      <span class="ch-visited-badge unseen">Auto</span>
-    </div>
-    <!-- Actions -->
-    <button class="dropdown-item" onclick="resetUserStats()">🗑️ Réinitialiser ma progression</button>
-    <button class="dropdown-item danger" onclick="logout()">🚪 Se déconnecter</button>
   </div>
-</div>
 
 
-<!-- =============================================
+  <!-- =============================================
      PROTECTION PAR MOT DE PASSE
      Lit les accès depuis passwords.json
      Pour ajouter/supprimer un accès :
        → Édite passwords.json sur GitHub, commit → c'est en ligne !
      ============================================= -->
-<div id="auth-overlay" style="
+  <div id="auth-overlay" style="
   position:fixed;inset:0;z-index:9999;
   background:#0f1b2d;
   display:flex;align-items:center;justify-content:center;
   font-family:'Source Serif 4',Georgia,serif;
 ">
-  <div style="
+    <div style="
     width:100%;max-width:400px;margin:20px;
     background:#1a2e4a;
     border:1px solid rgba(201,168,76,0.3);
@@ -1344,7 +1482,7 @@
     box-shadow:0 8px 40px rgba(0,0,0,0.5);
     text-align:center;
   ">
-    <div style="
+      <div style="
       display:inline-block;
       background:linear-gradient(135deg,#c9a84c,#e8c97a);
       color:#0f1b2d;font-family:'JetBrains Mono',monospace;
@@ -1352,19 +1490,15 @@
       padding:5px 14px;border-radius:20px;margin-bottom:20px;
     ">🔒 Accès Sécurisé</div>
 
-    <h1 style="font-family:'Playfair Display',serif;font-size:1.9rem;color:#f5f0e8;margin-bottom:6px;">
-      Maths<span style="color:#c9a84c">Première</span>
-    </h1>
-    <p style="color:#8a9bb5;font-size:14px;font-style:italic;margin-bottom:28px;">
-      Entre ton prénom et ton mot de passe pour accéder au site
-    </p>
+      <h1 style="font-family:'Playfair Display',serif;font-size:1.9rem;color:#f5f0e8;margin-bottom:6px;">
+        Maths<span style="color:#c9a84c">Première</span>
+      </h1>
+      <p style="color:#8a9bb5;font-size:14px;font-style:italic;margin-bottom:28px;">
+        Entre ton prénom et ton mot de passe pour accéder au site
+      </p>
 
-    <input
-      type="text" id="name-input"
-      placeholder="Ton prénom…"
-      onkeydown="if(event.key==='Enter') document.getElementById('pwd-input').focus()"
-      autocomplete="off"
-      style="
+      <input type="text" id="name-input" placeholder="Ton prénom…"
+        onkeydown="if(event.key==='Enter') document.getElementById('pwd-input').focus()" autocomplete="off" style="
         width:100%;
         background:rgba(255,255,255,0.06);
         border:1.5px solid rgba(255,255,255,0.15);
@@ -1372,15 +1506,11 @@
         color:#f5f0e8;font-family:'JetBrains Mono',monospace;
         font-size:15px;outline:none;margin-bottom:14px;
         box-sizing:border-box;transition:border-color 0.2s;
-      "
-    />
+      " />
 
-    <div style="position:relative;width:100%;margin-bottom:14px;">
-      <input
-        type="password" id="pwd-input"
-        placeholder="Mot de passe…"
-        onkeydown="if(event.key==='Enter') checkPassword()"
-        style="
+      <div style="position:relative;width:100%;margin-bottom:14px;">
+        <input type="password" id="pwd-input" placeholder="Mot de passe…"
+          onkeydown="if(event.key==='Enter') checkPassword()" style="
           width:100%;
           background:rgba(255,255,255,0.06);
           border:1.5px solid rgba(255,255,255,0.15);
@@ -1388,11 +1518,8 @@
           color:#f5f0e8;font-family:'JetBrains Mono',monospace;
           font-size:15px;outline:none;
           box-sizing:border-box;transition:border-color 0.2s;
-        "
-      />
-      <button
-        type="button"
-        onclick="
+        " />
+        <button type="button" onclick="
           const i = document.getElementById('pwd-input');
           const eye = document.getElementById('eye-icon');
           if (i.type === 'password') {
@@ -1402,20 +1529,16 @@
             i.type = 'password';
             eye.textContent = '👁️';
           }
-        "
-        style="
+        " style="
           position:absolute;right:14px;top:50%;transform:translateY(-50%);
           background:none;border:none;cursor:pointer;
           font-size:18px;line-height:1;padding:0;opacity:0.6;
           transition:opacity 0.2s;
-        "
-        onmouseover="this.style.opacity='1'"
-        onmouseout="this.style.opacity='0.6'"
-        title="Afficher / masquer le mot de passe"
-      ><span id="eye-icon">👁️</span></button>
-    </div>
+        " onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'"
+          title="Afficher / masquer le mot de passe"><span id="eye-icon">👁️</span></button>
+      </div>
 
-    <button onclick="checkPassword()" style="
+      <button onclick="checkPassword()" style="
       width:100%;
       background:linear-gradient(135deg,#c9a84c,#e8c97a);
       color:#0f1b2d;border:none;border-radius:40px;
@@ -1423,232 +1546,231 @@
       font-family:'Source Serif 4',serif;font-size:15px;font-weight:700;
       cursor:pointer;box-shadow:0 4px 16px rgba(201,168,76,0.3);
       transition:transform 0.2s;
-    " onmouseover="this.style.transform='translateY(-2px)'"
-       onmouseout="this.style.transform='translateY(0)'">
-      Accéder →
-    </button>
+    " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+        Accéder →
+      </button>
 
-    <div id="auth-error" style="
+      <div id="auth-error" style="
       display:none;margin-top:14px;color:#e05a5a;
       font-size:13px;font-family:'JetBrains Mono',monospace;
     ">❌ Mot de passe incorrect</div>
 
-    <div id="auth-welcome" style="
+      <div id="auth-welcome" style="
       display:none;margin-top:14px;color:#4caf82;
       font-size:13px;font-family:'JetBrains Mono',monospace;
     "></div>
+    </div>
   </div>
-</div>
 
-<script>
+  <script>
 
-// =============================================
-// TRACKING – Google Sheets via Apps Script
-// Remplace SCRIPT_URL par l'URL de déploiement
-// =============================================
-const SCRIPT_URL = 'COLLE_ICI_TON_URL_DE_DEPLOIEMENT';
+    // =============================================
+    // TRACKING – Google Sheets via Apps Script
+    // Remplace SCRIPT_URL par l'URL de déploiement
+    // =============================================
+    const SCRIPT_URL = 'https://docs.google.com/spreadsheets/d/1uiGw6aSBImLL0vLRx8fEeGh2pwS4YSm88CHeuIqOIfk/edit?gid=1268760545#gid=1268760545';
 
-// Détecte le navigateur depuis userAgent
-function detectBrowser(ua) {
-  if (/Edg\//.test(ua))     return 'Edge ' + (ua.match(/Edg\/([\d.]+)/) || [])[1];
-  if (/OPR\//.test(ua))     return 'Opera ' + (ua.match(/OPR\/([\d.]+)/) || [])[1];
-  if (/Firefox\//.test(ua)) return 'Firefox ' + (ua.match(/Firefox\/([\d.]+)/) || [])[1];
-  if (/Chrome\//.test(ua))  return 'Chrome ' + (ua.match(/Chrome\/([\d.]+)/) || [])[1];
-  if (/Safari\//.test(ua))  return 'Safari ' + (ua.match(/Version\/([\d.]+)/) || [])[1];
-  return 'Inconnu';
-}
-
-// Détecte l'OS depuis userAgent
-function detectOS(ua) {
-  if (/Windows NT 10/.test(ua)) return 'Windows 10/11';
-  if (/Windows NT 6/.test(ua))  return 'Windows 7/8';
-  if (/Mac OS X/.test(ua))      return 'macOS';
-  if (/Android/.test(ua))       return 'Android';
-  if (/iPhone|iPad/.test(ua))   return 'iOS';
-  if (/Linux/.test(ua))         return 'Linux';
-  return 'Inconnu';
-}
-
-// Envoie les données à Google Sheets (silencieux, ne bloque pas l'UI)
-async function sendToSheets(payload) {
-  if (!SCRIPT_URL || SCRIPT_URL.includes('COLLE_ICI')) return; // pas encore configuré
-  try {
-    await fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors', // requis pour Apps Script
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  } catch(e) { /* silencieux */ }
-}
-
-// Appelée juste après la connexion réussie
-async function logConnexion(userName) {
-  const ua = navigator.userAgent;
-  sendToSheets({
-    type:     'connexion',
-    name:     userName,
-    browser:  detectBrowser(ua),
-    os:       detectOS(ua),
-    lang:     navigator.language || '—',
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || '—',
-    screen:   screen.width + 'x' + screen.height
-  });
-}
-
-// Envoi de l'avancement (appelé par saveStats, avec délai anti-spam)
-let _trackingTimeout = null;
-function scheduleAvancementLog() {
-  clearTimeout(_trackingTimeout);
-  _trackingTimeout = setTimeout(() => {
-    const name = sessionStorage.getItem('mathsPremiere_user');
-    if (!name) return;
-    sendToSheets({
-      type:       'avancement',
-      name:       name,
-      total:      statsTotal,
-      correct:    statsCorrect,
-      corr:       statsCorr,
-      bestStreak: statsBestStreak,
-      chapitres:  [...chapitresVus]
-    });
-  }, 10000); // envoie 10s après la dernière action (évite le flood)
-}
-
-
-/* =============================================
-   AUTHENTIFICATION VIA passwords.json
-   Fallback intégré si le fichier est introuvable
-   ============================================= */
-
-// ⚠️ FALLBACK : liste de secours si passwords.json est inaccessible
-// Modifie passwords.json sur GitHub EN PRIORITÉ
-// Ne modifie cette liste que si passwords.json reste inaccessible
-// Les valeurs sont des hashes SHA-256 (jamais de mots de passe en clair !)
-const FALLBACK_USERS = [
-  { name: "Tom", hash: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" }
-];
-
-// Fonction de hachage SHA-256 (Web Crypto API, disponible dans tous les navigateurs modernes)
-async function sha256(text) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-// Si déjà connecté pendant cette session → on passe directement
-if (sessionStorage.getItem('mathsPremiere_auth') === 'true') {
-  document.getElementById('auth-overlay').style.display = 'none';
-}
-
-// Focus automatique sur le champ mot de passe
-window.addEventListener('load', () => {
-  const input = document.getElementById('name-input');
-  if (input) input.focus();
-});
-
-// Génère une empreinte stable de l'appareil (hash de plusieurs caractéristiques)
-async function deviceFingerprint() {
-  const raw = [
-    navigator.userAgent,
-    navigator.language,
-    screen.width + 'x' + screen.height,
-    Intl.DateTimeFormat().resolvedOptions().timeZone,
-    navigator.platform || ''
-  ].join('|');
-  return await sha256(raw);
-}
-
-// Vérifie ou enregistre l'empreinte de l'appareil dans localStorage
-async function checkFingerprint(userName) {
-  const fp       = await deviceFingerprint();
-  const fpKey    = 'mathsPremiere_fp_' + userName.toLowerCase();
-  const stored   = localStorage.getItem(fpKey);
-
-  if (!stored) {
-    // Première connexion sur cet appareil → on enregistre l'empreinte
-    localStorage.setItem(fpKey, fp);
-    return { ok: true, firstLogin: true };
-  }
-  if (stored === fp) {
-    return { ok: true, firstLogin: false };
-  }
-  // Empreinte différente → appareil non reconnu
-  return { ok: false };
-}
-
-async function checkPassword() {
-  const nameInput = document.getElementById('name-input');
-  const pwdInput  = document.getElementById('pwd-input');
-  const errorEl   = document.getElementById('auth-error');
-  const welcome   = document.getElementById('auth-welcome');
-
-  const enteredName = nameInput.value.trim();
-  const enteredPwd  = pwdInput.value.trim();
-
-  if (!enteredName || !enteredPwd) {
-    showError('❌ Remplis ton prénom et ton mot de passe.', nameInput, pwdInput);
-    return;
-  }
-
-  let users = FALLBACK_USERS;
-
-  try {
-    const res = await fetch('passwords.json?v=' + Date.now());
-    if (res.ok) {
-      const data = await res.json();
-      if (data.users && data.users.length > 0) users = data.users;
+    // Détecte le navigateur depuis userAgent
+    function detectBrowser(ua) {
+      if (/Edg\//.test(ua)) return 'Edge ' + (ua.match(/Edg\/([\d.]+)/) || [])[1];
+      if (/OPR\//.test(ua)) return 'Opera ' + (ua.match(/OPR\/([\d.]+)/) || [])[1];
+      if (/Firefox\//.test(ua)) return 'Firefox ' + (ua.match(/Firefox\/([\d.]+)/) || [])[1];
+      if (/Chrome\//.test(ua)) return 'Chrome ' + (ua.match(/Chrome\/([\d.]+)/) || [])[1];
+      if (/Safari\//.test(ua)) return 'Safari ' + (ua.match(/Version\/([\d.]+)/) || [])[1];
+      return 'Inconnu';
     }
-  } catch(e) {}
 
-  // Option A — Vérification nom + hash mot de passe ensemble
-  const enteredHash = await sha256(enteredPwd);
-  const match = users.find(u =>
-    u.name.toLowerCase() === enteredName.toLowerCase() &&
-    u.hash === enteredHash
-  );
+    // Détecte l'OS depuis userAgent
+    function detectOS(ua) {
+      if (/Windows NT 10/.test(ua)) return 'Windows 10/11';
+      if (/Windows NT 6/.test(ua)) return 'Windows 7/8';
+      if (/Mac OS X/.test(ua)) return 'macOS';
+      if (/Android/.test(ua)) return 'Android';
+      if (/iPhone|iPad/.test(ua)) return 'iOS';
+      if (/Linux/.test(ua)) return 'Linux';
+      return 'Inconnu';
+    }
 
-  if (!match) {
-    showError('❌ Prénom ou mot de passe incorrect.', nameInput, pwdInput);
-    return;
-  }
+    // Envoie les données à Google Sheets (silencieux, ne bloque pas l'UI)
+    async function sendToSheets(payload) {
+      if (!SCRIPT_URL || SCRIPT_URL.includes('COLLE_ICI')) return; // pas encore configuré
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors', // requis pour Apps Script
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) { /* silencieux */ }
+    }
 
-  // Option B — Vérification empreinte de l'appareil
-  const fpResult = await checkFingerprint(match.name);
-  if (!fpResult.ok) {
-    showError('🚫 Appareil non reconnu. Connecte-toi depuis ton appareil habituel.', nameInput, pwdInput);
-    return;
-  }
+    // Appelée juste après la connexion réussie
+    async function logConnexion(userName) {
+      const ua = navigator.userAgent;
+      sendToSheets({
+        type: 'connexion',
+        name: userName,
+        browser: detectBrowser(ua),
+        os: detectOS(ua),
+        lang: navigator.language || '—',
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || '—',
+        screen: screen.width + 'x' + screen.height
+      });
+    }
 
-  // ✅ Accès accordé
-  const msg = fpResult.firstLogin
-    ? '✅ Bienvenue, ' + match.name + ' ! Appareil enregistré.'
-    : '✅ Bienvenue, ' + match.name + ' !';
-  welcome.textContent   = msg;
-  welcome.style.display = 'block';
-  errorEl.style.display = 'none';
-  sessionStorage.setItem('mathsPremiere_auth', 'true');
-  sessionStorage.setItem('mathsPremiere_user', match.name);
-  logConnexion(match.name);
-  setTimeout(() => {
-    document.getElementById('auth-overlay').style.display = 'none';
-    if (typeof loadStats === 'function') loadStats();
-    if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
-  }, 800);
-}
+    // Envoi de l'avancement (appelé par saveStats, avec délai anti-spam)
+    let _trackingTimeout = null;
+    function scheduleAvancementLog() {
+      clearTimeout(_trackingTimeout);
+      _trackingTimeout = setTimeout(() => {
+        const name = sessionStorage.getItem('mathsPremiere_user');
+        if (!name) return;
+        sendToSheets({
+          type: 'avancement',
+          name: name,
+          total: statsTotal,
+          correct: statsCorrect,
+          corr: statsCorr,
+          bestStreak: statsBestStreak,
+          chapitres: [...chapitresVus]
+        });
+      }, 10000); // envoie 10s après la dernière action (évite le flood)
+    }
 
-function showError(msg, nameInput, pwdInput) {
-  const errorEl = document.getElementById('auth-error');
-  const pwdEl   = pwdInput || document.getElementById('pwd-input');
-  errorEl.textContent   = msg;
-  errorEl.style.display = 'block';
-  document.getElementById('auth-welcome').style.display = 'none';
-  pwdEl.style.borderColor = '#e05a5a';
-  setTimeout(() => { pwdEl.style.borderColor = 'rgba(255,255,255,0.15)'; }, 1200);
-  pwdEl.value = '';
-  pwdEl.focus();
-  }
-}
-</script>
+
+    /* =============================================
+       AUTHENTIFICATION VIA passwords.json
+       Fallback intégré si le fichier est introuvable
+       ============================================= */
+
+    // ⚠️ FALLBACK : liste de secours si passwords.json est inaccessible
+    // Modifie passwords.json sur GitHub EN PRIORITÉ
+    // Ne modifie cette liste que si passwords.json reste inaccessible
+    // Les valeurs sont des hashes SHA-256 (jamais de mots de passe en clair !)
+    const FALLBACK_USERS = [
+      { name: "Tom", hash: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" }
+    ];
+
+    // Fonction de hachage SHA-256 (Web Crypto API, disponible dans tous les navigateurs modernes)
+    async function sha256(text) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Si déjà connecté pendant cette session → on passe directement
+    if (sessionStorage.getItem('mathsPremiere_auth') === 'true') {
+      document.getElementById('auth-overlay').style.display = 'none';
+    }
+
+    // Focus automatique sur le champ mot de passe
+    window.addEventListener('load', () => {
+      const input = document.getElementById('name-input');
+      if (input) input.focus();
+    });
+
+    // Génère une empreinte stable de l'appareil (hash de plusieurs caractéristiques)
+    async function deviceFingerprint() {
+      const raw = [
+        navigator.userAgent,
+        navigator.language,
+        screen.width + 'x' + screen.height,
+        Intl.DateTimeFormat().resolvedOptions().timeZone,
+        navigator.platform || ''
+      ].join('|');
+      return await sha256(raw);
+    }
+
+    // Vérifie ou enregistre l'empreinte de l'appareil dans localStorage
+    async function checkFingerprint(userName) {
+      const fp = await deviceFingerprint();
+      const fpKey = 'mathsPremiere_fp_' + userName.toLowerCase();
+      const stored = localStorage.getItem(fpKey);
+
+      if (!stored) {
+        // Première connexion sur cet appareil → on enregistre l'empreinte
+        localStorage.setItem(fpKey, fp);
+        return { ok: true, firstLogin: true };
+      }
+      if (stored === fp) {
+        return { ok: true, firstLogin: false };
+      }
+      // Empreinte différente → appareil non reconnu
+      return { ok: false };
+    }
+
+    async function checkPassword() {
+      const nameInput = document.getElementById('name-input');
+      const pwdInput = document.getElementById('pwd-input');
+      const errorEl = document.getElementById('auth-error');
+      const welcome = document.getElementById('auth-welcome');
+
+      const enteredName = nameInput.value.trim();
+      const enteredPwd = pwdInput.value.trim();
+
+      if (!enteredName || !enteredPwd) {
+        showError('❌ Remplis ton prénom et ton mot de passe.', nameInput, pwdInput);
+        return;
+      }
+
+      let users = FALLBACK_USERS;
+
+      try {
+        const res = await fetch('passwords.json?v=' + Date.now());
+        if (res.ok) {
+          const data = await res.json();
+          if (data.users && data.users.length > 0) users = data.users;
+        }
+      } catch (e) { }
+
+      // Option A — Vérification nom + hash mot de passe ensemble
+      const enteredHash = await sha256(enteredPwd);
+      const match = users.find(u =>
+        u.name.toLowerCase() === enteredName.toLowerCase() &&
+        u.hash === enteredHash
+      );
+
+      if (!match) {
+        showError('❌ Prénom ou mot de passe incorrect.', nameInput, pwdInput);
+        return;
+      }
+
+      // Option B — Vérification empreinte de l'appareil
+      const fpResult = await checkFingerprint(match.name);
+      if (!fpResult.ok) {
+        showError('🚫 Appareil non reconnu. Connecte-toi depuis ton appareil habituel.', nameInput, pwdInput);
+        return;
+      }
+
+      // ✅ Accès accordé
+      const msg = fpResult.firstLogin
+        ? '✅ Bienvenue, ' + match.name + ' ! Appareil enregistré.'
+        : '✅ Bienvenue, ' + match.name + ' !';
+      welcome.textContent = msg;
+      welcome.style.display = 'block';
+      errorEl.style.display = 'none';
+      sessionStorage.setItem('mathsPremiere_auth', 'true');
+      sessionStorage.setItem('mathsPremiere_user', match.name);
+      logConnexion(match.name);
+      setTimeout(() => {
+        document.getElementById('auth-overlay').style.display = 'none';
+        if (typeof loadStats === 'function') loadStats();
+        if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
+      }, 800);
+    }
+
+    function showError(msg, nameInput, pwdInput) {
+      const errorEl = document.getElementById('auth-error');
+      const pwdEl = pwdInput || document.getElementById('pwd-input');
+      errorEl.textContent = msg;
+      errorEl.style.display = 'block';
+      document.getElementById('auth-welcome').style.display = 'none';
+      pwdEl.style.borderColor = '#e05a5a';
+      setTimeout(() => { pwdEl.style.borderColor = 'rgba(255,255,255,0.15)'; }, 1200);
+      pwdEl.value = '';
+      pwdEl.focus();
+    }
+
+  </script>
 
   <div id="app">
     <header role="banner">
@@ -1795,68 +1917,68 @@ function showError(msg, nameInput, pwdInput) {
     // Retourne la clé localStorage de l'utilisateur connecté
     function userKey() {
       const u = sessionStorage.getItem('mathsPremiere_user') || 'anonymous';
-      return 'mathsPremiere_stats_' + u.toLowerCase().replace(/\s+/g,'_');
+      return 'mathsPremiere_stats_' + u.toLowerCase().replace(/\s+/g, '_');
     }
 
     function saveStats() {
       try {
         localStorage.setItem(userKey(), JSON.stringify({
-          total:      statsTotal,
-          corr:       statsCorr,
-          correct:    statsCorrect,
+          total: statsTotal,
+          corr: statsCorr,
+          correct: statsCorrect,
           bestStreak: statsBestStreak,
-          chapitres:  [...chapitresVus]
+          chapitres: [...chapitresVus]
         }));
         updateDropdown(); // Mise à jour du mini-panneau
         scheduleAvancementLog(); // 📊 Log avancement → Google Sheets (délai 10s)
-      } catch(e) {}
+      } catch (e) { }
     }
 
     function loadStats() {
       try {
         const d = JSON.parse(localStorage.getItem(userKey()));
         if (d) {
-          statsTotal      = d.total      || 0;
-          statsCorr       = d.corr       || 0;
-          statsCorrect    = d.correct    || 0;
+          statsTotal = d.total || 0;
+          statsCorr = d.corr || 0;
+          statsCorrect = d.correct || 0;
           statsBestStreak = d.bestStreak || 0;
-          chapitresVus    = new Set(d.chapitres || []);
-          document.getElementById('s-total').textContent   = statsTotal;
-          document.getElementById('s-corr').textContent    = statsCorr;
-          document.getElementById('s-ok').textContent      = statsCorrect;
+          chapitresVus = new Set(d.chapitres || []);
+          document.getElementById('s-total').textContent = statsTotal;
+          document.getElementById('s-corr').textContent = statsCorr;
+          document.getElementById('s-ok').textContent = statsCorrect;
         }
         updateDropdown();
-      } catch(e) {}
+      } catch (e) { }
     }
 
     // Met à jour le menu déroulant utilisateur
     function updateDropdown() {
       const name = sessionStorage.getItem('mathsPremiere_user') || '—';
       const el = (id) => document.getElementById(id);
-      if (el('dd-name'))   el('dd-name').textContent   = name;
-      if (el('dd-total'))  el('dd-total').textContent  = statsTotal;
-      if (el('dd-ok'))     el('dd-ok').textContent     = statsCorrect;
-      if (el('dd-corr'))   el('dd-corr').textContent   = statsCorr;
+      if (el('dd-name')) el('dd-name').textContent = name;
+      if (el('dd-total')) el('dd-total').textContent = statsTotal;
+      if (el('dd-ok')) el('dd-ok').textContent = statsCorrect;
+      if (el('dd-corr')) el('dd-corr').textContent = statsCorr;
       if (el('dd-streak')) el('dd-streak').textContent = statsBestStreak;
       // Chapitres visités
-      const labels = ['Ch.1','Ch.2','Ch.3','Ch.4','Auto'];
-      const keys   = [1,2,3,4,5];
+      const labels = ['Ch.1', 'Ch.2', 'Ch.3', 'Ch.4', 'Auto'];
+      const keys = [1, 2, 3, 4, 5];
       const container = el('dd-chapters');
       if (container) {
         container.innerHTML = labels.map((lbl, i) => {
           const seen = chapitresVus.has(keys[i]);
-          return `<span class="ch-visited-badge ${seen?'seen':'unseen'}">${seen?'✓ ':''} ${lbl}</span>`;
+          return `<span class="ch-visited-badge ${seen ? 'seen' : 'unseen'}">${seen ? '✓ ' : ''} ${lbl}</span>`;
         }).join('');
       }
     }
 
     // Met à jour le bouton flottant avec le nom
     function updateUserMenu(name) {
-      const wrap   = document.getElementById('user-menu-wrap');
-      const label  = document.getElementById('user-menu-name');
+      const wrap = document.getElementById('user-menu-wrap');
+      const label = document.getElementById('user-menu-name');
       const ddName = document.getElementById('dd-name');
-      if (wrap)   wrap.style.display = 'block';
-      if (label)  label.textContent  = name;
+      if (wrap) wrap.style.display = 'block';
+      if (label) label.textContent = name;
       if (ddName) ddName.textContent = name;
       loadStats();
     }
@@ -1871,7 +1993,7 @@ function showError(msg, nameInput, pwdInput) {
     // Ferme le dropdown si on clique ailleurs
     document.addEventListener('click', (e) => {
       const wrap = document.getElementById('user-menu-wrap');
-      const dd   = document.getElementById('user-dropdown');
+      const dd = document.getElementById('user-dropdown');
       if (wrap && dd && !wrap.contains(e.target)) dd.classList.remove('open');
     });
 
@@ -1883,9 +2005,9 @@ function showError(msg, nameInput, pwdInput) {
       statsTotal = 0; statsCorr = 0; statsCorrect = 0;
       statsStreak = 0; statsBestStreak = 0;
       chapitresVus = new Set();
-      document.getElementById('s-total').textContent  = 0;
-      document.getElementById('s-corr').textContent   = 0;
-      document.getElementById('s-ok').textContent     = 0;
+      document.getElementById('s-total').textContent = 0;
+      document.getElementById('s-corr').textContent = 0;
+      document.getElementById('s-ok').textContent = 0;
       const streakEl = document.getElementById('s-streak');
       if (streakEl) streakEl.textContent = 0;
       // Cache le menu et réaffiche l'overlay de connexion
@@ -1907,9 +2029,9 @@ function showError(msg, nameInput, pwdInput) {
       statsTotal = 0; statsCorr = 0; statsCorrect = 0;
       statsStreak = 0; statsBestStreak = 0;
       chapitresVus = new Set();
-      document.getElementById('s-total').textContent  = 0;
-      document.getElementById('s-corr').textContent   = 0;
-      document.getElementById('s-ok').textContent     = 0;
+      document.getElementById('s-total').textContent = 0;
+      document.getElementById('s-corr').textContent = 0;
+      document.getElementById('s-ok').textContent = 0;
       const streakEl = document.getElementById('s-streak');
       if (streakEl) streakEl.textContent = 0;
       updateDropdown();
@@ -1982,7 +2104,7 @@ function showError(msg, nameInput, pwdInput) {
       if (a !== 0) s += coef(a, 'x', 2);
       if (b !== 0) {
         if (s) {
-          s += (b> 0 ? ' + ' : ' - ') + coef(Math.abs(b), 'x', 1);
+          s += (b > 0 ? ' + ' : ' - ') + coef(Math.abs(b), 'x', 1);
         } else {
           s += coef(b, 'x', 1);
         }
@@ -3570,7 +3692,7 @@ function showError(msg, nameInput, pwdInput) {
 
     function shuffleArray(arr) {
       const a = arr.slice();
-      for (let i = a.length - 1; i> 0; i--) {
+      for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [a[i], a[j]] = [a[j], a[i]];
       }
@@ -4650,9 +4772,9 @@ function showError(msg, nameInput, pwdInput) {
 
       let fStr, fpStr;
       if (deg === 3) {
-        fStr = `${coef(a, 'x', 3)} ${b>= 0 ? '+' : ''} ${poly(b, c, d)}`;
+        fStr = `${coef(a, 'x', 3)} ${b >= 0 ? '+' : ''} ${poly(b, c, d)}`;
         const p2 = poly(2 * b, c, 0).replace(/\s*\+\s*0/g, '').replace(/\s*-\s*0/g, '').trim() || '0';
-        fpStr = `${coef(3 * a, 'x', 2)} ${3 * a !== 0 && 2 * b>= 0 && p2 !== '0' ? ' + ' : ' '} ${p2}`.trim().replace(/\s+\s+/, ' ');
+        fpStr = `${coef(3 * a, 'x', 2)} ${3 * a !== 0 && 2 * b >= 0 && p2 !== '0' ? ' + ' : ' '} ${p2}`.trim().replace(/\s+\s+/, ' ');
         if (!fpStr.replace(/\s/g, '') || fpStr === 'undefined') fpStr = `${coef(3 * a, 'x', 2)} + ${p2}`;
       } else {
         fStr = poly(b, c, d);
@@ -4700,7 +4822,7 @@ function showError(msg, nameInput, pwdInput) {
       const d = randD(-3, 3, -4, 4, -6, 6);
       const e = randD(-4, 4, -5, 5, -8, 8);
 
-      const uStr2 = `${coef(aP, 'x', 1)} ${b>= 0 ? `+ ${b}` : `- ${Math.abs(b)}`}`;
+      const uStr2 = `${coef(aP, 'x', 1)} ${b >= 0 ? `+ ${b}` : `- ${Math.abs(b)}`}`;
       const vStr = poly(c, d, e);
       const vpStr = poly(2 * c, d, 0).replace(/\s*\+\s*0/g, '') || '0';
 
@@ -4751,7 +4873,7 @@ function showError(msg, nameInput, pwdInput) {
         d = randD(-4, 4, -5, 5, -8, 8);
       } while (a * d - b * c === 0 || c === 0 || d === 0);
 
-      const uStr = `${coef(a, 'x', 1)} ${b>= 0 ? `+ ${b}` : `- ${Math.abs(b)}`}`;
+      const uStr = `${coef(a, 'x', 1)} ${b >= 0 ? `+ ${b}` : `- ${Math.abs(b)}`}`;
       const vStr = `${coef(c, 'x', 1)} ${d >= 0 ? `+ ${d}` : `- ${Math.abs(d)}`}`;
       const nd = a * d - b * c;
       const f0 = fracInput(nd, d * d); // f'(0) = (ad-bc)/d^2
@@ -6128,7 +6250,7 @@ function showError(msg, nameInput, pwdInput) {
         } else {
           const a = pick([1, 2, 3, 4, 5, 7, 8]), b = pick([2, 3, 4, 5, 7, 9]);
           const c = pick([1, 2, 3, 4, 5, 7, 8]), d = pick([2, 3, 4, 5, 7, 9]);
-          const expected = (a / b> c / d) ? '>' : (Math.abs(a / b - c / d) < 1e-9 ? '=' : '<');
+          const expected = (a / b > c / d) ? '>' : (Math.abs(a / b - c / d) < 1e-9 ? '=' : '<');
           const ansLabel = expected === '=' ? '=' : (expected === '>' ? '>' : '<');
           const corr = `<div class="step result"><div class="step-label">Mise au même dénominateur</div><div class="step-content">$\\frac{${a}\\times${d}}{${b}\\times${d}} = \\frac{${a * d}}{${b * d}}$ et $\\frac{${c}\\times${b}}{${d}\\times${b}} = \\frac{${c * b}}{${b * d}}$. Donc $\\boxed{${ansLabel}}$</div></div>`;
           return mk('Comparaisons standard', `Comparer $$\\dfrac{${a}}{${b}}\\text{ et }\\dfrac{${c}}{${d}}$$`, ['Répondre par `>`, `<` ou `=`.'], expected, corr, { placeholder: 'Ex : >' });
@@ -6266,17 +6388,17 @@ function showError(msg, nameInput, pwdInput) {
         } else {
           const a = pick([2, 3, 4, 5]), b = nonZeroSigned(), x = nonZeroSigned();
           const y = a * x + b;
-          const corr = `<div class="step result"><div class="step-label">Résolution</div><div class="step-content">$y=${a}x${b> 0 ? `+${b}` : b} \\Rightarrow ${a}x=y${b> 0 ? `-${b}` : `+${-b}`} \\Rightarrow x=\\dfrac{y${b> 0 ? `-${b}` : `+${-b}`}}{${a}}$.<br/>Avec $y=${y}$, $x = \\boxed{${x}}$.</div></div>`;
-          return mk('Isoler une variable (Affine)', `On a $y=${a}x${b> 0 ? `+${b}` : b}$. Calculer $x$ lorsque $y=${y}$.`, ['Valeur de $x$.'], `${x}`, corr, { placeholder: 'Ex : 3' });
+          const corr = `<div class="step result"><div class="step-label">Résolution</div><div class="step-content">$y=${a}x${b > 0 ? `+${b}` : b} \\Rightarrow ${a}x=y${b > 0 ? `-${b}` : `+${-b}`} \\Rightarrow x=\\dfrac{y${b > 0 ? `-${b}` : `+${-b}`}}{${a}}$.<br/>Avec $y=${y}$, $x = \\boxed{${x}}$.</div></div>`;
+          return mk('Isoler une variable (Affine)', `On a $y=${a}x${b > 0 ? `+${b}` : b}$. Calculer $x$ lorsque $y=${y}$.`, ['Valeur de $x$.'], `${x}`, corr, { placeholder: 'Ex : 3' });
         }
       }
 
       if (type === 'tableauxSignes') {
         const p = nonZeroSigned(), q = nonZeroSigned();
         if (p === q) return genAutomatismes(); // relancer si racines identiques
-        const corr = `<div class="step"><div class="step-label">Racines</div><div class="step-content">Les racines des deux facteurs sont ${-p} et ${-q}.</div></div><div class="step result"><div class="step-label">Signe d'un produit affine</div><div class="step-content">Le coefficient dominant de $(x${p> 0 ? `+${p}` : p})(x${q > 0 ? `+${q}` : q})$ est $1 \\times 1 = 1 > 0$. Le produit est donc négatif entre ses racines. L'intervalle solution est $\\boxed{[${Math.min(-p, -q)}; ${Math.max(-p, -q)}]}$.</div></div>`;
+        const corr = `<div class="step"><div class="step-label">Racines</div><div class="step-content">Les racines des deux facteurs sont ${-p} et ${-q}.</div></div><div class="step result"><div class="step-label">Signe d'un produit affine</div><div class="step-content">Le coefficient dominant de $(x${p > 0 ? `+${p}` : p})(x${q > 0 ? `+${q}` : q})$ est $1 \\times 1 = 1 > 0$. Le produit est donc négatif entre ses racines. L'intervalle solution est $\\boxed{[${Math.min(-p, -q)}; ${Math.max(-p, -q)}]}$.</div></div>`;
         const expected = `[${Math.min(-p, -q)};${Math.max(-p, -q)}]`;
-        return mk('Inéquations et Signe', `Résoudre : $$(x${p> 0 ? `+${p}` : p})(x${q > 0 ? `+${q}` : q}) \\le 0$$`, ['Donner l\'intervalle sous la forme `[a;b]`.'], expected, corr, { placeholder: 'Ex : [-2;5]' });
+        return mk('Inéquations et Signe', `Résoudre : $$(x${p > 0 ? `+${p}` : p})(x${q > 0 ? `+${q}` : q}) \\le 0$$`, ['Donner l\'intervalle sous la forme `[a;b]`.'], expected, corr, { placeholder: 'Ex : [-2;5]' });
       }
 
       if (type === 'problemes') {
@@ -6307,7 +6429,7 @@ function showError(msg, nameInput, pwdInput) {
           const a = pick([2, 3, 4, 5]), x = nonZeroSigned(), b = nonZeroSigned();
           const c = a * x + b;
           const corr = `<div class="step result"><div class="step-label">Isolement de x</div><div class="step-content">${a}x = ${c} - (${b}) = ${c - b} d'où $x = \\frac{${c - b}}{${a}} = ${x}$.</div></div>`;
-          return mk('Équation du 1er degré', `Résoudre : $$${a}x${b> 0 ? `+${b}` : b} = ${c}$$`, ['Valeur de $x$.'], `${x}`, corr, { placeholder: 'Ex : -3' });
+          return mk('Équation du 1er degré', `Résoudre : $$${a}x${b > 0 ? `+${b}` : b} = ${c}$$`, ['Valeur de $x$.'], `${x}`, corr, { placeholder: 'Ex : -3' });
         }
       }
 

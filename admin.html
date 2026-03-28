@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MathsPremière – Admin</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:wght@300;400;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0f1b2d;
+      --navy-mid: #1a2e4a;
+      --navy-lt: #243a57;
+      --gold: #c9a84c;
+      --gold-lt: #e8c97a;
+      --cream: #f5f0e8;
+      --text: #f0ead8;
+      --text-dim: #8a9bb5;
+      --green: #4caf82;
+      --red: #e05a5a;
+      --orange: #ff9800;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--navy);
+      color: var(--text);
+      font-family: 'Source Serif 4', Georgia, serif;
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+
+    /* ── Login ── */
+    #login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 380px;
+      margin: 20px;
+      background: var(--navy-mid);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      border-radius: 20px;
+      padding: 40px 36px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+      color: var(--navy);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--cream);
+      margin-bottom: 6px;
+    }
+
+    h1 span {
+      color: var(--gold);
+    }
+
+    .sub {
+      color: var(--text-dim);
+      font-size: 13px;
+      font-style: italic;
+      margin-bottom: 28px;
+    }
+
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 11px 16px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--gold);
+    }
+
+    .btn {
+      display: inline-block;
+      cursor: pointer;
+      border: none;
+      font-family: 'Source Serif 4', serif;
+      font-weight: 600;
+      border-radius: 40px;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+      color: var(--navy);
+      padding: 11px 28px;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .btn-red {
+      background: var(--red);
+      color: #fff;
+      padding: 6px 14px;
+      font-size: 12px;
+    }
+
+    .btn-dim {
+      background: var(--navy-lt);
+      color: var(--text-dim);
+      padding: 6px 14px;
+      font-size: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: #fff;
+      padding: 6px 14px;
+      font-size: 12px;
+    }
+
+    .err {
+      color: var(--red);
+      font-size: 13px;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* ── Dashboard ── */
+    #dashboard {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .dash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 0 24px;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .dash-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--cream);
+    }
+
+    .dash-title span {
+      color: var(--gold);
+    }
+
+    .user-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .user-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      gap: 12px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .user-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--cream);
+    }
+
+    .user-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .limit-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .limit-wrap input[type="number"] {
+      width: 60px;
+      margin: 0;
+      padding: 5px 8px;
+      font-size: 13px;
+      border-radius: 8px;
+    }
+
+    .slot-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .slot-ok {
+      background: rgba(76, 175, 130, 0.15);
+      color: var(--green);
+      border: 1px solid rgba(76, 175, 130, 0.3);
+    }
+
+    .slot-warn {
+      background: rgba(255, 152, 0, 0.15);
+      color: var(--orange);
+      border: 1px solid rgba(255, 152, 0, 0.3);
+    }
+
+    .slot-full {
+      background: rgba(224, 90, 90, 0.15);
+      color: var(--red);
+      border: 1px solid rgba(224, 90, 90, 0.3);
+    }
+
+    .devices-list {
+      padding: 12px 24px 16px;
+    }
+
+    .device-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      gap: 12px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .device-row:last-child {
+      border-bottom: none;
+    }
+
+    .device-info {
+      font-size: 13px;
+    }
+
+    .device-browser {
+      color: var(--cream);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .device-detail {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .device-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .no-devices {
+      padding: 16px 24px;
+      font-style: italic;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      background: var(--navy-mid);
+      border: 1px solid rgba(76, 175, 130, 0.4);
+      color: var(--green);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.err {
+      border-color: rgba(224, 90, 90, 0.4);
+      color: var(--red);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(201, 168, 76, 0.2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Écran de connexion admin ─────────────────────────────────────────── -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="badge">⚙️ Administration</div>
+      <h1>Maths<span>Première</span></h1>
+      <p class="sub">Accès réservé à l'administrateur</p>
+      <input type="password" id="admin-pwd" placeholder="Mot de passe admin…"
+        onkeydown="if(event.key==='Enter') login()">
+      <button class="btn btn-gold" onclick="login()">Connexion →</button>
+      <div class="err" id="login-err">❌ Mot de passe incorrect</div>
+    </div>
+  </div>
+
+  <!-- ── Dashboard ────────────────────────────────────────────────────────── -->
+  <div id="dashboard">
+    <div class="dash-header">
+      <div>
+        <div class="badge">⚙️ Administration</div>
+        <div class="dash-title">Maths<span>Première</span> – Gestion des appareils</div>
+      </div>
+      <button class="btn btn-dim" onclick="logout()">Déconnexion</button>
+    </div>
+    <div id="dash-content">
+      <div class="loading"><span class="spinner"></span>Chargement…</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── Configuration ──────────────────────────────────────────────────────────
+    const SCRIPT_URL = 'https://docs.google.com/spreadsheets/d/1uiGw6aSBImLL0vLRx8fEeGh2pwS4YSm88CHeuIqOIfk/edit?gid=1268760545#gid=1268760545'; // même URL que dans index.html
+    const ADMIN_TOKEN = 't20c10P+a101';                        // même token que dans Code.gs
+
+    let adminToken = null; // stocké en mémoire après login
+
+    // ── Login ──────────────────────────────────────────────────────────────────
+    async function login() {
+      const pwd = document.getElementById('admin-pwd').value.trim();
+      if (!pwd) return;
+
+      // Vérification locale du token (sans exposer de route dédiée)
+      if (pwd !== ADMIN_TOKEN) {
+        document.getElementById('login-err').style.display = 'block';
+        document.getElementById('admin-pwd').value = '';
+        return;
+      }
+
+      adminToken = pwd;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      await loadData();
+    }
+
+    function logout() {
+      adminToken = null;
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('admin-pwd').value = '';
+    }
+
+    // ── Chargement des données ─────────────────────────────────────────────────
+    async function loadData() {
+      document.getElementById('dash-content').innerHTML =
+        '<div class="loading"><span class="spinner"></span>Chargement…</div>';
+
+      try {
+        const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.error) throw new Error(data.error);
+        renderDashboard(data);
+      } catch (e) {
+        document.getElementById('dash-content').innerHTML =
+          `<div class="loading" style="color:var(--red)">❌ Erreur : ${e.message}</div>`;
+      }
+    }
+
+    // ── Rendu du dashboard ─────────────────────────────────────────────────────
+    function renderDashboard(data) {
+      // Regrouper les appareils par utilisateur
+      const userMap = {};
+      for (const d of data.devices) {
+        if (!userMap[d.name]) userMap[d.name] = [];
+        userMap[d.name].push(d);
+      }
+
+      // Ajouter les utilisateurs qui n'ont pas encore d'appareils mais ont une config
+      for (const name of Object.keys(data.config)) {
+        if (!userMap[name]) userMap[name] = [];
+      }
+
+      const names = Object.keys(userMap).sort();
+      if (names.length === 0) {
+        document.getElementById('dash-content').innerHTML =
+          '<div class="loading">Aucun appareil enregistré pour l\'instant.</div>';
+        return;
+      }
+
+      let html = '';
+      for (const name of names) {
+        const devices = userMap[name];
+        const limit = data.config[name] || data.defaultLimit;
+        const count = devices.length;
+        const slotClass = count >= limit ? 'slot-full' : count >= limit - 1 ? 'slot-warn' : 'slot-ok';
+        const slotLabel = `${count} / ${limit} appareils`;
+
+        html += `
+    <div class="user-card" id="card-${safeName(name)}">
+      <div class="user-card-header">
+        <div class="user-name">👤 ${esc(name)}</div>
+        <div class="user-meta">
+          <div class="limit-wrap">
+            Limite :
+            <input type="number" min="1" max="10" value="${limit}" id="limit-${safeName(name)}"
+                   style="width:60px;margin:0;padding:5px 8px;font-size:13px;border-radius:8px;">
+            <button class="btn btn-green" onclick="setLimit('${esc(name)}')">Appliquer</button>
+          </div>
+          <span class="slot-badge ${slotClass}">${slotLabel}</span>
+          ${count > 0 ? `<button class="btn btn-red" onclick="deleteAll('${esc(name)}')">Tout supprimer</button>` : ''}
+        </div>
+      </div>`;
+
+        if (devices.length === 0) {
+          html += `<div class="no-devices">Aucun appareil enregistré.</div>`;
+        } else {
+          html += `<div class="devices-list">`;
+          for (const d of devices) {
+            html += `
+        <div class="device-row" id="dev-${safeName(name)}-${d.fp.slice(0, 8)}">
+          <div class="device-info">
+            <div class="device-browser">🖥️ ${esc(d.browser || '—')} · ${esc(d.os || '—')}</div>
+            <div class="device-detail">Écran : ${esc(d.screen || '—')}</div>
+            <div class="device-date">Enregistré le ${esc(d.date || '—')}</div>
+          </div>
+          <button class="btn btn-red" onclick="deleteDevice('${esc(name)}', '${d.fp}')">Supprimer</button>
+        </div>`;
+          }
+          html += `</div>`;
+        }
+
+        html += `</div>`;
+      }
+
+      document.getElementById('dash-content').innerHTML = html;
+    }
+
+    // ── Actions admin ──────────────────────────────────────────────────────────
+    async function apiPost(payload) {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, token: adminToken })
+      });
+      return await res.json();
+    }
+
+    async function setLimit(name) {
+      const input = document.getElementById('limit-' + safeName(name));
+      const limit = parseInt(input.value);
+      if (!limit || limit < 1) return;
+      try {
+        await apiPost({ type: 'admin_set_limit', name, limit });
+        toast('✅ Limite mise à jour pour ' + name);
+        await loadData();
+      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+    }
+
+    async function deleteDevice(name, fp) {
+      if (!confirm(`Supprimer cet appareil pour ${name} ?`)) return;
+      try {
+        await apiPost({ type: 'admin_delete_device', name, fp });
+        toast('✅ Appareil supprimé');
+        await loadData();
+      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+    }
+
+    async function deleteAll(name) {
+      if (!confirm(`Supprimer TOUS les appareils de ${name} ?\nIl devra se reconnecter depuis ses appareils.`)) return;
+      try {
+        await apiPost({ type: 'admin_delete_all_devices', name });
+        toast('✅ Tous les appareils de ' + name + ' supprimés');
+        await loadData();
+      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+    }
+
+    // ── Utilitaires ────────────────────────────────────────────────────────────
+    function safeName(name) { return name.toLowerCase().replace(/[^a-z0-9]/g, '_'); }
+    function esc(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    let _toastTimer = null;
+    function toast(msg, isErr = false) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.className = 'toast show' + (isErr ? ' err' : '');
+      clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(() => { el.className = 'toast'; }, 3000);
+    }
+  </script>
+</body>
+
+</html>
