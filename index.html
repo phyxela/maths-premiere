@@ -1534,7 +1534,7 @@
           font-size:15px;outline:none;
           box-sizing:border-box;transition:border-color 0.2s;
         " />
-        <button id="login-btn" type="button" onclick="
+        <button type="button" onclick="
           const i = document.getElementById('pwd-input');
           const eye = document.getElementById('eye-icon');
           if (i.type === 'password') {
@@ -1553,7 +1553,7 @@
           title="Afficher / masquer le mot de passe"><span id="eye-icon">👁️</span></button>
       </div>
 
-      <button onclick="checkPassword()" style="
+      <button id="login-btn" onclick="checkPassword()" style="
       width:100%;
       background:linear-gradient(135deg,#c9a84c,#e8c97a);
       color:#0f1b2d;border:none;border-radius:40px;
