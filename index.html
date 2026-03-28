@@ -1568,7 +1568,7 @@
     // TRACKING – Google Sheets via Apps Script
     // Remplace SCRIPT_URL par l'URL de déploiement
     // =============================================
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby84czu4UOtUOywbhOAOYpIhL8L9wK5a0CF_LqC0ZffeQjKQpE-xjdfU4ZG-DRfnNxA/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby76_LYKaWCjDMjK1UUHsDTNG_EPctmaJLnKyNAiGqD7VTC43LSKVMJsFVoDn0xmjEx/exec';
 
     // Détecte le navigateur depuis userAgent
     function detectBrowser(ua) {
@@ -1700,7 +1700,7 @@
         const url = SCRIPT_URL
           + '?action=check_device'
           + '&name=' + encodeURIComponent(userName)
-          + '&fp='   + encodeURIComponent(fp);
+          + '&fp=' + encodeURIComponent(fp);
         const data = await fetch(url).then(r => r.json());
 
         if (data.status === 'full') return { ok: false, reason: 'full', limit: data.limit };
@@ -1733,30 +1733,59 @@
 
     async function checkPassword() {
       const nameInput = document.getElementById('name-input');
-      const pwdInput  = document.getElementById('pwd-input');
+      const pwdInput = document.getElementById('pwd-input');
       const enteredName = nameInput.value.trim();
-      const enteredPwd  = pwdInput.value.trim();
+      const enteredPwd = pwdInput.value.trim();
 
-      if (!enteredName || !enteredPwd) {
-        showError('❌ Remplis ton prénom et ton mot de passe.', nameInput, pwdInput);
+      if (!enteredName) {
+        showError('❌ Remplis ton prénom.', nameInput, pwdInput);
         return;
       }
 
-      // 🚀 passwords.json + sha256 + empreinte partent en parallèle dès le clic
-      const [usersData, enteredHash, fp] = await Promise.all([
+      // 🚀 Toutes les sources partent en parallèle dès le clic
+      const [gasData, jsonData, enteredHash, fp] = await Promise.all([
+        // 1. Mots de passe depuis GAS (priorité max, gérés par l'admin)
+        fetch(SCRIPT_URL + '?action=get_passwords')
+          .then(r => r.ok ? r.json() : null)
+          .catch(() => null),
+        // 2. passwords.json GitHub (fallback)
         fetch('passwords.json?v=' + Date.now())
           .then(r => r.ok ? r.json() : null)
           .catch(() => null),
-        sha256(enteredPwd),
+        // 3. Hash du mot de passe saisi
+        sha256(enteredPwd || ''),
+        // 4. Empreinte appareil
         deviceFingerprint()
       ]);
 
-      const users = usersData?.users?.length ? usersData.users : FALLBACK_USERS;
+      // Fusion des sources : GAS écrase passwords.json si même nom
+      const fallbackUsers = jsonData?.users?.length ? jsonData.users : FALLBACK_USERS;
+      const gasUsers = gasData?.passwords || [];
 
-      const match = users.find(u =>
-        u.name.toLowerCase() === enteredName.toLowerCase() &&
-        u.hash === enteredHash
-      );
+      // Construire la liste finale (GAS prioritaire)
+      const gasNames = new Set(gasUsers.map(u => u.name.toLowerCase()));
+      const users = [
+        ...gasUsers,
+        ...fallbackUsers.filter(u => !gasNames.has(u.name.toLowerCase()))
+      ];
+
+      // Trouver l'utilisateur par son nom
+      const userEntry = users.find(u => u.name.toLowerCase() === enteredName.toLowerCase());
+
+      let match = null;
+      if (userEntry) {
+        if (userEntry.noPassword) {
+          // Mode sans mot de passe : le nom suffit
+          match = userEntry;
+        } else {
+          // Mode normal : vérification du hash
+          if (!enteredPwd) {
+            showError('❌ Remplis ton mot de passe.', nameInput, pwdInput);
+            return;
+          }
+          if (userEntry.hash === enteredHash) match = userEntry;
+        }
+      }
 
       if (!match) {
         showError('❌ Prénom ou mot de passe incorrect.', nameInput, pwdInput);

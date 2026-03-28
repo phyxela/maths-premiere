@@ -348,6 +348,144 @@
       font-size: 13px;
     }
 
+    /* ── Onglets ── */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: -1px;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* ── Gestion mots de passe ── */
+    .pwd-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .pwd-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--cream);
+      min-width: 100px;
+    }
+
+    .pwd-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .pwd-input {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 8px 14px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      outline: none;
+      width: 190px;
+      transition: border-color 0.2s;
+    }
+
+    .pwd-input:focus {
+      border-color: var(--gold);
+    }
+
+    .nopassword-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .nopassword-toggle:hover {
+      border-color: rgba(255, 152, 0, 0.4);
+      color: var(--orange);
+    }
+
+    .nopassword-toggle.active {
+      background: rgba(255, 152, 0, 0.12);
+      border-color: rgba(255, 152, 0, 0.5);
+      color: var(--orange);
+    }
+
+    .pwd-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .pwd-status.has-pwd {
+      background: rgba(76, 175, 130, 0.12);
+      border: 1px solid rgba(76, 175, 130, 0.3);
+      color: var(--green);
+    }
+
+    .pwd-status.no-pwd {
+      background: rgba(255, 152, 0, 0.12);
+      border: 1px solid rgba(255, 152, 0, 0.3);
+      color: var(--orange);
+    }
+
+    .pwd-status.no-config {
+      background: rgba(138, 155, 181, 0.12);
+      border: 1px solid rgba(138, 155, 181, 0.2);
+      color: var(--text-dim);
+    }
+
     .spinner {
       display: inline-block;
       width: 20px;
@@ -392,32 +530,40 @@
       </div>
       <button class="btn btn-dim" onclick="logout()">Déconnexion</button>
     </div>
-    <div id="dash-content">
-      <div class="loading"><span class="spinner"></span>Chargement…</div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('appareils')">🖥️ Appareils</button>
+      <button class="tab-btn" onclick="switchTab('passwords')">🔑 Mots de passe</button>
+    </div>
+    <div id="tab-appareils" class="tab-panel active">
+      <div id="dash-content">
+        <div class="loading"><span class="spinner"></span>Chargement…</div>
+      </div>
+    </div>
+    <div id="tab-passwords" class="tab-panel">
+      <div id="pwd-content">
+        <div class="loading"><span class="spinner"></span>Chargement…</div>
+      </div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
   <script>
-    // ── Configuration ──────────────────────────────────────────────────────────
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby84czu4UOtUOywbhOAOYpIhL8L9wK5a0CF_LqC0ZffeQjKQpE-xjdfU4ZG-DRfnNxA/exec'; // même URL que dans index.html
-    const ADMIN_TOKEN = 't20c10P+a101';                        // même token que dans Code.gs
+    // ── Configuration ────────────────────────────────────────────────────────
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby76_LYKaWCjDMjK1UUHsDTNG_EPctmaJLnKyNAiGqD7VTC43LSKVMJsFVoDn0xmjEx/exec';
+    const ADMIN_TOKEN = 't20c10P+a101';
 
-    let adminToken = null; // stocké en mémoire après login
+    let adminToken = null;
 
-    // ── Login ──────────────────────────────────────────────────────────────────
+    // ── Login ─────────────────────────────────────────────────────────────────
     async function login() {
       const pwd = document.getElementById('admin-pwd').value.trim();
       if (!pwd) return;
-
-      // Vérification locale du token (sans exposer de route dédiée)
       if (pwd !== ADMIN_TOKEN) {
         document.getElementById('login-err').style.display = 'block';
         document.getElementById('admin-pwd').value = '';
         return;
       }
-
       adminToken = pwd;
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
@@ -431,34 +577,41 @@
       document.getElementById('admin-pwd').value = '';
     }
 
-    // ── Chargement des données ─────────────────────────────────────────────────
+    // ── Onglets ───────────────────────────────────────────────────────────────
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector(`[onclick="switchTab(\'${name}\')"]`).classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+
+    // ── Chargement des données ────────────────────────────────────────────────
     async function loadData() {
       document.getElementById('dash-content').innerHTML =
+        '<div class="loading"><span class="spinner"></span>Chargement…</div>';
+      document.getElementById('pwd-content').innerHTML =
         '<div class="loading"><span class="spinner"></span>Chargement…</div>';
 
       try {
         const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
-        const res = await fetch(url);
-        const data = await res.json();
-
+        const data = await fetch(url).then(r => r.json());
         if (data.error) throw new Error(data.error);
-        renderDashboard(data);
+        renderDevices(data);
+        renderPasswords(data);
       } catch (e) {
-        document.getElementById('dash-content').innerHTML =
-          `<div class="loading" style="color:var(--red)">❌ Erreur : ${e.message}</div>`;
+        const errHtml = `<div class="loading" style="color:var(--red)">❌ Erreur : ${e.message}</div>`;
+        document.getElementById('dash-content').innerHTML = errHtml;
+        document.getElementById('pwd-content').innerHTML = errHtml;
       }
     }
 
-    // ── Rendu du dashboard ─────────────────────────────────────────────────────
-    function renderDashboard(data) {
-      // Regrouper les appareils par utilisateur
+    // ── Onglet Appareils ──────────────────────────────────────────────────────
+    function renderDevices(data) {
       const userMap = {};
       for (const d of data.devices) {
         if (!userMap[d.name]) userMap[d.name] = [];
         userMap[d.name].push(d);
       }
-
-      // Ajouter les utilisateurs qui n'ont pas encore d'appareils mais ont une config
       for (const name of Object.keys(data.config)) {
         if (!userMap[name]) userMap[name] = [];
       }
@@ -476,23 +629,22 @@
         const limit = data.config[name] || data.defaultLimit;
         const count = devices.length;
         const slotClass = count >= limit ? 'slot-full' : count >= limit - 1 ? 'slot-warn' : 'slot-ok';
-        const slotLabel = `${count} / ${limit} appareils`;
 
         html += `
-    <div class="user-card" id="card-${safeName(name)}">
-      <div class="user-card-header">
-        <div class="user-name">👤 ${esc(name)}</div>
-        <div class="user-meta">
-          <div class="limit-wrap">
-            Limite :
-            <input type="number" min="1" max="10" value="${limit}" id="limit-${safeName(name)}"
-                   style="width:60px;margin:0;padding:5px 8px;font-size:13px;border-radius:8px;">
-            <button class="btn btn-green" onclick="setLimit('${esc(name)}')">Appliquer</button>
-          </div>
-          <span class="slot-badge ${slotClass}">${slotLabel}</span>
-          ${count > 0 ? `<button class="btn btn-red" onclick="deleteAll('${esc(name)}')">Tout supprimer</button>` : ''}
-        </div>
-      </div>`;
+        <div class="user-card" id="card-${safeName(name)}">
+          <div class="user-card-header">
+            <div class="user-name">👤 ${esc(name)}</div>
+            <div class="user-meta">
+              <div class="limit-wrap">
+                Limite :
+                <input type="number" min="1" max="10" value="${limit}" id="limit-${safeName(name)}"
+                       style="width:60px;margin:0;padding:5px 8px;font-size:13px;border-radius:8px;">
+                <button class="btn btn-green" onclick="setLimit('${esc(name)}')">Appliquer</button>
+              </div>
+              <span class="slot-badge ${slotClass}">${count} / ${limit} appareils</span>
+              ${count > 0 ? `<button class="btn btn-red" onclick="deleteAll('${esc(name)}')">Tout supprimer</button>` : ''}
+            </div>
+          </div>`;
 
         if (devices.length === 0) {
           html += `<div class="no-devices">Aucun appareil enregistré.</div>`;
@@ -500,25 +652,79 @@
           html += `<div class="devices-list">`;
           for (const d of devices) {
             html += `
-        <div class="device-row" id="dev-${safeName(name)}-${d.fp.slice(0, 8)}">
-          <div class="device-info">
-            <div class="device-browser">🖥️ ${esc(d.browser || '—')} · ${esc(d.os || '—')}</div>
-            <div class="device-detail">Écran : ${esc(d.screen || '—')}</div>
-            <div class="device-date">Enregistré le ${esc(d.date || '—')}</div>
-          </div>
-          <button class="btn btn-red" onclick="deleteDevice('${esc(name)}', '${d.fp}')">Supprimer</button>
-        </div>`;
+            <div class="device-row" id="dev-${safeName(name)}-${d.fp.slice(0, 8)}">
+              <div class="device-info">
+                <div class="device-browser">🖥️ ${esc(d.browser || '—')} · ${esc(d.os || '—')}</div>
+                <div class="device-detail">Écran : ${esc(d.screen || '—')}</div>
+                <div class="device-date">Enregistré le ${esc(d.date || '—')}</div>
+              </div>
+              <button class="btn btn-red" onclick="deleteDevice('${esc(name)}','${d.fp}')">Supprimer</button>
+            </div>`;
           }
           html += `</div>`;
         }
-
         html += `</div>`;
       }
-
       document.getElementById('dash-content').innerHTML = html;
     }
 
-    // ── Actions admin ──────────────────────────────────────────────────────────
+    // ── Onglet Mots de passe ──────────────────────────────────────────────────
+    function renderPasswords(data) {
+      // Collecter tous les noms connus (appareils + config + passwords)
+      const allNames = new Set([
+        ...data.devices.map(d => d.name),
+        ...Object.keys(data.config),
+        ...Object.keys(data.passwords || {})
+      ]);
+
+      if (allNames.size === 0) {
+        document.getElementById('pwd-content').innerHTML =
+          '<div class="loading">Aucun élève enregistré pour l\'instant.</div>';
+        return;
+      }
+
+      const passwords = data.passwords || {};
+      let html = '';
+
+      for (const name of [...allNames].sort()) {
+        const pwd = passwords[name];
+        const hasHash = pwd && pwd.hash;
+        const noPassword = pwd && pwd.noPassword;
+
+        let statusHtml;
+        if (noPassword) {
+          statusHtml = `<span class="pwd-status no-pwd">🔓 Sans mot de passe</span>`;
+        } else if (hasHash) {
+          statusHtml = `<span class="pwd-status has-pwd">🔒 Mot de passe défini</span>`;
+        } else {
+          statusHtml = `<span class="pwd-status no-config">⚠️ Non configuré</span>`;
+        }
+
+        html += `
+        <div class="pwd-card">
+          <div class="pwd-name">👤 ${esc(name)}</div>
+          ${statusHtml}
+          <div class="pwd-controls">
+            <input class="pwd-input" type="text" id="pwd-input-${safeName(name)}"
+                   placeholder="Nouveau mot de passe…"
+                   ${noPassword ? 'disabled style="opacity:0.3"' : ''}>
+            <button class="btn btn-green" onclick="setPassword('${esc(name)}')"
+                    ${noPassword ? 'disabled style="opacity:0.3"' : ''}>
+              Appliquer
+            </button>
+            <label class="nopassword-toggle ${noPassword ? 'active' : ''}"
+                   id="nopwd-toggle-${safeName(name)}"
+                   onclick="toggleNoPassword('${esc(name)}', ${!noPassword})">
+              🔓 Sans mot de passe${noPassword ? ' ✓' : ''}
+            </label>
+          </div>
+        </div>`;
+      }
+
+      document.getElementById('pwd-content').innerHTML = html;
+    }
+
+    // ── Actions admin — Appareils ─────────────────────────────────────────────
     async function apiPost(payload) {
       const res = await fetch(SCRIPT_URL, {
         method: 'POST',
@@ -557,10 +763,40 @@
       } catch (e) { toast('❌ Erreur : ' + e.message, true); }
     }
 
-    // ── Utilitaires ────────────────────────────────────────────────────────────
+    // ── Actions admin — Mots de passe ─────────────────────────────────────────
+    async function sha256(text) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function setPassword(name) {
+      const input = document.getElementById('pwd-input-' + safeName(name));
+      const pwd = input.value.trim();
+      if (!pwd) { toast('❌ Saisis un mot de passe', true); return; }
+      try {
+        const hash = await sha256(pwd);
+        await apiPost({ type: 'admin_set_password', name, hash });
+        input.value = '';
+        toast('✅ Mot de passe mis à jour pour ' + name);
+        await loadData();
+      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+    }
+
+    async function toggleNoPassword(name, noPassword) {
+      try {
+        await apiPost({ type: 'admin_toggle_nopassword', name, noPassword });
+        toast(noPassword
+          ? '🔓 ' + name + ' peut se connecter sans mot de passe'
+          : '🔒 Mot de passe réactivé pour ' + name);
+        await loadData();
+      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+    }
+
+    // ── Utilitaires ───────────────────────────────────────────────────────────
     function safeName(name) { return name.toLowerCase().replace(/[^a-z0-9]/g, '_'); }
     function esc(str) {
-      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     let _toastTimer = null;
