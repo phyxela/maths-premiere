@@ -666,18 +666,35 @@
 
     // ── Login ─────────────────────────────────────────────────────────────────
     async function login() {
-      const pwd = document.getElementById('admin-pwd').value.trim();
-      if (!pwd) return;
-      if (pwd !== ADMIN_TOKEN) {
-        document.getElementById('login-err').style.display = 'block';
-        document.getElementById('admin-pwd').value = '';
-        return;
-      }
-      adminToken = pwd;
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      await loadData();
+  const pwd = document.getElementById('admin-pwd').value.trim();
+  if (!pwd) return;
+  
+  // Affiche un indicateur de chargement si tu veux
+  adminToken = pwd;
+  
+  // On tente de charger les données. Si le mot de passe est faux, le backend renverra une erreur.
+  try {
+    const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
+    const data = await fetch(url).then(r => r.json());
+    
+    if (data.error) {
+      document.getElementById('login-err').textContent = "❌ " + data.error;
+      document.getElementById('login-err').style.display = 'block';
+      adminToken = null;
+      return;
     }
+    
+    // Succès !
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    renderDevices(data);
+    renderPasswords(data);
+    
+  } catch (e) {
+    document.getElementById('login-err').textContent = "❌ Erreur de connexion";
+    document.getElementById('login-err').style.display = 'block';
+  }
+}
 
     function logout() {
       adminToken = null;
