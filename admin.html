@@ -90,7 +90,8 @@
     }
 
     input[type="password"],
-    input[type="number"] {
+    input[type="number"],
+    input[type="text"] {
       width: 100%;
       background: rgba(255, 255, 255, 0.06);
       border: 1.5px solid rgba(255, 255, 255, 0.15);
@@ -529,24 +530,6 @@
       border-radius: 10px;
     }
 
-    .btn-export {
-      background: rgba(201, 168, 76, 0.12);
-      color: var(--gold);
-      padding: 8px 18px;
-      font-size: 12px;
-      border: 1px solid rgba(201, 168, 76, 0.35);
-      border-radius: 40px;
-      font-family: 'JetBrains Mono', monospace;
-      cursor: pointer;
-      transition: transform 0.15s, background 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-export:hover {
-      background: rgba(201, 168, 76, 0.22);
-      transform: translateY(-2px);
-    }
-
     .nopassword-inline {
       display: flex;
       align-items: center;
@@ -589,7 +572,6 @@
 
 <body>
 
-  <!-- ── Écran de connexion admin ─────────────────────────────────────────── -->
   <div id="login-screen">
     <div class="login-box">
       <div class="badge">⚙️ Administration</div>
@@ -602,7 +584,6 @@
     </div>
   </div>
 
-  <!-- ── Dashboard ────────────────────────────────────────────────────────── -->
   <div id="dashboard">
     <div class="dash-header">
       <div>
@@ -622,13 +603,12 @@
     </div>
     <div id="tab-passwords" class="tab-panel">
 
-      <!-- Formulaire ajout élève -->
       <div class="add-student-card">
         <h3>➕ Ajouter un élève</h3>
         <div class="add-student-fields">
           <input type="text" id="new-student-name" placeholder="Prénom…" autocomplete="off"
             onkeydown="if(event.key==='Enter') addStudent()">
-          <input type="text" id="new-student-pwd" placeholder="Mot de passe…" autocomplete="off"
+          <input type="password" id="new-student-pwd" placeholder="Mot de passe…" autocomplete="off"
             onkeydown="if(event.key==='Enter') addStudent()">
           <label class="nopassword-inline">
             <input type="checkbox" id="new-student-nopwd"
@@ -640,13 +620,11 @@
         </div>
       </div>
 
-      <!-- Barre actions -->
       <div class="add-student-bar">
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.6">
           Les modifications sont sauvegardées dans le Google Sheet.<br>
-          Exporte et committe <code style="color:var(--gold)">passwords.json</code> sur GitHub pour mettre à jour le fallback.
+          La mise à jour du fichier de secours <code style="color:var(--gold)">passwords.json</code> sur GitHub est désormais <strong>automatique</strong> 🤖.
         </div>
-        <button class="btn-export" onclick="exportPasswordsJson()">⬇️ Exporter passwords.json</button>
       </div>
 
       <div id="pwd-content">
@@ -659,42 +637,39 @@
 
   <script>
     // ── Configuration ────────────────────────────────────────────────────────
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOjJhuqlOlWyoplhXGxuP0_77pCUFbpWdkHIdMbXsThJGwmycSs3zadDSERth3LPw/exec';
-    const ADMIN_TOKEN = 't20c10P+a101';
-
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby76_LYKaWCjDMjK1UUHsDTNG_EPctmaJLnKyNAiGqD7VTC43LSKVMJsFVoDn0xmjEx/exec';
+    
     let adminToken = null;
 
     // ── Login ─────────────────────────────────────────────────────────────────
     async function login() {
-  const pwd = document.getElementById('admin-pwd').value.trim();
-  if (!pwd) return;
-  
-  // Affiche un indicateur de chargement si tu veux
-  adminToken = pwd;
-  
-  // On tente de charger les données. Si le mot de passe est faux, le backend renverra une erreur.
-  try {
-    const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
-    const data = await fetch(url).then(r => r.json());
-    
-    if (data.error) {
-      document.getElementById('login-err').textContent = "❌ " + data.error;
-      document.getElementById('login-err').style.display = 'block';
-      adminToken = null;
-      return;
+      const pwd = document.getElementById('admin-pwd').value.trim();
+      if (!pwd) return;
+      
+      adminToken = pwd;
+      
+      try {
+        const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
+        const data = await fetch(url).then(r => r.json());
+        
+        if (data.error) {
+          document.getElementById('login-err').textContent = "❌ " + data.error;
+          document.getElementById('login-err').style.display = 'block';
+          adminToken = null;
+          return;
+        }
+        
+        // Succès !
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        renderDevices(data);
+        renderPasswords(data);
+        
+      } catch (e) {
+        document.getElementById('login-err').textContent = "❌ Erreur de connexion";
+        document.getElementById('login-err').style.display = 'block';
+      }
     }
-    
-    // Succès !
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    renderDevices(data);
-    renderPasswords(data);
-    
-  } catch (e) {
-    document.getElementById('login-err').textContent = "❌ Erreur de connexion";
-    document.getElementById('login-err').style.display = 'block';
-  }
-}
 
     function logout() {
       adminToken = null;
@@ -707,7 +682,7 @@
     function switchTab(name) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      document.querySelector(`[onclick="switchTab(\'${name}\')"]`).classList.add('active');
+      document.querySelector(`[onclick="switchTab(\\'${name}\\')"]`).classList.add('active');
       document.getElementById('tab-' + name).classList.add('active');
     }
 
@@ -749,7 +724,7 @@
       const names = Object.keys(userMap).sort();
       if (names.length === 0) {
         document.getElementById('dash-content').innerHTML =
-          '<div class="loading">Aucun appareil enregistré pour l\'instant.</div>';
+          '<div class="loading">Aucun appareil enregistré pour l\\'instant.</div>';
         return;
       }
 
@@ -836,7 +811,7 @@
           <div class="pwd-name">👤 ${esc(name)}</div>
           ${statusHtml}
           <div class="pwd-controls">
-            <input class="pwd-input" type="text" id="pwd-input-${safeName(name)}"
+            <input class="pwd-input" type="password" id="pwd-input-${safeName(name)}"
                    placeholder="Nouveau mot de passe…"
                    ${noPassword ? 'disabled style="opacity:0.3"' : ''}>
             <button class="btn btn-green" onclick="setPassword('${esc(name)}')"
@@ -880,11 +855,19 @@
 
     async function deleteDevice(name, fp) {
       if (!confirm(`Supprimer cet appareil pour ${name} ?`)) return;
+      
+      // Optimistic UI : masquer la ligne tout de suite
+      const row = document.getElementById(`dev-${safeName(name)}-${fp.slice(0, 8)}`);
+      if (row) row.style.display = 'none'; 
+      
       try {
         await apiPost({ type: 'admin_delete_device', name, fp });
         toast('✅ Appareil supprimé');
-        await loadData();
-      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+        // Optionnel : await loadData(); 
+      } catch (e) { 
+        if (row) row.style.display = 'flex'; // Remettre si erreur
+        toast('❌ Erreur : ' + e.message, true); 
+      }
     }
 
     async function deleteAll(name) {
@@ -956,34 +939,6 @@
           : '❌ Erreur : ' + e.message;
         toast(msg, true);
       }
-    }
-
-    // ── Exporter passwords.json ───────────────────────────────────────────────
-    async function exportPasswordsJson() {
-      try {
-        const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
-        const data = await fetch(url).then(r => r.json());
-        if (data.error) throw new Error(data.error);
-
-        const passwords = data.passwords || {};
-        const users = Object.entries(passwords)
-          .filter(([, v]) => v.hash || v.noPassword)
-          .map(([name, v]) => {
-            const entry = { name };
-            if (v.noPassword) entry.noPassword = true;
-            else entry.hash = v.hash;
-            return entry;
-          });
-
-        const json = JSON.stringify({ users }, null, 2);
-        const blob = new Blob([json], { type: 'application/json' });
-        const a    = document.createElement('a');
-        a.href     = URL.createObjectURL(blob);
-        a.download = 'passwords.json';
-        a.click();
-        URL.revokeObjectURL(a.href);
-        toast('✅ passwords.json exporté – committe-le sur GitHub !');
-      } catch (e) { toast('❌ Erreur export : ' + e.message, true); }
     }
 
     // ── Utilitaires ───────────────────────────────────────────────────────────
