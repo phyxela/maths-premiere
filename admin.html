@@ -787,8 +787,9 @@
       ]);
 
       if (allNames.size === 0) {
+        // Sheet vide : affiche un message d'invitation à ajouter
         document.getElementById('pwd-content').innerHTML =
-          '<div class="loading">Aucun élève enregistré pour l\'instant.</div>';
+          '<div class="loading">Aucun élève dans le Sheet. Utilise le formulaire ci-dessus pour en ajouter.</div>';
         return;
       }
 
@@ -837,10 +838,12 @@
     async function apiPost(payload) {
       const res = await fetch(SCRIPT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ ...payload, token: adminToken })
       });
-      return await res.json();
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      return data;
     }
 
     async function setLimit(name) {
@@ -907,8 +910,8 @@
       const pwdEl    = document.getElementById('new-student-pwd');
       const noPassEl = document.getElementById('new-student-nopwd');
 
-      const name      = nameEl.value.trim();
-      const pwd       = pwdEl.value.trim();
+      const name       = nameEl.value.trim();
+      const pwd        = pwdEl.value.trim();
       const noPassword = noPassEl.checked;
 
       if (!name) { toast('❌ Saisis un prénom.', true); nameEl.focus(); return; }
@@ -916,25 +919,22 @@
 
       try {
         const hash = noPassword ? '' : await sha256(pwd);
-
-        // Vérifier doublon côté client avant d'envoyer
-        const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
-        const current = await fetch(url).then(r => r.json());
-        const existing = current.passwords || {};
-        if (Object.keys(existing).some(k => k.toLowerCase() === name.toLowerCase())) {
-          toast('⚠️ Cet élève existe déjà. Utilise le formulaire ci-dessous pour modifier.', true);
-          return;
-        }
-
+        // Le serveur GAS gère lui-même le doublon et retourne {error:'exists'}
+        // apiPost() lève une exception si data.error est présent → catch ci-dessous
         await apiPost({ type: 'admin_add_student', name, hash, noPassword });
-        nameEl.value = '';
-        pwdEl.value  = '';
+        nameEl.value    = '';
+        pwdEl.value     = '';
         noPassEl.checked = false;
-        pwdEl.disabled = false;
+        pwdEl.disabled  = false;
         pwdEl.style.opacity = '1';
         toast('✅ Élève ' + name + ' ajouté avec succès !');
         await loadData();
-      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+      } catch (e) {
+        const msg = e.message === 'exists'
+          ? '⚠️ ' + name + ' existe déjà. Modifie-le dans la liste ci-dessous.'
+          : '❌ Erreur : ' + e.message;
+        toast(msg, true);
+      }
     }
 
     // ── Exporter passwords.json ───────────────────────────────────────────────
