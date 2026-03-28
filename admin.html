@@ -646,36 +646,49 @@
       const pwd = document.getElementById('admin-pwd').value.trim();
       if (!pwd) return;
       
+      // 1. On affiche le chargement immédiatement
+      const btn = document.querySelector('#login-screen .btn-gold');
+      const errEl = document.getElementById('login-err');
+      const originalText = btn.textContent;
+      btn.textContent = "⏳ Connexion en cours...";
+      btn.disabled = true;
+      errEl.style.display = 'none';
+      
       adminToken = pwd;
       
       try {
+        // 2. On contacte Google
         const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
         const data = await fetch(url).then(r => r.json());
         
+        // 3. Si Google dit que le mot de passe est faux
         if (data.error) {
-          document.getElementById('login-err').textContent = "❌ " + data.error;
-          document.getElementById('login-err').style.display = 'block';
+          errEl.textContent = "❌ " + data.error;
+          errEl.style.display = 'block';
           adminToken = null;
+          btn.textContent = originalText;
+          btn.disabled = false;
           return;
         }
         
-        // Succès !
+        // 4. Succès ! On affiche le dashboard
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
+        
+        // On remet le bouton normal pour la prochaine fois
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
         renderDevices(data);
         renderPasswords(data);
         
       } catch (e) {
-        document.getElementById('login-err').textContent = "❌ Erreur de connexion";
-        document.getElementById('login-err').style.display = 'block';
+        // 5. Si Google est injoignable
+        errEl.textContent = "❌ Le serveur Google refuse la connexion.";
+        errEl.style.display = 'block';
+        btn.textContent = originalText;
+        btn.disabled = false;
       }
-    }
-
-    function logout() {
-      adminToken = null;
-      document.getElementById('login-screen').style.display = 'flex';
-      document.getElementById('dashboard').style.display = 'none';
-      document.getElementById('admin-pwd').value = '';
     }
 
     // ── Onglets ───────────────────────────────────────────────────────────────
