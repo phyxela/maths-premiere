@@ -1356,8 +1356,24 @@
       Maths<span style="color:#c9a84c">Première</span>
     </h1>
     <p style="color:#8a9bb5;font-size:14px;font-style:italic;margin-bottom:28px;">
-      Entre ton mot de passe pour accéder au site
+      Entre ton prénom et ton mot de passe pour accéder au site
     </p>
+
+    <input
+      type="text" id="name-input"
+      placeholder="Ton prénom…"
+      onkeydown="if(event.key==='Enter') document.getElementById('pwd-input').focus()"
+      autocomplete="off"
+      style="
+        width:100%;
+        background:rgba(255,255,255,0.06);
+        border:1.5px solid rgba(255,255,255,0.15);
+        border-radius:10px;padding:12px 18px;
+        color:#f5f0e8;font-family:'JetBrains Mono',monospace;
+        font-size:15px;outline:none;margin-bottom:14px;
+        box-sizing:border-box;transition:border-color 0.2s;
+      "
+    />
 
     <div style="position:relative;width:100%;margin-bottom:14px;">
       <input
@@ -1430,7 +1446,7 @@
 // TRACKING – Google Sheets via Apps Script
 // Remplace SCRIPT_URL par l'URL de déploiement
 // =============================================
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxY-KS4MJskO-gflV3NC-UsKSi6XUJsjuyd2lWf3QlHTtUeBxQvbVHxNog7GJ-C32BN/exec';
+const SCRIPT_URL = 'COLLE_ICI_TON_URL_DE_DEPLOIEMENT';
 
 // Détecte le navigateur depuis userAgent
 function detectBrowser(ua) {
@@ -1526,58 +1542,110 @@ if (sessionStorage.getItem('mathsPremiere_auth') === 'true') {
 
 // Focus automatique sur le champ mot de passe
 window.addEventListener('load', () => {
-  const input = document.getElementById('pwd-input');
+  const input = document.getElementById('name-input');
   if (input) input.focus();
 });
 
-async function checkPassword() {
-  const input   = document.getElementById('pwd-input');
-  const errorEl = document.getElementById('auth-error');
-  const welcome = document.getElementById('auth-welcome');
-  const entered = input.value.trim();
-  if (!entered) return;
+// Génère une empreinte stable de l'appareil (hash de plusieurs caractéristiques)
+async function deviceFingerprint() {
+  const raw = [
+    navigator.userAgent,
+    navigator.language,
+    screen.width + 'x' + screen.height,
+    Intl.DateTimeFormat().resolvedOptions().timeZone,
+    navigator.platform || ''
+  ].join('|');
+  return await sha256(raw);
+}
 
-  let users = FALLBACK_USERS; // par défaut : fallback
+// Vérifie ou enregistre l'empreinte de l'appareil dans localStorage
+async function checkFingerprint(userName) {
+  const fp       = await deviceFingerprint();
+  const fpKey    = 'mathsPremiere_fp_' + userName.toLowerCase();
+  const stored   = localStorage.getItem(fpKey);
+
+  if (!stored) {
+    // Première connexion sur cet appareil → on enregistre l'empreinte
+    localStorage.setItem(fpKey, fp);
+    return { ok: true, firstLogin: true };
+  }
+  if (stored === fp) {
+    return { ok: true, firstLogin: false };
+  }
+  // Empreinte différente → appareil non reconnu
+  return { ok: false };
+}
+
+async function checkPassword() {
+  const nameInput = document.getElementById('name-input');
+  const pwdInput  = document.getElementById('pwd-input');
+  const errorEl   = document.getElementById('auth-error');
+  const welcome   = document.getElementById('auth-welcome');
+
+  const enteredName = nameInput.value.trim();
+  const enteredPwd  = pwdInput.value.trim();
+
+  if (!enteredName || !enteredPwd) {
+    showError('❌ Remplis ton prénom et ton mot de passe.', nameInput, pwdInput);
+    return;
+  }
+
+  let users = FALLBACK_USERS;
 
   try {
-    // Tentative de chargement de passwords.json
     const res = await fetch('passwords.json?v=' + Date.now());
     if (res.ok) {
       const data = await res.json();
       if (data.users && data.users.length > 0) users = data.users;
     }
-  } catch(e) {
-    // passwords.json inaccessible → on utilise le fallback silencieusement
+  } catch(e) {}
+
+  // Option A — Vérification nom + hash mot de passe ensemble
+  const enteredHash = await sha256(enteredPwd);
+  const match = users.find(u =>
+    u.name.toLowerCase() === enteredName.toLowerCase() &&
+    u.hash === enteredHash
+  );
+
+  if (!match) {
+    showError('❌ Prénom ou mot de passe incorrect.', nameInput, pwdInput);
+    return;
   }
 
-  // Hachage SHA-256 du mot de passe saisi avant comparaison
-  const enteredHash = await sha256(entered);
-  const match = users.find(u => u.hash === enteredHash);
+  // Option B — Vérification empreinte de l'appareil
+  const fpResult = await checkFingerprint(match.name);
+  if (!fpResult.ok) {
+    showError('🚫 Appareil non reconnu. Connecte-toi depuis ton appareil habituel.', nameInput, pwdInput);
+    return;
+  }
 
-  if (match) {
-    // ✅ Accès accordé
-    welcome.textContent   = '✅ Bienvenue, ' + match.name + ' !';
-    welcome.style.display = 'block';
-    errorEl.style.display = 'none';
-    sessionStorage.setItem('mathsPremiere_auth', 'true');
-    sessionStorage.setItem('mathsPremiere_user', match.name);
-    logConnexion(match.name); // 📊 Log connexion → Google Sheets
-    setTimeout(() => {
-      document.getElementById('auth-overlay').style.display = 'none';
-      // Charger les stats de cet utilisateur une fois connecté
-      if (typeof loadStats === 'function') loadStats();
-      // Afficher le nom dans le menu utilisateur
-      if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
-    }, 800);
-  } else {
-    // ❌ Mauvais mot de passe
-    errorEl.textContent    = '❌ Mot de passe incorrect';
-    errorEl.style.display  = 'block';
-    welcome.style.display  = 'none';
-    input.style.borderColor = '#e05a5a';
-    setTimeout(() => { input.style.borderColor = 'rgba(255,255,255,0.15)'; }, 1200);
-    input.value = '';
-    input.focus();
+  // ✅ Accès accordé
+  const msg = fpResult.firstLogin
+    ? '✅ Bienvenue, ' + match.name + ' ! Appareil enregistré.'
+    : '✅ Bienvenue, ' + match.name + ' !';
+  welcome.textContent   = msg;
+  welcome.style.display = 'block';
+  errorEl.style.display = 'none';
+  sessionStorage.setItem('mathsPremiere_auth', 'true');
+  sessionStorage.setItem('mathsPremiere_user', match.name);
+  logConnexion(match.name);
+  setTimeout(() => {
+    document.getElementById('auth-overlay').style.display = 'none';
+    if (typeof loadStats === 'function') loadStats();
+    if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
+  }, 800);
+}
+
+function showError(msg, nameInput, pwdInput) {
+  const errorEl = document.getElementById('auth-error');
+  const pwdEl   = pwdInput || document.getElementById('pwd-input');
+  errorEl.textContent   = msg;
+  errorEl.style.display = 'block';
+  document.getElementById('auth-welcome').style.display = 'none';
+  pwdEl.style.borderColor = '#e05a5a';
+  setTimeout(() => { pwdEl.style.borderColor = 'rgba(255,255,255,0.15)'; }, 1200);
+  pwdEl.value = '';
+  pwdEl.focus();
   }
 }
 </script>
