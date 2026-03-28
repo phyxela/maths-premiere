@@ -1568,7 +1568,7 @@
     // TRACKING – Google Sheets via Apps Script
     // Remplace SCRIPT_URL par l'URL de déploiement
     // =============================================
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOjJhuqlOlWyoplhXGxuP0_77pCUFbpWdkHIdMbXsThJGwmycSs3zadDSERth3LPw/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby76_LYKaWCjDMjK1UUHsDTNG_EPctmaJLnKyNAiGqD7VTC43LSKVMJsFVoDn0xmjEx/exec';
 
     // Détecte le navigateur depuis userAgent
     function detectBrowser(ua) {
@@ -1731,6 +1731,43 @@
       }
     }
 
+    // ── Cache sessionStorage des passwords (5 min) ──────────────────────────
+    // Évite 2 fetches réseau à chaque connexion : instantané dès la 2e fois
+    const PWD_CACHE_KEY = 'mathsPremiere_pwdCache';
+    const PWD_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+    function getPwdCache() {
+      try {
+        const raw = sessionStorage.getItem(PWD_CACHE_KEY);
+        if (!raw) return null;
+        const { users, ts } = JSON.parse(raw);
+        if (Date.now() - ts > PWD_CACHE_TTL) { sessionStorage.removeItem(PWD_CACHE_KEY); return null; }
+        return users;
+      } catch { return null; }
+    }
+    function setPwdCache(users) {
+      try { sessionStorage.setItem(PWD_CACHE_KEY, JSON.stringify({ users, ts: Date.now() })); } catch {}
+    }
+
+    async function fetchUsers() {
+      const cached = getPwdCache();
+      if (cached) return cached; // ✅ Pas de réseau si déjà en cache
+
+      const [gasData, jsonData] = await Promise.all([
+        fetch(SCRIPT_URL + '?action=get_passwords').then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch('passwords.json').then(r => r.ok ? r.json() : null).catch(() => null)
+      ]);
+      const fallbackUsers = jsonData?.users?.length ? jsonData.users : FALLBACK_USERS;
+      const gasUsers = gasData?.passwords || [];
+      const gasNames = new Set(gasUsers.map(u => u.name.toLowerCase()));
+      const users = [
+        ...gasUsers,
+        ...fallbackUsers.filter(u => !gasNames.has(u.name.toLowerCase()))
+      ];
+      setPwdCache(users);
+      return users;
+    }
+
     async function checkPassword() {
       const nameInput = document.getElementById('name-input');
       const pwdInput = document.getElementById('pwd-input');
@@ -1742,32 +1779,12 @@
         return;
       }
 
-      // 🚀 Toutes les sources partent en parallèle dès le clic
-      const [gasData, jsonData, enteredHash, fp] = await Promise.all([
-        // 1. Mots de passe depuis GAS (priorité max, gérés par l'admin)
-        fetch(SCRIPT_URL + '?action=get_passwords')
-          .then(r => r.ok ? r.json() : null)
-          .catch(() => null),
-        // 2. passwords.json GitHub (fallback)
-        fetch('passwords.json?v=' + Date.now())
-          .then(r => r.ok ? r.json() : null)
-          .catch(() => null),
-        // 3. Hash du mot de passe saisi
+      // 🚀 Passwords depuis cache ou réseau + hash + empreinte en parallèle
+      const [users, enteredHash, fp] = await Promise.all([
+        fetchUsers(),                  // cache sessionStorage → quasi-instantané si déjà chargé
         sha256(enteredPwd || ''),
-        // 4. Empreinte appareil
         deviceFingerprint()
       ]);
-
-      // Fusion des sources : GAS écrase passwords.json si même nom
-      const fallbackUsers = jsonData?.users?.length ? jsonData.users : FALLBACK_USERS;
-      const gasUsers = gasData?.passwords || [];
-
-      // Construire la liste finale (GAS prioritaire)
-      const gasNames = new Set(gasUsers.map(u => u.name.toLowerCase()));
-      const users = [
-        ...gasUsers,
-        ...fallbackUsers.filter(u => !gasNames.has(u.name.toLowerCase()))
-      ];
 
       // Trouver l'utilisateur par son nom
       const userEntry = users.find(u => u.name.toLowerCase() === enteredName.toLowerCase());

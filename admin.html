@@ -659,7 +659,7 @@
 
   <script>
     // ── Configuration ────────────────────────────────────────────────────────
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOjJhuqlOlWyoplhXGxuP0_77pCUFbpWdkHIdMbXsThJGwmycSs3zadDSERth3LPw/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby76_LYKaWCjDMjK1UUHsDTNG_EPctmaJLnKyNAiGqD7VTC43LSKVMJsFVoDn0xmjEx/exec';
     const ADMIN_TOKEN = 't20c10P+a101';
 
     let adminToken = null;
@@ -721,7 +721,11 @@
         if (!userMap[d.name]) userMap[d.name] = [];
         userMap[d.name].push(d);
       }
+      // Inclure aussi les élèves définis dans Passwords ou Config, même sans appareil
       for (const name of Object.keys(data.config)) {
+        if (!userMap[name]) userMap[name] = [];
+      }
+      for (const name of Object.keys(data.passwords || {})) {
         if (!userMap[name]) userMap[name] = [];
       }
 
