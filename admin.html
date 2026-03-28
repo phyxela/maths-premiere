@@ -695,26 +695,7 @@
         btn.disabled = false;
       }
     }
-        
-        // 4. Succès ! On affiche le dashboard
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-        
-        // On remet le bouton normal pour la prochaine fois
-        btn.textContent = originalText;
-        btn.disabled = false;
-        
-        renderDevices(data);
-        renderPasswords(data);
-        
-      } catch (e) {
-        // 5. Si Google est injoignable
-        errEl.textContent = "❌ Le serveur Google refuse la connexion.";
-        errEl.style.display = 'block';
-        btn.textContent = originalText;
-        btn.disabled = false;
-      }
-    }
+
 
     // ── Onglets ───────────────────────────────────────────────────────────────
     function switchTab(name) {
@@ -762,7 +743,7 @@
       const names = Object.keys(userMap).sort();
       if (names.length === 0) {
         document.getElementById('dash-content').innerHTML =
-          '<div class="loading">Aucun appareil enregistré pour l\\'instant.</div>';
+          '<div class="loading">Aucun appareil enregistré pour l\'instant.</div>';
         return;
       }
 
