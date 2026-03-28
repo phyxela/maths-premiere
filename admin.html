@@ -775,7 +775,6 @@
 
     // ── Onglet Mots de passe ──────────────────────────────────────────────────
     function renderPasswords(data) {
-      // Collecter tous les noms connus (appareils + config + passwords)
       const allNames = new Set([
         ...data.devices.map(d => d.name),
         ...Object.keys(data.config),
@@ -783,7 +782,6 @@
       ]);
 
       if (allNames.size === 0) {
-        // Sheet vide : affiche un message d'invitation à ajouter
         document.getElementById('pwd-content').innerHTML =
           '<div class="loading">Aucun élève dans le Sheet. Utilise le formulaire ci-dessus pour en ajouter.</div>';
         return;
@@ -806,8 +804,9 @@
           statusHtml = `<span class="pwd-status no-config">⚠️ Non configuré</span>`;
         }
 
+        // On ajoute un ID unique à la carte pour pouvoir la masquer dynamiquement
         html += `
-        <div class="pwd-card">
+        <div class="pwd-card" id="pwd-card-${safeName(name)}">
           <div class="pwd-name">👤 ${esc(name)}</div>
           ${statusHtml}
           <div class="pwd-controls">
@@ -823,6 +822,9 @@
                    onclick="toggleNoPassword('${esc(name)}', ${!noPassword})">
               🔓 Sans mot de passe${noPassword ? ' ✓' : ''}
             </label>
+            <button class="btn btn-red" onclick="deleteStudent('${esc(name)}')">
+              🗑️
+            </button>
           </div>
         </div>`;
       }
@@ -938,6 +940,24 @@
           ? '⚠️ ' + name + ' existe déjà. Modifie-le dans la liste ci-dessous.'
           : '❌ Erreur : ' + e.message;
         toast(msg, true);
+      }
+    }
+
+    async function deleteStudent(name) {
+      if (!confirm(`⚠️ Es-tu sûr de vouloir supprimer DÉFINITIVEMENT l'élève ${name} ?\n\nCela supprimera ses accès, ses limites et tous ses appareils.`)) return;
+      
+      // Masquer la carte tout de suite pour une interface fluide
+      const card = document.getElementById(`pwd-card-${safeName(name)}`);
+      if (card) card.style.display = 'none'; 
+      
+      try {
+        await apiPost({ type: 'admin_delete_student', name });
+        toast(`✅ Élève ${name} supprimé avec succès !`);
+        // On recharge les données pour mettre à jour l'onglet "Appareils" également
+        await loadData(); 
+      } catch (e) {
+        if (card) card.style.display = 'flex'; // Réafficher en cas d'erreur
+        toast('❌ Erreur : ' + e.message, true); 
       }
     }
 
