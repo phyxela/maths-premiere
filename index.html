@@ -1408,9 +1408,16 @@
 // ⚠️ FALLBACK : liste de secours si passwords.json est inaccessible
 // Modifie passwords.json sur GitHub EN PRIORITÉ
 // Ne modifie cette liste que si passwords.json reste inaccessible
+// Les valeurs sont des hashes SHA-256 (jamais de mots de passe en clair !)
 const FALLBACK_USERS = [
-  { name: "Tom",     password: "admin" }
+  { name: "Tom", hash: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" }
 ];
+
+// Fonction de hachage SHA-256 (Web Crypto API, disponible dans tous les navigateurs modernes)
+async function sha256(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 // Si déjà connecté pendant cette session → on passe directement
 if (sessionStorage.getItem('mathsPremiere_auth') === 'true') {
@@ -1443,7 +1450,9 @@ async function checkPassword() {
     // passwords.json inaccessible → on utilise le fallback silencieusement
   }
 
-  const match = users.find(u => u.password === entered);
+  // Hachage SHA-256 du mot de passe saisi avant comparaison
+  const enteredHash = await sha256(entered);
+  const match = users.find(u => u.hash === enteredHash);
 
   if (match) {
     // ✅ Accès accordé
