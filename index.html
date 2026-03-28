@@ -1253,10 +1253,76 @@
       display: block;
       animation: fadeIn 0.4s ease;
     }
+
+    /* --------- Menu utilisateur (3 points) --------- */
+    .user-menu-wrap { position:fixed; top:16px; right:16px; z-index:8000; }
+    .user-menu-btn {
+      background:var(--navy-mid); border:1px solid rgba(201,168,76,0.3);
+      border-radius:40px; padding:7px 14px; cursor:pointer;
+      display:flex; align-items:center; gap:8px; transition:all 0.2s;
+      color:var(--text); font-family:'JetBrains Mono',monospace; font-size:12px;
+    }
+    .user-menu-btn:hover { border-color:var(--gold); background:var(--navy-lt); }
+    .user-name-label { color:var(--gold); font-size:12px; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .user-dropdown {
+      display:none; position:absolute; top:calc(100% + 8px); right:0;
+      background:var(--navy-lt); border:1px solid rgba(201,168,76,0.25);
+      border-radius:var(--r-md); padding:8px; min-width:210px;
+      box-shadow:var(--shadow); animation:fadeIn 0.2s ease;
+    }
+    .user-dropdown.open { display:block; }
+    .user-dropdown-header { padding:8px 12px 10px; border-bottom:1px solid rgba(255,255,255,0.07); margin-bottom:6px; }
+    .user-dropdown-name { font-family:'Playfair Display',serif; color:var(--cream); font-size:15px; }
+    .user-dropdown-sub { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-dim); letter-spacing:1px; margin-top:2px; }
+    .user-mini-stats { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:8px 12px; border-bottom:1px solid rgba(255,255,255,0.07); margin-bottom:6px; }
+    .user-mini-stat { text-align:center; }
+    .user-mini-val { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--gold); line-height:1; }
+    .user-mini-lbl { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text-dim); text-transform:uppercase; margin-top:2px; }
+    .chapters-visited { display:flex; gap:4px; flex-wrap:wrap; padding:6px 12px 10px; border-bottom:1px solid rgba(255,255,255,0.07); margin-bottom:6px; }
+    .ch-visited-badge { font-size:10px; padding:2px 8px; border-radius:20px; font-family:'JetBrains Mono',monospace; }
+    .ch-visited-badge.seen { background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.25); color:var(--gold-lt); }
+    .ch-visited-badge.unseen { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); color:var(--text-dim); }
+    .dropdown-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:var(--r-sm); cursor:pointer; font-size:13px; color:var(--text); transition:background 0.15s; border:none; background:none; width:100%; text-align:left; }
+    .dropdown-item:hover { background:rgba(255,255,255,0.06); }
+    .dropdown-item.danger { color:var(--red); }
+    .dropdown-item.danger:hover { background:rgba(224,90,90,0.08); }
   </style>
 </head>
 
 <body>
+<!-- Menu utilisateur flottant -->
+<div class="user-menu-wrap" id="user-menu-wrap" style="display:none">
+  <button class="user-menu-btn" onclick="toggleUserMenu()">
+    <span id="user-avatar">👤</span>
+    <span class="user-name-label" id="user-menu-name">—</span>
+    <span style="color:var(--text-dim)">···</span>
+  </button>
+  <div class="user-dropdown" id="user-dropdown">
+    <div class="user-dropdown-header">
+      <div class="user-dropdown-name" id="dd-name">—</div>
+      <div class="user-dropdown-sub">PROGRESSION SAUVEGARDÉE</div>
+    </div>
+    <!-- Mini stats -->
+    <div class="user-mini-stats">
+      <div class="user-mini-stat"><div class="user-mini-val" id="dd-total">0</div><div class="user-mini-lbl">Exercices</div></div>
+      <div class="user-mini-stat"><div class="user-mini-val" style="color:var(--green)" id="dd-ok">0</div><div class="user-mini-lbl">Bonne rép.</div></div>
+      <div class="user-mini-stat"><div class="user-mini-val" id="dd-corr">0</div><div class="user-mini-lbl">Corrections</div></div>
+      <div class="user-mini-stat"><div class="user-mini-val" style="color:#ff9800" id="dd-streak">0</div><div class="user-mini-lbl">🔥 Série max</div></div>
+    </div>
+    <!-- Chapitres visités -->
+    <div class="chapters-visited" id="dd-chapters">
+      <span class="ch-visited-badge unseen">Ch.1</span>
+      <span class="ch-visited-badge unseen">Ch.2</span>
+      <span class="ch-visited-badge unseen">Ch.3</span>
+      <span class="ch-visited-badge unseen">Ch.4</span>
+      <span class="ch-visited-badge unseen">Auto</span>
+    </div>
+    <!-- Actions -->
+    <button class="dropdown-item" onclick="resetUserStats()">🗑️ Réinitialiser ma progression</button>
+    <button class="dropdown-item danger" onclick="logout()">🚪 Se déconnecter</button>
+  </div>
+</div>
+
 
 <!-- =============================================
      PROTECTION PAR MOT DE PASSE
@@ -1336,54 +1402,72 @@
 <script>
 /* =============================================
    AUTHENTIFICATION VIA passwords.json
+   Fallback intégré si le fichier est introuvable
    ============================================= */
+
+// ⚠️ FALLBACK : liste de secours si passwords.json est inaccessible
+// Modifie passwords.json sur GitHub EN PRIORITÉ
+// Ne modifie cette liste que si passwords.json reste inaccessible
+const FALLBACK_USERS = [
+  { name: "Tom",     password: "admin" }
+];
 
 // Si déjà connecté pendant cette session → on passe directement
 if (sessionStorage.getItem('mathsPremiere_auth') === 'true') {
   document.getElementById('auth-overlay').style.display = 'none';
 }
 
+// Focus automatique sur le champ mot de passe
+window.addEventListener('load', () => {
+  const input = document.getElementById('pwd-input');
+  if (input) input.focus();
+});
+
 async function checkPassword() {
-  const input    = document.getElementById('pwd-input');
-  const errorEl  = document.getElementById('auth-error');
-  const welcome  = document.getElementById('auth-welcome');
-  const entered  = input.value.trim();
+  const input   = document.getElementById('pwd-input');
+  const errorEl = document.getElementById('auth-error');
+  const welcome = document.getElementById('auth-welcome');
+  const entered = input.value.trim();
   if (!entered) return;
 
+  let users = FALLBACK_USERS; // par défaut : fallback
+
   try {
-    // Charge passwords.json depuis la racine du dépôt
-    // ?v=timestamp évite le cache navigateur
-    const res  = await fetch('passwords.json?v=' + Date.now());
-    if (!res.ok) throw new Error('Fichier introuvable');
-    const data = await res.json();
-
-    // Cherche si le mot de passe correspond à un utilisateur
-    const match = data.users.find(u => u.password === entered);
-
-    if (match) {
-      // ✅ Accès accordé
-      welcome.textContent = '✅ Bienvenue, ' + match.name + ' !';
-      welcome.style.display = 'block';
-      errorEl.style.display = 'none';
-      // On mémorise la session (disparaît à la fermeture du navigateur)
-      sessionStorage.setItem('mathsPremiere_auth', 'true');
-      sessionStorage.setItem('mathsPremiere_user', match.name);
-      setTimeout(() => {
-        document.getElementById('auth-overlay').style.display = 'none';
-      }, 900);
-    } else {
-      // ❌ Mauvais mot de passe
-      errorEl.style.display  = 'block';
-      welcome.style.display  = 'none';
-      input.style.borderColor = '#e05a5a';
-      setTimeout(() => { input.style.borderColor = 'rgba(255,255,255,0.15)'; }, 1200);
-      input.value = '';
-      input.focus();
+    // Tentative de chargement de passwords.json
+    const res = await fetch('passwords.json?v=' + Date.now());
+    if (res.ok) {
+      const data = await res.json();
+      if (data.users && data.users.length > 0) users = data.users;
     }
-
   } catch(e) {
-    errorEl.textContent    = '⚠️ Erreur : passwords.json introuvable. Contacte l\'admin.';
+    // passwords.json inaccessible → on utilise le fallback silencieusement
+  }
+
+  const match = users.find(u => u.password === entered);
+
+  if (match) {
+    // ✅ Accès accordé
+    welcome.textContent   = '✅ Bienvenue, ' + match.name + ' !';
+    welcome.style.display = 'block';
+    errorEl.style.display = 'none';
+    sessionStorage.setItem('mathsPremiere_auth', 'true');
+    sessionStorage.setItem('mathsPremiere_user', match.name);
+    setTimeout(() => {
+      document.getElementById('auth-overlay').style.display = 'none';
+      // Charger les stats de cet utilisateur une fois connecté
+      if (typeof loadStats === 'function') loadStats();
+      // Afficher le nom dans le menu utilisateur
+      if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
+    }, 800);
+  } else {
+    // ❌ Mauvais mot de passe
+    errorEl.textContent    = '❌ Mot de passe incorrect';
     errorEl.style.display  = 'block';
+    welcome.style.display  = 'none';
+    input.style.borderColor = '#e05a5a';
+    setTimeout(() => { input.style.borderColor = 'rgba(255,255,255,0.15)'; }, 1200);
+    input.value = '';
+    input.focus();
   }
 }
 </script>
@@ -1523,30 +1607,141 @@ async function checkPassword() {
     // Stockage du dernier sujet de Bac généré (pour afficher ensuite le corrigé).
     let currentBacExercises = [];
 
-    // Persistance localStorage
+    // =============================================
+    // PERSISTANCE PAR UTILISATEUR
+    // Chaque utilisateur a sa propre clé localStorage : mathsPremiere_stats_NOM
+    // =============================================
+
+    let chapitresVus = new Set(); // chapitres consultés cette session
+
+    // Retourne la clé localStorage de l'utilisateur connecté
+    function userKey() {
+      const u = sessionStorage.getItem('mathsPremiere_user') || 'anonymous';
+      return 'mathsPremiere_stats_' + u.toLowerCase().replace(/\s+/g,'_');
+    }
+
     function saveStats() {
       try {
-        localStorage.setItem('mathsPremiere_stats', JSON.stringify({
-          total: statsTotal, corr: statsCorr, correct: statsCorrect,
-          bestStreak: statsBestStreak
+        localStorage.setItem(userKey(), JSON.stringify({
+          total:      statsTotal,
+          corr:       statsCorr,
+          correct:    statsCorrect,
+          bestStreak: statsBestStreak,
+          chapitres:  [...chapitresVus]
         }));
-      } catch (e) { }
+        updateDropdown(); // Mise à jour du mini-panneau
+      } catch(e) {}
     }
+
     function loadStats() {
       try {
-        const d = JSON.parse(localStorage.getItem('mathsPremiere_stats'));
+        const d = JSON.parse(localStorage.getItem(userKey()));
         if (d) {
-          statsTotal = d.total || 0;
-          statsCorr = d.corr || 0;
-          statsCorrect = d.correct || 0;
+          statsTotal      = d.total      || 0;
+          statsCorr       = d.corr       || 0;
+          statsCorrect    = d.correct    || 0;
           statsBestStreak = d.bestStreak || 0;
-          document.getElementById('s-total').textContent = statsTotal;
-          document.getElementById('s-corr').textContent = statsCorr;
-          document.getElementById('s-ok').textContent = statsCorrect;
+          chapitresVus    = new Set(d.chapitres || []);
+          document.getElementById('s-total').textContent   = statsTotal;
+          document.getElementById('s-corr').textContent    = statsCorr;
+          document.getElementById('s-ok').textContent      = statsCorrect;
         }
-      } catch (e) { }
+        updateDropdown();
+      } catch(e) {}
     }
-    document.addEventListener('DOMContentLoaded', loadStats);
+
+    // Met à jour le menu déroulant utilisateur
+    function updateDropdown() {
+      const name = sessionStorage.getItem('mathsPremiere_user') || '—';
+      const el = (id) => document.getElementById(id);
+      if (el('dd-name'))   el('dd-name').textContent   = name;
+      if (el('dd-total'))  el('dd-total').textContent  = statsTotal;
+      if (el('dd-ok'))     el('dd-ok').textContent     = statsCorrect;
+      if (el('dd-corr'))   el('dd-corr').textContent   = statsCorr;
+      if (el('dd-streak')) el('dd-streak').textContent = statsBestStreak;
+      // Chapitres visités
+      const labels = ['Ch.1','Ch.2','Ch.3','Ch.4','Auto'];
+      const keys   = [1,2,3,4,5];
+      const container = el('dd-chapters');
+      if (container) {
+        container.innerHTML = labels.map((lbl, i) => {
+          const seen = chapitresVus.has(keys[i]);
+          return `<span class="ch-visited-badge ${seen?'seen':'unseen'}">${seen?'✓ ':''} ${lbl}</span>`;
+        }).join('');
+      }
+    }
+
+    // Met à jour le bouton flottant avec le nom
+    function updateUserMenu(name) {
+      const wrap   = document.getElementById('user-menu-wrap');
+      const label  = document.getElementById('user-menu-name');
+      const ddName = document.getElementById('dd-name');
+      if (wrap)   wrap.style.display = 'block';
+      if (label)  label.textContent  = name;
+      if (ddName) ddName.textContent = name;
+      loadStats();
+    }
+
+    // Ouvre / ferme le dropdown
+    function toggleUserMenu() {
+      const dd = document.getElementById('user-dropdown');
+      if (dd) dd.classList.toggle('open');
+      updateDropdown();
+    }
+
+    // Ferme le dropdown si on clique ailleurs
+    document.addEventListener('click', (e) => {
+      const wrap = document.getElementById('user-menu-wrap');
+      const dd   = document.getElementById('user-dropdown');
+      if (wrap && dd && !wrap.contains(e.target)) dd.classList.remove('open');
+    });
+
+    // Déconnexion : vide la session, réaffiche le mur de connexion
+    function logout() {
+      sessionStorage.removeItem('mathsPremiere_auth');
+      sessionStorage.removeItem('mathsPremiere_user');
+      // Réinitialise l'affichage
+      statsTotal = 0; statsCorr = 0; statsCorrect = 0;
+      statsStreak = 0; statsBestStreak = 0;
+      chapitresVus = new Set();
+      document.getElementById('s-total').textContent  = 0;
+      document.getElementById('s-corr').textContent   = 0;
+      document.getElementById('s-ok').textContent     = 0;
+      const streakEl = document.getElementById('s-streak');
+      if (streakEl) streakEl.textContent = 0;
+      // Cache le menu et réaffiche l'overlay de connexion
+      const wrap = document.getElementById('user-menu-wrap');
+      if (wrap) wrap.style.display = 'none';
+      const dropdown = document.getElementById('user-dropdown');
+      if (dropdown) dropdown.classList.remove('open');
+      const overlay = document.getElementById('auth-overlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        setTimeout(() => { document.getElementById('pwd-input').focus(); }, 100);
+      }
+    }
+
+    // Réinitialise la progression de l'utilisateur connecté
+    function resetUserStats() {
+      if (!confirm('Réinitialiser toute ta progression ? Cette action est irréversible.')) return;
+      localStorage.removeItem(userKey());
+      statsTotal = 0; statsCorr = 0; statsCorrect = 0;
+      statsStreak = 0; statsBestStreak = 0;
+      chapitresVus = new Set();
+      document.getElementById('s-total').textContent  = 0;
+      document.getElementById('s-corr').textContent   = 0;
+      document.getElementById('s-ok').textContent     = 0;
+      const streakEl = document.getElementById('s-streak');
+      if (streakEl) streakEl.textContent = 0;
+      updateDropdown();
+      document.getElementById('user-dropdown').classList.remove('open');
+    }
+
+    // Initialisation au chargement (si déjà connecté depuis une session précédente)
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = sessionStorage.getItem('mathsPremiere_user');
+      if (user) updateUserMenu(user);
+    });
 
     /* =============================================
        UTILITAIRES MATHÉMATIQUES
@@ -1736,6 +1931,11 @@ async function checkPassword() {
     function selectChapter(n) {
       closeBacZone();
       currentChapter = n;
+      // Marquer ce chapitre comme visité et sauvegarder
+      if (typeof chapitresVus !== 'undefined') {
+        chapitresVus.add(n);
+        saveStats();
+      }
       document.querySelectorAll('.ch-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === n));
       const names = ['', 'Second Degré', 'Dérivation', 'Suites Numériques', 'Probabilités', 'Automatismes'];
       const titleEl = document.getElementById('zone-title');
