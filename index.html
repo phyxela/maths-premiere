@@ -1412,6 +1412,21 @@
     .dropdown-item.danger:hover {
       background: rgba(224, 90, 90, 0.08);
     }
+
+    /* --------- Animation de chargement --------- */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 
@@ -1519,7 +1534,7 @@
           font-size:15px;outline:none;
           box-sizing:border-box;transition:border-color 0.2s;
         " />
-        <button type="button" onclick="
+        <button id="login-btn" type="button" onclick="
           const i = document.getElementById('pwd-input');
           const eye = document.getElementById('eye-icon');
           if (i.type === 'password') {
@@ -1781,6 +1796,8 @@
     async function checkPassword() {
       const nameInput = document.getElementById('name-input');
       const pwdInput = document.getElementById('pwd-input');
+      const loginBtn = document.getElementById('login-btn'); // On récupère le bouton
+      
       const enteredName = nameInput.value.trim();
       const enteredPwd = pwdInput.value.trim();
 
@@ -1789,66 +1806,93 @@
         return;
       }
 
-      // 🚀 Passwords depuis cache ou réseau + hash + empreinte en parallèle
-      const [users, enteredHash, fp] = await Promise.all([
-        fetchUsers(),                  // cache sessionStorage → quasi-instantané si déjà chargé
-        sha256(enteredPwd || ''),
-        deviceFingerprint()
-      ]);
-
-      // Trouver l'utilisateur par son nom
-      const userEntry = users.find(u => u.name.toLowerCase() === enteredName.toLowerCase());
-
-      let match = null;
-      if (userEntry) {
-        if (userEntry.noPassword) {
-          // Mode sans mot de passe : le nom suffit
-          match = userEntry;
-        } else {
-          // Mode normal : vérification du hash
-          if (!enteredPwd) {
-            showError('❌ Remplis ton mot de passe.', nameInput, pwdInput);
-            return;
-          }
-          if (userEntry.hash === enteredHash) match = userEntry;
-        }
-      }
-
-      if (!match) {
-        showError('❌ Prénom ou mot de passe incorrect.', nameInput, pwdInput);
-        return;
-      }
-
-      // fp est déjà calculé, on le passe directement (pas de double calcul)
-      const fpResult = await checkFingerprint(match.name, fp);
-      if (!fpResult.ok) {
-        const msg = fpResult.reason === 'full'
-          ? `🚫 Limite de ${fpResult.limit} appareils atteinte.`
-          : '🚫 Appareil non reconnu. Connecte-toi depuis ton appareil habituel.';
-        showError(msg, nameInput, pwdInput);
-        return;
-      }
-
-      // ✅ Accès accordé
-      const welcome = document.getElementById('auth-welcome');
-      welcome.textContent = fpResult.firstLogin
-        ? '✅ Bienvenue, ' + match.name + ' ! Appareil enregistré.'
-        : '✅ Bienvenue, ' + match.name + ' !';
-      welcome.style.display = 'block';
+      // --- ⏳ AFFICHAGE DU CHARGEMENT ---
+      const originalBtnText = loginBtn.innerHTML;
+      // On met un spinner bleu marine pour qu'il soit visible sur le bouton doré
+      loginBtn.innerHTML = '<span class="spinner" style="border-color: rgba(15,27,45,0.2); border-top-color: #0f1b2d; width: 16px; height: 16px; margin-right: 8px;"></span> Connexion...';
+      loginBtn.disabled = true;
+      loginBtn.style.opacity = '0.8';
       document.getElementById('auth-error').style.display = 'none';
-      sessionStorage.setItem('mathsPremiere_auth', 'true');
-      sessionStorage.setItem('mathsPremiere_user', match.name);
-      logConnexion(match.name); // fire-and-forget
-      setTimeout(() => {
-        document.getElementById('auth-overlay').style.display = 'none';
-        if (typeof loadStats === 'function') loadStats();
-        if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
-      }, 800);
+      // ----------------------------------
+
+      try {
+        // 🚀 Passwords depuis cache ou réseau + hash + empreinte en parallèle
+        const [users, enteredHash, fp] = await Promise.all([
+          fetchUsers(),                  
+          sha256(enteredPwd || ''),
+          deviceFingerprint()
+        ]);
+
+        // Trouver l'utilisateur par son nom
+        const userEntry = users.find(u => u.name.toLowerCase() === enteredName.toLowerCase());
+
+        let match = null;
+        if (userEntry) {
+          if (userEntry.noPassword) {
+            match = userEntry;
+          } else {
+            if (!enteredPwd) {
+              showError('❌ Remplis ton mot de passe.', nameInput, pwdInput, originalBtnText);
+              return;
+            }
+            if (userEntry.hash === enteredHash) match = userEntry;
+          }
+        }
+
+        if (!match) {
+          showError('❌ Prénom ou mot de passe incorrect.', nameInput, pwdInput, originalBtnText);
+          return;
+        }
+
+        const fpResult = await checkFingerprint(match.name, fp);
+        if (!fpResult.ok) {
+          const msg = fpResult.reason === 'full'
+            ? `🚫 Limite de ${fpResult.limit} appareils atteinte.`
+            : '🚫 Appareil non reconnu. Connecte-toi depuis ton appareil habituel.';
+          showError(msg, nameInput, pwdInput, originalBtnText);
+          return;
+        }
+
+        // ✅ Accès accordé
+        loginBtn.innerHTML = '✅ Ouverture...'; // Petit message de succès sur le bouton
+        const welcome = document.getElementById('auth-welcome');
+        welcome.textContent = fpResult.firstLogin
+          ? '✅ Bienvenue, ' + match.name + ' ! Appareil enregistré.'
+          : '✅ Bienvenue, ' + match.name + ' !';
+        welcome.style.display = 'block';
+        document.getElementById('auth-error').style.display = 'none';
+        sessionStorage.setItem('mathsPremiere_auth', 'true');
+        sessionStorage.setItem('mathsPremiere_user', match.name);
+        logConnexion(match.name); 
+        
+        setTimeout(() => {
+          document.getElementById('auth-overlay').style.display = 'none';
+          if (typeof loadStats === 'function') loadStats();
+          if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
+          // On remet le bouton à son état normal en arrière-plan (pour la déconnexion)
+          loginBtn.innerHTML = originalBtnText;
+          loginBtn.disabled = false;
+          loginBtn.style.opacity = '1';
+        }, 800);
+
+      } catch (e) {
+        showError('❌ Erreur de connexion au serveur.', nameInput, pwdInput, originalBtnText);
+      }
     }
 
-    function showError(msg, nameInput, pwdInput) {
+    // On modifie showError pour qu'elle remette le bouton normal si besoin
+    function showError(msg, nameInput, pwdInput, originalBtnText = null) {
       const errorEl = document.getElementById('auth-error');
       const pwdEl = pwdInput || document.getElementById('pwd-input');
+      const loginBtn = document.getElementById('login-btn');
+      
+      // Si on avait modifié le bouton, on le remet à la normale
+      if (loginBtn && originalBtnText) {
+        loginBtn.innerHTML = originalBtnText;
+        loginBtn.disabled = false;
+        loginBtn.style.opacity = '1';
+      }
+
       errorEl.textContent = msg;
       errorEl.style.display = 'block';
       document.getElementById('auth-welcome').style.display = 'none';
