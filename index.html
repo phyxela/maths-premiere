@@ -1257,6 +1257,137 @@
 </head>
 
 <body>
+
+<!-- =============================================
+     PROTECTION PAR MOT DE PASSE
+     Lit les accès depuis passwords.json
+     Pour ajouter/supprimer un accès :
+       → Édite passwords.json sur GitHub, commit → c'est en ligne !
+     ============================================= -->
+<div id="auth-overlay" style="
+  position:fixed;inset:0;z-index:9999;
+  background:#0f1b2d;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Source Serif 4',Georgia,serif;
+">
+  <div style="
+    width:100%;max-width:400px;margin:20px;
+    background:#1a2e4a;
+    border:1px solid rgba(201,168,76,0.3);
+    border-radius:20px;padding:40px 36px;
+    box-shadow:0 8px 40px rgba(0,0,0,0.5);
+    text-align:center;
+  ">
+    <div style="
+      display:inline-block;
+      background:linear-gradient(135deg,#c9a84c,#e8c97a);
+      color:#0f1b2d;font-family:'JetBrains Mono',monospace;
+      font-size:10px;letter-spacing:2.5px;text-transform:uppercase;
+      padding:5px 14px;border-radius:20px;margin-bottom:20px;
+    ">🔒 Accès Sécurisé</div>
+
+    <h1 style="font-family:'Playfair Display',serif;font-size:1.9rem;color:#f5f0e8;margin-bottom:6px;">
+      Maths<span style="color:#c9a84c">Première</span>
+    </h1>
+    <p style="color:#8a9bb5;font-size:14px;font-style:italic;margin-bottom:28px;">
+      Entre ton mot de passe pour accéder au site
+    </p>
+
+    <input
+      type="password" id="pwd-input"
+      placeholder="Mot de passe…"
+      onkeydown="if(event.key==='Enter') checkPassword()"
+      style="
+        width:100%;
+        background:rgba(255,255,255,0.06);
+        border:1.5px solid rgba(255,255,255,0.15);
+        border-radius:10px;padding:12px 18px;
+        color:#f5f0e8;font-family:'JetBrains Mono',monospace;
+        font-size:15px;outline:none;margin-bottom:14px;
+        box-sizing:border-box;transition:border-color 0.2s;
+      "
+    />
+
+    <button onclick="checkPassword()" style="
+      width:100%;
+      background:linear-gradient(135deg,#c9a84c,#e8c97a);
+      color:#0f1b2d;border:none;border-radius:40px;
+      padding:12px 0;
+      font-family:'Source Serif 4',serif;font-size:15px;font-weight:700;
+      cursor:pointer;box-shadow:0 4px 16px rgba(201,168,76,0.3);
+      transition:transform 0.2s;
+    " onmouseover="this.style.transform='translateY(-2px)'"
+       onmouseout="this.style.transform='translateY(0)'">
+      Accéder →
+    </button>
+
+    <div id="auth-error" style="
+      display:none;margin-top:14px;color:#e05a5a;
+      font-size:13px;font-family:'JetBrains Mono',monospace;
+    ">❌ Mot de passe incorrect</div>
+
+    <div id="auth-welcome" style="
+      display:none;margin-top:14px;color:#4caf82;
+      font-size:13px;font-family:'JetBrains Mono',monospace;
+    "></div>
+  </div>
+</div>
+
+<script>
+/* =============================================
+   AUTHENTIFICATION VIA passwords.json
+   ============================================= */
+
+// Si déjà connecté pendant cette session → on passe directement
+if (sessionStorage.getItem('mathsPremiere_auth') === 'true') {
+  document.getElementById('auth-overlay').style.display = 'none';
+}
+
+async function checkPassword() {
+  const input    = document.getElementById('pwd-input');
+  const errorEl  = document.getElementById('auth-error');
+  const welcome  = document.getElementById('auth-welcome');
+  const entered  = input.value.trim();
+  if (!entered) return;
+
+  try {
+    // Charge passwords.json depuis la racine du dépôt
+    // ?v=timestamp évite le cache navigateur
+    const res  = await fetch('passwords.json?v=' + Date.now());
+    if (!res.ok) throw new Error('Fichier introuvable');
+    const data = await res.json();
+
+    // Cherche si le mot de passe correspond à un utilisateur
+    const match = data.users.find(u => u.password === entered);
+
+    if (match) {
+      // ✅ Accès accordé
+      welcome.textContent = '✅ Bienvenue, ' + match.name + ' !';
+      welcome.style.display = 'block';
+      errorEl.style.display = 'none';
+      // On mémorise la session (disparaît à la fermeture du navigateur)
+      sessionStorage.setItem('mathsPremiere_auth', 'true');
+      sessionStorage.setItem('mathsPremiere_user', match.name);
+      setTimeout(() => {
+        document.getElementById('auth-overlay').style.display = 'none';
+      }, 900);
+    } else {
+      // ❌ Mauvais mot de passe
+      errorEl.style.display  = 'block';
+      welcome.style.display  = 'none';
+      input.style.borderColor = '#e05a5a';
+      setTimeout(() => { input.style.borderColor = 'rgba(255,255,255,0.15)'; }, 1200);
+      input.value = '';
+      input.focus();
+    }
+
+  } catch(e) {
+    errorEl.textContent    = '⚠️ Erreur : passwords.json introuvable. Contacte l\'admin.';
+    errorEl.style.display  = 'block';
+  }
+}
+</script>
+
   <div id="app">
     <header role="banner">
       <div class="header-badge">Première Spécialité Mathématiques</div>
