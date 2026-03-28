@@ -1682,21 +1682,54 @@
 
     // Vérifie ou enregistre l'empreinte de l'appareil dans localStorage
     async function checkFingerprint(userName) {
-      const fp = await deviceFingerprint();
-      const fpKey = 'mathsPremiere_fp_' + userName.toLowerCase();
-      const stored = localStorage.getItem(fpKey);
+  const fp = await deviceFingerprint();
+  const ua = navigator.userAgent;
 
-      if (!stored) {
-        // Première connexion sur cet appareil → on enregistre l'empreinte
-        localStorage.setItem(fpKey, fp);
-        return { ok: true, firstLogin: true };
-      }
-      if (stored === fp) {
-        return { ok: true, firstLogin: false };
-      }
-      // Empreinte différente → appareil non reconnu
-      return { ok: false };
+  try {
+    // 1. Demande au serveur si cet appareil est déjà connu
+    const url = SCRIPT_URL
+      + '?action=check_device'
+      + '&name=' + encodeURIComponent(userName)
+      + '&fp='   + encodeURIComponent(fp);
+    const res  = await fetch(url);
+    const data = await res.json();
+
+    if (data.status === 'known') {
+      return { ok: true, firstLogin: false };
     }
+
+    if (data.status === 'full') {
+      return { ok: false, reason: 'full', limit: data.limit };
+    }
+
+    if (data.status === 'new') {
+      // 2. Enregistre l'appareil dans Google Sheets
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          type:    'register_device',
+          name:    userName,
+          fp:      fp,
+          browser: detectBrowser(ua),
+          os:      detectOS(ua),
+          screen:  screen.width + 'x' + screen.height
+        })
+      });
+      return { ok: true, firstLogin: true };
+    }
+
+  } catch (e) {
+    // Fallback localStorage si le réseau est inaccessible
+    const fpKey  = 'mathsPremiere_fp_' + userName.toLowerCase();
+    const stored = localStorage.getItem(fpKey);
+    if (!stored) { localStorage.setItem(fpKey, fp); return { ok: true, firstLogin: true }; }
+    if (stored === fp) return { ok: true, firstLogin: false };
+  }
+
+  return { ok: false };
+}
 
     async function checkPassword() {
       const nameInput = document.getElementById('name-input');
