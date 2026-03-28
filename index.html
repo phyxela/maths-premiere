@@ -1469,24 +1469,9 @@ async function sendToSheets(payload) {
 // Appelée juste après la connexion réussie
 async function logConnexion(userName) {
   const ua = navigator.userAgent;
-  let ip = '—', country = '—', city = '—';
-  try {
-    // Récupère IP + géolocalisation approximative (ville/pays, sans accord requis)
-    const geo = await fetch('https://ipapi.co/json/');
-    if (geo.ok) {
-      const gd = await geo.json();
-      ip      = gd.ip      || '—';
-      country = gd.country_name || '—';
-      city    = gd.city    || '—';
-    }
-  } catch(e) {}
-
   sendToSheets({
     type:     'connexion',
     name:     userName,
-    ip:       ip,
-    country:  country,
-    city:     city,
     browser:  detectBrowser(ua),
     os:       detectOS(ua),
     lang:     navigator.language || '—',
