@@ -487,6 +487,48 @@
       color: var(--text-dim);
     }
 
+    /* ── Tableau Récapitulatif ── */
+    .admin-table-container {
+      background: var(--navy-mid);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .admin-table th, .admin-table td {
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .admin-table th {
+      background: rgba(201, 168, 76, 0.08);
+      color: var(--gold);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .admin-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .hash-cell {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      word-break: break-all;
+      max-width: 300px;
+    }
+
     /* ── Ajout élève ── */
     .add-student-bar {
       display: flex;
@@ -588,21 +630,23 @@
     <div class="dash-header">
       <div>
         <div class="badge">⚙️ Administration</div>
-        <div class="dash-title">Maths<span>Première</span> – Gestion des appareils</div>
+        <div class="dash-title">Maths<span>Première</span> – Gestion</div>
       </div>
       <button class="btn btn-dim" onclick="logout()">Déconnexion</button>
     </div>
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('appareils')">🖥️ Appareils</button>
-      <button class="tab-btn" onclick="switchTab('passwords')">🔑 Mots de passe</button>
+      <button class="tab-btn" onclick="switchTab('passwords')">🔑 Gestion Accès</button>
+      <button class="tab-btn" onclick="switchTab('recap')">📋 Récapitulatif</button>
     </div>
+
     <div id="tab-appareils" class="tab-panel active">
       <div id="dash-content">
         <div class="loading"><span class="spinner"></span>Chargement…</div>
       </div>
     </div>
-    <div id="tab-passwords" class="tab-panel">
 
+    <div id="tab-passwords" class="tab-panel">
       <div class="add-student-card">
         <h3>➕ Ajouter un élève</h3>
         <div class="add-student-fields">
@@ -619,25 +663,34 @@
           <button class="btn btn-green" onclick="addStudent()">Ajouter</button>
         </div>
       </div>
-
-      <div class="add-student-bar">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.6">
-          Les modifications sont sauvegardées dans le Google Sheet.<br>
-          La mise à jour du fichier de secours <code style="color:var(--gold)">passwords.json</code> sur GitHub est désormais <strong>automatique</strong> 🤖.
-        </div>
-      </div>
-
       <div id="pwd-content">
         <div class="loading"><span class="spinner"></span>Chargement…</div>
       </div>
     </div>
+
+    <div id="tab-recap" class="tab-panel">
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>👤 Élève</th>
+              <th>🔑 Empreinte (Hash SHA-256)</th>
+              <th>🔓 Statut</th>
+            </tr>
+          </thead>
+          <tbody id="recap-content-body">
+            </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
   <div class="toast" id="toast"></div>
 
   <script>
     // ── Configuration ────────────────────────────────────────────────────────
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxOjJhuqlOlWyoplhXGxuP0_77pCUFbpWdkHIdMbXsThJGwmycSs3zadDSERth3LPw/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby76_LYKaWCjDMjK1UUHsDTNG_EPctmaJLnKyNAiGqD7VTC43LSKVMJsFVoDn0xmjEx/exec';
     
     let adminToken = null;
 
@@ -653,7 +706,6 @@
         return;
       }
       
-      // 1. On affiche le chargement immédiatement
       const originalText = btn.textContent;
       btn.innerHTML = '<span class="spinner"></span> Connexion...';
       btn.disabled = true;
@@ -662,11 +714,9 @@
       adminToken = pwd;
       
       try {
-        // 2. On contacte Google
         const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
         const data = await fetch(url).then(r => r.json());
         
-        // 3. Si Google dit que le mot de passe est faux
         if (data.error) {
           errEl.textContent = "❌ " + data.error;
           errEl.style.display = 'block';
@@ -676,19 +726,17 @@
           return;
         }
         
-        // 4. Succès ! On affiche le dashboard
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         
-        // On remet le bouton normal pour la prochaine fois
         btn.innerHTML = originalText;
         btn.disabled = false;
         
         renderDevices(data);
         renderPasswords(data);
+        renderRecap(data);
         
       } catch (e) {
-        // 5. Si Google est injoignable
         errEl.textContent = "❌ Le serveur Google refuse la connexion.";
         errEl.style.display = 'block';
         btn.innerHTML = originalText;
@@ -696,28 +744,40 @@
       }
     }
 
+    function logout() {
+      adminToken = null;
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('admin-pwd').value = '';
+    }
 
     // ── Onglets ───────────────────────────────────────────────────────────────
     function switchTab(name) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      document.querySelector(`[onclick="switchTab(\\'${name}\\')"]`).classList.add('active');
+      
+      // On cherche le bouton par son action
+      const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(name));
+      if(btn) btn.classList.add('active');
+      
       document.getElementById('tab-' + name).classList.add('active');
     }
 
     // ── Chargement des données ────────────────────────────────────────────────
     async function loadData() {
-      document.getElementById('dash-content').innerHTML =
-        '<div class="loading"><span class="spinner"></span>Chargement…</div>';
-      document.getElementById('pwd-content').innerHTML =
-        '<div class="loading"><span class="spinner"></span>Chargement…</div>';
+      const loaders = ['dash-content', 'pwd-content'];
+      loaders.forEach(id => {
+        document.getElementById(id).innerHTML = '<div class="loading"><span class="spinner"></span>Chargement…</div>';
+      });
 
       try {
         const url = SCRIPT_URL + '?action=admin_data&token=' + encodeURIComponent(adminToken);
         const data = await fetch(url).then(r => r.json());
         if (data.error) throw new Error(data.error);
+        
         renderDevices(data);
         renderPasswords(data);
+        renderRecap(data);
       } catch (e) {
         const errHtml = `<div class="loading" style="color:var(--red)">❌ Erreur : ${e.message}</div>`;
         document.getElementById('dash-content').innerHTML = errHtml;
@@ -732,7 +792,6 @@
         if (!userMap[d.name]) userMap[d.name] = [];
         userMap[d.name].push(d);
       }
-      // Inclure aussi les élèves définis dans Passwords ou Config, même sans appareil
       for (const name of Object.keys(data.config)) {
         if (!userMap[name]) userMap[name] = [];
       }
@@ -742,8 +801,7 @@
 
       const names = Object.keys(userMap).sort();
       if (names.length === 0) {
-        document.getElementById('dash-content').innerHTML =
-          '<div class="loading">Aucun appareil enregistré pour l\'instant.</div>';
+        document.getElementById('dash-content').innerHTML = '<div class="loading">Aucun élève enregistré.</div>';
         return;
       }
 
@@ -761,8 +819,7 @@
             <div class="user-meta">
               <div class="limit-wrap">
                 Limite :
-                <input type="number" min="1" max="10" value="${limit}" id="limit-${safeName(name)}"
-                       style="width:60px;margin:0;padding:5px 8px;font-size:13px;border-radius:8px;">
+                <input type="number" min="1" max="10" value="${limit}" id="limit-${safeName(name)}">
                 <button class="btn btn-green" onclick="setLimit('${esc(name)}')">Appliquer</button>
               </div>
               <span class="slot-badge ${slotClass}">${count} / ${limit} appareils</span>
@@ -801,8 +858,7 @@
       ]);
 
       if (allNames.size === 0) {
-        document.getElementById('pwd-content').innerHTML =
-          '<div class="loading">Aucun élève dans le Sheet. Utilise le formulaire ci-dessus pour en ajouter.</div>';
+        document.getElementById('pwd-content').innerHTML = '<div class="loading">Aucun élève. Utilisez le formulaire.</div>';
         return;
       }
 
@@ -814,44 +870,56 @@
         const hasHash = pwd && pwd.hash;
         const noPassword = pwd && pwd.noPassword;
 
-        let statusHtml;
-        if (noPassword) {
-          statusHtml = `<span class="pwd-status no-pwd">🔓 Sans mot de passe</span>`;
-        } else if (hasHash) {
-          statusHtml = `<span class="pwd-status has-pwd">🔒 Mot de passe défini</span>`;
-        } else {
-          statusHtml = `<span class="pwd-status no-config">⚠️ Non configuré</span>`;
-        }
+        let statusHtml = noPassword 
+          ? `<span class="pwd-status no-pwd">🔓 Sans mot de passe</span>`
+          : (hasHash ? `<span class="pwd-status has-pwd">🔒 Mot de passe défini</span>` : `<span class="pwd-status no-config">⚠️ Non configuré</span>`);
 
-        // On ajoute un ID unique à la carte pour pouvoir la masquer dynamiquement
         html += `
         <div class="pwd-card" id="pwd-card-${safeName(name)}">
           <div class="pwd-name">👤 ${esc(name)}</div>
           ${statusHtml}
           <div class="pwd-controls">
             <input class="pwd-input" type="password" id="pwd-input-${safeName(name)}"
-                   placeholder="Nouveau mot de passe…"
-                   ${noPassword ? 'disabled style="opacity:0.3"' : ''}>
-            <button class="btn btn-green" onclick="setPassword('${esc(name)}')"
-                    ${noPassword ? 'disabled style="opacity:0.3"' : ''}>
-              Appliquer
-            </button>
-            <label class="nopassword-toggle ${noPassword ? 'active' : ''}"
-                   id="nopwd-toggle-${safeName(name)}"
-                   onclick="toggleNoPassword('${esc(name)}', ${!noPassword})">
+                   placeholder="Nouveau mot de passe…" ${noPassword ? 'disabled style="opacity:0.3"' : ''}>
+            <button class="btn btn-green" onclick="setPassword('${esc(name)}')" ${noPassword ? 'disabled style="opacity:0.3"' : ''}>Appliquer</button>
+            <label class="nopassword-toggle ${noPassword ? 'active' : ''}" onclick="toggleNoPassword('${esc(name)}', ${!noPassword})">
               🔓 Sans mot de passe${noPassword ? ' ✓' : ''}
             </label>
-            <button class="btn btn-red" onclick="deleteStudent('${esc(name)}')">
-              🗑️
-            </button>
+            <button class="btn btn-red" onclick="deleteStudent('${esc(name)}')">🗑️</button>
           </div>
         </div>`;
       }
-
       document.getElementById('pwd-content').innerHTML = html;
     }
 
-    // ── Actions admin — Appareils ─────────────────────────────────────────────
+    // ── Onglet Récapitulatif (NOUVEAU) ─────────────────────────────────────────
+    function renderRecap(data) {
+      const allNames = new Set([
+        ...data.devices.map(d => d.name),
+        ...Object.keys(data.config),
+        ...Object.keys(data.passwords || {})
+      ]);
+
+      const passwords = data.passwords || {};
+      const tbody = document.getElementById('recap-content-body');
+      tbody.innerHTML = '';
+
+      for (const name of [...allNames].sort()) {
+        const pwd = passwords[name];
+        const hash = (pwd && pwd.hash) ? pwd.hash : '—';
+        const noPassword = pwd && pwd.noPassword;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td style="font-weight:600; color:var(--gold-lt)">${esc(name)}</td>
+          <td class="hash-cell">${noPassword ? '<span style="color:var(--orange)">[ACCÈS LIBRE]</span>' : esc(hash)}</td>
+          <td>${noPassword ? '🔓 Libre' : '🔒 Protégé'}</td>
+        `;
+        tbody.appendChild(row);
+      }
+    }
+
+    // ── Actions API ───────────────────────────────────────────────────────────
     async function apiPost(payload) {
       const res = await fetch(SCRIPT_URL, {
         method: 'POST',
@@ -864,43 +932,37 @@
     }
 
     async function setLimit(name) {
-      const input = document.getElementById('limit-' + safeName(name));
-      const limit = parseInt(input.value);
+      const limit = parseInt(document.getElementById('limit-' + safeName(name)).value);
       if (!limit || limit < 1) return;
       try {
         await apiPost({ type: 'admin_set_limit', name, limit });
-        toast('✅ Limite mise à jour pour ' + name);
+        toast('✅ Limite mise à jour');
         await loadData();
-      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+      } catch (e) { toast('❌ ' + e.message, true); }
     }
 
     async function deleteDevice(name, fp) {
       if (!confirm(`Supprimer cet appareil pour ${name} ?`)) return;
-      
-      // Optimistic UI : masquer la ligne tout de suite
       const row = document.getElementById(`dev-${safeName(name)}-${fp.slice(0, 8)}`);
       if (row) row.style.display = 'none'; 
-      
       try {
         await apiPost({ type: 'admin_delete_device', name, fp });
         toast('✅ Appareil supprimé');
-        // Optionnel : await loadData(); 
       } catch (e) { 
-        if (row) row.style.display = 'flex'; // Remettre si erreur
-        toast('❌ Erreur : ' + e.message, true); 
+        if (row) row.style.display = 'flex';
+        toast('❌ ' + e.message, true); 
       }
     }
 
     async function deleteAll(name) {
-      if (!confirm(`Supprimer TOUS les appareils de ${name} ?\nIl devra se reconnecter depuis ses appareils.`)) return;
+      if (!confirm(`Supprimer TOUS les appareils de ${name} ?`)) return;
       try {
         await apiPost({ type: 'admin_delete_all_devices', name });
-        toast('✅ Tous les appareils de ' + name + ' supprimés');
+        toast('✅ Appareils réinitialisés');
         await loadData();
-      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+      } catch (e) { toast('❌ ' + e.message, true); }
     }
 
-    // ── Actions admin — Mots de passe ─────────────────────────────────────────
     async function sha256(text) {
       const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
@@ -908,83 +970,57 @@
 
     async function setPassword(name) {
       const input = document.getElementById('pwd-input-' + safeName(name));
-      const pwd = input.value.trim();
-      if (!pwd) { toast('❌ Saisis un mot de passe', true); return; }
+      if (!input.value.trim()) { toast('❌ Saisis un mot de passe', true); return; }
       try {
-        const hash = await sha256(pwd);
+        const hash = await sha256(input.value.trim());
         await apiPost({ type: 'admin_set_password', name, hash });
         input.value = '';
-        toast('✅ Mot de passe mis à jour pour ' + name);
+        toast('✅ Mot de passe mis à jour');
         await loadData();
-      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+      } catch (e) { toast('❌ ' + e.message, true); }
     }
 
     async function toggleNoPassword(name, noPassword) {
       try {
         await apiPost({ type: 'admin_toggle_nopassword', name, noPassword });
-        toast(noPassword
-          ? '🔓 ' + name + ' peut se connecter sans mot de passe'
-          : '🔒 Mot de passe réactivé pour ' + name);
+        toast(noPassword ? '🔓 Accès libre activé' : '🔒 Mot de passe requis');
         await loadData();
-      } catch (e) { toast('❌ Erreur : ' + e.message, true); }
+      } catch (e) { toast('❌ ' + e.message, true); }
     }
 
-    // ── Ajouter un élève ──────────────────────────────────────────────────────
     async function addStudent() {
-      const nameEl   = document.getElementById('new-student-name');
-      const pwdEl    = document.getElementById('new-student-pwd');
-      const noPassEl = document.getElementById('new-student-nopwd');
+      const name = document.getElementById('new-student-name').value.trim();
+      const pwd = document.getElementById('new-student-pwd').value.trim();
+      const noPassword = document.getElementById('new-student-nopwd').checked;
 
-      const name       = nameEl.value.trim();
-      const pwd        = pwdEl.value.trim();
-      const noPassword = noPassEl.checked;
-
-      if (!name) { toast('❌ Saisis un prénom.', true); nameEl.focus(); return; }
-      if (!noPassword && !pwd) { toast('❌ Saisis un mot de passe (ou coche "Sans mot de passe").', true); pwdEl.focus(); return; }
+      if (!name) { toast('❌ Saisis un prénom.', true); return; }
+      if (!noPassword && !pwd) { toast('❌ Saisis un mot de passe.', true); return; }
 
       try {
         const hash = noPassword ? '' : await sha256(pwd);
-        // Le serveur GAS gère lui-même le doublon et retourne {error:'exists'}
-        // apiPost() lève une exception si data.error est présent → catch ci-dessous
         await apiPost({ type: 'admin_add_student', name, hash, noPassword });
-        nameEl.value    = '';
-        pwdEl.value     = '';
-        noPassEl.checked = false;
-        pwdEl.disabled  = false;
-        pwdEl.style.opacity = '1';
-        toast('✅ Élève ' + name + ' ajouté avec succès !');
+        document.getElementById('new-student-name').value = '';
+        document.getElementById('new-student-pwd').value = '';
+        toast('✅ Élève ' + name + ' ajouté !');
         await loadData();
       } catch (e) {
-        const msg = e.message === 'exists'
-          ? '⚠️ ' + name + ' existe déjà. Modifie-le dans la liste ci-dessous.'
-          : '❌ Erreur : ' + e.message;
-        toast(msg, true);
+        toast(e.message === 'exists' ? '⚠️ Existe déjà' : '❌ ' + e.message, true);
       }
     }
 
     async function deleteStudent(name) {
-      if (!confirm(`⚠️ Es-tu sûr de vouloir supprimer DÉFINITIVEMENT l'élève ${name} ?\n\nCela supprimera ses accès, ses limites et tous ses appareils.`)) return;
-      
-      // Masquer la carte tout de suite pour une interface fluide
-      const card = document.getElementById(`pwd-card-${safeName(name)}`);
-      if (card) card.style.display = 'none'; 
-      
+      if (!confirm(`⚠️ Supprimer DÉFINITIVEMENT l'élève ${name} ?`)) return;
       try {
         await apiPost({ type: 'admin_delete_student', name });
-        toast(`✅ Élève ${name} supprimé avec succès !`);
-        // On recharge les données pour mettre à jour l'onglet "Appareils" également
+        toast('✅ Élève supprimé');
         await loadData(); 
-      } catch (e) {
-        if (card) card.style.display = 'flex'; // Réafficher en cas d'erreur
-        toast('❌ Erreur : ' + e.message, true); 
-      }
+      } catch (e) { toast('❌ ' + e.message, true); }
     }
 
     // ── Utilitaires ───────────────────────────────────────────────────────────
     function safeName(name) { return name.toLowerCase().replace(/[^a-z0-9]/g, '_'); }
     function esc(str) {
-      return String(str)
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     let _toastTimer = null;
@@ -997,5 +1033,4 @@
     }
   </script>
 </body>
-
 </html>
