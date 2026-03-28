@@ -1447,13 +1447,21 @@ async function logConnexion(userName) {
   let ip = '—', country = '—', city = '—';
   try {
     // Récupère IP + géolocalisation approximative (ville/pays, sans accord requis)
-    const geo = await fetch('https://ipapi.co/json/');
-    if (geo.ok) {
-      const gd = await geo.json();
-      ip      = gd.ip      || '—';
-      country = gd.country_name || '—';
-      city    = gd.city    || '—';
-    }
+// 1. Récupère l'IPv4 en forçant le protocole v4
+const ipRes = await fetch('https://api4.ipify.org?format=json');
+if (ipRes.ok) {
+  const ipData = await ipRes.json();
+  ip = ipData.ip || '—';
+}
+// 2. Géolocalisation avec l'IPv4 obtenue
+if (ip !== '—') {
+  const geo = await fetch(`https://ipapi.co/${ip}/json/`);
+  if (geo.ok) {
+    const gd = await geo.json();
+    country = gd.country_name || '—';
+    city    = gd.city         || '—';
+  }
+}
   } catch(e) {}
 
   sendToSheets({
