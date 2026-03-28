@@ -579,7 +579,7 @@
       <p class="sub">Accès réservé à l'administrateur</p>
       <input type="password" id="admin-pwd" placeholder="Mot de passe admin…"
         onkeydown="if(event.key==='Enter') login()">
-      <button class="btn btn-gold" onclick="login()">Connexion →</button>
+      <button id="admin-login-btn" class="btn btn-gold" onclick="login()">Connexion →</button>
       <div class="err" id="login-err">❌ Mot de passe incorrect</div>
     </div>
   </div>
@@ -644,13 +644,18 @@
     // ── Login ─────────────────────────────────────────────────────────────────
     async function login() {
       const pwd = document.getElementById('admin-pwd').value.trim();
-      if (!pwd) return;
+      const errEl = document.getElementById('login-err');
+      const btn = document.getElementById('admin-login-btn');
+      
+      if (!pwd) {
+        errEl.textContent = "❌ Saisis un mot de passe.";
+        errEl.style.display = 'block';
+        return;
+      }
       
       // 1. On affiche le chargement immédiatement
-      const btn = document.querySelector('#login-screen .btn-gold');
-      const errEl = document.getElementById('login-err');
       const originalText = btn.textContent;
-      btn.textContent = "⏳ Connexion en cours...";
+      btn.innerHTML = '<span class="spinner"></span> Connexion...';
       btn.disabled = true;
       errEl.style.display = 'none';
       
@@ -666,10 +671,30 @@
           errEl.textContent = "❌ " + data.error;
           errEl.style.display = 'block';
           adminToken = null;
-          btn.textContent = originalText;
+          btn.innerHTML = originalText;
           btn.disabled = false;
           return;
         }
+        
+        // 4. Succès ! On affiche le dashboard
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        
+        // On remet le bouton normal pour la prochaine fois
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        
+        renderDevices(data);
+        renderPasswords(data);
+        
+      } catch (e) {
+        // 5. Si Google est injoignable
+        errEl.textContent = "❌ Le serveur Google refuse la connexion.";
+        errEl.style.display = 'block';
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
         
         // 4. Succès ! On affiche le dashboard
         document.getElementById('login-screen').style.display = 'none';
