@@ -1400,6 +1400,96 @@
 </div>
 
 <script>
+
+// =============================================
+// TRACKING – Google Sheets via Apps Script
+// Remplace SCRIPT_URL par l'URL de déploiement
+// =============================================
+const SCRIPT_URL = 'COLLE_ICI_TON_URL_DE_DEPLOIEMENT';
+
+// Détecte le navigateur depuis userAgent
+function detectBrowser(ua) {
+  if (/Edg\//.test(ua))     return 'Edge ' + (ua.match(/Edg\/([\d.]+)/) || [])[1];
+  if (/OPR\//.test(ua))     return 'Opera ' + (ua.match(/OPR\/([\d.]+)/) || [])[1];
+  if (/Firefox\//.test(ua)) return 'Firefox ' + (ua.match(/Firefox\/([\d.]+)/) || [])[1];
+  if (/Chrome\//.test(ua))  return 'Chrome ' + (ua.match(/Chrome\/([\d.]+)/) || [])[1];
+  if (/Safari\//.test(ua))  return 'Safari ' + (ua.match(/Version\/([\d.]+)/) || [])[1];
+  return 'Inconnu';
+}
+
+// Détecte l'OS depuis userAgent
+function detectOS(ua) {
+  if (/Windows NT 10/.test(ua)) return 'Windows 10/11';
+  if (/Windows NT 6/.test(ua))  return 'Windows 7/8';
+  if (/Mac OS X/.test(ua))      return 'macOS';
+  if (/Android/.test(ua))       return 'Android';
+  if (/iPhone|iPad/.test(ua))   return 'iOS';
+  if (/Linux/.test(ua))         return 'Linux';
+  return 'Inconnu';
+}
+
+// Envoie les données à Google Sheets (silencieux, ne bloque pas l'UI)
+async function sendToSheets(payload) {
+  if (!SCRIPT_URL || SCRIPT_URL.includes('COLLE_ICI')) return; // pas encore configuré
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors', // requis pour Apps Script
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) { /* silencieux */ }
+}
+
+// Appelée juste après la connexion réussie
+async function logConnexion(userName) {
+  const ua = navigator.userAgent;
+  let ip = '—', country = '—', city = '—';
+  try {
+    // Récupère IP + géolocalisation approximative (ville/pays, sans accord requis)
+    const geo = await fetch('https://ipapi.co/json/');
+    if (geo.ok) {
+      const gd = await geo.json();
+      ip      = gd.ip      || '—';
+      country = gd.country_name || '—';
+      city    = gd.city    || '—';
+    }
+  } catch(e) {}
+
+  sendToSheets({
+    type:     'connexion',
+    name:     userName,
+    ip:       ip,
+    country:  country,
+    city:     city,
+    browser:  detectBrowser(ua),
+    os:       detectOS(ua),
+    lang:     navigator.language || '—',
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || '—',
+    screen:   screen.width + 'x' + screen.height
+  });
+}
+
+// Envoi de l'avancement (appelé par saveStats, avec délai anti-spam)
+let _trackingTimeout = null;
+function scheduleAvancementLog() {
+  clearTimeout(_trackingTimeout);
+  _trackingTimeout = setTimeout(() => {
+    const name = sessionStorage.getItem('mathsPremiere_user');
+    if (!name) return;
+    sendToSheets({
+      type:       'avancement',
+      name:       name,
+      total:      statsTotal,
+      correct:    statsCorrect,
+      corr:       statsCorr,
+      bestStreak: statsBestStreak,
+      chapitres:  [...chapitresVus]
+    });
+  }, 10000); // envoie 10s après la dernière action (évite le flood)
+}
+
+
 /* =============================================
    AUTHENTIFICATION VIA passwords.json
    Fallback intégré si le fichier est introuvable
@@ -1461,6 +1551,7 @@ async function checkPassword() {
     errorEl.style.display = 'none';
     sessionStorage.setItem('mathsPremiere_auth', 'true');
     sessionStorage.setItem('mathsPremiere_user', match.name);
+    logConnexion(match.name); // 📊 Log connexion → Google Sheets
     setTimeout(() => {
       document.getElementById('auth-overlay').style.display = 'none';
       // Charger les stats de cet utilisateur une fois connecté
@@ -1639,6 +1730,7 @@ async function checkPassword() {
           chapitres:  [...chapitresVus]
         }));
         updateDropdown(); // Mise à jour du mini-panneau
+        scheduleAvancementLog(); // 📊 Log avancement → Google Sheets (délai 10s)
       } catch(e) {}
     }
 
