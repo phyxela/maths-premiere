@@ -6856,7 +6856,7 @@
             `Combien de personnes environ sont abonnées à la médiathèque ?`,
             `Combien de personnes environ ont un vélo ?`,
             `Combien de personnes environ sont à la fois abonnées et possèdent un vélo ?`,
-            `Interpréter le résultat obtenu pour $P(A \cap B)$ dans le contexte.`
+            `Interpréter le résultat obtenu pour $P(A \\cap B)$ dans le contexte.`
           ],
           correction: `<div class="step"><div class="step-label">Calculs</div>
         <div class="step-content">${n} × ${pA} = ${Math.round(n * pA)} abonnés ; ${n} × ${pB} = ${Math.round(n * pB)} cyclistes ; ${n} × ${pAB} = ${Math.round(n * pAB)} les deux.</div></div>
@@ -7700,37 +7700,37 @@
 <div class="course-section">
   <div class="course-section-title">1) Expérience aléatoire et vocabulaire</div>
   <div class="course-def"><span class="block-title">Définition</span>
-    Une <b>expérience aléatoire</b> est une expérience dont le résultat n'est pas prévisible à l'avance. L'ensemble des résultats possibles forme l'<b>univers</b> $\Omega$.
+    Une <b>expérience aléatoire</b> est une expérience dont le résultat n'est pas prévisible à l'avance. L'ensemble des résultats possibles forme l'<b>univers</b> $\\Omega$.
   </div>
   <div class="course-rem"><span class="block-title">Vocabulaire</span>
-    • Un <b>événement</b> est un sous-ensemble de $\Omega$.<br>
-    • L'événement <b>impossible</b> : $\varnothing$.<br>
-    • L'événement <b>certain</b> : $\Omega$.<br>
-    • $A \cap B$ : "A et B" ; $A \cup B$ : "A ou B" ; $\overline{A}$ : "non A".
+    • Un <b>événement</b> est un sous-ensemble de $\\Omega$.<br>
+    • L'événement <b>impossible</b> : $\\varnothing$.<br>
+    • L'événement <b>certain</b> : $\\Omega$.<br>
+    • $A \\cap B$ : "A et B" ; $A \\cup B$ : "A ou B" ; $\\overline{A}$ : "non A".
   </div>
 </div>
 <div class="course-section">
   <div class="course-section-title">2) Probabilité sur un univers fini</div>
   <div class="course-def"><span class="block-title">Définition</span>
-    Si tous les résultats sont équiprobables : $P(A) = \dfrac{\text{nombre de cas favorables}}{\text{nombre de cas possibles}}$.
+    Si tous les résultats sont équiprobables : $P(A) = \\dfrac{\\text{nombre de cas favorables}}{\\text{nombre de cas possibles}}$.
   </div>
   <div class="course-rem"><span class="block-title">Propriétés</span>
-    $0 \leq P(A) \leq 1$ ; $P(\Omega) = 1$ ; $P(\overline{A}) = 1 - P(A)$ ; $P(A \cup B) = P(A) + P(B) - P(A \cap B)$.
+    $0 \\leq P(A) \\leq 1$ ; $P(\\Omega) = 1$ ; $P(\\overline{A}) = 1 - P(A)$ ; $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$.
   </div>
 </div>
 <div class="course-section">
   <div class="course-section-title">3) Probabilité conditionnelle et indépendance</div>
   <div class="course-def"><span class="block-title">Définition</span>
-    $P_A(B) = \dfrac{P(A \cap B)}{P(A)}$ (si $P(A) > 0$) : probabilité de $B$ sachant $A$.
+    $P_A(B) = \\dfrac{P(A \\cap B)}{P(A)}$ (si $P(A) > 0$) : probabilité de $B$ sachant $A$.
   </div>
   <div class="course-prop"><span class="block-title">Indépendance</span>
-    $A$ et $B$ sont indépendants si $P(A \cap B) = P(A) \times P(B)$.
+    $A$ et $B$ sont indépendants si $P(A \\cap B) = P(A) \\times P(B)$.
   </div>
 </div>
 <div class="course-section">
   <div class="course-section-title">4) Formule des probabilités totales</div>
   <div class="course-prop"><span class="block-title">Propriété</span>
-    $P(B) = P(A)P_A(B) + P(\overline{A})P_{\overline{A}}(B)$
+    $P(B) = P(A)P_A(B) + P(\\overline{A})P_{\\overline{A}}(B)$
   </div>
 </div>
 <div class="course-section">
@@ -7739,9 +7739,9 @@
     Une <b>variable aléatoire</b> $X$ associe à chaque issue un nombre réel. Sa <b>loi de probabilité</b> est la liste des valeurs possibles et leurs probabilités.
   </div>
   <div class="course-prop"><span class="block-title">Espérance, variance, écart-type</span>
-    $E(X) = \sum x_i P(X = x_i)$<br>
+    $E(X) = \\sum x_i P(X = x_i)$<br>
     $V(X) = E(X^2) - [E(X)]^2$<br>
-    $\sigma(X) = \sqrt{V(X)}$
+    $\\sigma(X) = \\sqrt{V(X)}$
   </div>
 </div>
 <div class="course-section">
@@ -7749,7 +7749,7 @@
   <div class="course-def"><span class="block-title">Définition</span>
     <b>Bernoulli</b> : expérience à deux issues (succès/échec).<br>
     <b>Binomiale</b> : répétition indépendante de $n$ épreuves de Bernoulli de probabilité $p$.<br>
-    $P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$
+    $P(X = k) = \\binom{n}{k} p^k (1-p)^{n-k}$
   </div>
 </div>
 <div class="course-section">
@@ -7761,7 +7761,7 @@
 <div class="course-section">
   <div class="course-section-title">Exemples et rappels</div>
   <div class="course-ex"><span class="block-title">Exemple</span>
-    On lance deux dés : $\Omega = \{(i,j)\mid 1 \leq i,j \leq 6\}$, $P(\text{double 6}) = \dfrac{1}{36}$.
+    On lance deux dés : $\\Omega = \\{(i,j)\\mid 1 \\leq i,j \\leq 6\\}$, $P(\\text{double 6}) = \\dfrac{1}{36}$.
   </div>
 </div>
 `;
@@ -7777,10 +7777,10 @@
 <div class="course-section">
   <div class="course-section-title">2) Taux de variation</div>
   <div class="course-def"><span class="block-title">Définition</span>
-    $\tau_{[a;b]} = \dfrac{f(b) - f(a)}{b - a}$ : variation moyenne de $f$ entre $a$ et $b$.
+    $\\tau_{[a;b]} = \\dfrac{f(b) - f(a)}{b - a}$ : variation moyenne de $f$ entre $a$ et $b$.
   </div>
   <div class="course-rem"><span class="block-title">Interprétation</span>
-    $\tau > 0$ : $f$ croissante sur $[a;b]$ ; $\tau < 0$ : $f$ décroissante.
+    $\\tau > 0$ : $f$ croissante sur $[a;b]$ ; $\\tau < 0$ : $f$ décroissante.
   </div>
 </div>
 <div class="course-section">
@@ -7789,8 +7789,8 @@
     <ul>
       <li><b>Affine</b> $f(x) = ax + b$ : droite, $a$ = pente.</li>
       <li><b>Quadratique</b> $f(x) = x^2$ : parabole, minimum en $0$.</li>
-      <li><b>Racine carrée</b> $f(x) = \sqrt{x}$ : croissante sur $[0; +\infty[$.</li>
-      <li><b>Sinusoïdale</b> $f(t) = A\sin(\omega t + \varphi)$ : oscillations, période $T$.</li>
+      <li><b>Racine carrée</b> $f(x) = \\sqrt{x}$ : croissante sur $[0; +\\infty[$.</li>
+      <li><b>Sinusoïdale</b> $f(t) = A\\sin(\\omega t + \\varphi)$ : oscillations, période $T$.</li>
     </ul>
   </div>
 </div>
@@ -7819,14 +7819,14 @@
   <div class="course-section-title">1) Suites arithmétiques</div>
   <div class="course-def"><span class="block-title">Définition</span>
     $u_{n+1} = u_n + r$ ; $u_n = u_0 + n r$<br>
-    <b>Somme</b> : $S = \dfrac{(n+1)(u_0 + u_n)}{2}$
+    <b>Somme</b> : $S = \\dfrac{(n+1)(u_0 + u_n)}{2}$
   </div>
 </div>
 <div class="course-section">
   <div class="course-section-title">2) Suites géométriques</div>
   <div class="course-def"><span class="block-title">Définition</span>
     $u_{n+1} = q u_n$ ; $u_n = u_0 q^n$<br>
-    <b>Somme</b> : $S = u_0 \dfrac{q^{n+1} - 1}{q - 1}$ ($q \neq 1$)
+    <b>Somme</b> : $S = u_0 \\dfrac{q^{n+1} - 1}{q - 1}$ ($q \\neq 1$)
   </div>
 </div>
 <div class="course-section">
@@ -7849,18 +7849,18 @@
 <div class="course-section">
   <div class="course-section-title">1) Rappels sur le cercle trigonométrique</div>
   <div class="course-def"><span class="block-title">Définition</span>
-    Sur le cercle trigonométrique, à chaque angle $\theta$ correspond un point $M$ de coordonnées $(\cos\theta, \sin\theta)$.
+    Sur le cercle trigonométrique, à chaque angle $\\theta$ correspond un point $M$ de coordonnées $(\\cos\\theta, \\sin\\theta)$.
   </div>
 </div>
 <div class="course-section">
   <div class="course-section-title">2) Valeurs remarquables</div>
   <div class="course-prop"><span class="block-title">Tableau</span>
     <table style="width:100%;font-size:12px;border-collapse:collapse">
-      <tr><th>$\theta$</th><th>$\sin$</th><th>$\cos$</th><th>$\tan$</th></tr>
+      <tr><th>$\\theta$</th><th>$\\sin$</th><th>$\\cos$</th><th>$\\tan$</th></tr>
       <tr><td>$0$</td><td>$0$</td><td>$1$</td><td>$0$</td></tr>
-      <tr><td>$30°$</td><td>$\frac{1}{2}$</td><td>$\frac{\sqrt{3}}{2}$</td><td>$\frac{\sqrt{3}}{3}$</td></tr>
-      <tr><td>$45°$</td><td>$\frac{\sqrt{2}}{2}$</td><td>$\frac{\sqrt{2}}{2}$</td><td>$1$</td></tr>
-      <tr><td>$60°$</td><td>$\frac{\sqrt{3}}{2}$</td><td>$\frac{1}{2}$</td><td>$\sqrt{3}$</td></tr>
+      <tr><td>$30°$</td><td>$\\frac{1}{2}$</td><td>$\\frac{\\sqrt{3}}{2}$</td><td>$\\frac{\\sqrt{3}}{3}$</td></tr>
+      <tr><td>$45°$</td><td>$\\frac{\\sqrt{2}}{2}$</td><td>$\\frac{\\sqrt{2}}{2}$</td><td>$1$</td></tr>
+      <tr><td>$60°$</td><td>$\\frac{\\sqrt{3}}{2}$</td><td>$\\frac{1}{2}$</td><td>$\\sqrt{3}$</td></tr>
       <tr><td>$90°$</td><td>$1$</td><td>$0$</td><td>—</td></tr>
     </table>
   </div>
@@ -7868,20 +7868,20 @@
 <div class="course-section">
   <div class="course-section-title">3) Triangle rectangle</div>
   <div class="course-def"><span class="block-title">Définitions</span>
-    $\sin\hat{A} = \dfrac{\text{côté opposé}}{\text{hypoténuse}}$<br>
-    $\cos\hat{A} = \dfrac{\text{côté adjacent}}{\text{hypoténuse}}$<br>
-    $\tan\hat{A} = \dfrac{\text{côté opposé}}{\text{côté adjacent}}$
+    $\\sin\\hat{A} = \\dfrac{\\text{côté opposé}}{\\text{hypoténuse}}$<br>
+    $\\cos\\hat{A} = \\dfrac{\\text{côté adjacent}}{\\text{hypoténuse}}$<br>
+    $\\tan\\hat{A} = \\dfrac{\\text{côté opposé}}{\\text{côté adjacent}}$
   </div>
   <div class="course-rem"><span class="block-title">Pythagore et relation fondamentale</span>
     $a^2 + b^2 = c^2$ (hypoténuse $c$)<br>
-    $\sin^2\theta + \cos^2\theta = 1$
+    $\\sin^2\\theta + \\cos^2\\theta = 1$
   </div>
 </div>
 <div class="course-section">
   <div class="course-section-title">4) Fonctions périodiques</div>
   <div class="course-prop"><span class="block-title">Forme générale</span>
-    $f(t) = A \sin\left(\dfrac{2\pi}{T} t + \varphi\right)$<br>
-    $A$ : amplitude, $T$ : période, $\nu = 1/T$ : fréquence
+    $f(t) = A \\sin\\left(\\dfrac{2\\pi}{T} t + \\varphi\\right)$<br>
+    $A$ : amplitude, $T$ : période, $\\nu = 1/T$ : fréquence
   </div>
 </div>
 `;
@@ -7890,7 +7890,7 @@
 <div class="course-section">
   <div class="course-section-title">1) Statistiques descriptives</div>
   <div class="course-def"><span class="block-title">Définitions</span>
-    <b>Moyenne</b> $\bar{x} = \dfrac{x_1 + x_2 + ... + x_n}{N}$<br>
+    <b>Moyenne</b> $\\bar{x} = \\dfrac{x_1 + x_2 + ... + x_n}{N}$<br>
     <b>Médiane</b> : valeur qui partage la série en deux groupes de même effectif.<br>
     <b>Quartiles</b> : $Q_1$ (25%), $Q_3$ (75%).
   </div>
@@ -7898,14 +7898,14 @@
 <div class="course-section">
   <div class="course-section-title">2) Dispersion</div>
   <div class="course-prop"><span class="block-title">Écart-type</span>
-    $\sigma = \sqrt{\dfrac{1}{N} \sum (x_i - \bar{x})^2}$
+    $\\sigma = \\sqrt{\\dfrac{1}{N} \\sum (x_i - \\bar{x})^2}$
   </div>
 </div>
 <div class="course-section">
   <div class="course-section-title">3) Échantillonnage et fluctuation</div>
   <div class="course-rem"><span class="block-title">Intervalle de fluctuation</span>
-    Pour $n \geq 25$ et $0.2 \leq p \leq 0.8$ :<br>
-    $\left[ p - \dfrac{1}{\sqrt{n}} ; p + \dfrac{1}{\sqrt{n}} \right]$ (niveau 95%)
+    Pour $n \\geq 25$ et $0.2 \\leq p \\leq 0.8$ :<br>
+    $\\left[ p - \\dfrac{1}{\\sqrt{n}} ; p + \\dfrac{1}{\\sqrt{n}} \\right]$ (niveau 95%)
   </div>
 </div>
 <div class="course-section">
