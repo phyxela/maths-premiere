@@ -7610,7 +7610,7 @@
           { row: ['Sportif', 'Non sportif'], col: ['Externe', 'Pensionnaire'], context: 'élèves d\'un lycée' },
           { row: ['Client < 30 ans', 'Client ≥ 30 ans'], col: ['Satisfait', 'Non satisfait'], context: 'clients d\'un magasin' }
         ]);
-        const a=rand(40,100), b=rand(20,60), c=rand(30,70), d=rand(50,120);
+        const a = rand(40, 100), b = rand(20, 60), c = rand(30, 70), d = rand(50, 120);
         const row1Tot = a + b, row2Tot = c + d;
         const col1Tot = a + c, col2Tot = b + d;
         const total = a + b + c + d;
@@ -7635,10 +7635,10 @@
           ],
           correction: `<div class="step"><div class="step-label">Proportion globale</div>
           <div class="step-content">L'effectif total est de ${total}. L'effectif des ${categories.row[0].toLowerCase()} est de ${row1Tot}.<br/>
-          $p_1 = \\frac{${row1Tot}}{${total}} \\approx ${+(row1Tot/total).toFixed(3)}$, soit <strong>${+(row1Tot/total*100).toFixed(1)}%</strong>.</div></div>
+          $p_1 = \\frac{${row1Tot}}{${total}} \\approx ${+(row1Tot / total).toFixed(3)}$, soit <strong>${+(row1Tot / total * 100).toFixed(1)}%</strong>.</div></div>
           <div class="step result"><div class="step-label">Proportion sous-population</div>
           <div class="step-content">On se restreint aux ${categories.row[1].toLowerCase()} (total de la ligne = ${row2Tot}). L'effectif des ${categories.col[1].toLowerCase()} dans cette catégorie est de ${d}.<br/>
-          $p_2 = \\frac{${d}}{${row2Tot}} \\approx ${+(d/row2Tot).toFixed(3)}$, soit <strong>${+(d/row2Tot*100).toFixed(1)}%</strong>.</div></div>`
+          $p_2 = \\frac{${d}}{${row2Tot}} \\approx ${+(d / row2Tot).toFixed(3)}$, soit <strong>${+(d / row2Tot * 100).toFixed(1)}%</strong>.</div></div>`
         };
       }
 
@@ -7921,13 +7921,13 @@
             `Calculer $P_V(C)$. Arrondir à 0.01 près.`
           ],
           correction: `<div class="step"><div class="step-label">Probabilité simple</div>
-          <div class="step-content">$P(V) = \\frac{\\text{Total Vélo}}{\\text{Total global}} = \\frac{${nB}}{${total}} = ${+(nB/total).toFixed(3)}$.</div></div>
+          <div class="step-content">$P(V) = \\frac{\\text{Total Vélo}}{\\text{Total global}} = \\frac{${nB}}{${total}} = ${+(nB / total).toFixed(3)}$.</div></div>
           <div class="step"><div class="step-label">Conditionnelle (ligne)</div>
           <div class="step-content">Sachant que la personne habite en ville, on regarde uniquement la ligne "Ville" (Effectif = ${nA}).<br/>
-          $P_C(\\overline{V}) = \\frac{${nAnB}}{${nA}} = ${+(nAnB/nA).toFixed(3)}$.</div></div>
+          $P_C(\\overline{V}) = \\frac{${nAnB}}{${nA}} = ${+(nAnB / nA).toFixed(3)}$.</div></div>
           <div class="step result"><div class="step-label">Conditionnelle (colonne)</div>
           <div class="step-content">Sachant que la personne a un vélo, on regarde uniquement la colonne "Vélo" (Effectif = ${nB}).<br/>
-          $P_V(C) = \\frac{${nAB}}{${nB}} \\approx <strong>${+(nAB/nB).toFixed(2)}</strong>$.</div></div>`
+          $P_V(C) = \\frac{${nAB}}{${nB}} \\approx <strong>${+(nAB / nB).toFixed(2)}</strong>$.</div></div>`
         };
       }
 
