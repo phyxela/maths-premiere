@@ -40,6 +40,9 @@
       --text-dim: #6b80b5;
       --green: #34d399;
       --red: #f87171;
+      --orange: #fb923c;
+      --purple: #a855f7;
+      --gold: #fbbf24;
       --border: rgba(59, 130, 246, 0.16);
       --border-dim: rgba(59, 130, 246, 0.08);
 
@@ -2656,7 +2659,7 @@
       <rect x="0" y="0" width="${W}" height="${H}" fill="rgba(0,0,0,0)"></rect>
       <line x1="${xTo(0)}" y1="${pad}" x2="${xTo(0)}" y2="${H - pad}" stroke="rgba(96,165,250,0.5)" stroke-width="1"></line>
       <line x1="${pad}" y1="${yTo(0)}" x2="${W - pad}" y2="${yTo(0)}" stroke="rgba(96,165,250,0.5)" stroke-width="1"></line>
-      <polyline points="${pts.join(' ')}" fill="none" stroke="rgba(91,155,213,0.95)" stroke-width="2"></polyline>
+      <polyline points="${pts.join(' ')}" fill="none" stroke="var(--orange)" stroke-width="2"></polyline>
       <text x="${xTo(0) + 4}" y="${yTo(0) - 4}" fill="rgba(220,230,255,0.65)" font-size="10" font-family="JetBrains Mono, monospace">0</text>
     </svg>
   `;
@@ -2678,7 +2681,7 @@
 
       return `
     <svg class="course-svg" viewBox="0 0 420 140" preserveAspectRatio="xMidYMid meet" style="border-radius:8px; margin: 15px 0;">
-      <path d="${path}" fill="none" stroke="var(--purple)" stroke-width="3.5" stroke-linecap="round" />
+      <path d="${path}" fill="none" stroke="var(--orange)" stroke-width="3.5" stroke-linecap="round" />
       <line x1="${tx1}" y1="${ty}" x2="${tx2}" y2="${ty}" stroke="var(--gold)" stroke-width="2.5" stroke-dasharray="6,4" />
       <circle cx="210" cy="${ty}" r="5" fill="var(--gold)" />
       <text x="210" y="${isMax ? ty - 15 : ty + 20}" fill="var(--cream)" font-size="14" font-family="JetBrains Mono, monospace" text-anchor="middle" font-weight="bold">${label}</text>
@@ -2734,7 +2737,7 @@
       <text x="${xTo(0) + 5}" y="${pad - 5}" fill="rgba(220,230,255,0.65)" font-size="12" font-family="JetBrains Mono, monospace">y</text>
 
       <!-- Curve Cf -->
-      <polyline points="${pts.join(' ')}" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-linecap="round"></polyline>
+      <polyline points="${pts.join(' ')}" fill="none" stroke="var(--orange)" stroke-width="2.5" stroke-linecap="round"></polyline>
 
       <!-- Secant line (AB) -->
       <line x1="${xTo(secX1).toFixed(1)}" y1="${yTo(secY1).toFixed(1)}" x2="${xTo(secX2).toFixed(1)}" y2="${yTo(secY2).toFixed(1)}" stroke="var(--green)" stroke-width="2" stroke-dasharray="8,4"></line>
@@ -2815,7 +2818,7 @@
       <text x="${xTo(0) + 5}" y="${pad - 5}" fill="rgba(220,230,255,0.65)" font-size="12" font-family="JetBrains Mono, monospace">y</text>
 
       <!-- Curve Cf -->
-      <polyline points="${pts.join(' ')}" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-linecap="round"></polyline>
+      <polyline points="${pts.join(' ')}" fill="none" stroke="var(--orange)" stroke-width="2.5" stroke-linecap="round"></polyline>
 
       <!-- Tangent line -->
       <line x1="${xTo(tX1).toFixed(1)}" y1="${yTo(tY1).toFixed(1)}" x2="${xTo(tX2).toFixed(1)}" y2="${yTo(tY2).toFixed(1)}" stroke="var(--green)" stroke-width="2"></line>
@@ -2834,11 +2837,11 @@
       <text x="${(xTo(tX2) + 4).toFixed(1)}" y="${(yTo(tY2) - 6).toFixed(1)}" fill="var(--green)" font-size="12" font-family="JetBrains Mono, monospace">Tangente</text>
 
       <!-- Curve label -->
-      <text x="${xTo(3)}" y="${(yTo(f(3)) - 10).toFixed(1)}" fill="var(--purple)" font-size="12" font-family="JetBrains Mono, monospace" font-weight="bold" text-anchor="middle">𝒞f</text>
+      <text x="${xTo(3)}" y="${(yTo(f(3)) - 10).toFixed(1)}" fill="var(--orange)" font-size="12" font-family="JetBrains Mono, monospace" font-weight="bold" text-anchor="middle">𝒞f</text>
 
       <!-- Dashed projection lines -->
-      <line x1="${xTo(a).toFixed(1)}" y1="${yTo(fa).toFixed(1)}" x2="${xTo(a).toFixed(1)}" y2="${yTo(0).toFixed(1)}" stroke="rgba(91,155,213,0.35)" stroke-width="1" stroke-dasharray="3,3"></line>
-      <line x1="${xTo(a).toFixed(1)}" y1="${yTo(fa).toFixed(1)}" x2="${xTo(0).toFixed(1)}" y2="${yTo(fa).toFixed(1)}" stroke="rgba(91,155,213,0.35)" stroke-width="1" stroke-dasharray="3,3"></line>
+      <line x1="${xTo(a).toFixed(1)}" y1="${yTo(fa).toFixed(1)}" x2="${xTo(a).toFixed(1)}" y2="${yTo(0).toFixed(1)}" stroke="rgba(251,146,60,0.35)" stroke-width="1" stroke-dasharray="3,3"></line>
+      <line x1="${xTo(a).toFixed(1)}" y1="${yTo(fa).toFixed(1)}" x2="${xTo(0).toFixed(1)}" y2="${yTo(fa).toFixed(1)}" stroke="rgba(251,146,60,0.35)" stroke-width="1" stroke-dasharray="3,3"></line>
       <text x="${xTo(a)}" y="${yTo(0) + 16}" fill="rgba(220,230,255,0.55)" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="middle">a</text>
       <text x="${xTo(0) - 8}" y="${(yTo(fa) + 4).toFixed(1)}" fill="rgba(220,230,255,0.55)" font-size="10" font-family="JetBrains Mono, monospace" text-anchor="end">f(a)</text>
     </svg>
@@ -2879,7 +2882,7 @@
       <text x="${xTo(0) + 5}" y="${pad - 5}" fill="rgba(220,230,255,0.65)" font-size="12" font-family="JetBrains Mono, monospace">y</text>
 
       <!-- Curve -->
-      <polyline points="${pts.join(' ')}" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-linecap="round"></polyline>
+      <polyline points="${pts.join(' ')}" fill="none" stroke="var(--orange)" stroke-width="2.5" stroke-linecap="round"></polyline>
 
       <!-- Max local at (-1, 3) -->
       <circle cx="${xTo(-1).toFixed(1)}" cy="${yTo(3).toFixed(1)}" r="5" fill="var(--green)"></circle>
@@ -3001,7 +3004,7 @@
         const px = xTo(pt.x).toFixed(1);
         const py = yTo(pt.y).toFixed(1);
         const color = pt.color || 'var(--blue-acc)';
-        pointsSvg += `<circle cx="${px}" cy="${py}" r="5.5" fill="${color}" stroke="rgba(0,0,0,0.3)" stroke-width="1"></circle>`;
+        pointsSvg += `<circle cx="${px}" cy="${py}" r="5.5" fill="${color}" stroke="rgba(251,146,60,0.5)" stroke-width="1"></circle>`;
         if (pt.label) {
           pointsSvg += `<text x="${parseFloat(px) + 10}" y="${parseFloat(py) - 10}" fill="${color}" font-size="14" font-family="JetBrains Mono, monospace" font-weight="bold">${pt.label}</text>`;
         }
@@ -3716,8 +3719,8 @@
         <!-- SVG Arbre pondéré -->
         <svg class="course-svg" viewBox="0 0 440 160" preserveAspectRatio="xMidYMid meet">
           <line x1="40" y1="80" x2="150" y2="80" stroke="rgba(96,165,250,0.5)" stroke-width="2"></line>
-          <line x1="150" y1="80" x2="245" y2="40" stroke="rgba(91,155,213,0.85)" stroke-width="2"></line>
-          <line x1="150" y1="80" x2="245" y2="120" stroke="rgba(91,155,213,0.85)" stroke-width="2"></line>
+          <line x1="150" y1="80" x2="245" y2="40" stroke="var(--orange)" stroke-width="2"></line>
+          <line x1="150" y1="80" x2="245" y2="120" stroke="var(--orange)" stroke-width="2"></line>
           <line x1="245" y1="40" x2="360" y2="20" stroke="rgba(155,127,213,0.85)" stroke-width="2"></line>
           <line x1="245" y1="40" x2="360" y2="70" stroke="rgba(155,127,213,0.85)" stroke-width="2"></line>
           <line x1="245" y1="120" x2="360" y2="90" stroke="rgba(155,127,213,0.85)" stroke-width="2"></line>
@@ -6831,14 +6834,36 @@
     // CH.1 TC — PROBABILITÉS
     // ══════════════════════════════════════════════════════════════════
     function genTC_Proba() {
+      // Plus de variété et de progressivité
       const type = pickD(
-        ['tableau'],
-        ['arbre', 'tableau'],
-        ['independance', 'var_alea', 'arbre']
+        ['tableau', 'arbre', 'situation'],
+        ['arbre', 'tableau', 'independance', 'situation'],
+        ['independance', 'var_alea', 'arbre', 'situation']
       );
       if (type === 'arbre') return genTC_ProbaArbre();
       if (type === 'independance') return genTC_ProbaIndep();
       if (type === 'var_alea') return genTC_ProbaVarAlea();
+      if (type === 'situation') {
+        // Situation concrète, question d'interprétation
+        const n = pick([100, 200, 500]);
+        const pA = pick([0.2, 0.3, 0.4, 0.5]);
+        const pB = pick([0.1, 0.15, 0.2, 0.25]);
+        const pAB = +(pA * pB).toFixed(2);
+        return {
+          title: "Situation concrète – Interprétation de probabilité",
+          enonce: `Dans une ville, ${n} personnes sont interrogées. $P(A)=${pA}$ (être abonné à la médiathèque), $P(B)=${pB}$ (avoir un vélo). On suppose l'indépendance.`,
+          questions: [
+            `Combien de personnes environ sont abonnées à la médiathèque ?`,
+            `Combien de personnes environ ont un vélo ?`,
+            `Combien de personnes environ sont à la fois abonnées et possèdent un vélo ?`,
+            `Interpréter le résultat obtenu pour $P(A \cap B)$ dans le contexte.`
+          ],
+          correction: `<div class="step"><div class="step-label">Calculs</div>
+        <div class="step-content">${n} × ${pA} = ${Math.round(n * pA)} abonnés ; ${n} × ${pB} = ${Math.round(n * pB)} cyclistes ; ${n} × ${pAB} = ${Math.round(n * pAB)} les deux.</div></div>
+        <div class="step"><div class="step-label">Interprétation</div>
+        <div class="step-content">Environ ${Math.round(n * pAB)} personnes sont à la fois abonnées et possèdent un vélo, car les événements sont supposés indépendants.</div></div>`
+        };
+      }
       return genTC_ProbaTableau();
     }
 
@@ -6983,22 +7008,47 @@
     //  fonctions de référence, modèles affins/quadratiques/périodiques)
     // ══════════════════════════════════════════════════════════════════
     function genTC_Fonctions() {
+      // Plus de variété et de contexte réel
       const type = pickD(
-        ['taux_variation'],
-        ['lecture_graphique', 'taux_variation'],
-        ['modele_contextuel', 'lecture_graphique']
+        ['taux_variation', 'lecture_graphique'],
+        ['lecture_graphique', 'taux_variation', 'modele_contextuel'],
+        ['modele_contextuel', 'lecture_graphique', 'situation']
       );
       if (type === 'lecture_graphique') return genTC_FonctionsLecture();
       if (type === 'modele_contextuel') return genTC_FonctionsModele();
+      if (type === 'situation') {
+        // Situation concrète, modélisation
+        const ctxs = [
+          { titre: "Consommation d'eau", uniteX: 'jours', uniteY: 'L', fn: x => 120 + 15 * x, label: 'f(x)=120+15x', a: 2, b: 7 },
+          { titre: "Croissance d'une plante", uniteX: 'semaines', uniteY: 'cm', fn: x => 3 * x * x + 2, label: 'f(x)=3x^2+2', a: 1, b: 4 },
+          { titre: "Température extérieure", uniteX: 'heures', uniteY: '°C', fn: x => 10 + 8 * Math.sin(Math.PI * x / 12), label: 'f(x)=10+8\sin(\frac{\pi}{12}x)', a: 6, b: 18 }
+        ];
+        const ctx = pick(ctxs);
+        const fa = ctx.fn(ctx.a), fb = ctx.fn(ctx.b);
+        const tau = +((fb - fa) / (ctx.b - ctx.a)).toFixed(2);
+        return {
+          title: `Situation concrète — ${ctx.titre}`,
+          enonce: `La fonction $f$ modélise « ${ctx.titre} » par $f(x)=${ctx.label}$.`,
+          questions: [
+            `Calculer $f(${ctx.a})$ et $f(${ctx.b})$.`,
+            `Calculer le taux de variation moyen entre $x=${ctx.a}$ et $x=${ctx.b}$.`,
+            `Interpréter ce taux de variation dans le contexte.`,
+            `La croissance est-elle régulière ? Justifier.`
+          ],
+          correction: `<div class="step"><div class="step-label">Images</div><div class="step-content">$f(${ctx.a})=${fa}$ ${ctx.uniteY}, $f(${ctx.b})=${fb}$ ${ctx.uniteY}</div></div>
+          <div class="step"><div class="step-label">Taux de variation</div><div class="step-content">$$\\tau=\\frac{${fb}-${fa}}{${ctx.b}-${ctx.a}}=${tau}$$ ${ctx.uniteY}/${ctx.uniteX}</div></div>
+          <div class="step"><div class="step-label">Interprétation</div><div class="step-content">En moyenne, la variation est de $${tau}$ ${ctx.uniteY} par ${ctx.uniteX}.</div></div>`
+        };
+      }
       return genTC_FonctionsTaux();
     }
 
     function genTC_FonctionsTaux() {
       const ctxs = [
-        { fn: x => 2 * x + 3, label: 'f(x)=2x+3', nom: 'une fonction affine', unite: '€/unité' },
-        { fn: x => x * x, label: 'f(x)=x^2', nom: 'la fonction carré', unite: 'm²/m' },
-        { fn: x => 3 * x - 1, label: 'f(x)=3x-1', nom: 'une fonction affine', unite: '€/unité' },
-        { fn: x => 0.5 * x * x + 1, label: 'f(x)=0{,}5x^2+1', nom: 'une fonction quadratique', unite: 'unité' }
+        { fn: x => 2 * x + 3, label: 'f(x)=2x+3', nom: 'fonction affine (prix)', unite: '€/unité' },
+        { fn: x => x * x, label: 'f(x)=x^2', nom: 'fonction carré (surface)', unite: 'm²/m' },
+        { fn: x => 3 * x - 1, label: 'f(x)=3x-1', nom: 'fonction affine (distance)', unite: 'km/h' },
+        { fn: x => 0.5 * x * x + 1, label: 'f(x)=0{,}5x^2+1', nom: 'fonction quadratique (hauteur)', unite: 'm' }
       ];
       const ctx = pick(ctxs);
       const a = rand(0, 4), b = a + pick([1, 2, 3]);
@@ -7006,26 +7056,21 @@
       const tau = +((fb - fa) / (b - a)).toFixed(2);
       return {
         title: "Taux de variation moyen",
-        enonce: `On considère ${ctx.nom} $f$ définie par $f(x)=${ctx.label}$.`,
+        enonce: `On considère la ${ctx.nom} $f$ définie par $f(x)=${ctx.label}$.`,
         questions: [
           `Calculer $f(${a})$ et $f(${b})$.`,
           `Calculer le taux de variation moyen de $f$ entre $x=${a}$ et $x=${b}$.`,
-          `Interpréter ce résultat dans un contexte concret.`,
-          currentDifficulty === 'difficile' ? `Comparer $f(${a + 1})-f(${a})$ et $f(${b})-f(${b - 1})$. Que remarque-t-on ?` : `La fonction est-elle croissante ou décroissante sur cet intervalle ?`
+          `Interpréter ce résultat dans le contexte.`,
+          currentDifficulty === 'difficile' ? `Comparer $f(${a + 1})-f(${a})$ et $f(${b})-f(${b - 1})$. Que remarques-tu ?` : `La fonction est-elle croissante ou décroissante sur cet intervalle ?`
         ],
-        correction: `<div class="step"><div class="step-label">Images</div>
-      <div class="step-content">$f(${a})=${fa}$, $f(${b})=${fb}$</div></div>
-      <div class="step"><div class="step-label">Taux de variation</div>
-      <div class="step-content">$$\\tau=\\frac{f(${b})-f(${a})}{${b}-${a}}=\\frac{${fb}-${fa}}{${b - a}}=${tau}$$</div></div>
-      <div class="step"><div class="step-label">Interprétation</div>
-      <div class="step-content">En moyenne, quand $x$ augmente de 1 unité entre ${a} et ${b}, $f(x)$ ${tau >= 0 ? 'augmente' : 'diminue'} de $|${tau}|$ ${ctx.unite}.</div></div>`
+        correction: `<div class="step"><div class="step-label">Images</div><div class="step-content">$f(${a})=${fa}$, $f(${b})=${fb}$</div></div>
+        <div class="step"><div class="step-label">Taux de variation</div><div class="step-content">$$\\tau=\\frac{f(${b})-f(${a})}{${b}-${a}}=\\frac{${fb}-${fa}}{${b - a}}=${tau}$$</div></div>
+        <div class="step"><div class="step-label">Interprétation</div><div class="step-content">En moyenne, $f(x)$ ${tau >= 0 ? 'augmente' : 'diminue'} de $|${tau}|$ ${ctx.unite} par unité de $x$ sur $[${a}\,;\,${b}]$.</div></div>`
       };
     }
 
     function genTC_FonctionsLecture() {
-      const pts = [
-        { a: rand(0, 3), b: rand(0, 3), c: rand(1, 4), d: rand(4, 8) }
-      ][0];
+      // Ajout d'un contexte supplémentaire et correction KaTeX
       const ctxs = [
         {
           titre: "Température au cours de la journée",
@@ -7050,13 +7095,25 @@
             [3, pick([45, 50, 55])],
             [4, pick([60, 65, 70])]
           ]
+        },
+        {
+          titre: "Volume d'eau dans une cuve (remplissage)",
+          uniteX: 'minutes',
+          uniteY: 'L',
+          valeurs: [
+            [0, 0],
+            [5, pick([10, 12, 15])],
+            [10, pick([20, 25, 30])],
+            [15, pick([30, 35, 40])],
+            [20, pick([40, 45, 50])]
+          ]
         }
       ];
       const ctx = pick(ctxs);
       const tab = ctx.valeurs;
       const tableHTML = `<table style="margin:14px auto;border-collapse:collapse;font-size:13px;">
-    <tr><th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">$t$ (${ctx.uniteX})</th>${tab.map(([t]) => `<td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">$${t}$</td>`).join('')}</tr>
-    <tr><th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">$f(t)$ (${ctx.uniteY})</th>${tab.map(([, v]) => `<td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">$${v}$</td>`).join('')}</tr>
+    <tr><th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">$t$ (${ctx.uniteX})</th>${tab.map(([t]) => `<td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">${t}</td>`).join('')}</tr>
+    <tr><th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">$f(t)$ (${ctx.uniteY})</th>${tab.map(([, v]) => `<td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">${v}</td>`).join('')}</tr>
   </table>`;
       const idx = pick([1, 2, 3]);
       const tau12 = +((tab[idx][1] - tab[idx - 1][1]) / (tab[idx][0] - tab[idx - 1][0])).toFixed(2);
@@ -7070,12 +7127,9 @@
           `Calculer le taux de variation moyen entre $t=${tab[idx - 1][0]}$ et $t=${tab[idx][0]}$.`,
           currentDifficulty === 'difficile' ? `Estimer $f(${(tab[idx - 1][0] + tab[idx][0]) / 2})$ par interpolation linéaire.` : `Interpréter ce taux de variation.`
         ],
-        correction: `<div class="step"><div class="step-label">Maximum</div>
-      <div class="step-content">Maximum $f(${maxVal[0]})=${maxVal[1]}$ ${ctx.uniteY} atteint en $t=${maxVal[0]}$ ${ctx.uniteX}.</div></div>
-      <div class="step"><div class="step-label">Taux de variation</div>
-      <div class="step-content">$$\\tau=\\frac{${tab[idx][1]}-${tab[idx - 1][1]}}{${tab[idx][0]}-${tab[idx - 1][0]}}=${tau12}\\text{ ${ctx.uniteY}/${ctx.uniteX}}$$</div></div>
-      <div class="step"><div class="step-label">Sens de variation</div>
-      <div class="step-content">$\\tau=${tau12}$ ${tau12 >= 0 ? '> 0 : $f$ est <strong>croissante</strong>' : '< 0 : $f$ est <strong>décroissante</strong>'} sur cet intervalle.</div></div>`
+        correction: `<div class="step"><div class="step-label">Maximum</div><div class="step-content">Maximum $f(${maxVal[0]})=${maxVal[1]}$ ${ctx.uniteY} atteint en $t=${maxVal[0]}$ ${ctx.uniteX}.</div></div>
+        <div class="step"><div class="step-label">Taux de variation</div><div class="step-content">$$\\tau=\\frac{${tab[idx][1]}-${tab[idx - 1][1]}}{${tab[idx][0]}-${tab[idx - 1][0]}}=${tau12}$$ ${ctx.uniteY}/${ctx.uniteX}</div></div>
+        <div class="step"><div class="step-label">Sens de variation</div><div class="step-content">$\\tau=${tau12}$ ${tau12 >= 0 ? '> 0 : $f$ est <strong>croissante</strong>' : '< 0 : $f$ est <strong>décroissante</strong>'} sur cet intervalle.</div></div>`
       };
     }
 
@@ -7143,10 +7197,11 @@
     // CH.3 TC — SUITES NUMÉRIQUES
     // ══════════════════════════════════════════════════════════════════
     function genTC_Suites() {
+      // Plus de variété et d'équilibre
       const type = pickD(
-        ['identifier'],
-        ['formule', 'identifier'],
-        ['contexte', 'formule']
+        ['identifier', 'formule'],
+        ['formule', 'contexte', 'identifier'],
+        ['contexte', 'identifier', 'formule']
       );
       if (type === 'formule') return genTC_SuitesFormule();
       if (type === 'contexte') return genTC_SuitesContexte();
@@ -7160,18 +7215,28 @@
       const terms = isArith
         ? [u0, u0 + r, u0 + 2 * r, u0 + 3 * r]
         : [u0, +(u0 * r).toFixed(2), +(u0 * r * r).toFixed(2), +(u0 * r ** 3).toFixed(2)];
+      const diffOrRatio = [];
+      for (let i = 1; i < terms.length; i++) {
+        if (isArith) {
+          diffOrRatio.push(+(terms[i] - terms[i-1]).toFixed(2));
+        } else {
+          diffOrRatio.push(+(terms[i] / terms[i-1]).toFixed(2));
+        }
+      }
       return {
         title: "Identifier la nature d'une suite",
         enonce: `Suite $(u_n)$ : $${terms.map((t, i) => `u_${i}=${t}`).join(',\\;')}\\ldots$`,
         questions: [
+          `Calculer les différences successives (ou les rapports si géométrique).`,
           `La suite est-elle arithmétique ou géométrique ? Justifier.`,
-          `Donner la raison et la formule explicite.`,
-          `Calculer $u_{10}$.`
+          `Donner la raison et la formule explicite de $u_n$.`,
+          `Calculer $u_{10}$.`,
+          currentDifficulty === 'difficile' ? `La suite est-elle croissante ou décroissante ? Expliquer pourquoi.` : `Quel est le sens de variation de cette suite ?`
         ],
-        correction: `<div class="step"><div class="step-label">Nature</div>
-      <div class="step-content">${isArith ? `Différences constantes = $${r}$ → <strong>arithmétique</strong>, $r=${r}$.` : `Rapports constants = $${r}$ → <strong>géométrique</strong>, $q=${r}$.`}</div></div>
-      <div class="step"><div class="step-label">Formule et $u_{10}$</div>
-      <div class="step-content">$u_n=${isArith ? `${u0}+${r}n` : `${u0}\\times(${r})^n`}$, donc $u_{10}=${isArith ? u0 + 10 * r : +(u0 * r ** 10).toFixed(3)}$.</div></div>`
+        correction: `<div class="step"><div class="step-label">Différences/Rapports</div><div class="step-content">${isArith ? `Différences : $${diffOrRatio.join(', ')}$` : `Rapports : $${diffOrRatio.join(', ')}$`}</div></div>
+        <div class="step"><div class="step-label">Nature</div><div class="step-content">${isArith ? `Différences constantes = $${r}$ → <strong>arithmétique</strong>, $r=${r}$.` : `Rapports constants = $${r}$ → <strong>géométrique</strong>, $q=${r}$.`}</div></div>
+        <div class="step"><div class="step-label">Formule et $u_{10}$</div><div class="step-content">$$u_n=${isArith ? `${u0}+${r}n` : `${u0}\\times(${r})^n`}$$Donc $u_{10}=${isArith ? u0 + 10 * r : +(u0 * r ** 10).toFixed(3)}$.</div></div>
+        <div class="step"><div class="step-label">Sens de variation</div><div class="step-content">${isArith ? `$r=${r}$ ${r > 0 ? '> 0 : suite <strong>croissante</strong>' : r < 0 ? '< 0 : suite <strong>décroissante</strong>' : '= 0 : suite <strong>constante</strong>'}` : `$q=${r}$, $u_0=${u0}$ : suite ${r > 1 ? '<strong>croissante</strong>' : r === 1 ? '<strong>constante</strong>' : r > 0 && r < 1 ? '<strong>décroissante</strong>' : '<strong>oscillante</strong>'}`}</div></div>`
       };
     }
 
@@ -7187,33 +7252,40 @@
         questions: [
           `Formule explicite de $u_n$.`,
           `Calculer $u_{${n}}$.`,
-          `Calculer $S=u_0+\\cdots+u_{${n}}$.`
+          `Écrire la formule de la somme $S=u_0+u_1+\\cdots+u_{${n}}$.`,
+          `Calculer $S$.`,
+          currentDifficulty === 'difficile' ? `Pour quelle valeur de $n$ a-t-on $u_n \\geq 1000$ ?` : `Interpréter cette somme dans un contexte concret.`
         ],
-        correction: `<div class="step"><div class="step-label">Résultats</div>
-      <div class="step-content">$u_n=${isArith ? `${u0}+${r}n` : `${u0}\\times${r}^n`}$<br/>
-      $u_{${n}}=${+un.toFixed(3)}$<br/>
-      $S=${+S.toFixed(2)}$</div></div>`
+        correction: `<div class="step"><div class="step-label">Formule explicite</div><div class="step-content">$$u_n=${isArith ? `${u0}+${r}n` : `${u0}\\times${r}^n`}$$</div></div>
+        <div class="step"><div class="step-label">Calcul de $u_{${n}}$</div><div class="step-content">$u_{${n}}=${+un.toFixed(3)}$</div></div>
+        <div class="step"><div class="step-label">Somme</div><div class="step-content">$$S=${isArith ? `\\frac{(${n}+1)(u_0+u_{${n}})}{2}=\\frac{(${n}+1)(${u0}+${+un.toFixed(2)})}{2}` : `u_0\\frac{${r}^{${n}+1}-1}{${r}-1}=\\frac{${u0}(${r}^{${n}+1}-1)}{${r}-1}`}=${+S.toFixed(2)}$$</div></div>`
       };
     }
 
     function genTC_SuitesContexte() {
       const ctx = pick([
-        { desc: 'Un capital de {u0} € est placé à 5 % par an.', u0: rand(500, 2000), r: 1.05, type: 'geo', unite: '€', question: 'Au bout de combien d\'années le capital double-t-il ?' },
-        { desc: 'Une entreprise augmente sa production de 200 unités par mois.', u0: rand(800, 1500), r: 200, type: 'arith', unite: 'unités', question: 'Production après 2 ans ?' }
+        { desc: 'Un capital de {u0} € est placé à 5 % par an.', u0: rand(500, 2000), r: 1.05, type: 'geo', unite: '€', n: 12, question: 'Au bout de combien d\'années le capital double-t-il ?' },
+        { desc: 'Une entreprise augmente sa production de 200 unités par mois.', u0: rand(800, 1500), r: 200, type: 'arith', unite: 'unités', n: 24, question: 'Production après 2 ans ?' },
+        { desc: 'Une population de {u0} individus augmente de 3 % chaque année.', u0: rand(100, 500), r: 1.03, type: 'geo', unite: 'individus', n: 10, question: 'Combien d\'individus après 10 ans ?' },
+        { desc: 'Un athlète court 3 km le 1er jour, puis augmente sa distance de 0,5 km chaque jour.', u0: 3, r: 0.5, type: 'arith', unite: 'km', n: 7, question: 'Distance totale parcourue en 1 semaine ?' }
       ]);
       const u0 = ctx.u0, isArith = ctx.type === 'arith', r = ctx.r;
       const desc = ctx.desc.replace('{u0}', u0);
-      const u12 = isArith ? u0 + r * 12 : +(u0 * r ** 12).toFixed(2);
+      const un = isArith ? u0 + r * ctx.n : +(u0 * r ** ctx.n).toFixed(2);
+      const S = isArith ? (ctx.n + 1) * (u0 + un) / 2 : u0 * (r ** (ctx.n + 1) - 1) / (r - 1);
       return {
-        title: "Suites – Contexte",
+        title: "Suites – Contexte réel",
         enonce: `${desc} On note $u_n$ la valeur au rang $n$.`,
         questions: [
-          `Nature de $(u_n)$, premier terme et raison.`,
+          `Nature de $(u_n)$, premier terme et raison. Justifier.`,
           `Formule explicite de $u_n$.`,
-          ctx.question
+          `${isArith ? `La somme $u_0+u_1+\\cdots+u_{${ctx.n}}$.` : `Valeur après ${ctx.n} unités de temps.`}`,
+          `${ctx.question}`,
+          currentDifficulty === 'difficile' ? `Interpréter le résultat dans le contexte donné.` : `Vérifier votre réponse.`
         ],
-        correction: `<div class="step"><div class="step-label">Suite ${isArith ? 'arithmétique' : 'géométrique'}</div>
-      <div class="step-content">$u_n=${isArith ? `${u0}+${r}n` : `${u0}\\times${r}^n`}$, $u_{12}=${u12}$ ${ctx.unite}.</div></div>`
+        correction: `<div class="step"><div class="step-label">Nature et raison</div><div class="step-content">Suite <strong>${isArith ? 'arithmétique' : 'géométrique'}</strong>, $u_0=${u0}$, ${isArith ? `$r=${r}$` : `$q=${r}$`}</div></div>
+        <div class="step"><div class="step-label">Formule</div><div class="step-content">$$u_n=${isArith ? `${u0}+${r}n` : `${u0}\\times${r}^n`}$$</div></div>
+        <div class="step"><div class="step-label">Résultat</div><div class="step-content">$u_{${ctx.n}}=${un}$ ${ctx.unite}${isArith ? `, Somme = ${+S.toFixed(2)}` : ''}</div></div>`
       };
     }
 
@@ -7223,10 +7295,11 @@
     //  fonctions sin et cos comme fonctions périodiques)
     // ══════════════════════════════════════════════════════════════════
     function genTC_Trigo() {
+      // Plus de variété et d'équilibre
       const type = pickD(
-        ['valeurs_rem'],
-        ['triangle', 'valeurs_rem'],
-        ['periodique', 'triangle']
+        ['valeurs_rem', 'triangle'],
+        ['triangle', 'periodique', 'valeurs_rem'],
+        ['periodique', 'valeurs_rem', 'triangle']
       );
       if (type === 'triangle') return genTC_TrigoTriangle();
       if (type === 'periodique') return genTC_TrigoFonctionPeriodique();
@@ -7235,23 +7308,30 @@
 
     function genTC_TrigoValeursRem() {
       const angles = [
+        { deg: 0, rad: '0', sin: '0', cos: '1', tan: '0' },
         { deg: 30, rad: '\\frac{\\pi}{6}', sin: '\\frac{1}{2}', cos: '\\frac{\\sqrt{3}}{2}', tan: '\\frac{\\sqrt{3}}{3}' },
         { deg: 45, rad: '\\frac{\\pi}{4}', sin: '\\frac{\\sqrt{2}}{2}', cos: '\\frac{\\sqrt{2}}{2}', tan: '1' },
         { deg: 60, rad: '\\frac{\\pi}{3}', sin: '\\frac{\\sqrt{3}}{2}', cos: '\\frac{1}{2}', tan: '\\sqrt{3}' },
+        { deg: 90, rad: '\\frac{\\pi}{2}', sin: '1', cos: '0', tan: 'indéfinie' },
         { deg: 120, rad: '\\frac{2\\pi}{3}', sin: '\\frac{\\sqrt{3}}{2}', cos: '-\\frac{1}{2}', tan: '-\\sqrt{3}' },
-        { deg: 150, rad: '\\frac{5\\pi}{6}', sin: '\\frac{1}{2}', cos: '-\\frac{\\sqrt{3}}{2}', tan: '-\\frac{\\sqrt{3}}{3}' }
+        { deg: 135, rad: '\\frac{3\\pi}{4}', sin: '\\frac{\\sqrt{2}}{2}', cos: '-\\frac{\\sqrt{2}}{2}', tan: '-1' },
+        { deg: 150, rad: '\\frac{5\\pi}{6}', sin: '\\frac{1}{2}', cos: '-\\frac{\\sqrt{3}}{2}', tan: '-\\frac{\\sqrt{3}}{3}' },
+        { deg: 180, rad: '\\pi', sin: '0', cos: '-1', tan: '0' }
       ];
       const sel = pick(angles);
       return {
         title: "Valeurs remarquables",
         enonce: `Angle $\\theta=${sel.rad}$ rad ($${sel.deg}°$).`,
         questions: [
+          `Convertir $\\theta$ en degrés (ou en radians si donné en degrés).`,
           `Valeur exacte de $\\sin(\\theta)$.`,
           `Valeur exacte de $\\cos(\\theta)$.`,
-          `En déduire $\\tan(\\theta)$.`
+          `En déduire $\\tan(\\theta)$ (si elle existe).`,
+          currentDifficulty === 'difficile' ? `Placer l'angle $\\theta$ sur le cercle unité et justifier les valeurs.` : `Vérifier que $\\sin^2(\\theta) + \\cos^2(\\theta) = 1$.`
         ],
-        correction: `<div class="step"><div class="step-label">Valeurs</div>
-      <div class="step-content">$\\sin=${sel.sin}$, $\\cos=${sel.cos}$, $\\tan=${sel.tan}$</div></div>`
+        correction: `<div class="step"><div class="step-label">Conversion</div><div class="step-content">$${sel.deg}° = ${sel.rad}$ rad</div></div>
+        <div class="step"><div class="step-label">Valeurs</div><div class="step-content">$\\sin(\\theta)=${sel.sin}$, $\\cos(\\theta)=${sel.cos}$, $\\tan(\\theta)=${sel.tan}$</div></div>
+        <div class="step"><div class="step-label">Vérification</div><div class="step-content">$(${sel.sin})^2 + (${sel.cos})^2 = 1$ ✓</div></div>`
       };
     }
 
@@ -7294,10 +7374,11 @@
     //  lecture de distributions, fluctuation d'échantillonnage)
     // ══════════════════════════════════════════════════════════════════
     function genTC_Stats() {
+      // Plus de variété et d'équilibre
       const type = pickD(
-        ['indicateurs'],
-        ['distribution', 'indicateurs'],
-        ['fluctuation', 'distribution']
+        ['indicateurs', 'distribution'],
+        ['distribution', 'fluctuation', 'indicateurs'],
+        ['fluctuation', 'indicateurs', 'distribution']
       );
       if (type === 'distribution') return genTC_StatsDistribution();
       if (type === 'fluctuation') return genTC_StatsFluct();
@@ -7308,39 +7389,38 @@
       const ctxs = [
         { nom: 'notes de contrôle', unite: '/20', n: 10 },
         { nom: 'durée de trajets (en min)', unite: 'min', n: 8 },
-        { nom: 'températures journalières (°C)', unite: '°C', n: 7 }
+        { nom: 'températures journalières (°C)', unite: '°C', n: 7 },
+        { nom: 'tailles d\'élèves (cm)', unite: 'cm', n: 12 },
+        { nom: 'poids (kg)', unite: 'kg', n: 9 }
       ];
       const ctx = pick(ctxs);
       const n = ctx.n;
-      // Génère une liste de n valeurs entières triées
       const vals = Array.from({ length: n }, () => rand(5, 18)).sort((a, b) => a - b);
       const mean = +(vals.reduce((s, v) => s + v, 0) / n).toFixed(2);
       const sorted = [...vals];
       const med = n % 2 === 0 ? +((sorted[n / 2 - 1] + sorted[n / 2]) / 2).toFixed(1) : sorted[(n - 1) / 2];
       const q1 = sorted[Math.floor(n / 4)];
       const q3 = sorted[Math.floor(3 * n / 4)];
+      const iqr = q3 - q1;
       const variance = +(vals.reduce((s, v) => s + (v - mean) ** 2, 0) / n).toFixed(2);
       const ecartType = +Math.sqrt(variance).toFixed(2);
+      const min = vals[0], max = vals[n-1];
       const tableRow = `<table style="margin:10px auto;border-collapse:collapse;font-size:13px;">
     <tr><th style="padding:6px 10px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">Valeurs (${ctx.unite})</th>
-    ${vals.map(v => `<td style="padding:6px 10px;border:1px solid rgba(255,255,255,0.15);text-align:center">$${v}$</td>`).join('')}</tr></table>`;
+    ${vals.map(v => `<td style="padding:6px 10px;border:1px solid rgba(255,255,255,0.15);text-align:center">${v}</td>`).join('')}</tr></table>`;
       return {
         title: `Statistiques — ${ctx.nom}`,
         enonce: `On relève les ${ctx.nom} suivantes pour $n=${n}$ observations :${tableRow}`,
         questions: [
           `Calculer la moyenne $\\bar{x}$.`,
-          `Déterminer la médiane.`,
-          currentDifficulty !== 'facile' ? `Déterminer les quartiles $Q_1$ et $Q_3$, puis l'étendue interquartile.` : `Donner le minimum et le maximum de la série.`,
-          currentDifficulty === 'difficile' ? `Calculer la variance $V$ puis l'écart-type $\\sigma$.` : `Interpréter la moyenne dans le contexte.`
+          `Déterminer la médiane et vérifier qu'elle diffère de la moyenne.`,
+          `Déterminer les quartiles $Q_1$ et $Q_3$, puis l'intervalle interquartile $[Q_1\\,;\\,Q_3]$.`,
+          currentDifficulty === 'difficile' ? `Calculer la variance $V$ puis l'écart-type $\\sigma$.` : `Donner le minimum, le maximum et l'étendue de la série.`
         ],
-        correction: `<div class="step"><div class="step-label">Moyenne</div>
-      <div class="step-content">$$\\bar{x}=\\frac{${vals.join('+')}}{${n}}=${mean}$$</div></div>
-      <div class="step"><div class="step-label">Médiane (série triée : ${sorted.join(', ')})</div>
-      <div class="step-content">$n=${n}$ ${n % 2 === 0 ? `(pair) : médiane $=\\frac{${sorted[n / 2 - 1]}+${sorted[n / 2]}}{2}=${med}$` : `(impair) : médiane = valeur centrale $=${med}$`}</div></div>
-      <div class="step"><div class="step-label">Quartiles</div>
-      <div class="step-content">$Q_1=${q1}$, $Q_3=${q3}$, étendue interquartile $=${q3 - q1}$.</div></div>
-      ${currentDifficulty === 'difficile' ? `<div class="step"><div class="step-label">Écart-type</div>
-      <div class="step-content">$V=${variance}$, $\\sigma=\\sqrt{${variance}}\\approx${ecartType}$.</div></div>` : ''}`
+        correction: `<div class="step"><div class="step-label">Moyenne</div><div class="step-content">$$\\bar{x}=\\frac{${vals.join('+')}}{${n}}=${mean}$$</div></div>
+        <div class="step"><div class="step-label">Médiane (série triée : ${sorted.join(', ')})</div><div class="step-content">$n=${n}$ ${n % 2 === 0 ? `(pair) : \\text{médiane}=\\frac{${sorted[n / 2 - 1]}+${sorted[n / 2]}}{2}=${med}$` : `(impair) : \\text{médiane} = ${med}$`}</div></div>
+        <div class="step"><div class="step-label">Quartiles et intervalle interquartile</div><div class="step-content">$Q_1=${q1}$, $Q_3=${q3}$, intervalle interquartile $=[${q1}\\,;\\,${q3}]$, étendue $=${iqr}$</div></div>
+        ${currentDifficulty === 'difficile' ? `<div class="step"><div class="step-label">Variance et écart-type</div><div class="step-content">$$V=\\frac{\\sum(x_i-\\bar{x})^2}{n}=${variance}$$$$\\sigma=\\sqrt{V}\\approx${ecartType}$$</div></div>` : `<div class="step"><div class="step-label">Étendue</div><div class="step-content">$\\text{min}=${min}, \\text{max}=${max}, \\text{étendue}=${max-min}$</div></div>`}`
       };
     }
 
@@ -7419,20 +7499,23 @@
     }
 
     function genTC_TrigoTriangle() {
-      const triangles = [[3, 4, 5], [5, 12, 13], [8, 15, 17], [6, 8, 10]];
+      const triangles = [[3, 4, 5], [5, 12, 13], [8, 15, 17], [6, 8, 10], [7, 24, 25], [9, 12, 15]];
       const [a, b, c] = pick(triangles).map(x => x * pick([1, 2]));
       const angleA = +(Math.asin(a / c) * 180 / Math.PI).toFixed(1);
+      const angleC = +(Math.asin(b / c) * 180 / Math.PI).toFixed(1);
       return {
         title: "Trigonométrie – Triangle rectangle",
-        enonce: `Triangle $ABC$ rectangle en $B$, avec $BC=${a}$ et $AC=${c}$.`,
+        enonce: `Triangle $ABC$ rectangle en $B$, avec $BC=${a}$, $AB=${b}$ et $AC=${c}$ (hypoténuse).`,
         questions: [
-          `Calculer $AB$.`,
+          `Représenter le triangle en vérifiant la relation de Pythagore.`,
           `Calculer $\\sin(\\hat{A})$, $\\cos(\\hat{A})$ et $\\tan(\\hat{A})$.`,
-          `Donner $\\hat{A}$ en degrés (arrondi au dixième).`
+          `En déduire la mesure de l'angle $\\hat{A}$ en degrés.`,
+          `Calculer aussi l'angle $\\hat{C}$.`,
+          currentDifficulty === 'difficile' ? `Vérifier que $\\sin^2(\\hat{A}) + \\cos^2(\\hat{A}) = 1$.` : `Vérifier que $\\hat{A} + \\hat{C} = 90°$.`
         ],
-        correction: `<div class="step"><div class="step-label">Résultats</div>
-      <div class="step-content">$AB=${b}$, $\\sin(\\hat{A})=\\frac{${a}}{${c}}$, $\\cos(\\hat{A})=\\frac{${b}}{${c}}$, $\\tan(\\hat{A})=\\frac{${a}}{${b}}$<br/>
-      $\\hat{A}\\approx${angleA}°$</div></div>`
+        correction: `<div class="step"><div class="step-label">Théorème de Pythagore</div><div class="step-content">$${a}^2 + ${b}^2 = ${a*a} + ${b*b} = ${c*c} = ${c}^2$ ✓</div></div>
+        <div class="step"><div class="step-label">Valeurs trigonométriques</div><div class="step-content">$\\sin(\\hat{A})=\\frac{${a}}{${c}}\\approx${(a/c).toFixed(3)}$<br/>$\\cos(\\hat{A})=\\frac{${b}}{${c}}\\approx${(b/c).toFixed(3)}$<br/>$\\tan(\\hat{A})=\\frac{${a}}{${b}}\\approx${(a/b).toFixed(3)}$</div></div>
+        <div class="step"><div class="step-label">Angles</div><div class="step-content">$\\hat{A}\\approx${angleA}°$, $\\hat{C}\\approx${angleC}°$ (donc $\\hat{A} + \\hat{C} \\approx 90°$)</div></div>`
       };
     }
 
@@ -7491,17 +7574,21 @@
       const pnM = +(1 - pM).toFixed(2);
       const pAB = +(pM * pTM).toFixed(4), pnAB = +(pnM * pTnM).toFixed(4);
       const pT = +(pAB + pnAB).toFixed(4), vpp = +(pAB / pT).toFixed(4);
+      // Ajout d'une variante de contexte et d'une question d'analyse
       return {
-        title: "Test de dépistage – Probabilités totales",
-        enonce: `Test de dépistage d'une maladie $M$ : ${pct(pM)} atteints, sensibilité ${pct(pTM)}, faux positifs ${pct(pTnM)}.`,
+        title: "Test de dépistage – Probabilités totales et analyse critique",
+        enonce: `Un test médical détecte une maladie $M$ : ${pct(pM)} de la population est atteinte, sensibilité ${pct(pTM)}, taux de faux positifs ${pct(pTnM)}.`,
         questions: [
-          `Construire un arbre de probabilité.`,
-          `Calculer $P(T)$ (formule des probabilités totales).`,
-          `Calculer $P_T(M)$ (valeur prédictive positive).`,
-          `Le test est-il fiable ? Interpréter.`
+          `Construire un arbre de probabilité et annoter chaque branche.`,
+          `Calculer $P(T)$ (probabilité d'un test positif) à l'aide de la formule des probabilités totales.`,
+          `Calculer $P_T(M)$ (probabilité d'être malade sachant test positif).`,
+          `Le test est-il fiable pour dépister la maladie ? Justifier avec les résultats.`,
+          `Proposer une amélioration possible du dépistage ou une précaution à prendre lors de l'interprétation.`
         ],
         correction: `<div class="step"><div class="step-label">Calculs</div>
-      <div class="step-content">$P(T)=${pT}$, $P_T(M)\\approx${vpp}=${pct(vpp, 1)}$.</div></div>`
+      <div class="step-content">$P(T)=${pT}$, $P_T(M)\approx${vpp}=${pct(vpp, 1)}$.</div></div>
+      <div class="step"><div class="step-label">Analyse critique</div>
+      <div class="step-content">Même si le test est très sensible, la probabilité d'être réellement malade quand le test est positif ($P_T(M)$) peut rester faible si la maladie est rare. Il faut donc interpréter les résultats avec prudence et, si possible, confirmer par un second test ou croiser avec d'autres informations.</div></div>`
       };
     }
 
@@ -7509,7 +7596,9 @@
       const ctxs = [
         { nom: 'consommation électrique (kWh)', fn: x => +(2.5 * x + 120).toFixed(1), label: 'C(x)=2{,}5x+120', var: 'x', uniteX: 'appareils', unite: 'kWh', a0: 3, b0: 7 },
         { nom: 'population d\'une ville (milliers)', fn: x => +(0.5 * x * x + 10 * x + 200).toFixed(0), label: 'P(t)=0{,}5t^2+10t+200', var: 't', uniteX: 'années', unite: 'milliers hab.', a0: 2, b0: 6 },
-        { nom: 'intensité sonore (dB)', fn: x => +(20 * Math.sin(2 * Math.PI / 8 * x) + 60).toFixed(1), label: 'I(t)=20\\sin\\!\\left(\\tfrac{\\pi}{4}t\\right)+60', var: 't', uniteX: 's', unite: 'dB', a0: 0, b0: 4 }
+        { nom: 'intensité sonore (dB)', fn: x => +(20 * Math.sin(2 * Math.PI / 8 * x) + 60).toFixed(1), label: 'I(t)=20\\sin\\!\\left(\\tfrac{\\pi}{4}t\\right)+60', var: 't', uniteX: 's', unite: 'dB', a0: 0, b0: 4 },
+        { nom: 'croissance d\'une plante (cm)', fn: x => +(3 * x * x + 2).toFixed(1), label: 'f(x)=3x^2+2', var: 'x', uniteX: 'semaines', unite: 'cm', a0: 1, b0: 5 },
+        { nom: 'prix d\'un objet en fonction du temps (inflation)', fn: x => +(100 * Math.pow(1.03, x)).toFixed(2), label: 'P(t)=100\times1{,}03^t', var: 't', uniteX: 'années', unite: '€', a0: 0, b0: 4 }
       ];
       const ctx = pick(ctxs);
       const fa = ctx.fn(ctx.a0), fb = ctx.fn(ctx.b0);
@@ -7518,52 +7607,74 @@
         title: `Analyse d'une fonction – ${ctx.nom}`,
         enonce: `La fonction $f$ modélisant ${ctx.nom} est définie par $f(${ctx.var})=${ctx.label}$.`,
         questions: [
-          `Calculer $f(${ctx.a0})$ et $f(${ctx.b0})$. Interpréter ces valeurs.`,
+          `Calculer $f(${ctx.a0})$ et $f(${ctx.b0})$. Interpréter ces valeurs dans le contexte (unité, signification).`,
           `Calculer le taux de variation moyen entre ${ctx.var}=${ctx.a0} et ${ctx.var}=${ctx.b0}.`,
-          `La fonction est-elle croissante, décroissante ou ni l'un ni l'autre sur $[${ctx.a0}\\,;\\,${ctx.b0}]$ ?`,
-          `Interpréter le taux de variation dans le contexte de l'énoncé.`
+          `La fonction est-elle croissante, décroissante ou ni l'un ni l'autre sur $[${ctx.a0}\,;\,${ctx.b0}]$ ? Justifier à l'aide du taux de variation.`,
+          `Interpréter le taux de variation dans le contexte de l'énoncé.`,
+          `Proposer une situation concrète où ce modèle serait pertinent.`
         ],
-        correction: `<div class="step"><div class="step-label">Images</div>
-      <div class="step-content">$f(${ctx.a0})=${fa}$ ${ctx.unite}, $f(${ctx.b0})=${fb}$ ${ctx.unite}.</div></div>
-      <div class="step"><div class="step-label">Taux de variation</div>
-      <div class="step-content">$\\tau=\\dfrac{${fb}-${fa}}{${ctx.b0}-${ctx.a0}}=${tau}$ ${ctx.unite}/${ctx.uniteX}.</div></div>
-      <div class="step"><div class="step-label">Sens de variation</div>
-      <div class="step-content">$\\tau=${tau}$ ${tau > 0 ? '>0 : $f$ est <strong>croissante</strong>' : tau < 0 ? '<0 : $f$ est <strong>décroissante</strong>' : '=0 : $f$ est constante'} sur cet intervalle.</div></div>`
+        correction: `<div class="step"><div class="step-label">Images</div><div class="step-content">$f(${ctx.a0})=${fa}$ ${ctx.unite}, $f(${ctx.b0})=${fb}$ ${ctx.unite}.</div></div>
+        <div class="step"><div class="step-label">Taux de variation</div><div class="step-content">$$\\tau=\\frac{${fb}-${fa}}{${ctx.b0}-${ctx.a0}}=${tau}$$ ${ctx.unite}/${ctx.uniteX}</div></div>
+        <div class="step"><div class="step-label">Sens de variation</div><div class="step-content">$\\tau=${tau}$ ${tau > 0 ? '>0 : $f$ est <strong>croissante</strong>' : tau < 0 ? '<0 : $f$ est <strong>décroissante</strong>' : '=0 : $f$ est constante'} sur cet intervalle.</div></div>
+        <div class="step"><div class="step-label">Interprétation</div><div class="step-content">Le taux de variation moyen représente la variation moyenne de $f$ par unité de ${ctx.uniteX} sur l'intervalle considéré.</div></div>`
       };
     }
 
     function genBacTC_Suites() {
-      const u0 = pick([1000, 1500, 2000]), q = pick([1.03, 1.04, 1.05]), n = pick([5, 10, 15]);
-      const un = +(u0 * q ** n).toFixed(2);
+      const ctxs = [
+        { u0: pick([1000, 1500, 2000]), q: pick([1.03, 1.04, 1.05]), n: pick([5, 10, 15]), descrip: 'placement financier' },
+        { u0: pick([100, 200, 300]), r: pick([50, 75, 100]), n: pick([10, 12, 15]), descrip: 'production croissante', type: 'arith' },
+        { u0: 1000, q: 0.95, n: 12, descrip: 'dépréciation d\'une machine' }
+      ];
+      const ctx = pick(ctxs);
+      const isArith = ctx.type === 'arith';
+      const un = isArith ? ctx.u0 + ctx.r * ctx.n : +(ctx.u0 * ctx.q ** ctx.n).toFixed(2);
+      const S = isArith ? (ctx.n + 1) * (ctx.u0 + un) / 2 : ctx.u0 * (ctx.q ** (ctx.n + 1) - 1) / (ctx.q - 1);
       return {
-        title: "Placement financier – Suite géométrique",
-        enonce: `Capital $${u0}$ € placé à ${pct(q - 1)} annuels composés. $u_n$ = capital après $n$ années.`,
+        title: `Suite numérique – ${ctx.descrip}`,
+        enonce: isArith
+          ? `Une ${ctx.descrip} : $u_0=${ctx.u0}$, augmentation de $${ctx.r}$ unités par période. $u_n$ = valeur après $n$ périodes.`
+          : `Un ${ctx.descrip} : $u_0=${ctx.u0}$ €, taux de ${ctx.q > 1 ? 'croissance' : 'décroissance'} de $${Math.abs(ctx.q - 1) * 100}\\%$ par an.`,
         questions: [
-          `Montrer que $(u_n)$ est géométrique. Préciser $u_0$ et $q$.`,
+          `Montrer que $(u_n)$ est ${isArith ? 'arithmétique' : 'géométrique'}. Préciser $u_0$ et ${isArith ? '$r$' : '$q$'}.`,
           `Formule explicite de $u_n$.`,
-          `Capital après $${n}$ ans.`,
-          `Au bout de combien d'années le capital double-t-il ?`
+          `Calculer $u_{${ctx.n}}$.`,
+          `Calculer la somme $S=u_0+u_1+\\cdots+u_{${ctx.n}}$.`,
+          currentDifficulty === 'difficile' ? `Pour quelle valeur de $n$ atteint-on $u_n \\geq 5000$ ?` : `Interpréter le résultat.`
         ],
-        correction: `<div class="step"><div class="step-label">Résultat</div>
-      <div class="step-content">$u_n=${u0}\\times${q}^n$, $u_{${n}}\\approx${un}$ €.</div></div>`
+        correction: `<div class="step"><div class="step-label">Nature et raison</div><div class="step-content">Suite <strong>${isArith ? 'arithmétique' : 'géométrique'}</strong>, $u_0=${ctx.u0}$, ${isArith ? `$r=${ctx.r}$` : `$q=${ctx.q}$`}</div></div>
+        <div class="step"><div class="step-label">Formule</div><div class="step-content">$$u_n=${isArith ? `${ctx.u0}+${ctx.r}n` : `${ctx.u0}\\times${ctx.q}^n`}$$</div></div>
+        <div class="step"><div class="step-label">Valeur et somme</div><div class="step-content">$u_{${ctx.n}}=${un}$<br/>$S=${+S.toFixed(2)}$</div></div>`
       };
     }
 
     function genBacTC_Trigo() {
-      const h = pick([8, 10, 12, 15]), angle = pick([30, 45, 60]);
-      const d = +(h / Math.tan(angle * Math.PI / 180)).toFixed(2);
+      const ctxs = [
+        { h: pick([8, 10, 12, 15]), angle: pick([30, 45, 60]), nom: 'bâtiment' },
+        { h: pick([5, 6, 8, 10]), angle: pick([30, 45, 60]), nom: 'arbre' },
+        { h: pick([20, 30, 40, 50]), angle: pick([30, 45, 60]), nom: 'tour' }
+      ];
+      const ctx = pick(ctxs);
+      const h = ctx.h, angle = ctx.angle;
+      const rad = angle * Math.PI / 180;
+      const angTan = Math.tan(rad);
+      const d = +(h / angTan).toFixed(2);
       const l = +Math.sqrt(h ** 2 + d ** 2).toFixed(2);
+      const tanExact = angle === 30 ? '\\frac{\\sqrt{3}}{3}' : angle === 45 ? '1' : '\\sqrt{3}';
       return {
-        title: "Trigonométrie – Problème géométrique",
-        enonce: `Bâtiment de hauteur $${h}$ m observé sous un angle d'élévation de $${angle}°$.`,
+        title: "Trigonométrie – Problème concret",
+        enonce: `Un ${ctx.nom} de hauteur $${h}$ m est observé sous un angle d'élévation de $${angle}°$.`,
         questions: [
-          `Schéma annoté de la situation.`,
-          `Valeur exacte de $\\tan(${angle}°)$.`,
-          `Distance $d$ entre les deux bâtiments.`,
-          `Distance observateur–sommet.`
+          `Représenter la situation avec un schéma annoté (triangle rectangle).`,
+          `Identifier la valeur exacte de $\\tan(${angle}°)$.`,
+          `Calculer (en m) la distance horizontale $d$ entre les deux points.`,
+          `Calculer (en m) la distance observateur–sommet.`,
+          currentDifficulty === 'difficile' ? `Vérifier vos résultats à l'aide du théorème de Pythagore.` : `Interpréter ces résultats.`
         ],
-        correction: `<div class="step"><div class="step-label">Résultats</div>
-      <div class="step-content">$d=\\frac{${h}}{\\tan(${angle}°)}\\approx${d}$ m, distance observateur–sommet $\\approx${l}$ m.</div></div>`
+        correction: `<div class="step"><div class="step-label">Valeur exacte de $\\tan(${angle}°)$</div><div class="step-content">$\\tan(${angle}°)=${tanExact}$</div></div>
+        <div class="step"><div class="step-label">Distance horizontale</div><div class="step-content">$$d=\\frac{h}{\\tan(${angle}°)}=\\frac{${h}}{${tanExact}}\\approx${d}\\text{ m}$$</div></div>
+        <div class="step"><div class="step-label">Distance observateur–sommet</div><div class="step-content">$$l=\\sqrt{${h}^2+${d}^2}\\approx${l}\\text{ m}$$</div></div>
+        <div class="step"><div class="step-label">Vérification</div><div class="step-content">$${h}^2 + ${d}^2 \\approx ${l*l}$ ✓</div></div>`
       };
     }
 
