@@ -2270,10 +2270,10 @@
         Quelle est ta filière ?
       </h2>
       <p style="color:#6b80b5;font-size:14px;margin-bottom:4px;">
-        Ce choix sera mémorisé pour tes prochaines connexions.
+        Chaque filière a sa propre progression, indépendante de l'autre.
       </p>
       <p style="color:#6b80b5;font-size:13px;font-style:italic;">
-        Tu peux le modifier à tout moment dans ton profil.
+        Tu peux basculer à tout moment depuis ton profil — ta progression est sauvegardée dans chaque filière.
       </p>
       <div class="level-choice-grid">
         <button class="level-card spe" onclick="selectLevel('spe')">
@@ -2457,23 +2457,17 @@
       const ol = document.getElementById('level-overlay');
       if (ol) ol.style.display = 'none';
 
-      const changedLevel = currentNiveau !== niv;
-
-      // Réinitialiser les chapitres si on change vraiment de filière  
-      if (changedLevel) {
-        chapitresVus = new Set();  // Réinitialiser car les chapitres sont différents entre TC et SPE
-      }
-
+      // On bascule simplement vers la filière choisie.
+      // applyNiveau() → loadStats() charge les stats propres à cette filière
+      // depuis localStorage (ou remet tout à zéro si jamais utilisée).
+      // On NE sauvegarde PAS ici : cela éviterait d'écraser la progression
+      // de la filière cible avec des données de l'ancienne filière.
       currentNiveau = niv;
       sessionStorage.setItem('mathsPremiere_niveau', niv);
 
-      // Sauvegarder la réinitialisation avec la nouvelle filière
-      if (changedLevel) {
-        saveStats();
-      }
-
       applyNiveau(niv);
-      // Sauvegarde silencieuse dans le Sheet
+
+      // Sauvegarde silencieuse de la préférence de filière dans le Sheet
       const userName = sessionStorage.getItem('mathsPremiere_user');
       if (userName) {
         sendToSheets({ type: 'set_level', name: userName, niveau: niv });
@@ -2682,9 +2676,10 @@
       }
     }
 
-    // Réinitialise la progression de l'utilisateur connecté
+    // Réinitialise la progression de l'utilisateur connecté (filière courante uniquement)
     function resetUserStats() {
-      if (!confirm('Réinitialiser toute ta progression ? Cette action est irréversible.')) return;
+      const filiereLabel = currentNiveau === 'tc' ? 'Tronc Commun' : 'Spécialité';
+      if (!confirm(`Réinitialiser ta progression en ${filiereLabel} ? Cette action est irréversible.\n\nL'autre filière n'est pas affectée.`)) return;
       localStorage.removeItem(userKey());
       statsTotal = 0; statsCorr = 0; statsCorrect = 0;
       statsStreak = 0; statsBestStreak = 0;

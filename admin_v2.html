@@ -869,6 +869,14 @@
     </div>
 
     <div id="tab-recap" class="tab-panel">
+      <!-- Filtres filière -->
+      <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; align-items:center;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">Filtrer :</span>
+        <button class="tab-btn active" id="filter-all"   onclick="filterRecap('all')"   style="font-size:11px;padding:7px 16px;">Toutes les filières</button>
+        <button class="tab-btn"        id="filter-spe"   onclick="filterRecap('spe')"   style="font-size:11px;padding:7px 16px;">📐 Spécialité</button>
+        <button class="tab-btn"        id="filter-tc"    onclick="filterRecap('tc')"    style="font-size:11px;padding:7px 16px;">📊 Tronc Commun</button>
+        <button class="tab-btn"        id="filter-none"  onclick="filterRecap('none')"  style="font-size:11px;padding:7px 16px;">⚠️ Aucune activité</button>
+      </div>
       <div class="admin-table-container">
         <table class="admin-table">
           <thead>
@@ -1093,15 +1101,32 @@
       document.getElementById('pwd-content').innerHTML = html;
     }
 
-    // ── Onglet Récapitulatif (Amélioré) ─────────────────────────────────────────
+    // ── Onglet Récapitulatif ─────────────────────────────────────────
+    let _lastRecapData = null; // garde les données pour le filtre
+
     function renderRecap(data) {
+      _lastRecapData = data;
+      filterRecap('all');
+    }
+
+    function filterRecap(mode) {
+      // Mise à jour des boutons filtre
+      ['all','spe','tc','none'].forEach(f => {
+        const btn = document.getElementById('filter-' + f);
+        if (btn) btn.classList.toggle('active', f === mode);
+      });
+      _buildRecapTable(_lastRecapData, mode);
+    }
+
+    function _buildRecapTable(data, filterMode) {
+      if (!data) return;
       const allNames = new Set([
         ...data.devices.map(d => d.name),
         ...Object.keys(data.config),
         ...Object.keys(data.passwords || {})
       ]);
 
-      const passwords = data.passwords || {};
+      const passwords   = data.passwords   || {};
       const advancements = data.advancements || {};
       const tbody = document.getElementById('recap-content-body');
       tbody.innerHTML = '';
@@ -1109,33 +1134,24 @@
       // Fonction utilitaire pour générer une belle carte de stats
       const buildAdvCard = (advData, label, badgeClass) => {
         if (!advData || parseInt(advData.total) === 0) return '';
-
-        const total = parseInt(advData.total) || 0;
+        const total   = parseInt(advData.total)   || 0;
         const correct = parseInt(advData.correct) || 0;
-        const streak = parseInt(advData.bestStreak) || 0;
+        const streak  = parseInt(advData.bestStreak) || 0;
         const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
-
-        // Détermination de la couleur de santé
         let color = 'var(--red)';
         if (pct >= 70) color = 'var(--green)';
         else if (pct >= 40) color = 'var(--orange)';
-
-        // Formatage de la date (ex: "14/05/2024" à partir de "14/05/2024 15:32:00")
         const dateStr = advData.date ? advData.date.split(' ')[0] : '—';
-
-        // Formatage des chapitres en badges
         const chaps = advData.chapitres ? advData.chapitres.split(',').map(c => c.trim()).filter(Boolean) : [];
         const chapHtml = chaps.length > 0
           ? chaps.map(c => `<span class="ch-mini-badge">${c.replace('Ch.', 'Ch ')}</span>`).join('')
           : `<span style="color:var(--text-dim); font-size:10px; font-style:italic;">Aucun</span>`;
-
         return `
           <div class="adv-card">
             <div class="adv-header">
               <span class="badge ${badgeClass}" style="margin:0;">${label}</span>
               <span class="adv-date" title="Dernière activité">🕒 ${dateStr}</span>
             </div>
-            
             <div class="adv-stats">
               <div class="adv-stat-item">
                 <span class="adv-val" style="color:${color}">${pct}%</span>
@@ -1150,12 +1166,10 @@
                 <span class="adv-lbl">Série Max</span>
               </div>
             </div>
-
             <div class="adv-chaps">
               <span class="adv-lbl" style="margin-right:2px;">Chapitres :</span>
               ${chapHtml}
             </div>
-
             <div class="adv-progress-bg">
               <div class="adv-progress-fill" style="width: ${pct}%; background-color: ${color};"></div>
             </div>
@@ -1163,38 +1177,47 @@
         `;
       };
 
+      let shown = 0;
       for (const name of [...allNames].sort()) {
         const pwd = passwords[name];
         const hash = (pwd && pwd.hash) ? pwd.hash : '—';
         const noPassword = pwd && pwd.noPassword;
+        const adv = advancements[name] || {};
 
-        // Construction du contenu de la cellule Progression
-        const adv = advancements[name];
+        const hasSpe  = adv.spe  && parseInt(adv.spe.total)  > 0;
+        const hasTc   = adv.tc   && parseInt(adv.tc.total)   > 0;
+        const hasAny  = hasSpe || hasTc;
+
+        // Filtrage
+        if (filterMode === 'spe'  && !hasSpe)  continue;
+        if (filterMode === 'tc'   && !hasTc)   continue;
+        if (filterMode === 'none' && hasAny)   continue;
+
+        const speHtml = buildAdvCard(adv.spe, 'Spécialité',   'badge-spe');
+        const tcHtml  = buildAdvCard(adv.tc,  'Tronc Commun', 'badge-tc');
+
         let statsHtml = '<div class="adv-grid">';
-        let hasData = false;
-
-        if (adv) {
-          const speHtml = buildAdvCard(adv.spe, 'Spécialité', 'badge-spe');
-          const tcHtml = buildAdvCard(adv.tc, 'Tronc Commun', 'badge-tc');
-
-          if (speHtml || tcHtml) {
-            statsHtml += speHtml + tcHtml;
-            hasData = true;
-          }
-        }
-
-        if (!hasData) {
+        if (speHtml || tcHtml) {
+          statsHtml += speHtml + tcHtml;
+        } else {
           statsHtml += `<div class="no-data">Aucun exercice réalisé pour le moment.</div>`;
         }
         statsHtml += '</div>';
 
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td style="font-weight:600; color:var(--text); vertical-align: top;">${esc(name)}</td>
-          <td class="hash-cell" style="vertical-align: top;">${noPassword ? '<span style="color:var(--orange)">[ACCÈS LIBRE]</span>' : esc(hash)}</td>
-          <td style="vertical-align: top;">${noPassword ? '🔓 Libre' : '🔒 Protégé'}</td>
+          <td style="font-weight:600; color:var(--text); vertical-align:top;">${esc(name)}</td>
+          <td class="hash-cell" style="vertical-align:top;">${noPassword ? '<span style="color:var(--orange)">[ACCÈS LIBRE]</span>' : esc(hash)}</td>
+          <td style="vertical-align:top;">${noPassword ? '🔓 Libre' : '🔒 Protégé'}</td>
           <td>${statsHtml}</td>
         `;
+        tbody.appendChild(row);
+        shown++;
+      }
+
+      if (shown === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="4" style="text-align:center;color:var(--text-dim);font-style:italic;padding:24px;">Aucun élève ne correspond à ce filtre.</td>`;
         tbody.appendChild(row);
       }
     }
