@@ -2441,7 +2441,8 @@
       { n: 2, icon: '📈', name: 'Fonctions Affines' },
       { n: 3, icon: '➕', name: 'Suites Arithmétiques' },
       { n: 4, icon: '🎲', name: 'Probabilités' },
-      { n: 5, icon: '✖️', name: 'Suites Géométriques' }
+      { n: 5, icon: '✖️', name: 'Suites Géométriques' },
+      { n: 6, icon: '⚡', name: 'Automatismes' }
     ];
 
     // Affiche l'overlay de sélection de filière
@@ -4213,7 +4214,7 @@
 
       let generators;
       if (currentNiveau === 'tc') {
-        generators = [null, genTC_Chiffres, genTC_Affines, genTC_SuitesArith, genTC_Proba, genTC_SuitesGeom];
+        generators = [null, genTC_Chiffres, genTC_Affines, genTC_SuitesArith, genTC_Proba, genTC_SuitesGeom, genTC_Automatismes];
       } else {
         generators = [null, genSecondDegree, genDerivation, genSuites, genProba, genAutomatismes];
       }
@@ -7518,7 +7519,89 @@ def seuil():
 
 
     // ══════════════════════════════════════════════════════════════════
-    // BAC BLANC TRONC COMMUN — 5 EXERCICES (PROBLÈMES CONCRETS)
+    // CH.6 TC — AUTOMATISMES (Fractions, Équations, Pourcentages)
+    // ══════════════════════════════════════════════════════════════════
+    function genTC_Automatismes() {
+      const type = pick(['fraction', 'equation', 'pourcentage', 'developpement']);
+
+      if (type === 'fraction') {
+        const b = pick([2, 3, 4, 5, 7]);
+        const a = rand(1, 5);
+        const c = rand(1, 5);
+        const op = pick(['+', '-']);
+        const num = op === '+' ? (a + c * b) : (a - c * b);
+        return {
+          isAuto: true,
+          title: "⚡ Automatisme – Fractions",
+          enonce: `Calculer et donner le résultat sous forme de fraction irréductible : $$\\frac{${a}}{${b}} ${op} ${c}$$`,
+          questions: [`Effectuer le calcul.`],
+          interactiveAnswer: fracInput(num, b),
+          answerPlaceholder: `Ex: ${num}/${b}`,
+          correction: `<div class="step result"><div class="step-label">Mise au même dénominateur</div>
+        <div class="step-content">$\\frac{${a}}{${b}} ${op} ${c} = \\frac{${a}}{${b}} ${op} \\frac{${c * b}}{${b}} = \\frac{${a} ${op} ${c * b}}{${b}} = \\frac{${num}}{${b}}$.</div></div>`
+        };
+      }
+
+      if (type === 'equation') {
+        const a = pick([2, 3, 4, 5]);
+        const b = rand(-10, 10);
+        const c = rand(-10, 10);
+        if (b === c) return genTC_Automatismes();
+        const ans = fracInput(c - b, a);
+        return {
+          isAuto: true,
+          title: "⚡ Automatisme – Équation du 1er degré",
+          enonce: `Résoudre l'équation suivante : $$${a}x ${b >= 0 ? '+' + b : '-' + Math.abs(b)} = ${c}$$`,
+          questions: [`Donner la valeur de $x$.`],
+          interactiveAnswer: ans,
+          answerPlaceholder: `Ex: ${ans}`,
+          correction: `<div class="step result"><div class="step-label">Isolement de x</div>
+        <div class="step-content">$${a}x = ${c} ${b >= 0 ? '- ' + b : '+ ' + Math.abs(b)}$<br/>
+        $${a}x = ${c - b}$<br/>
+        $x = \\frac{${c - b}}{${a}}$ ${((c - b) % a === 0) ? ` = ${(c - b) / a}` : ''}</div></div>`
+        };
+      }
+
+      if (type === 'pourcentage') {
+        const val = rand(2, 9) * 10;
+        const pct = pick([10, 20, 25, 50]);
+        const ans = (val * pct) / 100;
+        return {
+          isAuto: true,
+          title: "⚡ Automatisme – Pourcentages",
+          enonce: `Calculer $${pct}\\%$ de $${val}$.`,
+          questions: [`Donner le résultat.`],
+          interactiveAnswer: ans.toString(),
+          answerPlaceholder: `Ex: ${ans}`,
+          correction: `<div class="step result"><div class="step-label">Astuce de calcul</div>
+        <div class="step-content">Prendre ${pct}% revient à ${pct === 10 ? 'diviser par 10' : pct === 20 ? 'diviser par 5' : pct === 25 ? 'diviser par 4' : 'diviser par 2'}.<br/>
+        $${val} \\times \\frac{${pct}}{100} = ${ans}$.</div></div>`
+        };
+      }
+
+      // Developpement simple
+      const a_dev = rand(2, 5);
+      const b_dev = rand(1, 5);
+      const sign = pick(['+', '-']);
+      return {
+        isAuto: true,
+        title: "⚡ Automatisme – Développement",
+        enonce: `Développer l'expression : $$x( ${a_dev}x ${sign} ${b_dev} )$$`,
+        questions: [`Écrire le résultat sous la forme ax² + bx`],
+        interactiveAnswer: `${a_dev}x^2${sign}${b_dev}x`,
+        answerPlaceholder: `Ex: ${a_dev}x^2${sign}${b_dev}x`,
+        correction: `<div class="step result"><div class="step-label">Distributivité simple</div>
+      <div class="step-content">On distribue le $x$ sur chaque terme de la parenthèse :<br/>
+      $x \\times ${a_dev}x = ${a_dev}x^2$<br/>
+      $x \\times (${sign}${b_dev}) = ${sign}${b_dev}x$<br/>
+      Résultat : $${a_dev}x^2 ${sign} ${b_dev}x$.</div></div>`
+      };
+    }
+
+
+
+    // ══════════════════════════════════════════════════════════════════
+    // BAC BLANC TRONC COMMUN
     // ══════════════════════════════════════════════════════════════════
     function generateBacSujetTC() {
       const bacContentEl = document.getElementById('bac-content');
@@ -7622,7 +7705,7 @@ def seuil():
 
 
     // ══════════════════════════════════════════════════════════════════
-    // COURS TRONC COMMUN — FICHES COMPLÈTES (Basées sur le programme)
+    // COURS TRONC COMMUN — FICHES COMPLÈTES (GRANDEMENT ENRICHIES)
     // ══════════════════════════════════════════════════════════════════
     function renderCourseTC(chapter) {
       const courseEl = document.getElementById('course-content');
@@ -7631,178 +7714,267 @@ def seuil():
 
       if (chapter === 1) {
         html = `<div class="course-section">
-  <div class="course-section-title">1) Proportions et Pourcentages</div>
-  <div class="course-def"><span class="block-title">Proportion</span>
-    La proportion $p$ d'une sous-population $A$ d'effectif $n_A$ dans une population globale $E$ d'effectif $N$ est :
+  <div class="course-section-title">1) Proportions et Sous-populations</div>
+  <div class="course-def"><span class="block-title">Définition & Calcul</span>
+    La proportion $p$ d'une sous-population $A$ (ex: les élèves gauchers) d'effectif $n_A$ dans une population globale $E$ (ex: tout le lycée) d'effectif $N$ se calcule par :
     $$p = \\frac{n_A}{N}$$
-    On l'exprime souvent en pourcentage (en multipliant par 100).
+    On l'exprime généralement en pourcentage (en multipliant par 100).<br/>
+    <strong>Exemple :</strong> Si un lycée de 1200 élèves compte 300 gauchers, la proportion est $p = \\frac{300}{1200} = 0.25$, soit $25\\%$.
   </div>
-  <div class="course-prop"><span class="block-title">Proportion de proportion</span>
-    Si $A$ est une sous-population de $B$, et $B$ une sous-population de $C$, alors la proportion de $A$ dans $C$ est le <strong>produit</strong> des proportions : $p = p_1 \\times p_2$.
+  <div class="course-prop"><span class="block-title">Proportion de proportion (Inclusions successives)</span>
+    Si $A$ est une sous-population de $B$ (proportion $p_1$), et $B$ une sous-population de $C$ (proportion $p_2$), alors la proportion globale de $A$ dans $C$ est le <strong>produit</strong> des proportions :
+    $$p_{globale} = p_1 \\times p_2$$
+    <strong>Exemple :</strong> Si $60\\%$ des élèves sont des filles ($p_2=0.6$), et que $10\\%$ des filles font du rugby ($p_1=0.1$), alors la proportion de filles rugbywomen dans le lycée est de $0.6 \\times 0.1 = 0.06$, soit $6\\%$.
   </div>
 </div>
 
 <div class="course-section">
-  <div class="course-section-title">2) Taux d'évolution et Coefficient Multiplicateur</div>
-  <div class="course-def"><span class="block-title">Taux d'évolution (T)</span>
-    C'est la variation relative entre une valeur initiale ($V_i$) et une valeur finale ($V_f$) :
-    $$T = \\frac{V_f - V_i}{V_i}$$
-    Si $T>0$, c'est une hausse. Si $T<0$, c'est une baisse.
+  <div class="course-section-title">2) Évolutions : Taux et Coefficient Multiplicateur</div>
+  <div class="course-def"><span class="block-title">Taux d'évolution ($t$)</span>
+    Il mesure la variation entre une valeur de départ ($V_D$) et une valeur d'arrivée ($V_A$) :
+    $$t = \\frac{V_A - V_D}{V_D}$$
+    Si $t > 0$, on a une augmentation. Si $t < 0$, c'est une diminution.
   </div>
-  <div class="course-prop"><span class="block-title">Coefficient Multiplicateur (CM)</span>
-    Pour appliquer une évolution de $t\\%$, on multiplie la valeur par le coefficient multiplicateur $CM$ :
-    $$CM = 1 + \\frac{t}{100} \\quad \\text{(Hausse)} \\qquad \\text{ou} \\qquad CM = 1 - \\frac{t}{100} \\quad \\text{(Baisse)}$$
-    <strong>Relation clé :</strong> $V_f = V_i \\times CM$ et $T = CM - 1$.
+  <div class="course-prop"><span class="block-title">Le Coefficient Multiplicateur (CM)</span>
+    C'est l'outil indispensable pour calculer des évolutions successives ! Appliquer une évolution de $t\\%$ revient à multiplier la valeur de départ par un coefficient multiplicateur :
+    $$CM = 1 + \\frac{t}{100}$$
+    <strong>Exemple de Hausse :</strong> Une hausse de 15% correspond à un $CM = 1 + 0.15 = 1.15$.<br/>
+    <strong>Exemple de Baisse :</strong> Une baisse de 20% correspond à un $CM = 1 - 0.20 = 0.80$.
   </div>
 </div>
 
 <div class="course-section">
   <div class="course-section-title">3) Évolutions Successives et Réciproques</div>
   <div class="course-method"><span class="block-title">Évolutions successives</span>
-    Lorsqu'une grandeur subit plusieurs évolutions successives, les taux <strong>ne s'additionnent pas</strong> ! On multiplie les coefficients multiplicateurs :
-    $$CM_{global} = CM_1 \\times CM_2 \\times \\dots \\times CM_n$$
+    <strong>Attention piège !</strong> Les pourcentages d'évolution <strong>NE S'ADDITIONNENT PAS</strong>. On doit <strong>multiplier</strong> les coefficients multiplicateurs entre eux.<br/>
+    $$CM_{global} = CM_1 \\times CM_2 \\times \\dots$$
+    <em>Exemple :</em> Une hausse de 10% ($CM = 1.1$) suivie d'une baisse de 10% ($CM = 0.9$) donne un $CM_{global} = 1.1 \\times 0.9 = 0.99$. La valeur a donc globalement <strong>baissé</strong> de 1%.
   </div>
   <div class="course-method"><span class="block-title">Évolution réciproque</span>
-    Pour compenser une évolution de coefficient $CM$, il faut appliquer une évolution réciproque de coefficient $CM_{rec}$ tel que :
-    $$CM_{rec} = \\frac{1}{CM}$$
-    <em>Attention : Une baisse de 20% n'est pas annulée par une hausse de 20%.</em>
+    C'est l'évolution qu'il faut appliquer pour "revenir en arrière" à la valeur initiale.<br/>
+    Son coefficient multiplicateur est l'inverse du premier :
+    $$CM_{rec} = \\frac{1}{CM_{initial}}$$
   </div>
 </div>`;
 
       } else if (chapter === 2) {
         html = `<div class="course-section">
   <div class="course-section-title">1) Fonction Affine et Modélisation</div>
-  <div class="course-def"><span class="block-title">Définition</span>
-    Une fonction $f$ définie sur $\\mathbb{R}$ par $f(x) = ax + b$ est une fonction affine.<br/>
-    • $a$ est le <strong>coefficient directeur</strong> (ou pente, ou taux de variation).<br/>
-    • $b$ est l'<strong>ordonnée à l'origine</strong> (valeur de $f(0)$).
+  <div class="course-def"><span class="block-title">Définition & Formule</span>
+    Une fonction $f$ est dite <strong>affine</strong> si elle peut s'écrire sous la forme :
+    $$f(x) = ax + b$$
+    • Le nombre $a$ est le <strong>coefficient directeur</strong> (ou pente). Il indique la "vitesse" de croissance ou décroissance.<br/>
+    • Le nombre $b$ est l'<strong>ordonnée à l'origine</strong>. C'est la valeur de la fonction quand $x = 0$ (le point de départ sur l'axe vertical).
   </div>
-  <div class="course-ex"><span class="block-title">Application Concrète</span>
-    Un taxi facture 3€ de prise en charge puis 1.50€ par kilomètre. La fonction de coût est $C(x) = 1.5x + 3$. C'est une croissance <strong>linéaire continue</strong>.
-  </div>
-</div>
-
-<div class="course-section">
-  <div class="course-section-title">2) Taux de variation constant</div>
-  <div class="course-prop"><span class="block-title">Propriété fondamentale</span>
-    Pour une fonction affine, le taux de variation entre deux points quelconques $x_1$ et $x_2$ est constant et vaut le coefficient directeur $a$ :
-    $$a = \\frac{f(x_2) - f(x_1)}{x_2 - x_1}$$
+  <div class="course-ex"><span class="block-title">Exemple de la vraie vie</span>
+    Un plombier facture 40€ de déplacement (frais fixes = $b$) puis 50€ par heure de travail (coût variable = $a$).<br/>
+    Le prix total pour $x$ heures de travail est modélisé par la fonction affine : $P(x) = 50x + 40$.
   </div>
 </div>
 
 <div class="course-section">
-  <div class="course-section-title">3) Variations et Signe</div>
+  <div class="course-section-title">2) Taux de variation et Calculs</div>
+  <div class="course-prop"><span class="block-title">Calculer le coefficient $a$</span>
+    Contrairement à d'autres fonctions, une fonction affine a un <strong>taux de variation constant</strong>. Si on connaît deux points $A(x_1; y_1)$ et $B(x_2; y_2)$ de la droite, on peut calculer $a$ :
+    $$a = \\frac{y_2 - y_1}{x_2 - x_1}$$
+  </div>
+  <div class="course-method"><span class="block-title">Retrouver $b$</span>
+    Une fois $a$ calculé, on remplace $x$ et $y$ par les coordonnées d'un des points connus dans l'équation $y = ax + b$ pour trouver l'inconnue $b$.
+  </div>
+</div>
+
+<div class="course-section">
+  <div class="course-section-title">3) Variations et Tableau de Signes</div>
   <div class="course-thm"><span class="block-title">Sens de variation</span>
-    • Si $a > 0$ : la fonction est <strong>strictement croissante</strong> (la droite monte).<br/>
-    • Si $a < 0$ : la fonction est <strong>strictement décroissante</strong> (la droite descend).<br/>
-    • Si $a = 0$ : la fonction est <strong>constante</strong> ($f(x) = b$).
+    Le sens d'une droite affine dépend uniquement du signe de $a$ :<br/>
+    • Si $a > 0$ : la droite "monte", la fonction est <strong>strictement croissante</strong>.<br/>
+    • Si $a < 0$ : la droite "descend", la fonction est <strong>strictement décroissante</strong>.<br/>
+    • Si $a = 0$ : la droite est horizontale, la fonction est <strong>constante</strong>.
   </div>
-  <div class="course-method"><span class="block-title">Étude de Signe</span>
-    L'équation $ax + b = 0$ a pour unique solution $x = -\\frac{b}{a}$.<br/>
-    Le signe de $ax+b$ est toujours du <strong>signe contraire de $a$</strong> avant la racine, et du <strong>signe de $a$</strong> après la racine.
+  <div class="course-method"><span class="block-title">Faire un tableau de signes</span>
+    1. On cherche d'abord la racine (l'endroit où la droite coupe l'axe des abscisses) en résolvant $ax + b = 0$, ce qui donne $x = -\\frac{b}{a}$.<br/>
+    2. On trace le tableau : la fonction est du <strong>signe contraire de $a$</strong> avant la racine, et du <strong>signe de $a$</strong> après la racine.
   </div>
 </div>`;
 
       } else if (chapter === 3) {
         html = `<div class="course-section">
-  <div class="course-section-title">1) Suites Arithmétiques (Croissance Linéaire Discrète)</div>
-  <div class="course-def"><span class="block-title">Définition (Récurrence)</span>
-    Une suite $(u_n)$ est arithmétique s'il existe un réel constant $r$ tel que pour tout entier $n$ :
-    $$u_{n+1} = u_n + r$$
-    Le réel $r$ s'appelle la <strong>raison</strong> de la suite. Elle modélise des situations où une quantité augmente ou diminue d'une valeur fixe à intervalles de temps réguliers.
+  <div class="course-section-title">1) Qu'est-ce qu'une Suite Numérique ?</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    Une suite numérique est une liste ordonnée de nombres indexée par des entiers naturels ($0, 1, 2, 3...$).<br/>
+    On note $u_n$ le terme de rang $n$. Le tout premier terme est souvent $u_0$ (ou $u_1$ si on parle de mois/d'années).
   </div>
 </div>
 
 <div class="course-section">
-  <div class="course-section-title">2) Terme Général et Variations</div>
-  <div class="course-prop"><span class="block-title">Formule Explicite</span>
-    Pour calculer directement n'importe quel terme sans calculer les précédents :
+  <div class="course-section-title">2) Suites Arithmétiques (Croissance Linéaire Discrète)</div>
+  <div class="course-def"><span class="block-title">Définition par Récurrence</span>
+    Une suite $(u_n)$ est arithmétique s'il existe un nombre fixe $r$ (la <strong>raison</strong>) qu'on ajoute à chaque étape pour passer au terme suivant :
+    $$u_{n+1} = u_n + r$$
+  </div>
+  <div class="course-ex"><span class="block-title">Exemple concret</span>
+    Tu possèdes 50€ dans ta tirelire ($u_0 = 50$). Chaque mois, tu y ajoutes exactement 15€ ($r = 15$).<br/>
+    Le mois suivant tu auras $u_1 = 50 + 15 = 65$€.<br/>
+    Le mois d'après $u_2 = 65 + 15 = 80$€.
+  </div>
+</div>
+
+<div class="course-section">
+  <div class="course-section-title">3) Formule Explicite (Saut dans le temps)</div>
+  <div class="course-prop"><span class="block-title">Calculer n'importe quel terme</span>
+    Pour éviter de calculer tous les mois intermédiaires pour connaître ta tirelire dans 20 mois, on utilise la formule explicite :
     $$u_n = u_0 + n \\times r$$
-    Si le premier terme est $u_1$, la formule devient $u_n = u_1 + (n-1)r$.
+    <em>(Si la suite commence à $u_1$, la formule devient $u_n = u_1 + (n-1) \\times r$).</em>
   </div>
   <div class="course-thm"><span class="block-title">Sens de variation</span>
-    • Si $r > 0$, la suite est strictement croissante (elle tend vers $+\\infty$).<br/>
-    • Si $r < 0$, la suite est strictement décroissante (elle tend vers $-\\infty$).
+    L'évolution dépend uniquement du signe de la raison $r$ :<br/>
+    • Si $r > 0$, on ajoute du positif, la suite est <strong>croissante</strong>.<br/>
+    • Si $r < 0$, on enlève de la valeur, la suite est <strong>décroissante</strong>.
   </div>
 </div>
 
 <div class="course-section">
-  <div class="course-section-title">3) Somme de termes successifs</div>
-  <div class="course-method"><span class="block-title">Calcul d'un cumul</span>
-    Pour additionner les valeurs successives d'une suite arithmétique (ex: production totale sur 10 ans), on utilise la formule :
+  <div class="course-section-title">4) Somme de termes successifs</div>
+  <div class="course-method"><span class="block-title">Formule de Gauss</span>
+    Pour additionner très vite tous les termes consécutifs d'une suite arithmétique (ex: calculer ton épargne totale si tu mets 10€, puis 15€, puis 20€...), on utilise :
     $$S = \\text{Nombre de termes} \\times \\frac{\\text{Premier terme} + \\text{Dernier terme}}{2}$$
+    <em>Attention au comptage des termes ! De $u_0$ à $u_{10}$, il y a 11 termes (et non 10).</em>
   </div>
 </div>`;
 
       } else if (chapter === 4) {
         html = `<div class="course-section">
   <div class="course-section-title">1) Probabilités conditionnelles</div>
-  <div class="course-def"><span class="block-title">Définitions</span>
-    La probabilité conditionnelle de $B$ sachant que $A$ est réalisé (avec $P(A) > 0$) est :
+  <div class="course-def"><span class="block-title">Définition & Intuition</span>
+    Une probabilité conditionnelle permet de calculer la chance qu'un événement $B$ se réalise, <strong>sachant qu'une condition $A$ est déjà remplie</strong>.<br/>
+    La formule mathématique (pour $P(A) > 0$) est :
     $$P_A(B) = \\frac{P(A \\cap B)}{P(A)}$$
-    On en déduit la règle du produit : $P(A \\cap B) = P(A) \\times P_A(B)$.
+  </div>
+  <div class="course-ex"><span class="block-title">Exemple concret</span>
+    On tire au sort une carte dans un jeu. <br/>Quelle est la probabilité de tirer un "Roi" ($B$) <strong>sachant</strong> qu'on a tiré une carte "Rouge" ($A$) ?<br/>
+    L'univers s'est réduit aux seules cartes rouges (16 cartes). Parmi elles, il n'y a que 2 Rois. Donc $P_A(B) = \\frac{2}{16} = \\frac{1}{8}$.
   </div>
 </div>
 
 <div class="course-section">
   <div class="course-section-title">2) Arbres Pondérés</div>
-  <div class="course-method"><span class="block-title">Règles de construction</span>
-    1. La somme des probabilités des branches issues d'un même nœud vaut 1.<br/>
-    2. La probabilité d'un chemin (une feuille) est le <strong>produit</strong> des probabilités des branches qui le composent (intersection).
+  <div class="course-method"><span class="block-title">Règles de construction et de calcul</span>
+    Un arbre de probabilités est l'outil visuel le plus puissant. Il obéit à deux règles d'or :<br/>
+    1. <strong>Loi des Nœuds</strong> : La somme des probabilités des branches qui partent d'un même point vaut toujours 1. ($P_A(B) + P_A(\\overline{B}) = 1$).<br/>
+    2. <strong>Règle du Produit</strong> : Pour trouver la probabilité d'un chemin complet (intersection $A \\cap B$), on <strong>multiplie</strong> les probabilités rencontrées sur ce chemin.<br/>
+    $$P(A \\cap B) = P(A) \\times P_A(B)$$
   </div>
 </div>
 
 <div class="course-section">
   <div class="course-section-title">3) Loi des probabilités totales</div>
-  <div class="course-prop"><span class="block-title">Théorème</span>
-    Si $A$ et $\\overline{A}$ forment une partition de l'univers, alors la probabilité d'un événement $B$ s'obtient en additionnant les probabilités de tous les chemins menant à $B$ :
-    $$P(B) = P(A \\cap B) + P(\\overline{A} \\cap B) = P(A)P_A(B) + P(\\overline{A})P_{\\overline{A}}(B)$$
+  <div class="course-prop"><span class="block-title">Additionner les chemins</span>
+    Si on veut connaître la probabilité finale d'un événement $B$ qui apparaît au bout de plusieurs chemins différents dans l'arbre, on <strong>additionne</strong> les probabilités de ces différents chemins :
+    $$P(B) = P(A \\cap B) + P(\\overline{A} \\cap B)$$
   </div>
 </div>
 
 <div class="course-section">
-  <div class="course-section-title">4) Indépendance</div>
-  <div class="course-thm"><span class="block-title">Règle</span>
-    Deux événements $A$ et $B$ sont dits indépendants si et seulement si :
+  <div class="course-section-title">4) Indépendance de deux événements</div>
+  <div class="course-thm"><span class="block-title">Règle de test</span>
+    On dit que deux événements $A$ et $B$ sont indépendants s'ils ne s'influencent pas du tout. Le fait que $A$ se produise ne change rien aux chances de $B$ : $P_A(B) = P(B)$.<br/>
+    Mathématiquement, on teste l'indépendance en vérifiant si l'égalité suivante est vraie :
     $$P(A \\cap B) = P(A) \\times P(B)$$
-    Cela équivaut à dire que $P_A(B) = P(B)$ (savoir que A s'est produit ne change pas les chances de B).
+    Si l'égalité est fausse, ils ne sont pas indépendants.
   </div>
 </div>`;
 
       } else if (chapter === 5) {
         html = `<div class="course-section">
   <div class="course-section-title">1) Suites Géométriques (Croissance Exponentielle Discrète)</div>
-  <div class="course-def"><span class="block-title">Définition (Récurrence)</span>
-    Une suite $(u_n)$ est géométrique s'il existe un réel constant $q$ (la <strong>raison</strong>) tel que pour tout entier $n$ :
-    $$u_{n+1} = q \\times u_n$$
-    Elle modélise des évolutions en pourcentage (ex: +5% par an $\\implies q = 1.05$). C'est ce qu'on appelle la croissance exponentielle.
+  <div class="course-def"><span class="block-title">Définition par Récurrence</span>
+    Une suite $(u_n)$ est géométrique s'il existe un nombre fixe $q$ (la <strong>raison</strong>) par lequel on <strong>multiplie</strong> chaque terme pour obtenir le suivant :
+    $$u_{n+1} = u_n \\times q$$
+    Elle est l'outil parfait pour modéliser des <strong>évolutions en pourcentages répétées</strong> (intérêts bancaires, inflation, dépréciation d'une voiture, prolifération de bactéries).
+  </div>
+  <div class="course-ex"><span class="block-title">Lien avec les taux d'évolution</span>
+    Si ton loyer augmente de 5% par an, tu multiplies sa valeur chaque année par $CM = 1 + \\frac{5}{100} = 1.05$.<br/>
+    C'est une suite géométrique de raison $q = 1.05$.
   </div>
 </div>
 
 <div class="course-section">
   <div class="course-section-title">2) Terme Général et Variations</div>
   <div class="course-prop"><span class="block-title">Formule Explicite</span>
-    Pour calculer directement n'importe quel terme :
+    Pour calculer la valeur après $n$ années sans calculer toutes les années intermédiaires :
     $$u_n = u_0 \\times q^n$$
-    Si le premier terme est $u_1$, la formule est $u_n = u_1 \\times q^{n-1}$.
+    <em>Rappel : les puissances se calculent avant les multiplications !</em>
   </div>
-  <div class="course-thm"><span class="block-title">Sens de variation (pour $u_0 > 0$)</span>
-    • Si $q > 1$, la suite est <strong>croissante</strong> (ex: placement à intérêts). Elle tend vers $+\\infty$.<br/>
-    • Si $0 < q < 1$, la suite est <strong>décroissante</strong> (ex: dépréciation, radioactivité). Elle tend vers $0$.
+  <div class="course-thm"><span class="block-title">Sens de variation (en supposant $u_0 > 0$)</span>
+    L'évolution dépend du fait que la raison soit supérieure ou inférieure à 1 :<br/>
+    • Si $q > 1$, on multiplie par "plus que 1", la valeur grossit : la suite est <strong>croissante</strong> et s'envole vers l'infini (croissance exponentielle).<br/>
+    • Si $0 < q < 1$, on multiplie par "moins que 1" (ex: 0.8), la valeur rétrécit : la suite est <strong>décroissante</strong> et tendra lentement vers zéro (décroissance radioactive).
   </div>
 </div>
 
 <div class="course-section">
-  <div class="course-section-title">3) Algorithmique de Seuil</div>
-  <div class="course-method"><span class="block-title">Boucle Tant Que (While)</span>
-    Pour déterminer en quelle année une population dépasse un certain seuil, on utilise un programme avec une boucle conditionnelle :
-    <pre style="background:rgba(255,255,255,0.05); padding:10px; border-radius:5px;">
+  <div class="course-section-title">3) Algorithmique de Seuil (Le "Tant Que")</div>
+  <div class="course-method"><span class="block-title">Trouver une année de dépassement</span>
+    Très souvent au Bac, on te demande en quelle année une population ou un capital dépassera une certaine valeur (le seuil). On utilise une boucle <code>while</code> (Tant Que) en Python :
+    <pre style="background:rgba(255,255,255,0.05); padding:10px; border-radius:5px; font-family:monospace; margin-top:8px;">
 n = 0
 u = u0
 while u < Seuil:
-    u = u * q
-    n = n + 1
-print(n)</pre>
+    u = u * q    # On passe à l'année suivante
+    n = n + 1    # On ajoute 1 au compteur d'années
+print(n)         # Affiche l'année où le seuil est enfin dépassé
+    </pre>
+  </div>
+</div>`;
+
+      } else if (chapter === 6) {
+        html = `<div class="course-section">
+  <div class="course-section-title">1) Les Fractions</div>
+  <div class="course-method"><span class="block-title">Addition et Soustraction</span>
+    On ne peut additionner ou soustraire deux fractions que si elles ont <strong>le même dénominateur</strong>.<br/>
+    $$\\frac{a}{c} + \\frac{b}{c} = \\frac{a+b}{c}$$
+    <em>Exemple :</em> $\\frac{2}{3} + \\frac{5}{4}$. On choisit un dénominateur commun (12). $\\frac{2 \\times 4}{3 \\times 4} + \\frac{5 \\times 3}{4 \\times 3} = \\frac{8}{12} + \\frac{15}{12} = \\frac{23}{12}$.
+  </div>
+  <div class="course-method"><span class="block-title">Multiplication et Division</span>
+    • <strong>Multiplication :</strong> On multiplie les numérateurs entre eux, et les dénominateurs entre eux (pas besoin de dénominateur commun !).<br/>
+    • <strong>Division :</strong> Diviser par une fraction, c'est multiplier par son inverse.<br/>
+    $$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c}$$
+  </div>
+</div>
+
+<div class="course-section">
+  <div class="course-section-title">2) Résolution d'équations du 1er degré</div>
+  <div class="course-prop"><span class="block-title">Isoler l'inconnue $x$</span>
+    Le but est de se retrouver avec "$x = ...$" en utilisant les opérations inverses de chaque côté du signe égal.<br/>
+    L'ordre de nettoyage classique est : 1) Addition/Soustraction, 2) Multiplication/Division.<br/>
+    <em>Exemple :</em> $4x - 7 = 5$<br/>
+    On ajoute 7 des deux côtés : $4x = 5 + 7 \\implies 4x = 12$<br/>
+    On divise par 4 : $x = \\frac{12}{4} = 3$.
+  </div>
+</div>
+
+<div class="course-section">
+  <div class="course-section-title">3) Pourcentages simples</div>
+  <div class="course-def"><span class="block-title">Calcul rapide mental</span>
+    Prendre $p\\%$ d'une valeur, c'est multiplier cette valeur par $\\frac{p}{100}$.<br/>
+    Quelques astuces à connaître par cœur :<br/>
+    • Prendre <strong>50%</strong> d'un nombre revient à le diviser par 2.<br/>
+    • Prendre <strong>25%</strong> d'un nombre revient à le diviser par 4.<br/>
+    • Prendre <strong>10%</strong> d'un nombre revient à le diviser par 10 (décaler la virgule d'un cran).<br/>
+    • Prendre <strong>20%</strong> d'un nombre revient à le diviser par 5.
+  </div>
+</div>
+
+<div class="course-section">
+  <div class="course-section-title">4) Développements et Identités remarquables</div>
+  <div class="course-method"><span class="block-title">Distributivité</span>
+    • Simple : $k(a+b) = ka + kb$<br/>
+    • Double : $(a+b)(c+d) = ac + ad + bc + bd$<br/>
+  </div>
+  <div class="course-thm"><span class="block-title">Identités Remarquables (à savoir par cœur)</span>
+    1. Le carré d'une somme : $(a+b)^2 = a^2 + 2ab + b^2$<br/>
+    2. Le carré d'une différence : $(a-b)^2 = a^2 - 2ab + b^2$<br/>
+    3. La différence de deux carrés : $(a-b)(a+b) = a^2 - b^2$
   </div>
 </div>`;
 
