@@ -3251,11 +3251,29 @@
         .toLowerCase();
     }
 
-    function evalIfFrac(s) {
-      const m = s.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
-      if (m) return parseFloat(m[1]) / parseFloat(m[2]);
-      if (/^-?\d+(?:\.\d+)?$/.test(s)) return parseFloat(s);
-      return NaN;
+    function evalMath(s) {
+      if (!s) return NaN;
+      // Nettoyage pour une évaluation sécurisée légère
+      let expr = s.replace(/sqrt\((\d+(?:\.\d+)?)\)/g, 'Math.sqrt($1)')
+                  .replace(/(\d+)\/(\d+)/g, '($1/$2)');
+      
+      // On n'autorise que les chiffres, opérateurs de base, parenthèses et Math.sqrt
+      if (!/^[0-9.+\-*/()Math.sqrt ]+$/.test(expr)) {
+        // Si ça ressemble encore à une fraction simple a/b
+        if (/^-?\d+(?:\.\d+)?\/-?\d+(?:\.\d+)?$/.test(s)) {
+          const parts = s.split('/');
+          return parseFloat(parts[0]) / parseFloat(parts[1]);
+        }
+        // Sinon peut-être un nombre simple
+        if (/^-?\d+(?:\.\d+)?$/.test(s)) return parseFloat(s);
+        return NaN;
+      }
+
+      try {
+        return Function('"use strict";return (' + expr + ')')();
+      } catch (e) {
+        return NaN;
+      }
     }
 
     function answersMatch(userRaw, expected, alternatives = []) {
@@ -3263,12 +3281,15 @@
       const exp = normalizeStr(expected);
       if (user === exp) return true;
       if (alternatives.some(a => normalizeStr(a) === user)) return true;
-      // Comparaison numérique (tolère fractions ≈ décimaux)
-      const uVal = evalIfFrac(user);
-      const eVal = evalIfFrac(exp);
+      
+      // Comparaison numérique (tolère fractions, sqrt, décimaux)
+      const uVal = evalMath(user);
+      const eVal = evalMath(exp);
+      
       if (!isNaN(uVal) && !isNaN(eVal) && Math.abs(uVal - eVal) < 0.001) return true;
+      
       for (const alt of alternatives) {
-        const aVal = evalIfFrac(normalizeStr(alt));
+        const aVal = evalMath(normalizeStr(alt));
         if (!isNaN(uVal) && !isNaN(aVal) && Math.abs(uVal - aVal) < 0.001) return true;
       }
       return false;
@@ -3688,6 +3709,8 @@
         width = 480, height = 350,
         showPoints = [],
         tangent = null,
+        extraCurves = [], // a list of { f, color, width }
+        hLines = [], // a list of { y, color, width }
         curveColor = 'var(--purple)',
         curveWidth = 2.5
       } = opts || {};
@@ -3719,37 +3742,46 @@
       gridSvg += `<text x="${W - pad + 8}" y="${yTo(0) + 5}" fill="rgba(220,230,255,0.55)" font-size="13" font-family="JetBrains Mono, monospace">x</text>`;
       gridSvg += `<text x="${xTo(0) + 6}" y="${pad - 6}" fill="rgba(220,230,255,0.55)" font-size="13" font-family="JetBrains Mono, monospace">y</text>`;
 
-      // Sample curve
-      const pts = [];
-      const steps = 500;
-      for (let i = 0; i <= steps; i++) {
-        const x = xMin + (xMax - xMin) * i / steps;
-        try {
-          const y = f(x);
-          if (isFinite(y) && y >= yMin - 3 && y <= yMax + 3) {
-            pts.push(`${xTo(x).toFixed(1)},${yTo(y).toFixed(1)}`);
-          } else if (pts.length > 0) {
-            pts.push(''); // break
-          }
-        } catch (e) { /* skip */ }
+      // Render Functions helper
+      function renderFn(func, color, width) {
+        const pts = [];
+        const steps = 500;
+        for (let i = 0; i <= steps; i++) {
+          const x = xMin + (xMax - xMin) * i / steps;
+          try {
+            const y = func(x);
+            if (isFinite(y) && y >= yMin - 3 && y <= yMax + 3) {
+              pts.push(`${xTo(x).toFixed(1)},${yTo(y).toFixed(1)}`);
+            } else if (pts.length > 0 && pts[pts.length - 1] !== '') {
+              pts.push(''); 
+            }
+          } catch (e) { /* skip */ }
+        }
+        let svg = '';
+        let segment = [];
+        for (const p of pts) {
+          if (p === '') {
+            if (segment.length > 1) {
+              svg += `<polyline points="${segment.join(' ')}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round"></polyline>`;
+            }
+            segment = [];
+          } else { segment.push(p); }
+        }
+        if (segment.length > 1) {
+          svg += `<polyline points="${segment.join(' ')}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round"></polyline>`;
+        }
+        return svg;
       }
 
-      // Split by breaks
-      let curveSvg = '';
-      let segment = [];
-      for (const p of pts) {
-        if (p === '') {
-          if (segment.length > 1) {
-            curveSvg += `<polyline points="${segment.join(' ')}" fill="none" stroke="${curveColor}" stroke-width="${curveWidth}" stroke-linecap="round"></polyline>`;
-          }
-          segment = [];
-        } else {
-          segment.push(p);
-        }
-      }
-      if (segment.length > 1) {
-        curveSvg += `<polyline points="${segment.join(' ')}" fill="none" stroke="${curveColor}" stroke-width="${curveWidth}" stroke-linecap="round"></polyline>`;
-      }
+      let curveSvg = renderFn(f, curveColor, curveWidth);
+      extraCurves.forEach(c => {
+        curveSvg += renderFn(c.f, c.color || 'var(--orange)', c.width || 2);
+      });
+
+      hLines.forEach(l => {
+        const y = yTo(l.y);
+        curveSvg += `<line x1="${pad}" y1="${y}" x2="${W - pad}" y2="${y}" stroke="${l.color || 'white'}" stroke-width="${l.width || 1}" stroke-dasharray="4"></line>`;
+      });
 
       // Tangent line
       let tangentSvg = '';
@@ -4596,11 +4628,12 @@
           </div>
 
           <div class="course-method">
-            <span class="block-title">Fractions & puissances</span>
+            <span class="block-title">Fractions, puissances & racines</span>
             Respecter les règles de base !<br/>
             • Puissances : $a^n \\times a^m = a^{n+m}$ ; $\\frac{a^n}{a^m} = a^{n-m}$.<br/>
             • Fractions : pas d'addition sans mise au même dénominateur !<br/>
-            • Équivalence : $\\frac{1}{A} = B \\iff A = \\frac{1}{B}$ (si $A, B \\neq 0$).
+            • Équivalence : $\\frac{1}{A} = B \\iff A = \\frac{1}{B}$ (si $A, B \\neq 0$).<br/>
+            • Racines : $\\sqrt{a \\times b} = \\sqrt{a} \\times \\sqrt{b}$ (si $a,b \\ge 0$). On simplifie $\\sqrt{75} = \\sqrt{25 \\times 3} = 5\\sqrt{3}$.
           </div>
         </div>
 
@@ -4639,6 +4672,11 @@
             <span class="block-title">Tableaux de signes</span>
             Pour résoudre $(ax+b)(cx+d) \\ge 0$, on étudie le signe de chaque facteur affine. Le signe du produit permet de conclure.
           </div>
+          <div class="course-rem">
+            <span class="block-title">Moyenne pondérée</span>
+            La moyenne générale de plusieurs groupes est la moyenne des moyennes pondérées par les effectifs :<br/>
+            $\\bar{x}_{G} = \\frac{n_1\\bar{x}_1 + n_2\\bar{x}_2 + \\dots}{n_1 + n_2 + \\dots}$
+          </div>
         </div>
 
         <div class="course-block">
@@ -4654,7 +4692,12 @@
             <span class="block-title">Résolution d'équations</span>
             • $\\sqrt{x} = 5 \\implies x = 25$ (avec $x \\ge 0$)<br/>
             • $\\frac{1}{x} = 4 \\implies x = \\frac{1}{4}$ (avec $x \\neq 0$)<br/>
-            • $x^2 = 36 \\implies x = 6 \\text{ ou } x = -6$
+            • $x^2 = 36 \\implies x = 6 \\text{ ou } x = -6$<br/>
+            • $|X| = X \\iff X \\ge 0$
+          </div>
+          <div class="course-def">
+            <span class="block-title">Équation cartésienne</span>
+            Toute droite a une équation de la forme $ax+by+c=0$. Le vecteur $\\vec{u}(-b;a)$ est un vecteur directeur.
           </div>
         </div>
       </div>
@@ -7328,26 +7371,34 @@
           'comparaisons_carres',      // 1A-C01
           'programmes_calcul',        // 1A-C02
           'puissances',               // 1A-C03
+          'racines_simplification',   // NOUVEAU
           'unites_aire',              // 1A-C04/07
           'ecriture',                 // 1A-C05
           'isoler',                   // 1A-C11
           'tableauxSignes',           // 1A-C14
           'problemes',                // 1A-C15
           'equations_racine',         // 1A-C10
-          'factorisations_identites'  // 1A-C09
+          'factorisations_identites', // 1A-C09
+          'proba_formules'            // NOUVEAU
         ],
         difficile: [
           'comparaisons_inverses',    // 1A-C01
           'fractions_complexes',      // 1A-C02
           'fractions_inconnue',       // 1A-C02
           'puissances_scientifique',  // 1A-C03
+          'racines_carre',            // NOUVEAU
           'unites_volume',            // 1A-C04/07
           'ordre_grandeur',           // 1A-C05
           'isoler_physique',          // 1A-C11
+          'isoler_formule',           // NOUVEAU
           'tableauxSignes',           // 1A-C14
           'problemes',                // 1A-C15
+          'moyenne_groupes',          // NOUVEAU
           'equations_inverse',        // 1A-C10
-          'developpements_ir'         // 1A-C09
+          'developpements_ir',        // 1A-C09
+          'valeur_absolue_ineq',       // NOUVEAU
+          'graphique_droite_cartesienne', // NOUVEAU
+          'graphique_inequation_produit' // NOUVEAU
         ]
       };
 
@@ -7411,6 +7462,27 @@
           const expected = `${expectedNum}/${d}`;
           return mk('Opérations sur les fractions', `Calculer : $$\\dfrac{${a}}{${b}} + \\dfrac{${c}}{${d}}$$`, ['Donner la fraction.'], expected, corr, { placeholder: 'Ex : 11/12' });
         }
+      }
+
+      if (type === 'racines_simplification') {
+        const base = pick([2, 3, 5, 6]);
+        const a = randInt(2, 5), b = randInt(2, 5), c = randInt(2, 5);
+        const sqA = a * a * base, sqB = b * b * base, sqC = c * c * base;
+        const k1 = randInt(2, 4), k2 = randInt(2, 4), k3 = randInt(2, 4);
+        const resK = k1 * a - k2 * b + k3 * c;
+        const expected = `${resK}sqrt(${base})`;
+        const enonce = `Simplifier : $$A = ${k1}\\sqrt{${sqA}} - ${k2}\\sqrt{${sqB}} + ${k3}\\sqrt{${sqC}}$$`;
+        const corr = `<div class="step"><div class="step-label">Décomposition</div><div class="step-content">$\\sqrt{${sqA}} = \\sqrt{${a}^2 \\times ${base}} = ${a}\\sqrt{${base}}$<br/>$\\sqrt{${sqB}} = \\sqrt{${b}^2 \\times ${base}} = ${b}\\sqrt{${base}}$<br/>$\\sqrt{${sqC}} = \\sqrt{${c}^2 \\times ${base}} = ${c}\\sqrt{${base}}$</div></div><div class="step result"><div class="step-label">Réponse</div><div class="step-content">Expression = $${k1}(${a}\\sqrt{${base}}) - ${k2}(${b}\\sqrt{${base}}) + ${k3}(${c}\\sqrt{${base}}) = (${k1 * a} - ${k2 * b} + ${k3 * c})\\sqrt{${base}} = \\boxed{${resK}\\sqrt{${base}}}$.</div></div>`;
+        return mk('Simplification de racines', enonce, ['Donner la forme k*sqrt(n) ou k*sqrt(n)'], expected, corr, { placeholder: 'Ex : 28*sqrt(6)' });
+      }
+
+      if (type === 'racines_carre') {
+        const a = randInt(2, 10), b = randInt(2, 5), c = randInt(2, 5);
+        const sqB = b * b * a, sqC = c * c * a;
+        const res = Math.pow(b - c, 2) * a;
+        const expected = `${res}`;
+        const corr = `<div class="step"><div class="step-label">Simplification</div><div class="step-content">$\\sqrt{${sqB}} = ${b}\\sqrt{${a}}$ et $\\sqrt{${sqC}} = ${c}\\sqrt{${a}}$.<br/>L'expression devient $(${b}\\sqrt{${a}} - ${c}\\sqrt{${a}})^2 = ((${b - c})\\sqrt{${a}})^2$.</div></div><div class="step result"><div class="step-label">Calcul final</div><div class="step-content">$(${b - c})^2 \\times (\\sqrt{${a}})^2 = ${Math.pow(b - c, 2)} \\times ${a} = \\boxed{${res}}$.</div></div>`;
+        return mk('Carré de racines', `Simplifier : $$B = (\\sqrt{${sqB}} - \\sqrt{${sqC}})^2$$`, ['Valeur entière.'], expected, corr, { placeholder: 'Ex : 12' });
       }
 
       if (type === 'fractions_inconnue') {
@@ -7521,6 +7593,76 @@
           const corr = `<div class="step result"><div class="step-label">Résolution</div><div class="step-content">$y=${a}x${b > 0 ? `+${b}` : b} \\Rightarrow ${a}x=y${b > 0 ? `-${b}` : `+${-b}`} \\Rightarrow x=\\dfrac{y${b > 0 ? `-${b}` : `+${-b}`}}{${a}}$.<br/>Avec $y=${y}$, $x = \\boxed{${x}}$.</div></div>`;
           return mk('Isoler une variable (Affine)', `On a $y=${a}x${b > 0 ? `+${b}` : b}$. Calculer $x$ lorsque $y=${y}$.`, ['Valeur de $x$.'], `${x}`, corr, { placeholder: 'Ex : 3' });
         }
+      }
+
+      if (type === 'isoler_formule') {
+        const a = randInt(2, 5), b = randInt(2, 5);
+        const u = randInt(2, 6);
+        const invU = 1 / u;
+        const term1 = 1 / (2 * a);
+        const valB = 3 / (term1 - invU); // logic for 1/2a - 3/b = 1/u (Ex 1 Image 2)
+        // Let's use simpler literal: F = a + b/(cd)
+        const va = randInt(-5, 5), vb = randInt(2, 10), vc = pick([0.25, 0.5, 2]), vd = randInt(2, 8);
+        const res = va + vb / (vc * vd);
+        const expected = `${res}`;
+        const corr = `<div class="step"><div class="step-label">Calcul par étapes</div><div class="step-content">Dénominateur : $c \\times d = ${vc} \\times ${vd} = ${vc * vd}$.<br/>Fraction : $b / (cd) = ${vb} / ${vc * vd} = ${vb / (vc * vd)}$.</div></div><div class="step result"><div class="step-label">Somme</div><div class="step-content">$F = ${va} + ${vb / (vc * vd)} = \\boxed{${res}}$.</div></div>`;
+        return mk('Calcul de formule', `Calculer $F = a + \\dfrac{b}{cd}$ pour :<br/>$a=${va}, b=${vb}, c=${vc}, d=${vd}$`, ['Valeur numérique ou fraction.'], expected, corr, { placeholder: 'Ex : 2.5' });
+      }
+
+      if (type === 'moyenne_groupes') {
+        const nA = randInt(10, 20), nB = randInt(20, 30);
+        const nC = randInt(10, 20);
+        const mA = randInt(8, 11), mB = randInt(11, 14), mC = randInt(13, 16);
+        const mG = +((nA * mA + nB * mB + nC * mC) / (nA + nB + nC)).toFixed(1);
+
+        const corr = `<div class="step"><div class="step-label">Formule</div><div class="step-content">$\\bar{x}_{G} = \\dfrac{n_A\\bar{x}_A + n_B\\bar{x}_B + n_C\\bar{x}_C}{n_A + n_B + n_C}$</div></div><div class="step result"><div class="step-label">Résolution</div><div class="step-content">$${mG} = \\dfrac{${nA}\\times${mA} + ${nB}\\times${mB} + N\\times${mC}}{${nA + nB} + N}$<br/>En résolvant, on trouve $N = \\boxed{${nC}}$.</div></div>`;
+        return mk('Moyenne de groupes', `La moyenne de 3 groupes est $${mG}/20$.<br/>Groupe A : effectif $${nA}$, moyenne $${mA}$.<br/>Groupe B : effectif $${nB}$, moyenne $${mB}$.<br/>Groupe C : effectif $N$, moyenne $${mC}$.<br/>Calculer $N$.`, ['Valeur de N.'], `${nC}`, corr, { placeholder: 'Ex : 15' });
+      }
+
+      if (type === 'proba_formules') {
+        const pA = 0.4, pBn = 0.3, pAuB = 0.9;
+        const pB = 1 - pBn;
+        const pAiB = +(pA + pB - pAuB).toFixed(2);
+        const corr = `<div class="step"><div class="step-label">Formule</div><div class="step-content">$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$</div></div><div class="step result"><div class="step-label">Calcul</div><div class="step-content">$P(B) = 1 - P(\\bar{B}) = 1 - ${pBn} = ${pB}$.<br/>$P(A \\cap B) = ${pA} + ${pB} - ${pAuB} = \\boxed{${pAiB}}$.</div></div>`;
+        return mk('Relations Probabilités', `Sachant que $P(A)=${pA}$, $P(\\bar{B})=${pBn}$ et $P(A \\cup B)=${pAuB}$, calculer $P(A \\cap B)$.`, ['Valeur décimale.'], `${pAiB}`, corr, { placeholder: 'Ex : 0.2' });
+      }
+
+      if (type === 'valeur_absolue_ineq') {
+        const a = pick([2, 3, 4, 5]);
+        const b = a * a;
+        const expected = `]-inf;-${a}]U[${a};+inf[`;
+        const corr = `<div class="step"><div class="step-label">Définition</div><div class="step-content">$|X|=X \\iff X \\ge 0$.</div></div><div class="step result"><div class="step-label">Résolution</div><div class="step-content">$x^2 - ${b} \\ge 0 \\iff x^2 \\ge ${b} \\iff x \\le -${a}$ ou $x \\ge ${a}$.<br/>Soit $\\boxed{]-\\infty ; -${a}] \\cup [${a} ; +\\infty[}$.</div></div>`;
+        return mk('Valeur absolue', `Résoudre dans $\\mathbb{R}$ : $$|x^2 - ${b}| = x^2 - ${b}$$`, ['Format `]-inf;a]U[b;+inf[`.'], expected, corr, { alternatives: [`]-infinity;-${a}]U[${a};+infinity[`], placeholder: 'Ex : ]-inf;-3]U[3;+inf[' });
+      }
+
+      if (type === 'graphique_droite_cartesienne') {
+        const a = pick([-3, -2, -1, 1, 2, 3]), b = pick([-3, -2, -1, 1, 2, 3]), c = pick([-6, -4, -2, 0, 2, 4, 6]);
+        const f = (x) => (-a * x - c) / b;
+        const svg = createSVGGrid(f, { xMin: -5, xMax: 5, yMin: -5, yMax: 5, curveColor: 'var(--orange)' });
+        const expected = (a === 1 ? '' : a === -1 ? '-' : a) + 'x' + (b > 0 ? '+' : '-') + (Math.abs(b) === 1 ? '' : Math.abs(b)) + 'y' + (c > 0 ? '+' : c === 0 ? '' : '-') + (c === 0 ? '' : Math.abs(c)) + '=0';
+
+        return mk('Équation de droite', `Déterminer une équation cartésienne de la droite tracée :<br/>${svg}`, ['Format `ax+by+c=0`.'], expected, "Lecture de deux points et résolution.", { placeholder: 'Ex : 2x+3y-4=0' });
+      }
+
+      if (type === 'graphique_inequation_produit') {
+        const a = 1, b = 2; // roots
+        const f = (x) => (x - a) * (x + a); // x^2 - 1 -> -1 and 1
+        const g = (x) => -0.5 * (x - b); // linear -> 2
+        const svg = createSVGGrid(f, {
+          xMin: -5, xMax: 5, yMin: -5, yMax: 5,
+          curveColor: 'var(--purple)',
+          extraCurves: [{ f: g, color: 'var(--orange)' }]
+        });
+        const expected = `]-inf;-1]U[1;2]`; // signs: f+, g+ on ]-inf;-1]; f-, g+ on [-1,1]; f+, g+ on [1,2]; f+, g- on [2,+inf[
+        // Wait: f(x) = x^2-1 is >0 on ]-inf,-1]U[1,+inf[
+        // g(x) = -0.5(x-2) is >0 on ]-inf,2]
+        // f*g >= 0:
+        // ]-inf, -1]: f+ g+ -> +
+        // [-1, 1]: f- g+ -> -
+        // [1, 2]: f+ g+ -> +
+        // [2, +inf[: f+ g- -> -
+        // So expected is ]-inf;-1]U[1;2]
+        return mk('Inéquations complexes', `Déterminer l'ensemble des solutions de l'inéquation $f(x) \\times g(x) \\ge 0$ à partir des courbes de $f$ (violet) et $g$ (orange) :<br/>${svg}`, ['Format `]-inf;a]U[b;c]`.'], expected, "Étude du signe de chaque fonction sur le graphique.", { placeholder: 'Ex : ]-inf;-1]U[1;2]' });
       }
 
       if (type === 'tableauxSignes') {
@@ -8726,16 +8868,26 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
        Révèle progressivement le contenu (header, stats, chapitres). */
     function revealApp() {
       const app = document.getElementById('app');
-      if (!app || app.classList.contains('revealed')) return;
+      const menu = document.getElementById('user-menu-wrap');
+
+      if (!app) return;
+
+      // --- NOUVEAU : On nettoie les styles invisibles laissés par la déconnexion
+      app.style.opacity = '';
+      app.style.transform = '';
+      if (menu) menu.style.opacity = '';
+      // -----------------------------------------------------------------------
+
+      if (app.classList.contains('revealed')) return;
       app.classList.add('revealed');
+
       const header = document.querySelector('header');
       if (header) header.classList.add('anim');
       document.querySelector('.stats-bar')?.classList.add('revealed');
       document.querySelector('.diff-bar')?.classList.add('revealed');
-      document.getElementById('user-menu-wrap').style.display = '';
+      if (menu) menu.style.display = '';
 
       // Ré-déclenche le stagger des chapitres APRÈS que #app soit visible
-      // (ils ont peut-être déjà received revealed pendant la transition invisible)
       const btns = document.querySelectorAll('.ch-btn');
       btns.forEach(b => b.classList.remove('revealed'));
       btns.forEach((b, i) => {
@@ -8775,8 +8927,19 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
     window.logout = function () {
       const app = document.getElementById('app');
       const menu = document.getElementById('user-menu-wrap');
-      if (app) { app.style.transition = 'opacity .3s, transform .3s'; app.style.opacity = '0'; app.style.transform = 'translateY(10px)'; }
-      if (menu) { menu.style.transition = 'opacity .3s'; menu.style.opacity = '0'; }
+
+      if (app) {
+        app.style.transition = 'opacity .3s, transform .3s';
+        app.style.opacity = '0';
+        app.style.transform = 'translateY(10px)';
+        app.classList.remove('revealed'); // <-- LA CORRECTION EST ICI
+      }
+
+      if (menu) {
+        menu.style.transition = 'opacity .3s';
+        menu.style.opacity = '0';
+      }
+
       setTimeout(() => { if (_origLogout) _origLogout(); }, 320);
     };
   </script>
