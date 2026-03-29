@@ -22,37 +22,45 @@
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
 
-    <style>
+  <style>
     /* =============================================
        DESIGN SYSTEM – Academic Blue & Black
        ============================================= */
     :root {
-      --bg:       #07090f;
-      --bg-mid:   #0e1525;
-      --bg-lt:    #182038;
-      --bg-card:  #111827;
-      --blue:     #3b82f6;
-      --blue-lt:  #60a5fa;
+      --bg: #07090f;
+      --bg-mid: #0e1525;
+      --bg-lt: #182038;
+      --bg-card: #111827;
+      --blue: #3b82f6;
+      --blue-lt: #60a5fa;
       --blue-xlt: #93c5fd;
-      --blue-dim: rgba(59,130,246,0.12);
-      --indigo:   #818cf8;
-      --text:     #dde6ff;
+      --blue-dim: rgba(59, 130, 246, 0.12);
+      --indigo: #818cf8;
+      --text: #dde6ff;
       --text-dim: #6b80b5;
-      --green:    #34d399;
-      --red:      #f87171;
-      --border:   rgba(59,130,246,0.16);
-      --border-dim: rgba(59,130,246,0.08);
+      --green: #34d399;
+      --red: #f87171;
+      --border: rgba(59, 130, 246, 0.16);
+      --border-dim: rgba(59, 130, 246, 0.08);
 
       --r-sm: 8px;
       --r-md: 14px;
       --r-lg: 20px;
-      --shadow: 0 8px 32px rgba(0,0,0,0.55);
-      --shadow-sm: 0 2px 12px rgba(0,0,0,0.35);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+      --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.35);
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       background: var(--bg);
@@ -67,15 +75,18 @@
 
     body::before {
       content: '';
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       background:
-        radial-gradient(ellipse at 10% 15%, rgba(59,130,246,0.07) 0%, transparent 50%),
-        radial-gradient(ellipse at 90% 85%, rgba(129,140,248,0.07) 0%, transparent 50%);
-      pointer-events: none; z-index: 0;
+        radial-gradient(ellipse at 10% 15%, rgba(59, 130, 246, 0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 85%, rgba(129, 140, 248, 0.07) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     #app {
-      position: relative; z-index: 1;
+      position: relative;
+      z-index: 1;
       max-width: 860px;
       margin: 0 auto;
       padding: 0 20px 80px;
@@ -111,7 +122,10 @@
       color: #e8eeff;
       line-height: 1.15;
     }
-    h1 span { color: var(--blue-lt); }
+
+    h1 span {
+      color: var(--blue-lt);
+    }
 
     .header-sub {
       margin-top: 10px;
@@ -122,7 +136,9 @@
 
     /* --------- Stats bar --------- */
     .stats-bar {
-      display: flex; gap: 20px; flex-wrap: wrap;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
       margin-bottom: 20px;
       padding: 18px 24px;
       background: var(--bg-mid);
@@ -130,13 +146,18 @@
       border: 1px solid var(--border-dim);
       box-shadow: var(--shadow-sm);
     }
-    .stat { text-align: center; }
+
+    .stat {
+      text-align: center;
+    }
+
     .stat-val {
       font-family: 'Playfair Display', serif;
       font-size: 1.6rem;
       color: var(--blue-lt);
       line-height: 1;
     }
+
     .stat-lbl {
       font-size: 11px;
       color: var(--text-dim);
@@ -174,25 +195,31 @@
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       background: transparent;
       color: var(--text-dim);
       transition: all 0.2s ease;
     }
-    .diff-btn:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+
+    .diff-btn:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      color: var(--text);
+    }
 
     .diff-btn.active.facile {
-      background: rgba(52,211,153,0.12);
+      background: rgba(52, 211, 153, 0.12);
       border-color: var(--green);
       color: var(--green);
     }
+
     .diff-btn.active.moyen {
-      background: rgba(59,130,246,0.14);
+      background: rgba(59, 130, 246, 0.14);
       border-color: var(--blue-lt);
       color: var(--blue-lt);
     }
+
     .diff-btn.active.difficile {
-      background: rgba(248,113,113,0.12);
+      background: rgba(248, 113, 113, 0.12);
       border-color: var(--red);
       color: var(--red);
     }
@@ -224,35 +251,59 @@
       transition: all 0.25s ease;
       overflow: hidden;
     }
+
     .ch-btn::before {
       content: '';
-      position: absolute; inset: 0;
+      position: absolute;
+      inset: 0;
       background: linear-gradient(135deg, var(--blue), transparent);
       opacity: 0;
       transition: opacity 0.25s;
     }
+
     .ch-btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 28px rgba(59,130,246,0.2);
+      box-shadow: 0 8px 28px rgba(59, 130, 246, 0.2);
       border-color: var(--blue);
     }
-    .ch-btn:hover::before { opacity: 0.08; }
+
+    .ch-btn:hover::before {
+      opacity: 0.08;
+    }
+
     .ch-btn.active {
       border-color: var(--blue-lt);
       background: var(--bg-lt);
-      box-shadow: 0 0 0 2px rgba(96,165,250,0.4), var(--shadow);
+      box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.4), var(--shadow);
     }
-    .ch-btn.active::before { opacity: 0.12; }
 
-    .ch-btn.auto-ch { border-color: rgba(129,140,248,0.25); }
-    .ch-btn.auto-ch:hover { border-color: var(--indigo); }
+    .ch-btn.active::before {
+      opacity: 0.12;
+    }
+
+    .ch-btn.auto-ch {
+      border-color: rgba(129, 140, 248, 0.25);
+    }
+
+    .ch-btn.auto-ch:hover {
+      border-color: var(--indigo);
+    }
+
     .ch-btn.auto-ch.active {
       border-color: var(--indigo);
-      box-shadow: 0 0 0 2px rgba(129,140,248,0.35), var(--shadow);
+      box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.35), var(--shadow);
     }
-    .ch-btn.auto-ch::before { background: linear-gradient(135deg, var(--indigo), transparent); }
 
-    .ch-icon { font-size: 26px; margin-bottom: 8px; display: block; }
+    .ch-btn.auto-ch::before {
+      background: linear-gradient(135deg, var(--indigo), transparent);
+    }
+
+    .ch-icon {
+      font-size: 26px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
     .ch-num {
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
@@ -261,7 +312,11 @@
       text-transform: uppercase;
       margin-bottom: 4px;
     }
-    .ch-btn.auto-ch .ch-num { color: var(--indigo); }
+
+    .ch-btn.auto-ch .ch-num {
+      color: var(--indigo);
+    }
+
     .ch-name {
       font-family: 'Playfair Display', serif;
       font-size: 13px;
@@ -271,11 +326,23 @@
     }
 
     /* --------- Exercise zone --------- */
-    #exercise-zone { display: none; }
-    #exercise-zone.visible { display: block; animation: fadeIn 0.4s ease; }
+    #exercise-zone {
+      display: none;
+    }
 
-    #bac-zone { display: none; }
-    #bac-zone.visible { display: block; animation: fadeIn 0.4s ease; }
+    #exercise-zone.visible {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    #bac-zone {
+      display: none;
+    }
+
+    #bac-zone.visible {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
 
     .bac-menu {
       display: flex;
@@ -283,7 +350,9 @@
       margin: 0 0 26px;
     }
 
-    .bac-zone-header { margin-bottom: 14px; }
+    .bac-zone-header {
+      margin-bottom: 14px;
+    }
 
     .bac-zone-actions {
       display: flex;
@@ -292,7 +361,9 @@
       justify-content: flex-end;
     }
 
-    #bac-content { margin-top: 10px; }
+    #bac-content {
+      margin-top: 10px;
+    }
 
     .bac-exercise-header {
       display: flex;
@@ -317,7 +388,9 @@
       line-height: 1.4;
     }
 
-    .bac-global-actions { margin-top: 18px; }
+    .bac-global-actions {
+      margin-top: 18px;
+    }
 
     .bac-corr-ex-title {
       font-family: 'JetBrains Mono', monospace;
@@ -328,8 +401,21 @@
       margin: 10px 0 6px;
     }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .visible { will-change: opacity, transform; }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .visible {
+      will-change: opacity, transform;
+    }
 
     .zone-header {
       display: flex;
@@ -345,11 +431,17 @@
       font-size: 1.4rem;
       color: #e8eeff;
     }
-    .zone-title em { color: var(--blue-lt); font-style: normal; }
+
+    .zone-title em {
+      color: var(--blue-lt);
+      font-style: normal;
+    }
 
     /* --------- Buttons --------- */
     .btn {
-      display: inline-flex; align-items: center; gap: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       padding: 10px 22px;
       border-radius: 40px;
       font-family: 'Source Serif 4', serif;
@@ -359,48 +451,60 @@
       transition: all 0.2s ease;
       font-weight: 600;
     }
+
     .btn-gold {
       background: linear-gradient(135deg, var(--blue), var(--blue-lt));
       color: #07090f;
-      box-shadow: 0 4px 18px rgba(59,130,246,0.3);
+      box-shadow: 0 4px 18px rgba(59, 130, 246, 0.3);
     }
+
     .btn-gold:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(59,130,246,0.45);
+      box-shadow: 0 6px 24px rgba(59, 130, 246, 0.45);
     }
+
     .btn-ghost {
       background: transparent;
-      border: 1px solid rgba(96,165,250,0.35);
+      border: 1px solid rgba(96, 165, 250, 0.35);
       color: var(--blue-lt);
     }
+
     .btn-ghost:hover {
-      background: rgba(59,130,246,0.08);
+      background: rgba(59, 130, 246, 0.08);
       border-color: var(--blue-lt);
     }
+
     .btn-green {
       background: linear-gradient(135deg, var(--green), #10b981);
       color: #07090f;
-      box-shadow: 0 4px 16px rgba(52,211,153,0.3);
+      box-shadow: 0 4px 16px rgba(52, 211, 153, 0.3);
     }
+
     .btn-green:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 22px rgba(52,211,153,0.4);
+      box-shadow: 0 6px 22px rgba(52, 211, 153, 0.4);
     }
+
     .btn-check {
       background: linear-gradient(135deg, #60a5fa, #3b82f6);
       color: #07090f;
-      box-shadow: 0 4px 16px rgba(59,130,246,0.3);
+      box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
     }
+
     .btn-check:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 22px rgba(59,130,246,0.45);
+      box-shadow: 0 6px 22px rgba(59, 130, 246, 0.45);
     }
+
     .btn-purple {
       background: linear-gradient(135deg, var(--indigo), #6366f1);
       color: white;
-      box-shadow: 0 4px 16px rgba(129,140,248,0.3);
+      box-shadow: 0 4px 16px rgba(129, 140, 248, 0.3);
     }
-    .btn-purple:hover { transform: translateY(-2px); }
+
+    .btn-purple:hover {
+      transform: translateY(-2px);
+    }
 
     /* --------- Exercise card --------- */
     .exercise-card {
@@ -458,7 +562,7 @@
     }
 
     .course-content .course-block {
-      background: rgba(255,255,255,0.03);
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border-dim);
       border-radius: var(--r-md);
       padding: 16px 18px;
@@ -470,8 +574,14 @@
       font-size: 1rem;
     }
 
-    .course-list { margin: 8px 0; padding-left: 18px; }
-    .course-list li { margin: 4px 0; }
+    .course-list {
+      margin: 8px 0;
+      padding-left: 18px;
+    }
+
+    .course-list li {
+      margin: 4px 0;
+    }
 
     .course-topic {
       margin: 12px 0;
@@ -490,11 +600,13 @@
     .auto-cell {
       border: 1px solid var(--border-dim);
       border-radius: var(--r-sm);
-      background: rgba(255,255,255,0.02);
+      background: rgba(255, 255, 255, 0.02);
       padding: 10px 12px;
     }
 
-    .auto-cell strong { color: var(--blue-xlt); }
+    .auto-cell strong {
+      color: var(--blue-xlt);
+    }
 
     .auto-head {
       margin-bottom: 8px;
@@ -505,7 +617,11 @@
       text-transform: uppercase;
     }
 
-    @media (max-width: 720px) { .auto-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) {
+      .auto-grid {
+        grid-template-columns: 1fr;
+      }
+    }
 
     .course-kbd {
       font-family: 'JetBrains Mono', monospace;
@@ -516,10 +632,16 @@
       color: var(--blue-xlt);
     }
 
-    .course-svg { width: 100%; overflow-x: auto; }
+    .course-svg {
+      width: 100%;
+      overflow-x: auto;
+    }
 
     /* --------- Course content blocks --------- */
-    .course-section { margin: 22px 0 10px; }
+    .course-section {
+      margin: 22px 0 10px;
+    }
+
     .course-section-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.05rem;
@@ -531,44 +653,57 @@
       align-items: center;
       gap: 8px;
     }
+
     .course-section-title::before {
       content: '';
       display: inline-block;
-      width: 3px; height: 18px;
+      width: 3px;
+      height: 18px;
       background: linear-gradient(180deg, var(--blue), var(--indigo));
       border-radius: 2px;
       flex-shrink: 0;
     }
 
-    .course-def, .course-prop, .course-thm, .course-rem, .course-ex, .course-method {
+    .course-def,
+    .course-prop,
+    .course-thm,
+    .course-rem,
+    .course-ex,
+    .course-method {
       border-radius: var(--r-sm);
       padding: 14px 18px;
       margin: 10px 0;
       line-height: 1.9;
       font-size: 15px;
     }
+
     .course-def {
-      background: rgba(59,130,246,0.06);
+      background: rgba(59, 130, 246, 0.06);
       border-left: 3px solid var(--blue);
     }
+
     .course-prop {
-      background: rgba(129,140,248,0.06);
+      background: rgba(129, 140, 248, 0.06);
       border-left: 3px solid var(--indigo);
     }
+
     .course-thm {
-      background: rgba(52,211,153,0.06);
+      background: rgba(52, 211, 153, 0.06);
       border-left: 3px solid var(--green);
     }
+
     .course-rem {
-      background: rgba(255,255,255,0.03);
+      background: rgba(255, 255, 255, 0.03);
       border-left: 3px solid var(--text-dim);
     }
+
     .course-ex {
-      background: rgba(96,165,250,0.05);
+      background: rgba(96, 165, 250, 0.05);
       border-left: 3px solid var(--blue-lt);
     }
+
     .course-method {
-      background: rgba(251,146,60,0.05);
+      background: rgba(251, 146, 60, 0.05);
       border-left: 3px solid #fb923c;
     }
 
@@ -585,12 +720,30 @@
       margin-bottom: 6px;
       display: block;
     }
-    .course-def .block-title    { color: var(--blue); }
-    .course-prop .block-title   { color: var(--indigo); }
-    .course-thm .block-title    { color: var(--green); }
-    .course-rem .block-title    { color: var(--text-dim); }
-    .course-ex .block-title     { color: var(--blue-lt); }
-    .course-method .block-title { color: #fb923c; }
+
+    .course-def .block-title {
+      color: var(--blue);
+    }
+
+    .course-prop .block-title {
+      color: var(--indigo);
+    }
+
+    .course-thm .block-title {
+      color: var(--green);
+    }
+
+    .course-rem .block-title {
+      color: var(--text-dim);
+    }
+
+    .course-ex .block-title {
+      color: var(--blue-lt);
+    }
+
+    .course-method .block-title {
+      color: #fb923c;
+    }
 
     .course-content .derivees-table {
       width: 100%;
@@ -598,11 +751,14 @@
       margin: 12px 0;
       font-size: 14px;
     }
-    .derivees-table th, .derivees-table td {
+
+    .derivees-table th,
+    .derivees-table td {
       border: 1px solid var(--border);
       padding: 8px 14px;
       text-align: center;
     }
+
     .derivees-table th {
       background: var(--blue-dim);
       color: var(--blue-lt);
@@ -611,16 +767,23 @@
       letter-spacing: 1px;
       text-transform: uppercase;
     }
-    .derivees-table td { background: rgba(255,255,255,0.02); }
 
-    @media (max-width: 900px) { .course-content .course-grid { grid-template-columns: 1fr; } }
+    .derivees-table td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    @media (max-width: 900px) {
+      .course-content .course-grid {
+        grid-template-columns: 1fr;
+      }
+    }
 
     .auto-tag {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(129,140,248,0.1);
-      border: 1px solid rgba(129,140,248,0.3);
+      background: rgba(129, 140, 248, 0.1);
+      border: 1px solid rgba(129, 140, 248, 0.3);
       color: var(--indigo);
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
@@ -643,27 +806,46 @@
       margin-bottom: 14px;
       margin-left: 8px;
     }
-    .diff-tag.facile   { background: rgba(52,211,153,0.1);  border: 1px solid rgba(52,211,153,0.28);  color: var(--green); }
-    .diff-tag.moyen    { background: rgba(96,165,250,0.1);   border: 1px solid rgba(96,165,250,0.28);   color: var(--blue-lt); }
-    .diff-tag.difficile{ background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.28); color: var(--red); }
+
+    .diff-tag.facile {
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.28);
+      color: var(--green);
+    }
+
+    .diff-tag.moyen {
+      background: rgba(96, 165, 250, 0.1);
+      border: 1px solid rgba(96, 165, 250, 0.28);
+      color: var(--blue-lt);
+    }
+
+    .diff-tag.difficile {
+      background: rgba(248, 113, 113, 0.1);
+      border: 1px solid rgba(248, 113, 113, 0.28);
+      color: var(--red);
+    }
 
     .exercise-card h3 {
       font-family: 'Playfair Display', serif;
       font-size: 1.1rem;
       color: var(--blue-lt);
       margin-bottom: 16px;
-      display: flex; align-items: center; gap: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
+
     .exercise-card h3::before {
       content: '';
       display: inline-block;
-      width: 3px; height: 20px;
+      width: 3px;
+      height: 20px;
       background: linear-gradient(180deg, var(--blue), var(--indigo));
       border-radius: 2px;
     }
 
     .enonce {
-      background: rgba(59,130,246,0.05);
+      background: rgba(59, 130, 246, 0.05);
       border-left: 3px solid var(--blue);
       border-radius: 0 var(--r-sm) var(--r-sm) 0;
       padding: 16px 20px;
@@ -672,16 +854,25 @@
       line-height: 1.9;
     }
 
-    .question-list { list-style: none; padding: 0; }
+    .question-list {
+      list-style: none;
+      padding: 0;
+    }
+
     .question-list li {
       padding: 8px 0 8px 24px;
       position: relative;
-      border-bottom: 1px solid rgba(59,130,246,0.07);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.07);
     }
-    .question-list li:last-child { border-bottom: none; }
+
+    .question-list li:last-child {
+      border-bottom: none;
+    }
+
     .question-list li::before {
       content: attr(data-q);
-      position: absolute; left: 0;
+      position: absolute;
+      left: 0;
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       color: var(--blue-lt);
@@ -691,8 +882,8 @@
 
     /* --------- Answer zone --------- */
     .answer-zone {
-      background: rgba(59,130,246,0.05);
-      border: 1px solid rgba(59,130,246,0.2);
+      background: rgba(59, 130, 246, 0.05);
+      border: 1px solid rgba(59, 130, 246, 0.2);
       border-radius: var(--r-md);
       padding: 20px 24px;
       margin-top: 22px;
@@ -722,8 +913,8 @@
     }
 
     .answer-input {
-      background: rgba(255,255,255,0.04);
-      border: 1.5px solid rgba(59,130,246,0.2);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px solid rgba(59, 130, 246, 0.2);
       border-radius: var(--r-sm);
       padding: 10px 16px;
       color: #e8eeff;
@@ -733,9 +924,21 @@
       transition: border-color 0.2s, background 0.2s;
       outline: none;
     }
-    .answer-input:focus { border-color: var(--blue); background: rgba(59,130,246,0.07); }
-    .answer-input.correct { border-color: var(--green); background: rgba(52,211,153,0.07); }
-    .answer-input.incorrect { border-color: var(--red); background: rgba(248,113,113,0.05); }
+
+    .answer-input:focus {
+      border-color: var(--blue);
+      background: rgba(59, 130, 246, 0.07);
+    }
+
+    .answer-input.correct {
+      border-color: var(--green);
+      background: rgba(52, 211, 153, 0.07);
+    }
+
+    .answer-input.incorrect {
+      border-color: var(--red);
+      background: rgba(248, 113, 113, 0.05);
+    }
 
     .feedback {
       display: flex;
@@ -748,40 +951,59 @@
       margin-top: 12px;
       animation: fadeIn 0.3s ease;
     }
+
     .feedback.correct {
-      background: rgba(52,211,153,0.1);
-      border: 1px solid rgba(52,211,153,0.3);
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.3);
       color: var(--green);
     }
+
     .feedback.incorrect {
-      background: rgba(248,113,113,0.07);
-      border: 1px solid rgba(248,113,113,0.28);
+      background: rgba(248, 113, 113, 0.07);
+      border: 1px solid rgba(248, 113, 113, 0.28);
       color: var(--red);
     }
-    .feedback-note { font-size: 12px; font-weight: 400; color: var(--text-dim); margin-top: 2px; }
 
-    .show-corr-btn { margin-top: 14px; }
+    .feedback-note {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .show-corr-btn {
+      margin-top: 14px;
+    }
 
     /* --------- Correction card --------- */
     .correction-card {
-      background: rgba(52,211,153,0.05);
-      border: 1px solid rgba(52,211,153,0.25);
+      background: rgba(52, 211, 153, 0.05);
+      border: 1px solid rgba(52, 211, 153, 0.25);
       border-radius: var(--r-lg);
       padding: 32px;
       margin-bottom: 22px;
       display: none;
       animation: fadeIn 0.4s ease;
-      box-shadow: 0 8px 32px rgba(52,211,153,0.08);
+      box-shadow: 0 8px 32px rgba(52, 211, 153, 0.08);
     }
-    .correction-card.visible { display: block; }
+
+    .correction-card.visible {
+      display: block;
+    }
 
     .correction-card .corr-header {
-      display: flex; align-items: center; gap: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
       margin-bottom: 24px;
       padding-bottom: 16px;
-      border-bottom: 1px solid rgba(52,211,153,0.2);
+      border-bottom: 1px solid rgba(52, 211, 153, 0.2);
     }
-    .corr-icon { font-size: 24px; }
+
+    .corr-icon {
+      font-size: 24px;
+    }
+
     .corr-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.2rem;
@@ -792,10 +1014,11 @@
     .step {
       margin: 18px 0;
       padding: 16px 20px;
-      background: rgba(255,255,255,0.03);
+      background: rgba(255, 255, 255, 0.03);
       border-radius: var(--r-sm);
       border-left: 3px solid var(--blue);
     }
+
     .step-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
@@ -804,13 +1027,35 @@
       color: var(--blue-lt);
       margin-bottom: 8px;
     }
-    .step-content { font-size: 15px; line-height: 2; }
-    .step.result { border-left-color: var(--blue-lt); }
-    .step.result .step-label { color: var(--blue-xlt); }
-    .step.warn { border-left-color: var(--red); }
-    .step.warn .step-label { color: var(--red); }
-    .step.ok { border-left-color: var(--green); }
-    .step.ok .step-label { color: var(--green); }
+
+    .step-content {
+      font-size: 15px;
+      line-height: 2;
+    }
+
+    .step.result {
+      border-left-color: var(--blue-lt);
+    }
+
+    .step.result .step-label {
+      color: var(--blue-xlt);
+    }
+
+    .step.warn {
+      border-left-color: var(--red);
+    }
+
+    .step.warn .step-label {
+      color: var(--red);
+    }
+
+    .step.ok {
+      border-left-color: var(--green);
+    }
+
+    .step.ok .step-label {
+      color: var(--green);
+    }
 
     /* --------- Tables --------- */
     .sign-table {
@@ -820,29 +1065,58 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
     }
-    .sign-table th, .sign-table td {
+
+    .sign-table th,
+    .sign-table td {
       border: 1px solid var(--border);
       padding: 8px 12px;
       text-align: center;
     }
+
     .sign-table th {
       background: var(--blue-dim);
       color: var(--blue-lt);
       font-weight: 500;
     }
-    .sign-table .pos { color: var(--green); font-weight: 600; }
-    .sign-table .neg { color: var(--red); font-weight: 600; }
-    .sign-table .zero { color: var(--blue-xlt); }
-    .sign-table .var-up { color: var(--green); font-size: 16px; }
-    .sign-table .var-dn { color: var(--red); font-size: 16px; }
+
+    .sign-table .pos {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .sign-table .neg {
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    .sign-table .zero {
+      color: var(--blue-xlt);
+    }
+
+    .sign-table .var-up {
+      color: var(--green);
+      font-size: 16px;
+    }
+
+    .sign-table .var-dn {
+      color: var(--red);
+      font-size: 16px;
+    }
 
     /* --------- Bac probability tables --------- */
-    .bac-table { border-collapse: collapse; margin: 16px auto; font-size: 14px; }
-    .bac-table th, .bac-table td {
+    .bac-table {
+      border-collapse: collapse;
+      margin: 16px auto;
+      font-size: 14px;
+    }
+
+    .bac-table th,
+    .bac-table td {
       border: 1px solid var(--border);
       padding: 8px 16px;
       text-align: center;
     }
+
     .bac-table th {
       background: var(--blue-dim);
       color: var(--blue-lt);
@@ -863,42 +1137,105 @@
       overflow-x: auto;
       color: #c9d1f5;
     }
-    .python-code .keyword { color: #c678dd; }
-    .python-code .method  { color: var(--blue-lt); }
-    .python-code .number  { color: #f9a8d4; }
+
+    .python-code .keyword {
+      color: #c678dd;
+    }
+
+    .python-code .method {
+      color: var(--blue-lt);
+    }
+
+    .python-code .number {
+      color: #f9a8d4;
+    }
 
     /* --------- Probability tree --------- */
-    .tree-container { overflow-x: auto; margin: 16px 0; }
-    .tree-container svg text { font-family: 'Source Serif 4', serif; }
+    .tree-container {
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    .tree-container svg text {
+      font-family: 'Source Serif 4', serif;
+    }
 
     /* --------- Actions --------- */
-    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
 
     /* --------- KaTeX --------- */
-    .katex { color: #dde6ff !important; }
-    .katex-display { margin: 10px 0 !important; overflow-x: auto; }
+    .katex {
+      color: #dde6ff !important;
+    }
+
+    .katex-display {
+      margin: 10px 0 !important;
+      overflow-x: auto;
+    }
 
     /* --------- Scrollbar --------- */
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--bg-lt); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(59,130,246,0.4); }
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-lt);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(59, 130, 246, 0.4);
+    }
 
     /* --------- Responsive --------- */
     @media (max-width: 600px) {
-      .exercise-card, .correction-card { padding: 20px 16px; }
-      h1 { font-size: 1.7rem; }
-      .answer-input { width: 100%; }
+
+      .exercise-card,
+      .correction-card {
+        padding: 20px 16px;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+
+      .answer-input {
+        width: 100%;
+      }
     }
 
     /* --------- Streak animation --------- */
-    .stat-streak { color: #fb923c; }
-    @keyframes streakPulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.25); }
-      100% { transform: scale(1); }
+    .stat-streak {
+      color: #fb923c;
     }
-    .streak-animate { animation: streakPulse 0.4s ease; }
+
+    @keyframes streakPulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.25);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .streak-animate {
+      animation: streakPulse 0.4s ease;
+    }
 
     /* --------- Footer --------- */
     .app-footer {
@@ -913,8 +1250,14 @@
     }
 
     /* --------- Course zone hidden initially --------- */
-    #course-zone { display: none; }
-    #course-zone.visible { display: block; animation: fadeIn 0.4s ease; }
+    #course-zone {
+      display: none;
+    }
+
+    #course-zone.visible {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
 
     /* --------- Menu utilisateur (3 points) --------- */
     .user-menu-wrap {
@@ -938,6 +1281,7 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
     }
+
     .user-menu-btn:hover {
       border-color: var(--blue-lt);
       background: var(--bg-lt);
@@ -965,7 +1309,10 @@
       box-shadow: var(--shadow);
       animation: fadeIn 0.2s ease;
     }
-    .user-dropdown.open { display: block; }
+
+    .user-dropdown.open {
+      display: block;
+    }
 
     .user-dropdown-header {
       padding: 8px 12px 10px;
@@ -996,13 +1343,17 @@
       margin-bottom: 6px;
     }
 
-    .user-mini-stat { text-align: center; }
+    .user-mini-stat {
+      text-align: center;
+    }
+
     .user-mini-val {
       font-family: 'Playfair Display', serif;
       font-size: 1.1rem;
       color: var(--blue-lt);
       line-height: 1;
     }
+
     .user-mini-lbl {
       font-family: 'JetBrains Mono', monospace;
       font-size: 9px;
@@ -1026,13 +1377,15 @@
       border-radius: 20px;
       font-family: 'JetBrains Mono', monospace;
     }
+
     .ch-visited-badge.seen {
-      background: rgba(59,130,246,0.1);
+      background: rgba(59, 130, 246, 0.1);
       border: 1px solid var(--border);
       color: var(--blue-lt);
     }
+
     .ch-visited-badge.unseen {
-      background: rgba(255,255,255,0.03);
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border-dim);
       color: var(--text-dim);
     }
@@ -1052,22 +1405,128 @@
       width: 100%;
       text-align: left;
     }
-    .dropdown-item:hover { background: rgba(59,130,246,0.07); }
-    .dropdown-item.danger { color: var(--red); }
-    .dropdown-item.danger:hover { background: rgba(248,113,113,0.08); }
+
+    .dropdown-item:hover {
+      background: rgba(59, 130, 246, 0.07);
+    }
+
+    .dropdown-item.danger {
+      color: var(--red);
+    }
+
+    .dropdown-item.danger:hover {
+      background: rgba(248, 113, 113, 0.08);
+    }
 
     /* --------- Animation de chargement --------- */
     .spinner {
       display: inline-block;
-      width: 20px; height: 20px;
-      border: 2px solid rgba(59,130,246,0.2);
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(59, 130, 246, 0.2);
       border-top-color: var(--blue-lt);
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       vertical-align: middle;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* ── Niveau badge (dropdown) ── */
+    .niveau-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.5px;
+      margin: 6px 16px 4px;
+    }
+
+    .niveau-badge.spe {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--blue-lt);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    .niveau-badge.tc {
+      background: rgba(129, 140, 248, 0.12);
+      color: var(--indigo);
+      border: 1px solid rgba(129, 140, 248, 0.25);
+    }
+
+    /* ── Divider dans dropdown ── */
+    .dropdown-divider {
+      height: 1px;
+      background: var(--border-dim);
+      margin: 6px 0;
+    }
+
+    /* ── Level overlay cards ── */
+    .level-choice-grid {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 28px;
+    }
+
+    .level-card {
+      flex: 1;
+      min-width: 180px;
+      max-width: 220px;
+      padding: 24px 20px;
+      border-radius: 16px;
+      cursor: pointer;
+      border: 2px solid;
+      color: var(--text);
+      transition: all 0.2s;
+      text-align: center;
+      font-family: 'Source Serif 4', serif;
+      background: transparent;
+    }
+
+    .level-card.spe {
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .level-card.spe:hover {
+      border-color: var(--blue);
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .level-card.tc {
+      border-color: rgba(129, 140, 248, 0.3);
+    }
+
+    .level-card.tc:hover {
+      border-color: var(--indigo);
+      background: rgba(129, 140, 248, 0.1);
+    }
+
+    .level-card-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .level-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .level-card-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 
@@ -1112,6 +1571,9 @@
         <span class="ch-visited-badge unseen">Auto</span>
       </div>
       <!-- Actions -->
+      <div id="dd-niveau-badge"></div>
+      <button class="dropdown-item" onclick="showLevelSelector()">🔄 Changer de filière</button>
+      <div class="dropdown-divider"></div>
       <button class="dropdown-item" onclick="resetUserStats()">🗑️ Réinitialiser ma progression</button>
       <button class="dropdown-item danger" onclick="logout()">🚪 Se déconnecter</button>
     </div>
@@ -1507,13 +1969,25 @@
         logConnexion(match.name);
 
         setTimeout(() => {
-          document.getElementById('auth-overlay').style.display = 'none';
-          if (typeof loadStats === 'function') loadStats();
-          if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
-          // On remet le bouton à son état normal en arrière-plan (pour la déconnexion)
           loginBtn.innerHTML = originalBtnText;
           loginBtn.disabled = false;
           loginBtn.style.opacity = '1';
+
+          const niv = match.niveau || sessionStorage.getItem('mathsPremiere_niveau') || '';
+          if (niv) {
+            // Niveau déjà connu → on ouvre directement l'app
+            document.getElementById('auth-overlay').style.display = 'none';
+            sessionStorage.setItem('mathsPremiere_niveau', niv);
+            if (typeof loadStats === 'function') loadStats();
+            if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
+            applyNiveau(niv);
+          } else {
+            // Niveau inconnu → overlay de sélection (app reste en fond)
+            document.getElementById('auth-overlay').style.display = 'none';
+            if (typeof loadStats === 'function') loadStats();
+            if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
+            showLevelSelector();
+          }
         }, 800);
 
       } catch (e) {
@@ -1544,6 +2018,48 @@
     }
 
   </script>
+
+  <!-- ── SÉLECTION FILIÈRE (s'affiche après login si niveau non défini) ── -->
+  <div id="level-overlay" style="
+    display:none; position:fixed; inset:0; z-index:9998;
+    background:#07090f; align-items:center; justify-content:center;
+    font-family:'Source Serif 4',Georgia,serif;
+    ">
+    <div style="
+      width:100%; max-width:520px; margin:20px;
+      background:#0e1525; border:1px solid rgba(59,130,246,0.18);
+      border-radius:20px; padding:44px 36px;
+      box-shadow:0 8px 40px rgba(0,0,0,0.65); text-align:center;
+      ">
+      <div style="
+        display:inline-block; background:linear-gradient(135deg,#3b82f6,#60a5fa);
+        color:#0f1b2d; font-family:'JetBrains Mono',monospace;
+        font-size:10px; letter-spacing:2.5px; text-transform:uppercase;
+        padding:5px 14px; border-radius:20px; margin-bottom:20px;
+        ">📚 Choix de filière</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:#e8eeff;margin-bottom:8px;">
+        Quelle est ta filière ?
+      </h2>
+      <p style="color:#6b80b5;font-size:14px;margin-bottom:4px;">
+        Ce choix sera mémorisé pour tes prochaines connexions.
+      </p>
+      <p style="color:#6b80b5;font-size:13px;font-style:italic;">
+        Tu peux le modifier à tout moment dans ton profil.
+      </p>
+      <div class="level-choice-grid">
+        <button class="level-card spe" onclick="selectLevel('spe')">
+          <div class="level-card-icon">📐</div>
+          <div class="level-card-title">Maths Spécialité</div>
+          <div class="level-card-sub">Programme approfondi<br />4h / semaine</div>
+        </button>
+        <button class="level-card tc" onclick="selectLevel('tc')">
+          <div class="level-card-icon">📊</div>
+          <div class="level-card-title">Maths Tronc Commun</div>
+          <div class="level-card-sub">Enseignement commun<br />1h30 / semaine</div>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <div id="app">
     <header role="banner">
@@ -1586,33 +2102,7 @@
     </div>
 
     <!-- Menu chapitres -->
-    <div class="chapter-grid">
-      <button class="ch-btn" onclick="selectChapter(1)">
-        <span class="ch-icon">📐</span>
-        <div class="ch-num">Chapitre 1</div>
-        <div class="ch-name">Second Degré</div>
-      </button>
-      <button class="ch-btn" onclick="selectChapter(2)">
-        <span class="ch-icon">📈</span>
-        <div class="ch-num">Chapitre 2</div>
-        <div class="ch-name">Dérivation</div>
-      </button>
-      <button class="ch-btn" onclick="selectChapter(3)">
-        <span class="ch-icon">🔢</span>
-        <div class="ch-num">Chapitre 3</div>
-        <div class="ch-name">Suites Numériques</div>
-      </button>
-      <button class="ch-btn" onclick="selectChapter(4)">
-        <span class="ch-icon">🎲</span>
-        <div class="ch-num">Chapitre 4</div>
-        <div class="ch-name">Probabilités</div>
-      </button>
-      <button class="ch-btn auto-ch" onclick="selectChapter(5)">
-        <span class="ch-icon">⚡</span>
-        <div class="ch-num">Automatismes</div>
-        <div class="ch-name">Flash Questions</div>
-      </button>
-    </div>
+    <div class="chapter-grid" id="chapter-grid"></div>
 
     <!-- Zone cours -->
     <div id="course-zone">
@@ -1686,6 +2176,90 @@
     // =============================================
 
     let chapitresVus = new Set(); // chapitres consultés cette session
+
+    // ── FILIÈRE / NIVEAU ────────────────────────────────────────────
+    let currentNiveau = ''; // 'spe' | 'tc'
+
+    const SPE_CHAPTERS = [
+      { n:1, icon:'📐', name:'Second Degré'      },
+      { n:2, icon:'📈', name:'Dérivation'         },
+      { n:3, icon:'🔢', name:'Suites Numériques' },
+      { n:4, icon:'🎲', name:'Probabilités'       },
+      { n:5, icon:'⚡', name:'Automatismes'       }
+    ];
+
+    const TC_CHAPTERS = [
+      { n:1, icon:'🎲', name:'Probabilités'             },
+      { n:2, icon:'📈', name:'Fonctions & Dérivation'   },
+      { n:3, icon:'🔢', name:'Suites Numériques'        },
+      { n:4, icon:'📐', name:'Trigonométrie'             },
+      { n:5, icon:'⚡', name:'Automatismes'              }
+    ];
+
+    // Affiche l'overlay de sélection de filière
+    function showLevelSelector() {
+      const ol = document.getElementById('level-overlay');
+      if (ol) { ol.style.display = 'flex'; }
+      const dd = document.getElementById('user-dropdown');
+      if (dd) dd.classList.remove('open');
+    }
+
+    // Appelé par le clic sur une carte filière
+    async function selectLevel(niv) {
+      const ol = document.getElementById('level-overlay');
+      if (ol) ol.style.display = 'none';
+      currentNiveau = niv;
+      sessionStorage.setItem('mathsPremiere_niveau', niv);
+      applyNiveau(niv);
+      // Sauvegarde silencieuse dans le Sheet
+      const userName = sessionStorage.getItem('mathsPremiere_user');
+      if (userName) {
+        sendToSheets({ type: 'set_level', name: userName, niveau: niv });
+        sessionStorage.removeItem(PWD_CACHE_KEY);
+      }
+    }
+
+    // Met à jour toute l'UI en fonction du niveau
+    function applyNiveau(niv) {
+      currentNiveau = niv;
+      // Badge header
+      const badge = document.querySelector('.header-badge');
+      if (badge) badge.textContent = niv === 'tc'
+        ? 'Première – Maths Tronc Commun'
+        : 'Première Spécialité Mathématiques';
+      // Bac button label
+      const bacBtn = document.querySelector('.bac-menu button');
+      if (bacBtn) bacBtn.textContent = niv === 'tc'
+        ? '🎓 Sujet de Bac Blanc – Tronc Commun'
+        : '🎓 Sujet de Bac Blanc Génératif';
+      // Grille chapitres
+      renderChapterGrid(niv);
+      // Badge dans le dropdown
+      const badge2 = document.getElementById('dd-niveau-badge');
+      if (badge2) badge2.innerHTML = niv === 'tc'
+        ? '<span class="niveau-badge tc">📊 Tronc Commun</span>'
+        : '<span class="niveau-badge spe">📐 Spécialité</span>';
+      // Réinitialiser le chapitre courant si filière change
+      currentChapter = null;
+      document.getElementById('exercise-zone').style.display = 'none';
+      closeBacZone();
+    }
+
+    // Génère dynamiquement la grille de chapitres
+    function renderChapterGrid(niv) {
+      const grid = document.getElementById('chapter-grid');
+      if (!grid) return;
+      const chapters = niv === 'tc' ? TC_CHAPTERS : SPE_CHAPTERS;
+      grid.innerHTML = chapters.map(ch => `
+        <button class="ch-btn" onclick="selectChapter(${ch.n})">
+          <span class="ch-icon">${ch.icon}</span>
+          <div class="ch-num">Chapitre ${ch.n}</div>
+          <div class="ch-name">${ch.name}</div>
+        </button>
+      `).join('');
+      // Remettre à jour les badges visités
+      updateDropdown();
+    }
 
     // Retourne la clé localStorage de l'utilisateur connecté
     function userKey() {
@@ -1778,12 +2352,10 @@
       statsTotal = 0; statsCorr = 0; statsCorrect = 0;
       statsStreak = 0; statsBestStreak = 0;
       chapitresVus = new Set();
+      currentNiveau = '';
+      sessionStorage.removeItem('mathsPremiere_niveau');
+      currentChapter = null;
       document.getElementById('s-total').textContent = 0;
-      document.getElementById('s-corr').textContent = 0;
-      document.getElementById('s-ok').textContent = 0;
-      const streakEl = document.getElementById('s-streak');
-      if (streakEl) streakEl.textContent = 0;
-      // Cache le menu et réaffiche l'overlay de connexion
       const wrap = document.getElementById('user-menu-wrap');
       if (wrap) wrap.style.display = 'none';
       const dropdown = document.getElementById('user-dropdown');
@@ -1815,6 +2387,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       const user = sessionStorage.getItem('mathsPremiere_user');
       if (user) updateUserMenu(user);
+      const niv = sessionStorage.getItem('mathsPremiere_niveau');
+      if (niv) applyNiveau(niv);
     });
 
     /* =============================================
@@ -2011,12 +2585,14 @@
         saveStats();
       }
       document.querySelectorAll('.ch-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === n));
-      const names = ['', 'Second Degré', 'Dérivation', 'Suites Numériques', 'Probabilités', 'Automatismes'];
+
       const titleEl = document.getElementById('zone-title');
       if (n === 5) {
         titleEl.innerHTML = `⚡ <em>Automatismes</em>`;
       } else {
-        titleEl.innerHTML = `Chapitre <em>${n} — ${names[n]}</em>`;
+        const chapters = currentNiveau === 'tc' ? TC_CHAPTERS : SPE_CHAPTERS;
+        const ch = chapters.find(c => c.n === n);
+        titleEl.innerHTML = ch ? `Chapitre <em>${n} — ${ch.name}</em>` : `Chapitre <em>${n}</em>`;
       }
       const courseTitleEl = document.getElementById('course-title');
       if (courseTitleEl) {
@@ -2446,6 +3022,7 @@
     }
 
     function renderCourse(chapter) {
+      if (currentNiveau === 'tc') { renderCourseTC(chapter); return; }
       const contentEl = document.getElementById('course-content');
       if (!contentEl) return;
 
@@ -3323,7 +3900,14 @@
       if (!currentChapter) return;
       checkAttempts = 0;
       document.getElementById('correction-content').innerHTML = '';
-      const generators = [null, genSecondDegree, genDerivation, genSuites, genProba, genAutomatismes];
+
+      let generators;
+      if (currentNiveau === 'tc') {
+        generators = [null, genTC_Proba, genTC_Derivation, genTC_Suites, genTC_Trigo, genAutomatismes];
+      } else {
+        generators = [null, genSecondDegree, genDerivation, genSuites, genProba, genAutomatismes];
+      }
+
       currentExercise = generators[currentChapter]();
       renderExercise(currentExercise);
       statsTotal++;
@@ -3473,6 +4057,7 @@
     }
 
     function generateBacSujet() {
+      if (currentNiveau === 'tc') { generateBacSujetTC(); return; }
       const bacContentEl = document.getElementById('bac-content');
       const bacCorrBtn = document.getElementById('bac-show-corr-btn');
       const bacCorrEl = document.getElementById('bac-correction-content');
@@ -6235,8 +6820,617 @@
       return mk('Erreur critique', 'Catégorie non traitée ou introuvable.', ['-'], '0', '0');
     }
 
+/* =====================================================================
+   TRONC COMMUN — Générateurs d'exercices
+   Ch.1 Probabilités · Ch.2 Fonctions & Dérivation · Ch.3 Suites · Ch.4 Trigonométrie
+   ===================================================================== */
+
+function pct(v, dec = 0) { return (v * 100).toFixed(dec) + '\\%'; }
+
+// ══════════════════════════════════════════════════════════════════
+// CH.1 TC — PROBABILITÉS
+// ══════════════════════════════════════════════════════════════════
+function genTC_Proba() {
+  const type = pickD(
+    ['tableau'],
+    ['arbre', 'tableau'],
+    ['independance', 'var_alea', 'arbre']
+  );
+  if (type === 'arbre')         return genTC_ProbaArbre();
+  if (type === 'independance')  return genTC_ProbaIndep();
+  if (type === 'var_alea')      return genTC_ProbaVarAlea();
+  return genTC_ProbaTableau();
+}
+
+function genTC_ProbaTableau() {
+  const ctx = pick([
+    { pop: 'lycéens', A: 'Fille', notA: 'Garçon', B: 'pratique un sport', notB: 'ne pratique pas de sport' },
+    { pop: 'clients', A: 'Abonné premium', notA: 'Abonné standard', B: 'satisfait', notB: 'insatisfait' },
+    { pop: 'élèves', A: 'prend le bus', notA: 'ne prend pas le bus', B: 'en retard au moins une fois', notB: 'jamais en retard' }
+  ]);
+  const nAB  = rand(15, 50), nAnB = rand(10, 45), nnAB = rand(10, 40), nnAnB = rand(10, 40);
+  const nA = nAB + nAnB, nnA = nnAB + nnAnB, nB = nAB + nnAB, nnB = nAnB + nnAnB, n = nA + nnA;
+  const pAB_ok = nAB * nnA === nA * nnAB ? "sont indépendants" : "ne sont pas indépendants";
+  const table = (r1c1, r1c2, r1c3, r2c1, r2c2, r2c3, r3c1, r3c2, r3c3) =>
+    `<table style="margin:14px auto;border-collapse:collapse;font-size:13px;">
+      <tr><th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)"></th>
+          <th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">${ctx.B}</th>
+          <th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">${ctx.notB}</th>
+          <th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">Total</th></tr>
+      <tr><td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);font-weight:600">${ctx.A}</td>
+          <td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">${r1c1}</td>
+          <td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">${r1c2}</td>
+          <td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">${r1c3}</td></tr>
+      <tr><td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);font-weight:600">${ctx.notA}</td>
+          <td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">${r2c1}</td>
+          <td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">${r2c2}</td>
+          <td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">${r2c3}</td></tr>
+      <tr><td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);font-weight:600">Total</td>
+          <td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">${r3c1}</td>
+          <td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">${r3c2}</td>
+          <td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center;font-weight:600">${r3c3}</td></tr>
+    </table>`;
+  const showFull = currentDifficulty === 'facile';
+  const tbl = showFull
+    ? table(nAB, nAnB, nA, nnAB, nnAnB, nnA, nB, nnB, n)
+    : table(nAB, '?', nA, '?', nnAnB, '?', nB, '?', n);
+  return {
+    title: "Probabilités – Tableau à double entrée",
+    enonce: `On interroge un groupe de ${n} ${ctx.pop}. Le tableau ci-dessous résume les résultats.
+      On note $A$ l'événement « ${ctx.A.toLowerCase()} » et $B$ l'événement « ${ctx.B} ».${tbl}`,
+    questions: showFull ? [
+      `Calculer $P(A)$.`,
+      `Calculer $P(A \\cap B)$.`,
+      `Calculer $P_B(A)$, la probabilité d'être ${ctx.A.toLowerCase()} sachant ${ctx.B}.`,
+      `$A$ et $B$ sont-ils indépendants ? Justifier.`
+    ] : [
+      `Compléter le tableau (les cases « ? »).`,
+      `Calculer $P(A \\cap B)$ puis $P_B(A)$.`,
+      `Montrer que $A$ et $B$ ${pAB_ok}.`
+    ],
+    correction: `<div class="step"><div class="step-label">Tableau complété</div>
+      <div class="step-content">${table(nAB, nAnB, nA, nnAB, nnAnB, nnA, nB, nnB, n)}</div></div>
+      <div class="step"><div class="step-label">$P(A)$ et $P(A\\cap B)$</div>
+      <div class="step-content">$$P(A)=\\frac{${nA}}{${n}},\\quad P(A\\cap B)=\\frac{${nAB}}{${n}}$$</div></div>
+      <div class="step"><div class="step-label">Probabilité conditionnelle</div>
+      <div class="step-content">$$P_B(A)=\\frac{${nAB}}{${nB}}\\approx ${(nAB/nB).toFixed(3)}$$</div></div>
+      <div class="step"><div class="step-label">Indépendance</div>
+      <div class="step-content">Donc $A$ et $B$ <strong>${pAB_ok}</strong>.</div></div>`
+  };
+}
+
+function genTC_ProbaArbre() {
+  const ctx = pick([
+    { nom: 'Un lycée propose deux options : $A$ (art) et $\\overline{A}$ (sport).', pA: 0.4, pBsA: 0.7, pBsnA: 0.3 },
+    { nom: 'Une urne contient des billes bleues ($A$) et rouges ($\\overline{A}$).', pA: 0.6, pBsA: 0.8, pBsnA: 0.25 },
+    { nom: 'Dans une entreprise, 35 % des salariés sont des femmes ($A$).', pA: 0.35, pBsA: 0.6, pBsnA: 0.45 }
+  ]);
+  const pA = ctx.pA, pnA = +(1-pA).toFixed(2);
+  const pBsA = ctx.pBsA, pBsnA = ctx.pBsnA, pnBsnA = +(1-pBsnA).toFixed(2);
+  const pAB  = +(pA * pBsA).toFixed(4);
+  const pnAB = +(pnA * pBsnA).toFixed(4);
+  const pB   = +(pAB + pnAB).toFixed(4);
+  const pAsB = +(pAB / pB).toFixed(4);
+  return {
+    title: "Probabilités – Arbre de probabilité",
+    enonce: `${ctx.nom}<br/>On sait que : $P(A)=${pA}$, $P_A(B)=${pBsA}$, $P_{\\overline{A}}(B)=${pBsnA}$.`,
+    questions: [
+      `Reproduire et compléter l'arbre de probabilité.`,
+      `Calculer $P(A \\cap B)$ et $P(\\overline{A} \\cap B)$.`,
+      `En déduire $P(B)$ à l'aide de la formule des probabilités totales.`,
+      `Calculer $P_B(A)$.`
+    ],
+    correction: `<div class="step"><div class="step-label">Intersections</div>
+      <div class="step-content">$$P(A\\cap B)=${pA}\\times ${pBsA}=${pAB},\\quad P(\\overline{A}\\cap B)=${pnA}\\times ${pBsnA}=${pnAB}$$</div></div>
+      <div class="step"><div class="step-label">Probabilités totales</div>
+      <div class="step-content">$$P(B)=${pAB}+${pnAB}=${pB}$$</div></div>
+      <div class="step"><div class="step-label">$P_B(A)$</div>
+      <div class="step-content">$$P_B(A)=\\frac{${pAB}}{${pB}}\\approx ${pAsB}$$</div></div>`
+  };
+}
+
+function genTC_ProbaIndep() {
+  const pA = pick([0.3, 0.4, 0.5, 0.6, 0.7]);
+  const pB = pick([0.25, 0.3, 0.4, 0.5, 0.6]);
+  const indep = pick([true, false]);
+  const pAB = indep ? +(pA*pB).toFixed(4) : +(pA*pB + pick([-0.05, 0.05, 0.1, -0.1])).toFixed(4);
+  const verdict = (Math.abs(pAB - pA*pB) < 0.001) ? "indépendants" : "non indépendants";
+  return {
+    title: "Probabilités – Indépendance",
+    enonce: `Deux événements $A$ et $B$ vérifient : $P(A)=${pA}$, $P(B)=${pB}$, $P(A\\cap B)=${pAB}$.`,
+    questions: [
+      `Rappeler la définition de l'indépendance de deux événements.`,
+      `$A$ et $B$ sont-ils indépendants ? Justifier.`,
+      `Si $A$ et $B$ sont indépendants, que vaut $P_B(A)$ ?`
+    ],
+    correction: `<div class="step"><div class="step-label">Calcul</div>
+      <div class="step-content">$P(A)\\times P(B)=${+(pA*pB).toFixed(4)}$ et $P(A\\cap B)=${pAB}$.<br/>
+      Donc $A$ et $B$ sont <strong>${verdict}</strong>.</div></div>
+      <div class="step"><div class="step-label">Cas indépendant</div>
+      <div class="step-content">Si indépendants : $P_B(A)=P(A)=${pA}$.</div></div>`
+  };
+}
+
+function genTC_ProbaVarAlea() {
+  const vals = [rand(0,2), rand(3,5), rand(6,9)];
+  const p1 = pick([0.2, 0.25, 0.3, 0.4]);
+  const p2 = pick([0.3, 0.35, 0.4]);
+  const p3 = +(1-p1-p2).toFixed(2);
+  const E  = +(vals[0]*p1 + vals[1]*p2 + vals[2]*p3).toFixed(3);
+  const E2 = +(vals[0]**2*p1 + vals[1]**2*p2 + vals[2]**2*p3).toFixed(3);
+  const V  = +(E2 - E**2).toFixed(3);
+  return {
+    title: "Variable aléatoire discrète",
+    enonce: `$X$ prend les valeurs $${vals[0]}$, $${vals[1]}$, $${vals[2]}$ avec $P(X=${vals[0]})=${p1}$ et $P(X=${vals[1]})=${p2}$.`,
+    questions: [
+      `Calculer $P(X=${vals[2]})$.`,
+      `Dresser le tableau de la loi de $X$.`,
+      `Calculer $E(X)$.`,
+      currentDifficulty === 'difficile' ? `Calculer $V(X)$ et $\\sigma(X)$.` : `Interpréter $E(X)$.`
+    ],
+    correction: `<div class="step"><div class="step-label">$P(X=${vals[2]})$</div>
+      <div class="step-content">$1-${p1}-${p2}=${p3}$</div></div>
+      <div class="step"><div class="step-label">Espérance</div>
+      <div class="step-content">$$E(X)=${vals[0]}\\times${p1}+${vals[1]}\\times${p2}+${vals[2]}\\times${p3}=${E}$$</div></div>
+      ${currentDifficulty==='difficile'?`<div class="step"><div class="step-label">Variance</div>
+      <div class="step-content">$V(X)=${E2}-${E}^2=${V}$, $\\sigma(X)\\approx${Math.sqrt(V).toFixed(3)}$</div></div>`:''}`
+  };
+}
+
+// ══════════════════════════════════════════════════════════════════
+// CH.2 TC — FONCTIONS & DÉRIVATION
+// ══════════════════════════════════════════════════════════════════
+function genTC_Derivation() {
+  const type = pickD(
+    ['derivee_simple'],
+    ['tableau_variation', 'derivee_simple'],
+    ['etude_complete', 'tableau_variation']
+  );
+  if (type === 'tableau_variation') return genTC_DerivTableauVariation();
+  if (type === 'etude_complete')    return genTC_DerivEtudeComplete();
+  return genTC_DerivSimple();
+}
+
+function genTC_DerivSimple() {
+  const a = pick([-3,-2,-1,1,2,3]), b = pick([-4,-3,-2,-1,1,2,3,4]), c = rand(-5,5);
+  const da = 2*a, db = b;
+  return {
+    title: "Calcul d'une dérivée",
+    enonce: `Soit $f(x)=${a}x^2${b>=0?'+':''}${b}x${c>=0?'+':''}${c}$.`,
+    questions: [
+      `Rappeler les formules de dérivation usuelles.`,
+      `Calculer $f'(x)$.`,
+      `Calculer $f'(0)$ et interpréter géométriquement.`
+    ],
+    correction: `<div class="step"><div class="step-label">$f'(x)$</div>
+      <div class="step-content">$$f'(x)=${da}x${db>=0?'+':''}${db}$$</div></div>
+      <div class="step"><div class="step-label">$f'(0)$</div>
+      <div class="step-content">$f'(0)=${b}$ : pente de la tangente en $x=0$.</div></div>`
+  };
+}
+
+function genTC_DerivTableauVariation() {
+  const a = pick([-2,-1,1,2]), b = pick([-4,-3,-2,-1,1,2,3,4]), c = rand(-6,6);
+  const x0 = -b/(2*a);
+  const fx0 = +(a*x0*x0 + b*x0 + c).toFixed(2);
+  const varMin = a > 0;
+  return {
+    title: "Tableau de variations",
+    enonce: `Soit $f(x)=${a}x^2${b>=0?'+':''}${b}x${c>=0?'+':''}${c}$.`,
+    questions: [
+      `Calculer $f'(x)$.`,
+      `Étudier le signe de $f'(x)$ et dresser le tableau de variations.`,
+      `En déduire le ${varMin?'minimum':'maximum'} de $f$.`
+    ],
+    correction: `<div class="step"><div class="step-label">Dérivée</div>
+      <div class="step-content">$f'(x)=${2*a}x${b>=0?'+':''}${b}$, s'annule en $x=${x0}$.</div></div>
+      <div class="step"><div class="step-label">Extremum</div>
+      <div class="step-content">$f$ admet un ${varMin?'minimum':'maximum'} en $x=${x0}$ : $f(${x0})=${fx0}$.</div></div>`
+  };
+}
+
+function genTC_DerivEtudeComplete() {
+  const a = pick([-1,1]), b = pick([-3,-2,-1,1,2,3]), c = rand(-4,4), d = rand(-6,6);
+  const da=3*a, db=2*b, dc=c;
+  const discr = db*db - 4*da*dc;
+  let x1=null, x2=null;
+  if (discr>0) {
+    x1 = +((-db-Math.sqrt(discr))/(2*da)).toFixed(2);
+    x2 = +((-db+Math.sqrt(discr))/(2*da)).toFixed(2);
+    if (x1>x2) [x1,x2]=[x2,x1];
+  }
+  const fx = x => +(a*x**3+b*x**2+c*x+d).toFixed(2);
+  return {
+    title: "Étude d'une fonction cubique",
+    enonce: `Soit $f(x)=${a<0?'-':''}x^3${b>=0?'+':''}${b}x^2${c>=0?'+':''}${c}x${d>=0?'+':''}${d}$.`,
+    questions: [
+      `Calculer $f'(x)$.`,
+      `Étudier le signe de $f'(x)$ (discriminant).`,
+      `Dresser le tableau de variations et déterminer les extrema.`
+    ],
+    correction: `<div class="step"><div class="step-label">$f'(x)$</div>
+      <div class="step-content">$$f'(x)=${da}x^2${db>=0?'+':''}${db}x${dc>=0?'+':''}${dc}$$</div></div>
+      <div class="step"><div class="step-label">Discriminant $\\Delta=${discr}$</div>
+      <div class="step-content">${discr>0?`Deux racines $x_1\\approx${x1}$ et $x_2\\approx${x2}$. Extrema : $f(${x1})\\approx${fx(x1)}$ et $f(${x2})\\approx${fx(x2)}$.`:discr===0?`Racine double, pas d'extremum strict.`:`$\\Delta<0$ : $f$ strictement ${da>0?'croissante':'décroissante'} sur $\\mathbb{R}$.`}</div></div>`
+  };
+}
+
+// ══════════════════════════════════════════════════════════════════
+// CH.3 TC — SUITES NUMÉRIQUES
+// ══════════════════════════════════════════════════════════════════
+function genTC_Suites() {
+  const type = pickD(
+    ['identifier'],
+    ['formule', 'identifier'],
+    ['contexte', 'formule']
+  );
+  if (type==='formule')  return genTC_SuitesFormule();
+  if (type==='contexte') return genTC_SuitesContexte();
+  return genTC_SuitesIdentifier();
+}
+
+function genTC_SuitesIdentifier() {
+  const isArith = pick([true,false]);
+  const u0 = rand(-5,20);
+  const r = isArith ? rand(-5,8) : pick([2,3,0.5,-2]);
+  const terms = isArith
+    ? [u0,u0+r,u0+2*r,u0+3*r]
+    : [u0,+(u0*r).toFixed(2),+(u0*r*r).toFixed(2),+(u0*r**3).toFixed(2)];
+  return {
+    title: "Identifier la nature d'une suite",
+    enonce: `Suite $(u_n)$ : $${terms.map((t,i)=>`u_${i}=${t}`).join(',\\;')}\\ldots$`,
+    questions: [
+      `La suite est-elle arithmétique ou géométrique ? Justifier.`,
+      `Donner la raison et la formule explicite.`,
+      `Calculer $u_{10}$.`
+    ],
+    correction: `<div class="step"><div class="step-label">Nature</div>
+      <div class="step-content">${isArith?`Différences constantes = $${r}$ → <strong>arithmétique</strong>, $r=${r}$.`:`Rapports constants = $${r}$ → <strong>géométrique</strong>, $q=${r}$.`}</div></div>
+      <div class="step"><div class="step-label">Formule et $u_{10}$</div>
+      <div class="step-content">$u_n=${isArith?`${u0}+${r}n`:`${u0}\\times(${r})^n`}$, donc $u_{10}=${isArith?u0+10*r:+(u0*r**10).toFixed(3)}$.</div></div>`
+  };
+}
+
+function genTC_SuitesFormule() {
+  const isArith = pick([true,false]);
+  const u0=rand(1,15), r=isArith?rand(1,6):pick([2,3]);
+  const n=rand(5,12);
+  const un = isArith ? u0+r*n : u0*r**n;
+  const S = isArith ? (n+1)*(u0+(u0+r*n))/2 : u0*(r**(n+1)-1)/(r-1);
+  return {
+    title: "Suite – termes et somme",
+    enonce: `Suite ${isArith?'arithmétique':'géométrique'}, $u_0=${u0}$, raison $${isArith?'r':'q'}=${r}$.`,
+    questions: [
+      `Formule explicite de $u_n$.`,
+      `Calculer $u_{${n}}$.`,
+      `Calculer $S=u_0+\\cdots+u_{${n}}$.`
+    ],
+    correction: `<div class="step"><div class="step-label">Résultats</div>
+      <div class="step-content">$u_n=${isArith?`${u0}+${r}n`:`${u0}\\times${r}^n`}$<br/>
+      $u_{${n}}=${+un.toFixed(3)}$<br/>
+      $S=${+S.toFixed(2)}$</div></div>`
+  };
+}
+
+function genTC_SuitesContexte() {
+  const ctx = pick([
+    { desc:'Un capital de {u0} € est placé à 5 % par an.', u0:rand(500,2000), r:1.05, type:'geo', unite:'€', question:'Au bout de combien d\'années le capital double-t-il ?' },
+    { desc:'Une entreprise augmente sa production de 200 unités par mois.', u0:rand(800,1500), r:200, type:'arith', unite:'unités', question:'Production après 2 ans ?' }
+  ]);
+  const u0=ctx.u0, isArith=ctx.type==='arith', r=ctx.r;
+  const desc=ctx.desc.replace('{u0}',u0);
+  const u12=isArith?u0+r*12:+(u0*r**12).toFixed(2);
+  return {
+    title: "Suites – Contexte",
+    enonce: `${desc} On note $u_n$ la valeur au rang $n$.`,
+    questions: [
+      `Nature de $(u_n)$, premier terme et raison.`,
+      `Formule explicite de $u_n$.`,
+      ctx.question
+    ],
+    correction: `<div class="step"><div class="step-label">Suite ${isArith?'arithmétique':'géométrique'}</div>
+      <div class="step-content">$u_n=${isArith?`${u0}+${r}n`:`${u0}\\times${r}^n`}$, $u_{12}=${u12}$ ${ctx.unite}.</div></div>`
+  };
+}
+
+// ══════════════════════════════════════════════════════════════════
+// CH.4 TC — TRIGONOMÉTRIE
+// ══════════════════════════════════════════════════════════════════
+function genTC_Trigo() {
+  const type = pickD(
+    ['valeurs_rem'],
+    ['equation','triangle'],
+    ['vecteurs','equation']
+  );
+  if (type==='equation')  return genTC_TrigoEquation();
+  if (type==='triangle')  return genTC_TrigoTriangle();
+  if (type==='vecteurs')  return genTC_TrigoVecteurs();
+  return genTC_TrigoValeursRem();
+}
+
+function genTC_TrigoValeursRem() {
+  const angles = [
+    { deg:30,  rad:'\\frac{\\pi}{6}', sin:'\\frac{1}{2}',   cos:'\\frac{\\sqrt{3}}{2}', tan:'\\frac{\\sqrt{3}}{3}' },
+    { deg:45,  rad:'\\frac{\\pi}{4}', sin:'\\frac{\\sqrt{2}}{2}', cos:'\\frac{\\sqrt{2}}{2}', tan:'1' },
+    { deg:60,  rad:'\\frac{\\pi}{3}', sin:'\\frac{\\sqrt{3}}{2}', cos:'\\frac{1}{2}', tan:'\\sqrt{3}' },
+    { deg:120, rad:'\\frac{2\\pi}{3}', sin:'\\frac{\\sqrt{3}}{2}', cos:'-\\frac{1}{2}', tan:'-\\sqrt{3}' },
+    { deg:150, rad:'\\frac{5\\pi}{6}', sin:'\\frac{1}{2}', cos:'-\\frac{\\sqrt{3}}{2}', tan:'-\\frac{\\sqrt{3}}{3}' }
+  ];
+  const sel = pick(angles);
+  return {
+    title: "Valeurs remarquables",
+    enonce: `Angle $\\theta=${sel.rad}$ rad ($${sel.deg}°$).`,
+    questions: [
+      `Valeur exacte de $\\sin(\\theta)$.`,
+      `Valeur exacte de $\\cos(\\theta)$.`,
+      `En déduire $\\tan(\\theta)$.`
+    ],
+    correction: `<div class="step"><div class="step-label">Valeurs</div>
+      <div class="step-content">$\\sin=${sel.sin}$, $\\cos=${sel.cos}$, $\\tan=${sel.tan}$</div></div>`
+  };
+}
+
+function genTC_TrigoEquation() {
+  const val = pick([
+    { v:'\\frac{1}{2}',  sc:['\\frac{\\pi}{3}','\\frac{5\\pi}{3}'], ss:['\\frac{\\pi}{6}','\\frac{5\\pi}{6}'] },
+    { v:'\\frac{\\sqrt{2}}{2}', sc:['\\frac{\\pi}{4}','\\frac{7\\pi}{4}'], ss:['\\frac{\\pi}{4}','\\frac{3\\pi}{4}'] },
+    { v:'\\frac{\\sqrt{3}}{2}', sc:['\\frac{\\pi}{6}','\\frac{11\\pi}{6}'], ss:['\\frac{\\pi}{3}','\\frac{2\\pi}{3}'] }
+  ]);
+  const fct = pick(['cos','sin']);
+  const sols = fct==='cos' ? val.sc : val.ss;
+  return {
+    title: "Équation trigonométrique",
+    enonce: `Résoudre sur $[0;2\\pi[$ : $\\${fct}(x)=${val.v}$`,
+    questions: [
+      `Rappeler les valeurs remarquables du $${fct==='cos'?'cosinus':'sinus'}$.`,
+      `Donner les solutions dans $[0;2\\pi[$.`,
+      `Écrire les solutions générales.`
+    ],
+    correction: `<div class="step"><div class="step-label">Solutions</div>
+      <div class="step-content">$x=${sols[0]}$ ou $x=${sols[1]}$ (modulo $2\\pi$)</div></div>`
+  };
+}
+
+function genTC_TrigoTriangle() {
+  const triangles = [[3,4,5],[5,12,13],[8,15,17],[6,8,10]];
+  const [a,b,c] = pick(triangles).map(x => x*pick([1,2]));
+  const angleA = +(Math.asin(a/c)*180/Math.PI).toFixed(1);
+  return {
+    title: "Trigonométrie – Triangle rectangle",
+    enonce: `Triangle $ABC$ rectangle en $B$, avec $BC=${a}$ et $AC=${c}$.`,
+    questions: [
+      `Calculer $AB$.`,
+      `Calculer $\\sin(\\hat{A})$, $\\cos(\\hat{A})$ et $\\tan(\\hat{A})$.`,
+      `Donner $\\hat{A}$ en degrés (arrondi au dixième).`
+    ],
+    correction: `<div class="step"><div class="step-label">Résultats</div>
+      <div class="step-content">$AB=${b}$, $\\sin(\\hat{A})=\\frac{${a}}{${c}}$, $\\cos(\\hat{A})=\\frac{${b}}{${c}}$, $\\tan(\\hat{A})=\\frac{${a}}{${b}}$<br/>
+      $\\hat{A}\\approx${angleA}°$</div></div>`
+  };
+}
+
+function genTC_TrigoVecteurs() {
+  const A=[rand(-3,3),rand(-3,3)], B=[rand(1,5),rand(1,5)], C=[rand(-5,0),rand(1,4)];
+  const AB=[B[0]-A[0],B[1]-A[1]], AC=[C[0]-A[0],C[1]-A[1]];
+  const normAB=+Math.sqrt(AB[0]**2+AB[1]**2).toFixed(3);
+  const normAC=+Math.sqrt(AC[0]**2+AC[1]**2).toFixed(3);
+  const dot=AB[0]*AC[0]+AB[1]*AC[1];
+  const collin=AB[0]*AC[1]-AB[1]*AC[0];
+  return {
+    title: "Vecteurs dans le plan",
+    enonce: `$A(${A[0]};${A[1]})$, $B(${B[0]};${B[1]})$, $C(${C[0]};${C[1]})$.`,
+    questions: [
+      `Coordonnées de $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$.`,
+      `Normes $||\\overrightarrow{AB}||$ et $||\\overrightarrow{AC}||$.`,
+      `$\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ sont-ils colinéaires ?`,
+      currentDifficulty==='difficile'?`Calculer $\\overrightarrow{AB}\\cdot\\overrightarrow{AC}$.`:''
+    ].filter(q=>q!==''),
+    correction: `<div class="step"><div class="step-label">Résultats</div>
+      <div class="step-content">$\\overrightarrow{AB}=(${AB[0]};${AB[1]})$, $\\overrightarrow{AC}=(${AC[0]};${AC[1]})$<br/>
+      $||\\overrightarrow{AB}||=${normAB}$, $||\\overrightarrow{AC}||=${normAC}$<br/>
+      Déterminant : ${collin} → ${collin===0?'<strong>colinéaires</strong>':'<strong>non colinéaires</strong>'}
+      ${currentDifficulty==='difficile'?`<br/>Produit scalaire : $${dot}$`:''}</div></div>`
+  };
+}
+
+// ══════════════════════════════════════════════════════════════════
+// BAC BLANC TRONC COMMUN
+// ══════════════════════════════════════════════════════════════════
+function generateBacSujetTC() {
+  const bacContentEl = document.getElementById('bac-content');
+  const bacCorrBtn   = document.getElementById('bac-show-corr-btn');
+  const bacCorrEl    = document.getElementById('bac-correction-content');
+  if (!bacContentEl || !bacCorrBtn || !bacCorrEl) return;
+
+  const TC_META = {
+    1:{icon:'🎲',name:'Probabilités'},
+    2:{icon:'📈',name:'Fonctions & Dérivation'},
+    3:{icon:'🔢',name:'Suites Numériques'},
+    4:{icon:'📐',name:'Trigonométrie'}
+  };
+  const generatorsR = {1:genTC_Proba, 2:genTC_Derivation, 3:genTC_Suites, 4:genTC_Trigo};
+  const generatorsC = {1:genBacTC_Proba, 2:genBacTC_Derivation, 3:genBacTC_Suites, 4:genBacTC_Trigo};
+
+  currentBacExercises = [];
+  bacCorrEl.innerHTML = '';
+  bacCorrBtn.style.display = 'inline-flex';
+
+  for (const ch of [1,2,3,4]) {
+    const exR = generatorsR[ch](); exR._bacChapter=ch; exR._bacType='Connaissances et Calculs';
+    currentBacExercises.push(exR);
+    const exC = generatorsC[ch](); exC._bacChapter=ch; exC._bacType='Mise en situation';
+    currentBacExercises.push(exC);
+  }
+
+  bacContentEl.innerHTML = currentBacExercises.map((ex,idx) => {
+    const ch=ex._bacChapter, meta=TC_META[ch]||{icon:'',name:`Ch.${ch}`};
+    const qHTML=(ex.questions||[]).map((q,i)=>`<li data-q="${String.fromCharCode(97+i)})">${q}</li>`).join('');
+    return `<div class="exercise-card bac-exercise-card">
+      <div class="bac-exercise-header">
+        <div class="bac-ex-num">Exercice ${idx+1}</div>
+        <div class="bac-ex-chapter">${meta.icon} Ch.${ch} — ${meta.name}<br/>
+          <small style="opacity:0.8;font-weight:normal">[${ex._bacType}]</small></div>
+      </div>
+      <h3>${ex.title}</h3>
+      <div class="enonce">${ex.enonce}</div>
+      <ul class="question-list">${qHTML}</ul>
+    </div>`;
+  }).join('');
+  setTimeout(()=>renderKatex(bacContentEl),50);
+}
+
+function genBacTC_Proba() {
+  const pM=pick([0.05,0.10,0.15,0.20]);
+  const pTM=pick([0.90,0.95,0.98]), pTnM=pick([0.05,0.08,0.10]);
+  const pnM=+(1-pM).toFixed(2);
+  const pAB=+(pM*pTM).toFixed(4), pnAB=+(pnM*pTnM).toFixed(4);
+  const pT=+(pAB+pnAB).toFixed(4), vpp=+(pAB/pT).toFixed(4);
+  return {
+    title: "Test de dépistage – Probabilités totales",
+    enonce: `Test de dépistage d'une maladie $M$ : ${pct(pM)} atteints, sensibilité ${pct(pTM)}, faux positifs ${pct(pTnM)}.`,
+    questions: [
+      `Construire un arbre de probabilité.`,
+      `Calculer $P(T)$ (formule des probabilités totales).`,
+      `Calculer $P_T(M)$ (valeur prédictive positive).`,
+      `Le test est-il fiable ? Interpréter.`
+    ],
+    correction: `<div class="step"><div class="step-label">Calculs</div>
+      <div class="step-content">$P(T)=${pT}$, $P_T(M)\\approx${vpp}=${pct(vpp,1)}$.</div></div>`
+  };
+}
+
+function genBacTC_Derivation() {
+  const a=pick([-2,-1,1,2]), b=pick([-4,-3,0,3,4]), c=rand(-5,5);
+  const x0=b===0?0:-b/(2*a);
+  const fx0=+(a*x0**2+b*x0+c).toFixed(2);
+  return {
+    title: "Optimisation d'une fonction du second degré",
+    enonce: `Bénéfice modélisé par $f(x)=${a}x^2${b>=0?'+':''}${b}x${c>=0?'+':''}${c}$ (milliers €, $x\\in[0;10]$).`,
+    questions: [
+      `Calculer $f'(x)$.`,
+      `Tableau de variations sur $[0;10]$.`,
+      `Quantité optimale et bénéfice correspondant.`
+    ],
+    correction: `<div class="step"><div class="step-label">Optimum</div>
+      <div class="step-content">$f'(x)=${2*a}x${b>=0?'+':''}${b}=0\\Rightarrow x=${x0}$. Bénéfice ${a<0?'max':'min'} : $f(${x0})=${fx0}$ milliers €.</div></div>`
+  };
+}
+
+function genBacTC_Suites() {
+  const u0=pick([1000,1500,2000]), q=pick([1.03,1.04,1.05]), n=pick([5,10,15]);
+  const un=+(u0*q**n).toFixed(2);
+  return {
+    title: "Placement financier – Suite géométrique",
+    enonce: `Capital $${u0}$ € placé à ${pct(q-1)} annuels composés. $u_n$ = capital après $n$ années.`,
+    questions: [
+      `Montrer que $(u_n)$ est géométrique. Préciser $u_0$ et $q$.`,
+      `Formule explicite de $u_n$.`,
+      `Capital après $${n}$ ans.`,
+      `Au bout de combien d'années le capital double-t-il ?`
+    ],
+    correction: `<div class="step"><div class="step-label">Résultat</div>
+      <div class="step-content">$u_n=${u0}\\times${q}^n$, $u_{${n}}\\approx${un}$ €.</div></div>`
+  };
+}
+
+function genBacTC_Trigo() {
+  const h=pick([8,10,12,15]), angle=pick([30,45,60]);
+  const d=+(h/Math.tan(angle*Math.PI/180)).toFixed(2);
+  const l=+Math.sqrt(h**2+d**2).toFixed(2);
+  return {
+    title: "Trigonométrie – Problème géométrique",
+    enonce: `Bâtiment de hauteur $${h}$ m observé sous un angle d'élévation de $${angle}°$.`,
+    questions: [
+      `Schéma annoté de la situation.`,
+      `Valeur exacte de $\\tan(${angle}°)$.`,
+      `Distance $d$ entre les deux bâtiments.`,
+      `Distance observateur–sommet.`
+    ],
+    correction: `<div class="step"><div class="step-label">Résultats</div>
+      <div class="step-content">$d=\\frac{${h}}{\\tan(${angle}°)}\\approx${d}$ m, distance observateur–sommet $\\approx${l}$ m.</div></div>`
+  };
+}
+
+// ══════════════════════════════════════════════════════════════════
+// COURS TRONC COMMUN
+// ══════════════════════════════════════════════════════════════════
+function renderCourseTC(chapter) {
+  const courseEl = document.getElementById('course-content');
+  if (!courseEl) return;
+  let html = '';
+
+  if (chapter === 1) {
+    html = `<div class="course-grid">
+    <div class="course-block"><h3>Probabilité conditionnelle</h3>
+      $$P_A(B)=\\frac{P(A\\cap B)}{P(A)}$$
+      <p><strong>Indépendance :</strong> $P(A\\cap B)=P(A)\\times P(B)$</p></div>
+    <div class="course-block"><h3>Probabilités totales</h3>
+      $$P(B)=P(A)P_A(B)+P(\\overline{A})P_{\\overline{A}}(B)$$</div>
+    <div class="course-block"><h3>Variable aléatoire</h3>
+      <p>$E(X)=\\sum x_i P(X=x_i)$</p>
+      <p>$V(X)=E(X^2)-[E(X)]^2$, $\\sigma=\\sqrt{V(X)}$</p></div>
+    </div>`;
+  } else if (chapter === 2) {
+    html = `<div class="course-grid">
+    <div class="course-block"><h3>Dérivées usuelles</h3>
+      <table style="width:100%;font-size:13px;border-collapse:collapse">
+        <tr><th style="padding:5px;border:1px solid rgba(255,255,255,0.1)">$f$</th><th style="padding:5px;border:1px solid rgba(255,255,255,0.1)">$f'$</th></tr>
+        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$a$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td></tr>
+        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$ax+b$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$a$</td></tr>
+        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$x^n$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$nx^{n-1}$</td></tr>
+        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\sin x$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\cos x$</td></tr>
+        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\cos x$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$-\\sin x$</td></tr>
+      </table></div>
+    <div class="course-block"><h3>Règles</h3>
+      <p>$(f+g)'=f'+g'$, $\\ (\\lambda f)'=\\lambda f'$</p>
+      <p>$(fg)'=f'g+fg'$</p></div>
+    <div class="course-block"><h3>Signe de $f'$ et variations</h3>
+      <ul><li>$f'>0$ sur $I$ → $f$ croissante</li>
+      <li>$f'<0$ sur $I$ → $f$ décroissante</li>
+      <li>$f'(a)=0$ + changement de signe → extremum</li></ul></div>
+    </div>`;
+  } else if (chapter === 3) {
+    html = `<div class="course-grid">
+    <div class="course-block"><h3>Suite arithmétique</h3>
+      <p>$u_{n+1}=u_n+r$</p>
+      <p>$u_n=u_0+nr$</p>
+      <p>$S=\\dfrac{(n+1)(u_0+u_n)}{2}$</p></div>
+    <div class="course-block"><h3>Suite géométrique</h3>
+      <p>$u_{n+1}=q\\cdot u_n$</p>
+      <p>$u_n=u_0\\times q^n$</p>
+      <p>$S=u_0\\cdot\\dfrac{q^{n+1}-1}{q-1}$ ($q\\neq1$)</p></div>
+    <div class="course-block"><h3>Reconnaître</h3>
+      <ul><li>$u_{n+1}-u_n=cst$ → arithmétique</li>
+      <li>$u_{n+1}/u_n=cst$ → géométrique</li></ul></div>
+    </div>`;
+  } else if (chapter === 4) {
+    html = `<div class="course-grid">
+    <div class="course-block"><h3>Valeurs remarquables</h3>
+      <table style="width:100%;font-size:12px;border-collapse:collapse">
+        <tr><th style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1)">$\\theta$</th>
+            <th style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1)">$\\sin$</th>
+            <th style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1)">$\\cos$</th>
+            <th style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1)">$\\tan$</th></tr>
+        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$1$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td></tr>
+        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\pi}{6}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{1}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{3}$</td></tr>
+        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\pi}{4}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{2}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{2}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$1$</td></tr>
+        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\pi}{3}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{1}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\sqrt{3}$</td></tr>
+        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\pi}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$1$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">—</td></tr>
+      </table></div>
+    <div class="course-block"><h3>Relation fondamentale</h3>
+      $$\\sin^2\\theta+\\cos^2\\theta=1$$
+      <p>Triangle rectangle en $B$ : $\\sin\\hat{A}=\\frac{\\text{opp}}{\\text{hyp}}$, $\\cos\\hat{A}=\\frac{\\text{adj}}{\\text{hyp}}$</p></div>
+    <div class="course-block"><h3>Vecteurs</h3>
+      <p>$\\overrightarrow{AB}=(x_B-x_A;\\,y_B-y_A)$</p>
+      <p>Norme : $\\sqrt{x^2+y^2}$</p>
+      <p>Colinéarité : $x_1y_2-x_2y_1=0$</p>
+      <p>Produit scalaire : $x_1x_2+y_1y_2$</p></div>
+    </div>`;
+  } else {
+    html = `<div class="course-grid"><div class="course-block">Choisis un chapitre.</div></div>`;
+  }
+  courseEl.innerHTML = html;
+  setTimeout(()=>renderKatex(courseEl), 50);
+}
 
   </script>
-</body>
-
-</html>

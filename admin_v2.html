@@ -840,7 +840,18 @@
                 <button class="btn btn-green" onclick="setLimit('${esc(name)}')">Appliquer</button>
               </div>
               <span class="slot-badge ${slotClass}">${count} / ${limit} appareils</span>
-              ${count > 0 ? `<button class="btn btn-red" onclick="deleteAll('${esc(name)}')">Tout supprimer</button>` : ''}
+              <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                <span style="font-size:12px;color:var(--text-dim)">Filière :</span>
+                <select id="niveau-${safeName(name)}" style="
+                  background:var(--bg-lt);border:1px solid var(--border);border-radius:6px;
+                  color:var(--text);padding:4px 10px;font-size:12px;cursor:pointer;"
+                  onchange="setNiveau('${esc(name)}', this.value)">
+                  <option value="" ${!(data.passwords[name]?.niveau) ? 'selected' : ''}>— Non défini —</option>
+                  <option value="spe" ${data.passwords[name]?.niveau === 'spe' ? 'selected' : ''}>📐 Spécialité</option>
+                  <option value="tc"  ${data.passwords[name]?.niveau === 'tc'  ? 'selected' : ''}>📊 Tronc Commun</option>
+                </select>
+              </div>
+              ${count > 0 ? `<button class="btn btn-red" style="margin-top:6px" onclick="deleteAll('${esc(name)}')">Tout supprimer</button>` : ''}
             </div>
           </div>`;
 
@@ -891,10 +902,18 @@
           ? `<span class="pwd-status no-pwd">🔓 Sans mot de passe</span>`
           : (hasHash ? `<span class="pwd-status has-pwd">🔒 Mot de passe défini</span>` : `<span class="pwd-status no-config">⚠️ Non configuré</span>`);
 
+        const niv = pwd?.niveau;
+        const nivHtml = niv === 'spe'
+          ? `<span style="font-size:11px;background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.25);padding:2px 8px;border-radius:12px;font-family:monospace">📐 Spécialité</span>`
+          : niv === 'tc'
+          ? `<span style="font-size:11px;background:rgba(129,140,248,0.12);color:#818cf8;border:1px solid rgba(129,140,248,0.25);padding:2px 8px;border-radius:12px;font-family:monospace">📊 Tronc Commun</span>`
+          : `<span style="font-size:11px;color:var(--text-dim);font-family:monospace">— filière non définie —</span>`;
+
         html += `
         <div class="pwd-card" id="pwd-card-${safeName(name)}">
           <div class="pwd-name">👤 ${esc(name)}</div>
           ${statusHtml}
+          ${nivHtml}
           <div class="pwd-controls">
             <input class="pwd-input" type="password" id="pwd-input-${safeName(name)}"
                    placeholder="Nouveau mot de passe…" ${noPassword ? 'disabled style="opacity:0.3"' : ''}>
@@ -1036,6 +1055,19 @@
 
     // ── Utilitaires ───────────────────────────────────────────────────────────
     function safeName(name) { return name.toLowerCase().replace(/[^a-z0-9]/g, '_'); }
+
+    async function setNiveau(name, niveau) {
+      try {
+        const res = await apiPost({ type: 'admin_set_level', name, niveau });
+        if (res.success) {
+          const sel = document.getElementById('niveau-' + safeName(name));
+          if (sel) { sel.style.borderColor = 'var(--green)'; setTimeout(() => sel.style.borderColor = 'var(--border)', 1500); }
+          toast('✅ Filière mise à jour');
+        } else {
+          alert('Erreur : ' + (res.error || 'inconnue'));
+        }
+      } catch (e) { toast('❌ ' + e.message, true); }
+    }
     function esc(str) {
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
