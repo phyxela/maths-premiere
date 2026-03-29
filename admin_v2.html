@@ -690,6 +690,126 @@
     ::-webkit-scrollbar-thumb:hover {
       background: rgba(59, 130, 246, 0.4);
     }
+
+    /* ── Mini-Dashboard Progression ── */
+    .adv-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 280px;
+    }
+
+    .adv-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-dim);
+      border-radius: var(--r-sm);
+      padding: 12px 14px;
+      transition: background 0.2s;
+    }
+
+    .adv-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .adv-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .badge-spe {
+      background: var(--blue-lt);
+      color: #080c18;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .badge-tc {
+      background: var(--orange);
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .adv-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    .adv-stats {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 12px;
+    }
+
+    .adv-stat-item {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .adv-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .adv-lbl {
+      font-size: 9px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .adv-chaps {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .ch-mini-badge {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      color: var(--blue-xlt);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .adv-progress-bg {
+      height: 5px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .adv-progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    .no-data {
+      color: var(--text-dim);
+      font-style: italic;
+      font-size: 12px;
+      padding: 8px 0;
+    }
   </style>
 </head>
 
@@ -973,7 +1093,7 @@
       document.getElementById('pwd-content').innerHTML = html;
     }
 
-    // ── Onglet Récapitulatif (NOUVEAU) ─────────────────────────────────────────
+    // ── Onglet Récapitulatif (Amélioré) ─────────────────────────────────────────
     function renderRecap(data) {
       const allNames = new Set([
         ...data.devices.map(d => d.name),
@@ -982,47 +1102,99 @@
       ]);
 
       const passwords = data.passwords || {};
-      const advancements = data.advancements || {}; // NOUVEAU : On récupère les avancements
+      const advancements = data.advancements || {};
       const tbody = document.getElementById('recap-content-body');
       tbody.innerHTML = '';
+
+      // Fonction utilitaire pour générer une belle carte de stats
+      const buildAdvCard = (advData, label, badgeClass) => {
+        if (!advData || parseInt(advData.total) === 0) return '';
+
+        const total = parseInt(advData.total) || 0;
+        const correct = parseInt(advData.correct) || 0;
+        const streak = parseInt(advData.bestStreak) || 0;
+        const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+        // Détermination de la couleur de santé
+        let color = 'var(--red)';
+        if (pct >= 70) color = 'var(--green)';
+        else if (pct >= 40) color = 'var(--orange)';
+
+        // Formatage de la date (ex: "14/05/2024" à partir de "14/05/2024 15:32:00")
+        const dateStr = advData.date ? advData.date.split(' ')[0] : '—';
+
+        // Formatage des chapitres en badges
+        const chaps = advData.chapitres ? advData.chapitres.split(',').map(c => c.trim()).filter(Boolean) : [];
+        const chapHtml = chaps.length > 0
+          ? chaps.map(c => `<span class="ch-mini-badge">${c.replace('Ch.', 'Ch ')}</span>`).join('')
+          : `<span style="color:var(--text-dim); font-size:10px; font-style:italic;">Aucun</span>`;
+
+        return `
+          <div class="adv-card">
+            <div class="adv-header">
+              <span class="badge ${badgeClass}" style="margin:0;">${label}</span>
+              <span class="adv-date" title="Dernière activité">🕒 ${dateStr}</span>
+            </div>
+            
+            <div class="adv-stats">
+              <div class="adv-stat-item">
+                <span class="adv-val" style="color:${color}">${pct}%</span>
+                <span class="adv-lbl">Réussite</span>
+              </div>
+              <div class="adv-stat-item">
+                <span class="adv-val">${correct} / ${total}</span>
+                <span class="adv-lbl">Exercices</span>
+              </div>
+              <div class="adv-stat-item">
+                <span class="adv-val" style="color:var(--orange)">🔥 ${streak}</span>
+                <span class="adv-lbl">Série Max</span>
+              </div>
+            </div>
+
+            <div class="adv-chaps">
+              <span class="adv-lbl" style="margin-right:2px;">Chapitres :</span>
+              ${chapHtml}
+            </div>
+
+            <div class="adv-progress-bg">
+              <div class="adv-progress-fill" style="width: ${pct}%; background-color: ${color};"></div>
+            </div>
+          </div>
+        `;
+      };
 
       for (const name of [...allNames].sort()) {
         const pwd = passwords[name];
         const hash = (pwd && pwd.hash) ? pwd.hash : '—';
         const noPassword = pwd && pwd.noPassword;
 
-        // --- NOUVEAU : Construction des statistiques ---
+        // Construction du contenu de la cellule Progression
         const adv = advancements[name];
-        let statsHtml = '';
+        let statsHtml = '<div class="adv-grid">';
+        let hasData = false;
 
         if (adv) {
-          if (adv.spe) {
-            statsHtml += `<div style="margin-bottom:8px; line-height: 1.4;">
-              <span class="badge" style="background:var(--blue-lt); padding:2px 6px; font-size:10px; margin-bottom:0">Spé</span> 
-              <span style="color:var(--green); font-weight:bold;">${adv.spe.correct}/${adv.spe.total}</span> (🔥 ${adv.spe.bestStreak})
-              <br/><small style="color:var(--text-dim); font-size:11px;">Ch: ${adv.spe.chapitres}</small>
-            </div>`;
-          }
-          if (adv.tc) {
-            statsHtml += `<div style="line-height: 1.4;">
-              <span class="badge" style="background:var(--orange); color:white; padding:2px 6px; font-size:10px; margin-bottom:0">TC</span> 
-              <span style="color:var(--green); font-weight:bold;">${adv.tc.correct}/${adv.tc.total}</span> (🔥 ${adv.tc.bestStreak})
-              <br/><small style="color:var(--text-dim); font-size:11px;">Ch: ${adv.tc.chapitres}</small>
-            </div>`;
+          const speHtml = buildAdvCard(adv.spe, 'Spécialité', 'badge-spe');
+          const tcHtml = buildAdvCard(adv.tc, 'Tronc Commun', 'badge-tc');
+
+          if (speHtml || tcHtml) {
+            statsHtml += speHtml + tcHtml;
+            hasData = true;
           }
         }
 
-        if (!statsHtml) {
-          statsHtml = `<span style="color:var(--text-dim); font-style:italic;">Aucune donnée</span>`;
+        if (!hasData) {
+          statsHtml += `<div class="no-data">Aucun exercice réalisé pour le moment.</div>`;
         }
-        // ------------------------------------------------
+        statsHtml += '</div>';
 
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td style="font-weight:600; color:var(--text)">${esc(name)}</td>
-          <td class="hash-cell">${noPassword ? '<span style="color:var(--orange)">[ACCÈS LIBRE]</span>' : esc(hash)}</td>
-          <td>${noPassword ? '🔓 Libre' : '🔒 Protégé'}</td>
-          <td>${statsHtml}</td> `;
+          <td style="font-weight:600; color:var(--text); vertical-align: top;">${esc(name)}</td>
+          <td class="hash-cell" style="vertical-align: top;">${noPassword ? '<span style="color:var(--orange)">[ACCÈS LIBRE]</span>' : esc(hash)}</td>
+          <td style="vertical-align: top;">${noPassword ? '🔓 Libre' : '🔒 Protégé'}</td>
+          <td>${statsHtml}</td>
+        `;
         tbody.appendChild(row);
       }
     }
