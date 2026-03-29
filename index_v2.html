@@ -1304,121 +1304,297 @@
       position: absolute;
       top: calc(100% + 8px);
       right: 0;
-      background: var(--bg-lt);
-      border: 1px solid var(--border);
-      border-radius: var(--r-md);
-      padding: 8px;
-      min-width: 210px;
-      box-shadow: var(--shadow);
+      background: linear-gradient(135deg, #0e1525 0%, #0a0f1d 100%);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      border-radius: 16px;
+      padding: 0;
+      min-width: 320px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
       animation: fadeIn 0.2s ease;
+    }
+    
+    /* Scrollbar personnalisée */
+    .user-dropdown::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .user-dropdown::-webkit-scrollbar-track {
+      background: rgba(59, 130, 246, 0.05);
+    }
+    
+    .user-dropdown::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.25);
+      border-radius: 4px;
+    }
+    
+    .user-dropdown::-webkit-scrollbar-thumb:hover {
+      background: rgba(59, 130, 246, 0.4);
     }
 
     .user-dropdown.open {
       display: block;
     }
 
+    /* ── Header avec avatar et infos ------ */
     .user-dropdown-header {
-      padding: 8px 12px 10px;
-      border-bottom: 1px solid var(--border-dim);
-      margin-bottom: 6px;
+      padding: 20px 16px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(96, 165, 250, 0.03) 100%);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+      border-radius: 16px 16px 0 0;
     }
 
-    .user-dropdown-name {
+    .user-profile-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .user-avatar-bubble {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(96, 165, 250, 0.1));
+      border: 2px solid rgba(59, 130, 246, 0.25);
+      border-radius: 50%;
+      font-size: 24px;
+    }
+
+    .user-profile-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-profile-name {
       font-family: 'Playfair Display', serif;
       color: #e8eeff;
-      font-size: 15px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .user-dropdown-sub {
+    .user-profile-level {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      width: fit-content;
+    }
+
+    /* ── Barre de progression ------ */
+    .progress-section {
+      padding: 16px;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .progress-label {
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .progress-percent {
+      color: var(--blue-lt);
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .progress-bar-container {
+      height: 6px;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      border-radius: 3px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(96, 165, 250, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    /* ── Grid de stats principales ------ */
+    .stats-grid-main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 12px;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+    }
+
+    .stat-card {
+      padding: 12px;
+      background: rgba(59, 130, 246, 0.05);
+      border: 1px solid rgba(59, 130, 246, 0.12);
+      border-radius: 10px;
+      text-align: center;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card:hover {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: rgba(59, 130, 246, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .stat-card-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: #60a5fa;
+      font-weight: 600;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-card-label {
       font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
       color: var(--text-dim);
-      letter-spacing: 1px;
-      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    .user-mini-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border-dim);
-      margin-bottom: 6px;
+    .stat-correct .stat-card-value {
+      color: var(--green);
     }
 
-    .user-mini-stat {
+    .stat-success-rate .stat-card-value {
+      color: #fbbf24;
+    }
+
+    .stat-streak .stat-card-value {
+      color: #ff7f50;
+    }
+
+    /* ── Section corrections ------ */
+    .corrections-section {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .corrections-stat {
+      background: rgba(59, 130, 246, 0.05);
+      border: 1px solid rgba(59, 130, 246, 0.12);
+      border-radius: 10px;
+      padding: 10px;
       text-align: center;
     }
 
-    .user-mini-val {
+    .corrections-value {
       font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      color: var(--blue-lt);
-      line-height: 1;
+      font-size: 18px;
+      color: #60a5fa;
+      font-weight: 600;
     }
 
-    .user-mini-lbl {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px;
+    .corrections-label {
+      font-size: 11px;
       color: var(--text-dim);
-      text-transform: uppercase;
       margin-top: 2px;
     }
 
-    .chapters-visited {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-      padding: 6px 12px 10px;
-      border-bottom: 1px solid var(--border-dim);
-      margin-bottom: 6px;
+    /* ── Section chapitres ------ */
+    .chapters-section {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.1);
     }
 
-    .ch-visited-badge {
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-family: 'JetBrains Mono', monospace;
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
     }
 
-    .ch-visited-badge.seen {
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid var(--border);
-      color: var(--blue-lt);
-    }
-
-    .ch-visited-badge.unseen {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border-dim);
+    .chapter-badge {
+      padding: 8px 6px;
+      background: rgba(59, 130, 246, 0.05);
+      border: 1px solid rgba(59, 130, 246, 0.12);
+      border-radius: 8px;
+      font-size: 11px;
+      text-align: center;
+      font-weight: 500;
+      transition: all 0.2s ease;
       color: var(--text-dim);
     }
 
-    .dropdown-item {
+    .chapter-badge.visited {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(34, 197, 94, 0.08));
+      border-color: rgba(59, 130, 246, 0.25);
+      color: var(--green);
+    }
+
+    /* ── Section actions ------ */
+    .actions-section {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .action-btn {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 9px 12px;
-      border-radius: var(--r-sm);
+      padding: 11px 12px;
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      background: rgba(59, 130, 246, 0.04);
+      border-radius: 8px;
+      color: var(--text);
       cursor: pointer;
       font-size: 13px;
-      color: var(--text);
-      transition: background 0.15s;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
+      transition: all 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .dropdown-item:hover {
-      background: rgba(59, 130, 246, 0.07);
+    .action-btn:hover {
+      background: rgba(59, 130, 246, 0.12);
+      border-color: rgba(59, 130, 246, 0.3);
     }
 
-    .dropdown-item.danger {
-      color: var(--red);
+    .action-icon {
+      font-size: 14px;
     }
 
-    .dropdown-item.danger:hover {
+    .action-text {
+      flex: 1;
+    }
+
+    .action-reset:hover {
       background: rgba(248, 113, 113, 0.08);
+      border-color: rgba(248, 113, 113, 0.2);
+    }
+
+    .action-logout:hover {
+      background: rgba(248, 113, 113, 0.1);
+      border-color: rgba(248, 113, 113, 0.25);
     }
 
     /* --------- Animation de chargement --------- */
@@ -1438,12 +1614,12 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
       font-family: 'JetBrains Mono', monospace;
       letter-spacing: 0.5px;
-      margin: 6px 16px 4px;
+      margin: 0;
     }
 
     .niveau-badge.spe {
@@ -1459,11 +1635,7 @@
     }
 
     /* ── Divider dans dropdown ── */
-    .dropdown-divider {
-      height: 1px;
-      background: var(--border-dim);
-      margin: 6px 0;
-    }
+
 
     /* ── Level overlay cards ── */
     .level-choice-grid {
@@ -1542,43 +1714,80 @@
       <span style="color:var(--text-dim)">···</span>
     </button>
     <div class="user-dropdown" id="user-dropdown">
+      <!-- Header avec avatar et nom -->
       <div class="user-dropdown-header">
-        <div class="user-dropdown-name" id="dd-name">—</div>
-        <div class="user-dropdown-sub">PROGRESSION SAUVEGARDÉE</div>
-      </div>
-      <!-- Mini stats -->
-      <div class="user-mini-stats">
-        <div class="user-mini-stat">
-          <div class="user-mini-val" id="dd-total">0</div>
-          <div class="user-mini-lbl">Exercices</div>
-        </div>
-        <div class="user-mini-stat">
-          <div class="user-mini-val" style="color:var(--green)" id="dd-ok">0</div>
-          <div class="user-mini-lbl">Bonne rép.</div>
-        </div>
-        <div class="user-mini-stat">
-          <div class="user-mini-val" id="dd-corr">0</div>
-          <div class="user-mini-lbl">Corrections</div>
-        </div>
-        <div class="user-mini-stat">
-          <div class="user-mini-val" style="color:#ff9800" id="dd-streak">0</div>
-          <div class="user-mini-lbl">🔥 Série max</div>
+        <div class="user-profile-header">
+          <div class="user-avatar-bubble" id="dd-avatar-bubble">👤</div>
+          <div class="user-profile-info">
+            <div class="user-profile-name" id="dd-name">—</div>
+            <div class="user-profile-level" id="dd-niveau-badge"></div>
+          </div>
         </div>
       </div>
+      
+      <!-- Barre de progression globale -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-label">Progression</span>
+          <span class="progress-percent" id="dd-progress-percent">0%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="dd-progress-bar"></div>
+        </div>
+      </div>
+      
+      <!-- Stats principales -->
+      <div class="stats-grid-main">
+        <div class="stat-card stat-exercises">
+          <div class="stat-card-value" id="dd-total">0</div>
+          <div class="stat-card-label">Exercices</div>
+        </div>
+        <div class="stat-card stat-correct">
+          <div class="stat-card-value" id="dd-ok">0</div>
+          <div class="stat-card-label">Réussis</div>
+        </div>
+        <div class="stat-card stat-success-rate">
+          <div class="stat-card-value" id="dd-success-rate">—</div>
+          <div class="stat-card-label">Taux</div>
+        </div>
+        <div class="stat-card stat-streak">
+          <div class="stat-card-value" id="dd-streak">0</div>
+          <div class="stat-card-label">🔥 Série</div>
+        </div>
+      </div>
+      
+      <!-- Corrections vues -->
+      <div class="corrections-section">
+        <div class="section-title">📚 Corrections consultées</div>
+        <div class="corrections-stat">
+          <div class="corrections-value" id="dd-corr">0</div>
+          <div class="corrections-label">sur <span id="dd-total-ref">0</span> exercices</div>
+        </div>
+      </div>
+      
       <!-- Chapitres visités -->
-      <div class="chapters-visited" id="dd-chapters">
-        <span class="ch-visited-badge unseen">Ch.1</span>
-        <span class="ch-visited-badge unseen">Ch.2</span>
-        <span class="ch-visited-badge unseen">Ch.3</span>
-        <span class="ch-visited-badge unseen">Ch.4</span>
-        <span class="ch-visited-badge unseen">Auto</span>
+      <div class="chapters-section">
+        <div class="section-title">📖 Chapitres abordés</div>
+        <div class="chapters-grid" id="dd-chapters-grid">
+          <!-- Générés dynamiquement -->
+        </div>
       </div>
+      
       <!-- Actions -->
-      <div id="dd-niveau-badge"></div>
-      <button class="dropdown-item" onclick="showLevelSelector()">🔄 Changer de filière</button>
-      <div class="dropdown-divider"></div>
-      <button class="dropdown-item" onclick="resetUserStats()">🗑️ Réinitialiser ma progression</button>
-      <button class="dropdown-item danger" onclick="logout()">🚪 Se déconnecter</button>
+      <div class="actions-section">
+        <button class="action-btn action-change" onclick="showLevelSelector()">
+          <span class="action-icon">🔄</span>
+          <span class="action-text">Changer de filière</span>
+        </button>
+        <button class="action-btn action-reset" onclick="resetUserStats()">
+          <span class="action-icon">🗑️</span>
+          <span class="action-text">Réinitialiser</span>
+        </button>
+        <button class="action-btn action-logout" onclick="logout()">
+          <span class="action-icon">🚪</span>
+          <span class="action-text">Déconnexion</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -2365,42 +2574,63 @@
       const name = sessionStorage.getItem('mathsPremiere_user') || '—';
       const el = (id) => document.getElementById(id);
       
-      // Mettre à jour les stats du dropdown
-      const ddName = el('dd-name');
-      if (ddName) ddName.textContent = name;
+      // Nom et infos
+      const profileName = el('dd-name');
+      if (profileName) profileName.textContent = name;
       
-      const ddTotal = el('dd-total');
-      if (ddTotal) ddTotal.textContent = statsTotal;
+      // Stats principales
+      const total = parseInt(el('dd-total')?.textContent || '0');
+      const correct = parseInt(el('dd-ok')?.textContent || '0');
       
-      const ddOk = el('dd-ok');
-      if (ddOk) ddOk.textContent = statsCorrect;
+      el('dd-total').textContent = statsTotal;
+      el('dd-ok').textContent = statsCorrect;
+      el('dd-streak').textContent = statsBestStreak;
       
-      const ddCorr = el('dd-corr');
-      if (ddCorr) ddCorr.textContent = statsCorr;
+      // Taux de réussite
+      const successRate = statsTotal > 0 ? Math.round((statsCorrect / statsTotal) * 100) : 0;
+      const rateEl = el('dd-success-rate');
+      if (rateEl) rateEl.textContent = successRate + '%';
       
-      const ddStreak = el('dd-streak');
-      if (ddStreak) ddStreak.textContent = statsBestStreak;
+      // Corrections
+      el('dd-corr').textContent = statsCorr;
+      el('dd-total-ref').textContent = statsTotal;
       
-      // Mettre à jour les badges de chapitres visités
+      // Barre de progression
+      const progressPercent = Math.min(100, Math.round((statsCorrect / Math.max(1, statsTotal)) * 100));
+      const progressBar = el('dd-progress-bar');
+      if (progressBar) progressBar.style.width = progressPercent + '%';
+      
+      const progressPercentEl = el('dd-progress-percent');
+      if (progressPercentEl) progressPercentEl.textContent = progressPercent + '%';
+      
+      // Chapitres visités - affichage amélioré
       const labels = ['Ch.1', 'Ch.2', 'Ch.3', 'Ch.4', 'Auto'];
       const keys = [1, 2, 3, 4, 5];
-      const container = el('dd-chapters');
+      const container = el('dd-chapters-grid');
       if (container) {
         container.innerHTML = labels.map((lbl, i) => {
           const seen = chapitresVus.has(keys[i]);
-          return `<span class="ch-visited-badge ${seen ? 'seen' : 'unseen'}">${seen ? '✓ ' : ''} ${lbl}</span>`;
+          return `<div class="chapter-badge ${seen ? 'visited' : ''}">${lbl}</div>`;
         }).join('');
       }
     }
 
-    // Met à jour le bouton flottant avec le nom
     function updateUserMenu(name) {
       const wrap = document.getElementById('user-menu-wrap');
       const label = document.getElementById('user-menu-name');
       const ddName = document.getElementById('dd-name');
+      const avatarBubble = document.getElementById('dd-avatar-bubble');
+      
       if (wrap) wrap.style.display = 'block';
       if (label) label.textContent = name;
       if (ddName) ddName.textContent = name;
+      
+      // Mettre à jour le bubble avec la première lettre du nom
+      if (avatarBubble) {
+        const firstLetter = name.charAt(0).toUpperCase();
+        avatarBubble.textContent = firstLetter;
+      }
+      
       loadStats();
     }
 
