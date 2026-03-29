@@ -1959,7 +1959,7 @@
         sendToSheets({
           type: 'avancement',
           name: name,
-          filiere: currentNiveau, // <--- NOUVEAU : Envoi de la filière
+          filiere: currentNiveau || 'spe', // NOUVEAU : On envoie la filière !
           total: statsTotal,
           correct: statsCorrect,
           corr: statsCorr,
@@ -2506,7 +2506,8 @@
       currentChapter = null;
       document.getElementById('exercise-zone').style.display = 'none';
       closeBacZone();
-      loadStats(); // <--- NOUVEAU : On charge la progression spécifique à cette filière
+      // NOUVEAU : On charge la bonne progression
+      loadStats();
     }
 
     // Génère dynamiquement la grille de chapitres
@@ -2528,7 +2529,7 @@
     // Retourne la clé localStorage de l'utilisateur connecté selon sa filière
     function userKey() {
       const u = sessionStorage.getItem('mathsPremiere_user') || 'anonymous';
-      const niv = currentNiveau || 'defaut';
+      const niv = currentNiveau || 'spe';
       return 'mathsPremiere_stats_' + u.toLowerCase().replace(/\s+/g, '_') + '_' + niv;
     }
 
@@ -2563,7 +2564,7 @@
           statsBestStreak = d.bestStreak || 0;
           chapitresVus = new Set(d.chapitres || []);
         } else {
-          // Nouvelle filière = compteurs à zéro
+          // Si on change de filière et qu'il n'y a pas de sauvegarde, on met à 0
           statsTotal = 0; statsCorr = 0; statsCorrect = 0; statsBestStreak = 0;
           chapitresVus = new Set();
         }
