@@ -7585,92 +7585,225 @@
       let html = '';
 
       if (chapter === 1) {
-        html = `<div class="course-grid">
-    <div class="course-block"><h3>Probabilité conditionnelle</h3>
-      $$P_A(B)=\\frac{P(A\\cap B)}{P(A)}$$
-      <p><strong>Indépendance :</strong> $P(A\\cap B)=P(A)\\times P(B)$</p></div>
-    <div class="course-block"><h3>Probabilités totales</h3>
-      $$P(B)=P(A)P_A(B)+P(\\overline{A})P_{\\overline{A}}(B)$$</div>
-    <div class="course-block"><h3>Variable aléatoire</h3>
-      <p>$E(X)=\\sum x_i P(X=x_i)$</p>
-      <p>$V(X)=E(X^2)-[E(X)]^2$, $\\sigma=\\sqrt{V(X)}$</p></div>
-    </div>`;
+        html = `
+<div class="course-section">
+  <div class="course-section-title">1) Expérience aléatoire et vocabulaire</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    Une <b>expérience aléatoire</b> est une expérience dont le résultat n'est pas prévisible à l'avance. L'ensemble des résultats possibles forme l'<b>univers</b> $\Omega$.
+  </div>
+  <div class="course-rem"><span class="block-title">Vocabulaire</span>
+    • Un <b>événement</b> est un sous-ensemble de $\Omega$.<br>
+    • L'événement <b>impossible</b> : $\varnothing$.<br>
+    • L'événement <b>certain</b> : $\Omega$.<br>
+    • $A \cap B$ : "A et B" ; $A \cup B$ : "A ou B" ; $\overline{A}$ : "non A".
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">2) Probabilité sur un univers fini</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    Si tous les résultats sont équiprobables : $P(A) = \dfrac{\text{nombre de cas favorables}}{\text{nombre de cas possibles}}$.
+  </div>
+  <div class="course-rem"><span class="block-title">Propriétés</span>
+    $0 \leq P(A) \leq 1$ ; $P(\Omega) = 1$ ; $P(\overline{A}) = 1 - P(A)$ ; $P(A \cup B) = P(A) + P(B) - P(A \cap B)$.
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">3) Probabilité conditionnelle et indépendance</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    $P_A(B) = \dfrac{P(A \cap B)}{P(A)}$ (si $P(A) > 0$) : probabilité de $B$ sachant $A$.
+  </div>
+  <div class="course-prop"><span class="block-title">Indépendance</span>
+    $A$ et $B$ sont indépendants si $P(A \cap B) = P(A) \times P(B)$.
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">4) Formule des probabilités totales</div>
+  <div class="course-prop"><span class="block-title">Propriété</span>
+    $P(B) = P(A)P_A(B) + P(\overline{A})P_{\overline{A}}(B)$
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">5) Variables aléatoires discrètes</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    Une <b>variable aléatoire</b> $X$ associe à chaque issue un nombre réel. Sa <b>loi de probabilité</b> est la liste des valeurs possibles et leurs probabilités.
+  </div>
+  <div class="course-prop"><span class="block-title">Espérance, variance, écart-type</span>
+    $E(X) = \sum x_i P(X = x_i)$<br>
+    $V(X) = E(X^2) - [E(X)]^2$<br>
+    $\sigma(X) = \sqrt{V(X)}$
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">6) Schémas de Bernoulli et binomiale</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    <b>Bernoulli</b> : expérience à deux issues (succès/échec).<br>
+    <b>Binomiale</b> : répétition indépendante de $n$ épreuves de Bernoulli de probabilité $p$.<br>
+    $P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">7) Arbres de probabilités</div>
+  <div class="course-rem"><span class="block-title">Astuce</span>
+    Utiliser un arbre pour visualiser les enchaînements d'événements et calculer les probabilités composées.
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">Exemples et rappels</div>
+  <div class="course-ex"><span class="block-title">Exemple</span>
+    On lance deux dés : $\Omega = \{(i,j)\mid 1 \leq i,j \leq 6\}$, $P(\text{double 6}) = \dfrac{1}{36}$.
+  </div>
+</div>
+`;
       } else if (chapter === 2) {
-        html = `<div class="course-grid">
-    <div class="course-block"><h3>Taux de variation moyen</h3>
-      $$\\tau_{[a;b]}=\\frac{f(b)-f(a)}{b-a}$$
-      <p>Interprétation : variation moyenne de $f$ par unité d'écart entre $a$ et $b$.</p>
-      <p><strong>Signe :</strong> $\\tau>0$ → $f$ croissante ; $\\tau<0$ → $f$ décroissante sur $[a;b]$.</p></div>
-    <div class="course-block"><h3>Fonctions de référence</h3>
-      <table style="width:100%;font-size:13px;border-collapse:collapse">
-        <tr><th style="padding:5px;border:1px solid rgba(255,255,255,0.1)">$f(x)$</th><th style="padding:5px;border:1px solid rgba(255,255,255,0.1)">Type</th><th style="padding:5px;border:1px solid rgba(255,255,255,0.1)">Variation</th></tr>
-        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$ax+b$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">affine</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">croissante si $a>0$</td></tr>
-        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$x^2$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">quadratique</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">décr. sur $]-\\infty;0]$, croiss. sur $[0;+\\infty[$</td></tr>
-        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\sqrt{x}$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">racine carrée</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">croissante sur $[0;+\\infty[$</td></tr>
-        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$A\\sin\\!\\left(\\frac{2\\pi}{T}t\\right)$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">sinusoïdale</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">oscillante, période $T$, amplitude $A$</td></tr>
-      </table></div>
-    <div class="course-block"><h3>Modèles et contextes</h3>
-      <ul>
-        <li><strong>Modèle affine :</strong> croissance à taux constant (ex. tarification).</li>
-        <li><strong>Modèle quadratique :</strong> aires, chutes libres.</li>
-        <li><strong>Modèle périodique :</strong> phénomènes cycliques (son, marées, signal).</li>
-        <li><strong>Lecture graphique :</strong> image $f(a)$, antécédent $f(x)=k$, extremum.</li>
-      </ul></div>
-    </div>`;
+        html = `
+<div class="course-section">
+  <div class="course-section-title">1) Fonction, image, antécédent</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    Une <b>fonction</b> $f$ associe à chaque $x$ d'un ensemble $D$ un unique réel $f(x)$.<br>
+    $f(a)$ : <b>image</b> de $a$ ; $a$ : <b>antécédent</b> de $f(a)$.
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">2) Taux de variation</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    $\tau_{[a;b]} = \dfrac{f(b) - f(a)}{b - a}$ : variation moyenne de $f$ entre $a$ et $b$.
+  </div>
+  <div class="course-rem"><span class="block-title">Interprétation</span>
+    $\tau > 0$ : $f$ croissante sur $[a;b]$ ; $\tau < 0$ : $f$ décroissante.
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">3) Fonctions de référence</div>
+  <div class="course-prop"><span class="block-title">Exemples</span>
+    <ul>
+      <li><b>Affine</b> $f(x) = ax + b$ : droite, $a$ = pente.</li>
+      <li><b>Quadratique</b> $f(x) = x^2$ : parabole, minimum en $0$.</li>
+      <li><b>Racine carrée</b> $f(x) = \sqrt{x}$ : croissante sur $[0; +\infty[$.</li>
+      <li><b>Sinusoïdale</b> $f(t) = A\sin(\omega t + \varphi)$ : oscillations, période $T$.</li>
+    </ul>
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">4) Lecture graphique</div>
+  <div class="course-rem"><span class="block-title">À savoir lire</span>
+    • Lire l'image $f(a)$ sur un graphique.<br>
+    • Trouver les antécédents d'une valeur donnée.<br>
+    • Repérer maximum, minimum, variations.
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">5) Modélisation</div>
+  <div class="course-rem"><span class="block-title">Exemples de modèles</span>
+    <ul>
+      <li><b>Affine</b> : coût, distance, croissance linéaire.</li>
+      <li><b>Quadratique</b> : aires, trajectoires.</li>
+      <li><b>Périodique</b> : phénomènes cycliques (marées, sons).</li>
+    </ul>
+  </div>
+</div>
+`;
       } else if (chapter === 3) {
-        html = `<div class="course-grid">
-    <div class="course-block"><h3>Suite arithmétique</h3>
-      <p>$u_{n+1}=u_n+r$</p>
-      <p>$u_n=u_0+nr$</p>
-      <p>$S=\\dfrac{(n+1)(u_0+u_n)}{2}$</p></div>
-    <div class="course-block"><h3>Suite géométrique</h3>
-      <p>$u_{n+1}=q\\cdot u_n$</p>
-      <p>$u_n=u_0\\times q^n$</p>
-      <p>$S=u_0\\cdot\\dfrac{q^{n+1}-1}{q-1}$ ($q\\neq1$)</p></div>
-    <div class="course-block"><h3>Reconnaître</h3>
-      <ul><li>$u_{n+1}-u_n=cst$ → arithmétique</li>
-      <li>$u_{n+1}/u_n=cst$ → géométrique</li></ul></div>
-    </div>`;
+        html = `
+<div class="course-section">
+  <div class="course-section-title">1) Suites arithmétiques</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    $u_{n+1} = u_n + r$ ; $u_n = u_0 + n r$<br>
+    <b>Somme</b> : $S = \dfrac{(n+1)(u_0 + u_n)}{2}$
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">2) Suites géométriques</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    $u_{n+1} = q u_n$ ; $u_n = u_0 q^n$<br>
+    <b>Somme</b> : $S = u_0 \dfrac{q^{n+1} - 1}{q - 1}$ ($q \neq 1$)
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">3) Reconnaître le type</div>
+  <div class="course-rem"><span class="block-title">Astuce</span>
+    $u_{n+1} - u_n$ constant → arithmétique<br>
+    $u_{n+1} / u_n$ constant → géométrique
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">4) Problèmes types</div>
+  <div class="course-ex"><span class="block-title">Exemple</span>
+    Une population double chaque année : $u_0 = 100$, $q = 2$.<br>
+    $u_3 = 100 \times 2^3 = 800$.
+  </div>
+</div>
+`;
       } else if (chapter === 4) {
-        html = `<div class="course-grid">
-    <div class="course-block"><h3>Valeurs remarquables</h3>
-      <table style="width:100%;font-size:12px;border-collapse:collapse">
-        <tr><th style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1)">$\\theta$</th>
-            <th style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1)">$\\sin$</th>
-            <th style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1)">$\\cos$</th>
-            <th style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1)">$\\tan$</th></tr>
-        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$1$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td></tr>
-        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$30°$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{1}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{3}$</td></tr>
-        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$45°$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{2}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{2}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$1$</td></tr>
-        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$60°$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{1}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\sqrt{3}$</td></tr>
-        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$90°$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$1$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">—</td></tr>
-      </table></div>
-    <div class="course-block"><h3>Triangle rectangle</h3>
-      $$\\sin\\hat{A}=\\frac{\\text{côté opposé}}{\\text{hypoténuse}},\\quad\\cos\\hat{A}=\\frac{\\text{côté adjacent}}{\\text{hypoténuse}}$$
-      $$\\tan\\hat{A}=\\frac{\\text{côté opposé}}{\\text{côté adjacent}}$$
-      <p><strong>Pythagore :</strong> $a^2+b^2=c^2$ (avec $c$ = hypoténuse)</p>
-      <p><strong>Relation fondamentale :</strong> $\\sin^2\\theta+\\cos^2\\theta=1$</p></div>
-    <div class="course-block"><h3>Fonctions périodiques — sin et cos</h3>
-      $$f(t)=A\\,\\sin\\!\\left(\\frac{2\\pi}{T}\\,t+\\varphi\\right)$$
-      <ul>
-        <li>$A$ : <strong>amplitude</strong> (valeur max − valeur min)/2</li>
-        <li>$T$ : <strong>période</strong> (durée d'un cycle complet)</li>
-        <li>$\\nu=\\dfrac{1}{T}$ : <strong>fréquence</strong> (en Hz si $t$ en s)</li>
-        <li>La fonction oscille entre $-A$ et $+A$</li>
-      </ul></div>
-    </div>`;
+        html = `
+<div class="course-section">
+  <div class="course-section-title">1) Rappels sur le cercle trigonométrique</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    Sur le cercle trigonométrique, à chaque angle $\theta$ correspond un point $M$ de coordonnées $(\cos\theta, \sin\theta)$.
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">2) Valeurs remarquables</div>
+  <div class="course-prop"><span class="block-title">Tableau</span>
+    <table style="width:100%;font-size:12px;border-collapse:collapse">
+      <tr><th>$\theta$</th><th>$\sin$</th><th>$\cos$</th><th>$\tan$</th></tr>
+      <tr><td>$0$</td><td>$0$</td><td>$1$</td><td>$0$</td></tr>
+      <tr><td>$30°$</td><td>$\frac{1}{2}$</td><td>$\frac{\sqrt{3}}{2}$</td><td>$\frac{\sqrt{3}}{3}$</td></tr>
+      <tr><td>$45°$</td><td>$\frac{\sqrt{2}}{2}$</td><td>$\frac{\sqrt{2}}{2}$</td><td>$1$</td></tr>
+      <tr><td>$60°$</td><td>$\frac{\sqrt{3}}{2}$</td><td>$\frac{1}{2}$</td><td>$\sqrt{3}$</td></tr>
+      <tr><td>$90°$</td><td>$1$</td><td>$0$</td><td>—</td></tr>
+    </table>
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">3) Triangle rectangle</div>
+  <div class="course-def"><span class="block-title">Définitions</span>
+    $\sin\hat{A} = \dfrac{\text{côté opposé}}{\text{hypoténuse}}$<br>
+    $\cos\hat{A} = \dfrac{\text{côté adjacent}}{\text{hypoténuse}}$<br>
+    $\tan\hat{A} = \dfrac{\text{côté opposé}}{\text{côté adjacent}}$
+  </div>
+  <div class="course-rem"><span class="block-title">Pythagore et relation fondamentale</span>
+    $a^2 + b^2 = c^2$ (hypoténuse $c$)<br>
+    $\sin^2\theta + \cos^2\theta = 1$
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">4) Fonctions périodiques</div>
+  <div class="course-prop"><span class="block-title">Forme générale</span>
+    $f(t) = A \sin\left(\dfrac{2\pi}{T} t + \varphi\right)$<br>
+    $A$ : amplitude, $T$ : période, $\nu = 1/T$ : fréquence
+  </div>
+</div>
+`;
       } else if (chapter === 5) {
-        html = `<div class="course-grid">
-    <div class="course-block"><h3>Indicateurs de position</h3>
-      <p><strong>Moyenne :</strong> $\\bar{x} = \\dfrac{x_1 + x_2 + ... + x_n}{N}$</p>
-      <p><strong>Médiane :</strong> Valeur qui sépare la série ordonnée en deux moitiés égales (50% au-dessus, 50% en-dessous).</p></div>
-    <div class="course-block"><h3>Indicateurs de dispersion</h3>
-      <p><strong>Quartiles :</strong> $Q_1$ (au moins 25% des données lui sont $\\le$) et $Q_3$ (au moins 75% des données lui sont $\\le$).</p>
-      <p><strong>Écart-type $\\sigma$ :</strong> Mesure la dispersion globale des données autour de la moyenne.</p></div>
-    <div class="course-block"><h3>Échantillonnage</h3>
-      <p><strong>Fréquence observée $f$ :</strong> Part du caractère étudié dans l'échantillon.</p>
-      <p><strong>Intervalle de fluctuation (seuil 95%) :</strong> $\\left[ p - \\dfrac{1}{\\sqrt{n}} ; p + \\dfrac{1}{\\sqrt{n}} \\right]$ (pour $n \\ge 25$ et $0.2 \\le p \\le 0.8$).</p></div>
-    </div>`;
+        html = `
+<div class="course-section">
+  <div class="course-section-title">1) Statistiques descriptives</div>
+  <div class="course-def"><span class="block-title">Définitions</span>
+    <b>Moyenne</b> $\bar{x} = \dfrac{x_1 + x_2 + ... + x_n}{N}$<br>
+    <b>Médiane</b> : valeur qui partage la série en deux groupes de même effectif.<br>
+    <b>Quartiles</b> : $Q_1$ (25%), $Q_3$ (75%).
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">2) Dispersion</div>
+  <div class="course-prop"><span class="block-title">Écart-type</span>
+    $\sigma = \sqrt{\dfrac{1}{N} \sum (x_i - \bar{x})^2}$
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">3) Échantillonnage et fluctuation</div>
+  <div class="course-rem"><span class="block-title">Intervalle de fluctuation</span>
+    Pour $n \geq 25$ et $0.2 \leq p \leq 0.8$ :<br>
+    $\left[ p - \dfrac{1}{\sqrt{n}} ; p + \dfrac{1}{\sqrt{n}} \right]$ (niveau 95%)
+  </div>
+</div>
+<div class="course-section">
+  <div class="course-section-title">4) Fréquence observée</div>
+  <div class="course-def"><span class="block-title">Définition</span>
+    La <b>fréquence observée</b> $f$ est la proportion d'un caractère dans un échantillon.
+  </div>
+</div>
+`;
       } else {
         html = `<div class="course-grid"><div class="course-block">Choisis un chapitre.</div></div>`;
       }
