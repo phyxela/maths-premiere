@@ -3841,7 +3841,7 @@
         <div class="course-def">
           <span class="block-title">Définition</span>
           On appelle <b>trinôme du second degré</b> toute fonction $f$ définie sur $\\mathbb{R}$ par :
-          $$f(x) = ax^2 + bx + c$$
+          $f(x) = ax^2 + bx + c$
           où $a$, $b$, $c$ sont des réels avec $a \\neq 0$.
           <br/><br/>Le mot « trinôme » signifie qu'il y a <b>trois termes</b> : le terme en $x^2$, le terme en $x$, et le terme constant $c$. La condition $a \\neq 0$ est essentielle : sans $x^2$, on retomberait sur une simple fonction affine (du premier degré).
         </div>
@@ -3855,8 +3855,8 @@
 
         <div class="course-ex">
           <span class="block-title">Exemples</span>
-          • $f(x) = 2x^2 + 3x - 5$ est un trinôme du second degré ($a=2$, $b=3$, $c=-5$).<br/>
-          • $g(x) = -x^2 + 4$ est un trinôme du second degré ($a=-1$, $b=0$, $c=4$).<br/>
+          • $f(x) = 2x^2 + 3x - 5$ est un trinôme du second degré ($a=2, b=3, c=-5$).<br/>
+          • $g(x) = -x^2 + 4$ est un trinôme du second degré ($a=-1, b=0, c=4$).<br/>
           • $h(x) = 3x + 1$ n'est <b>pas</b> un trinôme du second degré (pas de terme en $x^2$).
         </div>
       </div>
@@ -3868,9 +3868,9 @@
         <div class="course-prop">
           <span class="block-title">Propriété</span>
           Tout trinôme $f(x) = ax^2+bx+c$ peut s'écrire sous la <b>forme canonique</b> :
-          $$f(x) = a(x - \\alpha)^2 + \\beta$$
+          $f(x) = a(x - \\alpha)^2 + \\beta$
           avec :
-          $$\\alpha = -\\frac{b}{2a} \\qquad \\text{et} \\qquad \\beta = f(\\alpha)$$
+          $\\alpha = -\\frac{b}{2a} \\qquad \\text{et} \\qquad \\beta = f(\\alpha)$
         </div>
 
         <div class="course-rem">
@@ -5183,8 +5183,8 @@
     <div class="step result">
       <div class="step-label">5) Limite</div>
       <div class="step-content">
-        Comme $0\<${pLatex}\<1$, on a $${pLatex}^{\\,n}\\to 0$, donc :
-        $$\\lim_{n\\to+\\infty}u_n=${L}.$$
+        Comme $0 < ${pLatex} < 1$, on a $${pLatex}^n \\to 0$, donc :
+        $$\\lim_{n \\to +\\infty} u_n = ${L}$$
         Stabilisation autour de $${L}$ ${ctx.obj}.
       </div>
     </div>
@@ -5243,7 +5243,7 @@
     <div class="step">
       <div class="step-label">b) Calcul de l'intersection</div>
       <div class="step-content">
-        $$P(M\\cap T)=P(M)\\times P_{M}(T)=${pctRaw(prev)}\\times ${pctRaw(sens)}= \boxed{${+(pMcapT).toFixed(4)}}$$
+        $$P(M\\cap T)=P(M)\\times P_{M}(T)=${pctRaw(prev)}\\times ${pctRaw(sens)}= \\boxed{${+(pMcapT).toFixed(4)}}$$
       </div>
     </div>
     <div class="step">
@@ -5252,7 +5252,7 @@
         Le test positif $T$ peut être obtenu avec les malades ou les non-malades :<br/>
         $P(T)=P(M \\cap T) + P(\\overline{M} \\cap T) = P(M) \\times P_{M}(T) + P(\\overline{M}) \\times P_{\\overline{M}}(T)$<br/>
         $P(T)= ${+(pMcapT).toFixed(4)} + (${+(pNotM).toFixed(2)} \\times ${+(pT_notM).toFixed(2)})$<br/>
-        $P(T)= ${+(pMcapT).toFixed(4)} + ${+(pNotM * pT_notM).toFixed(4)} = \boxed{${+(pT).toFixed(4)}}$$
+        $P(T)= ${+(pMcapT).toFixed(4)} + ${+(pNotM * pT_notM).toFixed(4)} = \\boxed{${+(pT).toFixed(4)}}$$
       </div>
     </div>
     <div class="step result">
@@ -5839,8 +5839,8 @@
         Comme $x \\in [1; ${xMax}]$, le dénominateur $x^2$ est strictement positif.<br/>Le signe dépend du numérateur $${a}x^2 - ${c}$.<br/>
         $\\implies ${a}x^2 - ${c} \\geq 0 \\iff x^2 \\geq \\dfrac{${c}}{${a}}$<br/>
         $\\implies x^2 \\geq ${c / a} \\iff x \\geq \\sqrt{${c / a}} = ${x0}$.<br/><br/>
-        $C'_m(x)$ est négatif sur $[1 ; ${x0}]$ et positif sur $[${x0} ; ${xMax}]$. Ainsi $C_m$ est décroissante puis croissante.<br/>
-        Le coût moyen est donc minimal pour une production de <strong>${x0} objets</strong>.
+        $C'_m(x)$ est négatif sur $[1 \\,;\\, ${x0}]$ et positif sur $[${x0} \\,;\\, ${xMax}]$. Ainsi $C_m$ est décroissante puis croissante.<br/>
+        Le coût moyen est donc minimal pour une production de $\\boxed{${x0}}$ objets.
       </div>
     </div>
   `;
@@ -5913,7 +5913,7 @@
       <div class="step-label">Étape 1 – Racines de $f'(x) = ${fpStr}$</div>
       <div class="step-content">
         $f'(x) = ${a === 1 ? '' : a === -1 ? '-' : a}(x - (${r1}))(x - ${r2})$<br/>
-        $f'(x) = 0 \\Leftrightarrow x = ${r1}$ ou $x = ${r2}$
+        $f'(x) = 0 \\iff x = ${r1} \\text{ ou } x = ${r2}$
       </div>
     </div>
     <div class="step result">
@@ -6547,7 +6547,7 @@
       <div class="step-label">3) Valeur Prédictive Positive $P_{T}(M)$</div>
       <div class="step-content">
         $P_{T}(M) = \\dfrac{P(M \\cap T)}{P(T)}$<br/>
-        $P_{T}(M) = \\dfrac{${pM_inter_T.toFixed(4)}}{${pT.toFixed(4)}} \\approx ${(vpp * 100).toFixed(1)} \\%$
+        $P_{T}(M) = \\dfrac{${pM_inter_T.toFixed(4)}}{${pT.toFixed(4)}} \\approx \\boxed{${(vpp * 100).toFixed(1)}\\,\\%}$
       </div>
     </div>
   `;
@@ -6615,7 +6615,7 @@
       <div class="step-label">Test d'indépendance</div>
       <div class="step-content">
         On calcule $P(A) \\times P(B) = ${(valA / tot).toFixed(2)} \\times ${(valB / tot).toFixed(2)} = ${((valA / tot) * (valB / tot)).toFixed(3)}$.<br/><br/>
-        ${actualIsIndep ? `On a bien $P(A \\cap B) = P(A) \\times P(B)$.<br/><strong>Les événements $A$ et $B$ sont indépendants.</strong>` : `On constate que $P(A \\cap B) \\neq P(A) \\times P(B)$.<br/><strong>Les événements $A$ et $B$ ne sont pas indépendants.</strong>`}
+        ${actualIsIndep ? `On a bien $P(A \\cap B) = P(A) \\times P(B)$.<br/><strong>Conclusion : Les événements $A$ et $B$ sont \\boxed{\\text{indépendants}}.</strong>` : `On constate que $P(A \\cap B) \\neq P(A) \\times P(B)$.<br/><strong>Conclusion : Les événements $A$ et $B$ ne sont \\boxed{\\text{PAS indépendants}}.</strong>`}
       </div>
     </div>
   `;
@@ -6835,7 +6835,7 @@
     Une entreprise compte une certaine proportion de femmes et d'hommes. Certaines personnes occupent un poste de cadre.<br/><br/>
     <div style="margin-top:8px;line-height:1.9">
       • La proportion de femmes dans l'entreprise est de $P(F) = ${pA_str}$.<br/>
-      • Parmi les femmes, la proportion de cadres est de $${f.n}/${f.d}$.<br/>
+      • Parmi les femmes, la proportion de cadres est de $P_F(C) = \\frac{${f.n}}{${f.d}}$.<br/>
       • On sait de plus que la probabilité qu'un employé tiré au hasard soit cadre est $P(C) = ${pE_str}$.
     </div>
     On choisit une personne au hasard. On note $F$ l'événement « la personne est une femme » et $C$ l'événement « la personne est cadre ».
@@ -6875,7 +6875,7 @@
     <div class="step result">
       <div class="step-label">4) Calcul de $P_{\\overline{F}}(C)$</div>
       <div class="step-content">
-        $$P_{\\overline{F}}(C) = \\frac{P(\\overline{F} \\cap C)}{P(\\overline{F})} = \\frac{${(pE - pFcapC).toFixed(4)}}{1 - ${pA_str}} = \\frac{${(pE - pFcapC).toFixed(4)}}{${pNotA_str}} = ${pE_given_notA.toFixed(4)}$$
+        $$P_{\\overline{F}}(C) = \\frac{P(\\overline{F} \\cap C)}{P(\\overline{F})} = \\frac{${(pE - pFcapC).toFixed(4)}}{1 - ${pA_str}} = \\frac{${(pE - pFcapC).toFixed(4)}}{${pNotA_str}} = \\boxed{${pE_given_notA.toFixed(4)}}$$
       </div>
     </div>
   `;
@@ -6933,7 +6933,7 @@
         On cherche les racines de $f(x)=0$. On peut calculer le discriminant avec $a=${a}$, $b=${fpB}$, $c=${fpC}$.<br/>
         On trouve $x_1 = ${r1}$ et $x_2 = ${r2}$.<br/>
         La forme factorisée est $f(x) = ${a > 1 ? a : ''}(x ${r1 <= 0 ? '+ ' + (-r1) : '- ' + r1})(x ${r2 <= 0 ? '+ ' + (-r2) : '- ' + r2})$.<br/>
-        Les points d'intersection sont $A(${r1};0)$ et $B(${r2};0)$.
+        Les points d'intersection sont $\\boxed{A(${r1} \\,;\\, 0)}$ et $\\boxed{B(${r2} \\,;\\, 0)}$.
       </div>
     </div>
     <div class="step">
@@ -6941,7 +6941,7 @@
       <div class="step-content">
         L'expression de $h$ est sous forme canonique : $h(x) = m(x-\\alpha)^2 + \\beta$.<br/>
         Ici $\\alpha = ${alpha}$ et $\\beta = ${beta}$.<br/>
-        Le sommet est donc $S(${alpha} \\,;\\, ${beta})$.
+        Le sommet est donc $\\boxed{S(${alpha} \\,;\\, ${beta})}$.
       </div>
     </div>
     <div class="step">
@@ -7784,10 +7784,10 @@
           ],
           correction: `<div class="step"><div class="step-label">Proportion globale</div>
           <div class="step-content">L'effectif total est de ${total}. L'effectif des ${categories.row[0].toLowerCase()} est de ${row1Tot}.<br/>
-          $p_1 = \\frac{${row1Tot}}{${total}} \\approx ${+(row1Tot / total).toFixed(3)}$, soit <strong>${+(row1Tot / total * 100).toFixed(1)}%</strong>.</div></div>
+          $p_1 = \\frac{1}{${total/row1Tot}} \\approx ${+(row1Tot / total).toFixed(3)}$ soit approx. $\\boxed{${+(row1Tot / total * 100).toFixed(1)}\\,\\%}$.</div></div>
           <div class="step result"><div class="step-label">Proportion sous-population</div>
-          <div class="step-content">On se restreint aux ${categories.row[1].toLowerCase()} (total de la ligne = ${row2Tot}). L'effectif des ${categories.col[1].toLowerCase()} dans cette catégorie est de ${d}.<br/>
-          $p_2 = \\frac{${d}}{${row2Tot}} \\approx ${+(d / row2Tot).toFixed(3)}$, soit <strong>${+(d / row2Tot * 100).toFixed(1)}%</strong>.</div></div>`
+          <div class="step-content">On se restreint aux ${categories.row[1].toLowerCase()} (total de la ligne = $${row2Tot}$). L'effectif des ${categories.col[1].toLowerCase()} dans cette catégorie est de $${d}$.<br/>
+          $p_2 = \\frac{${d}}{${row2Tot}} \\approx ${+(d / row2Tot).toFixed(3)}$ soit approx. $\\boxed{${+(d / row2Tot * 100).toFixed(1)}\\,\\%}$.</div></div>`
         };
       }
 
@@ -7810,7 +7810,7 @@
         <div class="step"><div class="step-label">Évolution globale</div>
         <div class="step-content">On <strong>multiplie</strong> les coefficients successifs : $CM_{global} = ${cm1} \\times ${cm2} = ${cmG}$.</div></div>
         <div class="step result"><div class="step-label">Taux d'évolution</div>
-        <div class="step-content">Le taux global est $T = CM_{global} - 1 = ${cmG} - 1 = ${cmG - 1}$.<br/>Soit une ${evG > 0 ? '<strong>hausse</strong>' : '<strong>baisse</strong>'} globale de <strong>${Math.abs(evG)}%</strong>.</div></div>`
+        <div class="step-content">Le taux global est $T = CM_{global} - 1 = ${cmG} - 1 = ${+(cmG - 1).toFixed(4)}$.<br/>Soit une ${evG > 0 ? '<strong>hausse</strong>' : '<strong>baisse</strong>'} globale de $\\boxed{${Math.abs(evG)}\\,\\%}$.</div></div>`
         };
       }
 
@@ -7906,12 +7906,12 @@
             `Dresser le tableau de signes de $f(x)$ sur l'intervalle $\\mathbb{R}$.`
           ],
           correction: `<div class="step"><div class="step-label">Racine</div>
-        <div class="step-content">$${a}x ${b > 0 ? '+ ' + b : '- ' + Math.abs(b)} = 0 \\iff ${a}x = ${-b} \\iff x = \\frac{${-b}}{${a}} = ${root}$.</div></div>
+        <div class="step-content">$${a}x ${b > 0 ? '+ ' + b : '- ' + Math.abs(b)} = 0 \\iff ${a}x = ${-b} \\iff x = \\frac{${-b}}{${a}} = \\boxed{${root}}$.</div></div>
         <div class="step result"><div class="step-label">Tableau de signes</div>
         <div class="step-content">Le coefficient directeur est $a = ${a}$. Il est <strong>${a > 0 ? 'positif (fonction croissante)' : 'négatif (fonction décroissante)'}</strong>.<br/>
         La fonction est donc du signe de $-a$ avant la racine, et du signe de $a$ après.<br/>
-        $x \\in ]-\\infty ; ${root}[ \\implies f(x) ${a > 0 ? '<' : '>'} 0$<br/>
-        $x \\in ]${root} ; +\\infty[ \\implies f(x) ${a > 0 ? '>' : '<'} 0$</div></div>`
+        $x \\in ]-\\infty \\, ; \\, ${root}[ \\implies f(x) ${a > 0 ? '<' : '>'} 0$<br/>
+        $x \\in ]${root} \\, ; \\, +\\infty[ \\implies f(x) ${a > 0 ? '>' : '<'} 0$</div></div>`
         };
       }
 
@@ -7951,10 +7951,10 @@
           `En déduire l'expression algébrique complète de $f(x)$.`
         ],
         correction: `<div class="step"><div class="step-label">Coefficient directeur</div>
-      <div class="step-content">$a = \\frac{y_B - y_A}{x_B - x_A} = \\frac{${yB} - ${yA < 0 ? '(' + yA + ')' : yA}}{${xB} - ${xA < 0 ? '(' + xA + ')' : xA}} = \\frac{${yB - yA}}{${xB - xA}} = ${a}$.</div></div>
+      <div class="step-content">$a = \\frac{y_B - y_A}{x_B - x_A} = \\frac{${yB} - ${yA < 0 ? '(' + yA + ')' : yA}}{${xB} - ${xA < 0 ? '(' + xA + ')' : xA}} = \\frac{${yB - yA}}{${xB - xA}} = \\boxed{${a}}$.</div></div>
       <div class="step"><div class="step-label">Ordonnée à l'origine</div>
       <div class="step-content">L'équation est de la forme $y = ${a}x + b$. On utilise le point $A$ :<br/>
-      $${yA} = ${a} \\times (${xA}) + b \\iff ${yA} = ${a * xA} + b \\iff b = ${yA} - (${a * xA}) = ${b}$.</div></div>
+      $${yA} = ${a} \\times (${xA}) + b \\iff ${yA} = ${a * xA} + b \\iff b = ${yA} - (${a * xA}) = \\boxed{${b}}$.</div></div>
       <div class="step result"><div class="step-label">Expression de $f$</div>
       <div class="step-content">$$f(x) = ${a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}$$</div></div>`
       };
@@ -7981,11 +7981,12 @@
             `Calculer la somme $S = u_0 + u_1 + \\dots + u_{${n}}$.`
           ],
           correction: `<div class="step"><div class="step-label">Terme général</div>
-        <div class="step-content">$u_{${n}} = u_0 + n \\times r = ${u0} + ${n} \\times ${r} = ${u0} + ${n * r} = ${un}$.</div></div>
+        <div class="step-content">On utilise la formule $u_n = u_0 + n \\times r$ :<br/>
+        $u_{${n}} = u_0 + ${n} \\times r = ${u0} + ${n} \\times ${r} = ${u0} + ${n * r} = \\boxed{${un}}$.</div></div>
         <div class="step result"><div class="step-label">Somme</div>
-        <div class="step-content">$S = \\text{Nombre de termes} \\times \\frac{\\text{Premier} + \\text{Dernier}}{2}$<br/>
-        De $u_0$ à $u_{${n}}$, il y a ${n + 1} termes.<br/>
-        $S = ${n + 1} \\times \\frac{${u0} + ${un}}{2} = ${n + 1} \\times \\frac{${u0 + un}}{2} = <strong>${sum}</strong>$.</div></div>`
+        <div class="step-content">On utilise la formule : $S = \\text{Nombre de termes} \\times \\frac{\\text{Premier} + \\text{Dernier}}{2}$<br/>
+        De $u_0$ à $u_{${n}}$, il y a $${n + 1}$ termes.<br/>
+        $S = ${n + 1} \\times \\frac{u_0 + u_{${n}}}{2} = ${n + 1} \\times \\frac{${u0} + ${un}}{2} = ${n + 1} \\times \\frac{${u0 + un}}{2} = \\boxed{${sum}}$.</div></div>`
         };
       }
 
@@ -8006,7 +8007,7 @@
         <div class="step-content">Attention, le premier terme est $u_1$. La formule est $u_n = u_1 + (n-1)r$.<br/>
         $u_n = ${u1} + (n-1) \\times ${r} = ${u1} + ${r}n - ${r} = ${r}n + ${u1 - r}$.</div></div>
         <div class="step result"><div class="step-label">Calcul à 2 ans</div>
-        <div class="step-content">$u_{24} = ${r} \\times 24 + ${u1 - r} = ${r * 24 + u1 - r}$ utilisateurs.</div></div>`
+        <div class="step-content">$u_{24} = ${r} \\times 24 + ${u1 - r} = \\boxed{${r * 24 + u1 - r}}$ utilisateurs.</div></div>`
         };
       }
 
@@ -8026,9 +8027,10 @@
       <div class="step-content">La raison est $r = ${r}$. Comme $r ${r > 0 ? '>' : '<'} 0$, la suite est <strong>${r > 0 ? 'croissante' : 'décroissante'}</strong>.</div></div>
       <div class="step"><div class="step-label">Premier terme</div>
       <div class="step-content">On sait que $u_5 = u_0 + 5r$.<br/>
-      Donc $u_0 = u_5 - 5r = ${u5} - 5 \\times (${r}) = ${u5} - (${5 * r}) = ${u0}$.</div></div>
+      Donc $u_0 = u_5 - 5r = ${u5} - 5 \\times (${r}) = ${u5} - (${5 * r}) = \\boxed{${u0}}$.</div></div>
       <div class="step result"><div class="step-label">Expression</div>
-      <div class="step-content">$$u_n = ${u0} ${r > 0 ? '+ ' + r : '- ' + Math.abs(r)}n$$</div></div>`
+      <div class="step-content">La formule est $u_n = u_0 + nr$ :<br/>
+      $u_n = ${u0} + n \\times (${r}) = \\boxed{${r}n ${u0 >= 0 ? '+ ' + u0 : '- ' + Math.abs(u0)}}$.</div></div>`
       };
     }
 
@@ -8122,9 +8124,9 @@
           ],
           correction: `<div class="step"><div class="step-label">Probabilités totales</div>
         <div class="step-content">$P(T) = P(M \\cap T) + P(\\overline{M} \\cap T) = P(M)P_M(T) + P(\\overline{M})P_{\\overline{M}}(T)$<br/>
-        $P(T) = ${pM} \\times ${pT_M} + ${1 - pM} \\times ${pT_nM} = ${pMcapT} + ${+((1 - pM) * pT_nM).toFixed(4)} = ${+pT.toFixed(4)}$.</div></div>
+        $P(T) = ${pM} \\times ${pT_M} + ${1 - pM} \\times ${pT_nM} = ${pMcapT} + ${+((1 - pM) * pT_nM).toFixed(4)} = \\boxed{${+pT.toFixed(4)}}$.</div></div>
         <div class="step result"><div class="step-label">Formule de Bayes</div>
-        <div class="step-content">$P_T(M) = \\frac{P(M \\cap T)}{P(T)} = \\frac{${pMcapT}}{${+pT.toFixed(4)}} \\approx ${+(pMcapT / pT).toFixed(3)}$.</div></div>`
+        <div class="step-content">$P_T(M) = \\frac{P(M \\cap T)}{P(T)} = \\frac{${pMcapT}}{${+pT.toFixed(4)}} \\approx \\boxed{${+(pMcapT / pT).toFixed(3)}}$.</div></div>`
         };
       }
 
@@ -8138,15 +8140,16 @@
         questions: [
           `Dresser un arbre de probabilités avec les événements $C$ et $M$.`,
           `Traduire l'énoncé en termes de probabilités : $P(C)$, $P_C(M)$, $P_{\\overline{C}}(M)$.`,
-          `Calculer la probabilité qu'un membre pratique la compétition ET la musculation.`,
-          `Calculer $P(M)$.`
+          `Calculer la probabilité qu'un membre pratique la compétition ET la musculation ($C \\cap M$).`,
+          `Calculer la probabilité $P(M)$ de faire de la musculation.`
         ],
         correction: `<div class="step"><div class="step-label">Données</div>
-      <div class="step-content">$P(C) = ${pA}$, $P_C(M) = ${pBsA}$, $P_{\\overline{C}}(M) = ${pBsnA}$. (On déduit facilement les branches contraires).</div></div>
+      <div class="step-content">$P(C) = ${pA}$, $P_C(M) = ${pBsA}$, $P_{\\overline{C}}(M) = ${pBsnA}$ (donc $P_{\\overline{C}}(\\overline{M}) = 1 - ${pBsnA} = 0.6$).</div></div>
       <div class="step"><div class="step-label">Intersection</div>
-      <div class="step-content">$P(C \\cap M) = P(C) \\times P_C(M) = ${pA} \\times ${pBsA} = ${+(pA * pBsA).toFixed(2)}$.</div></div>
+      <div class="step-content">$P(C \\cap M) = P(C) \\times P_C(M) = ${pA} \\times ${pBsA} = \\boxed{${+(pA * pBsA).toFixed(2)}}$.</div></div>
       <div class="step result"><div class="step-label">Probabilités totales</div>
-      <div class="step-content">$P(M) = P(C \\cap M) + P(\\overline{C} \\cap M) = ${+(pA * pBsA).toFixed(2)} + (0.4 \\times 0.4) = ${+(pA * pBsA).toFixed(2)} + 0.16 = ${+(pA * pBsA + 0.16).toFixed(2)}$.</div></div>`
+      <div class="step-content">D'après la loi des probabilités totales :<br/>
+      $P(M) = P(C \\cap M) + P(\\overline{C} \\cap M) = ${+(pA * pBsA).toFixed(2)} + (0.4 \\times 0.4) = ${+(pA * pBsA).toFixed(2)} + 0.16 = \\boxed{${+(pA * pBsA + 0.16).toFixed(2)}}$.</div></div>`
       };
     }
 
@@ -8180,15 +8183,15 @@ def seuil():
             `Résoudre manuellement ou à la calculatrice le problème posé en calculant les termes successifs.`
           ],
           correction: `<div class="step"><div class="step-label">Coefficient multiplicateur</div>
-        <div class="step-content">Une hausse de ${p}% donne un $CM = 1 + \\frac{${p}}{100} = ${q}$. C'est la raison de la suite géométrique.</div></div>
+        <div class="step-content">Une hausse de ${p}\\,\\% correspond à un coefficient $CM = 1 + \\frac{${p}}{100} = \\boxed{${q}}$. C'est la raison de la suite géométrique.</div></div>
         <div class="step"><div class="step-label">Algorithme</div>
-        <div class="step-content">La variable <code>n</code> sert de compteur pour le nombre d'années écoulées. La boucle <code>while</code> s'arrête dès que le prix <code>v</code> dépasse le double du prix initial (${seuil}).</div></div>
+        <div class="step-content">La variable <code>n</code> sert de compteur d'années. La boucle <code>while</code> s'arrête dès que le prix $v$ dépasse le double du prix initial ($${seuil}\\text{ €}$).</div></div>
         <div class="step result"><div class="step-label">Calcul des termes</div>
         <div class="step-content">On cherche $n$ tel que $v_n \\ge ${seuil}$. En testant :<br/>
         $v_6 = ${u0} \\times ${q}^6 \\approx ${+(u0 * Math.pow(q, 6)).toFixed(0)}$<br/>
         $v_7 = ${u0} \\times ${q}^7 \\approx ${+(u0 * Math.pow(q, 7)).toFixed(0)}$<br/>
         $v_8 = ${u0} \\times ${q}^8 \\approx ${+(u0 * Math.pow(q, 8)).toFixed(0)}$<br/>
-        C'est au bout de ${Math.ceil(Math.log(2) / Math.log(q))} ans que le prix aura doublé.</div></div>`
+        C'est au bout de $\\boxed{${Math.ceil(Math.log(2) / Math.log(q))}}$ ans que le prix aura doublé.</div></div>`
         };
       }
 
@@ -8205,7 +8208,7 @@ def seuil():
             `Quelle est la limite de cette suite lorsque $n$ tend vers l'infini ? Interpréter biologiquement.`
           ],
           correction: `<div class="step"><div class="step-label">Raison</div>
-        <div class="step-content">Baisser de ${baisse}% correspond à un coefficient multiplicateur $q = 1 - 0.${baisse} = ${q}$.<br/>$u_{n+1} = ${q} \\times u_n$. La suite est géométrique de raison $${q}$.</div></div>
+        <div class="step-content">Baisser de $${baisse}\\,\\%$ correspond à un coefficient multiplicateur $q = 1 - 0.${baisse} = ${q}$.<br/>$u_{n+1} = ${q} \\times u_n$. La suite est géométrique de raison $\\boxed{${q}}$.</div></div>
         <div class="step"><div class="step-label">Terme général</div>
         <div class="step-content">$$u_n = u_0 \\times q^n = ${u0} \\times ${q}^n$$</div></div>
         <div class="step result"><div class="step-label">Limite</div>
@@ -8228,11 +8231,11 @@ def seuil():
           `Rappeler la formule de la somme des termes d'une suite géométrique, puis calculer $S = u_0 + u_1 + \\dots + u_{${n}}$.`
         ],
         correction: `<div class="step"><div class="step-label">Terme général</div>
-      <div class="step-content">$u_n = u_0 \\times q^n = ${u0} \\times ${q}^n$.<br/>
-      $u_{${n}} = ${u0} \\times ${q}^{${n}} = ${u0} \\times ${Math.pow(q, n)} = ${un}$.</div></div>
+      <div class="step-content">La formule est $u_n = u_0 \\times q^n$. Ici : $u_n = ${u0} \\times ${q}^n$.<br/>
+      $u_{${n}} = ${u0} \\times ${q}^{${n}} = ${u0} \\times ${Math.pow(q, n)} = \\boxed{${un}}$.</div></div>
       <div class="step result"><div class="step-label">Somme</div>
-      <div class="step-content">La formule est $S = \\text{Premier terme} \\times \\frac{1 - q^{\\text{Nb termes}}}{1 - q}$.<br/>
-      Il y a ${n + 1} termes. $S = ${u0} \\times \\frac{1 - ${q}^{${n + 1}}}{1 - ${q}} = ${u0} \\times \\frac{1 - ${Math.pow(q, n + 1)}}{-${q - 1}} = <strong>${sum}</strong>$.</div></div>`
+      <div class="step-content">La formule est $S = \\text{Premier terme} \\times \\frac{q^{\\text{Nb termes}} - 1}{q - 1}$.<br/>
+      Il y a $${n + 1}$ termes. $S = ${u0} \\times \\frac{${q}^{${n + 1}} - 1}{${q} - 1} = ${u0} \\times \\frac{${Math.pow(q, n + 1)} - 1}{${q - 1}} = \\boxed{${sum}}$.</div></div>`
       };
     }
 
@@ -8256,7 +8259,7 @@ def seuil():
           answerPlaceholder: "Ex: 15",
           correction: `<div class="step result"><div class="step-label">Calcul de proportion</div>
         <div class="step-content">La proportion est donnée par $p = \\frac{\\text{Sous-effectif}}{\\text{Effectif total}} = \\frac{${sub}}{${total}} = ${sub / total}$.<br/>
-        En pourcentage : $p = ${sub / total} \\times 100 = \\boxed{${p} \\%}$.</div></div>`
+        En pourcentage : $p = ${sub / total} \\times 100 = \\boxed{${p}\\,\\%}$.</div></div>`
         };
       }
 
@@ -8268,13 +8271,13 @@ def seuil():
         return {
           isAuto: true,
           title: "⚡ Automatisme – Évolution",
-          enonce: `Une valeur de $${vD}$ € augmente de $${t} \\%$.<br/>Calculer sa valeur finale.`,
+          enonce: `Une valeur de $${vD}\\text{ €}$ augmente de $${t}\\,\\%$.<br/>Calculer sa valeur finale.`,
           questions: [`Donner le nouveau prix.`],
           interactiveAnswer: `${vA}`,
           answerPlaceholder: `Ex: ${vA}`,
           correction: `<div class="step result"><div class="step-label">Coefficient Multiplicateur</div>
-        <div class="step-content">Une hausse de $${t} \\%$ correspond à un $CM = 1 + \\frac{${t}}{100} = ${cm}$.<br/>
-        Valeur finale $V_A = V_D \\times CM = ${vD} \\times ${cm} = \\boxed{${vA}}$.</div></div>`
+        <div class="step-content">Une hausse de $${t}\\,\\%$ correspond à un coefficient $CM = 1 + \\frac{${t}}{100} = ${cm}$.<br/>
+        Valeur finale $V_A = V_D \\times CM = ${vD} \\times ${cm} = \\boxed{${vA}\\text{ €}}$.</div></div>`
         };
       }
 
@@ -8295,7 +8298,7 @@ def seuil():
           correction: `<div class="step"><div class="step-label">Lecture de b</div>
         <div class="step-content">L'ordonnée à l'origine (quand $x=0$) est $\\boxed{b = ${b}}$.</div></div>
         <div class="step result"><div class="step-label">Calcul de a</div>
-        <div class="step-content">Quand $x$ augmente de 1, $y$ augmente de ${a}. Donc $\\boxed{a = ${a}}$.<br/>
+        <div class="step-content">Quand $x$ augmente de $1$, $y$ augmente de ${a}. Donc $\\boxed{a = ${a}}$.<br/>
         On a donc $f(x) = \\boxed{${res}}$.</div></div>`
         };
       }
@@ -8314,7 +8317,7 @@ def seuil():
           interactiveAnswer: fracInput(num, b),
           answerPlaceholder: `Ex: ${num}/${b}`,
           correction: `<div class="step result"><div class="step-label">Mise au même dénominateur</div>
-        <div class="step-content">$\\frac{${a}}{${b}} ${op} ${c} = \\frac{${a}}{${b}} ${op} \\frac{${c * b}}{${b}} = \\frac{${a} ${op} ${c * b}}{${b}} = \\frac{${num}}{${b}}$.</div></div>`
+        <div class="step-content">$\\frac{${a}}{${b}} ${op} ${c} = \\frac{${a}}{${b}} ${op} \\frac{${c * b}}{${b}} = \\frac{${a} ${op} ${c * b}}{${b}} = \\boxed{\\frac{${num}}{${b}}}$.</div></div>`
         };
       }
 
@@ -8331,10 +8334,10 @@ def seuil():
           questions: [`Donner la valeur de l'inconnue $x$.`],
           interactiveAnswer: ans,
           answerPlaceholder: `Ex: ${ans}`,
-          correction: `<div class="step result"><div class="step-label">Isolement de x</div>
+          correction: `<div class="step result"><div class="step-label">Isolement de $x$</div>
         <div class="step-content">$${a}x = ${c} ${b >= 0 ? '- ' + b : '+ ' + Math.abs(b)}$<br/>
         $${a}x = ${c - b}$<br/>
-        $x = \\frac{${c - b}}{${a}}$ ${((c - b) % a === 0) ? ` = ${(c - b) / a}` : ''}</div></div>`
+        $x = \\frac{${c - b}}{${a}} ${((c - b) % a === 0) ? `= \\boxed{${(c - b) / a}}` : `= \\boxed{\\frac{${c - b}}{${a}}}`}$</div></div>`
         };
       }
 
@@ -8350,8 +8353,8 @@ def seuil():
           interactiveAnswer: ans.toString(),
           answerPlaceholder: `Ex: ${ans}`,
           correction: `<div class="step result"><div class="step-label">Astuce de calcul</div>
-        <div class="step-content">Prendre ${pct}% revient à ${pct === 10 ? 'diviser par 10' : pct === 20 ? 'diviser par 5' : pct === 25 ? 'diviser par 4' : 'diviser par 2'}.<br/>
-        $${val} \\times \\frac{${pct}}{100} = ${ans}$.</div></div>`
+        <div class="step-content">Prendre $${pct}\\,\\%$ revient à ${pct === 10 ? 'diviser par 10' : pct === 20 ? 'diviser par 5' : pct === 25 ? 'diviser par 4' : 'diviser par 2'}.<br/>
+        $${val} \\times \\frac{${pct}}{100} = \\boxed{${ans}}$.</div></div>`
         };
       }
 
@@ -8414,7 +8417,7 @@ def seuil():
             ${findX ? `On trace la droite horizontale $y = ${yVal}$. Les points d'intersection de cette droite avec la courbe nous donnent les antécédents en lisant leurs abscisses.` : `On repère $x = ${xVal}$ sur l'axe des abscisses. On monte (ou on descend) jusqu'à la courbe, puis on lit l'ordonnée correspondante sur l'axe vertical.`}
           </div></div>
           <div class="step result"><div class="step-label">Résultat</div>
-          <div class="step-content">On trouve <strong>$${fn.name}(${xVal}) = ${yVal}$</strong>.</div></div>`
+          <div class="step-content">On trouve : $\\boxed{${fn.name}(${xVal}) = ${yVal}}$.</div></div>`
         };
       }
 
@@ -8538,8 +8541,8 @@ def seuil():
   <div class="course-def"><span class="block-title">Définition & Calcul</span>
     La proportion $p$ d'une sous-population $A$ (ex: les élèves gauchers) d'effectif $n_A$ dans une population globale $E$ (ex: tout le lycée) d'effectif $N$ se calcule par :
     $$p = \\frac{n_A}{N}$$
-    On l'exprime généralement en pourcentage (en multipliant par 100).<br/>
-    <strong>Exemple :</strong> Si un lycée de 1200 élèves compte 300 gauchers, la proportion est $p = \\frac{300}{1200} = 0.25$, soit $25\\%$.
+    On l'exprime généralement en pourcentage (en multipliant par $100$).<br/>
+    <strong>Exemple :</strong> Si un lycée de $1200$ élèves compte $300$ gauchers, la proportion est $p = \\frac{300}{1200} = 0.25$, soit $25\\%$.
   </div>
   <div class="course-prop"><span class="block-title">Proportion de proportion (Inclusions successives)</span>
     Si $A$ est une sous-population de $B$ (proportion $p_1$), et $B$ une sous-population de $C$ (proportion $p_2$), alors la proportion globale de $A$ dans $C$ est le <strong>produit</strong> des proportions :
@@ -8745,7 +8748,7 @@ def seuil():
     Elle est l'outil parfait pour modéliser des <strong>évolutions en pourcentages répétées</strong> (intérêts bancaires, inflation, dépréciation d'une voiture, prolifération de bactéries).
   </div>
   <div class="course-ex"><span class="block-title">Lien avec les taux d'évolution</span>
-    Si ton loyer augmente de 5% par an, tu multiplies sa valeur chaque année par $CM = 1 + \\frac{5}{100} = 1.05$.<br/>
+    Si votre loyer augmente de $5\\%$ par an, vous multipliez sa valeur chaque année par $CM = 1 + \\frac{5}{100} = 1.05$.<br/>
     C'est une suite géométrique de raison $q = 1.05$.
   </div>
 </div>
