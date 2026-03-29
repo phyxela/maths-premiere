@@ -2181,19 +2181,19 @@
     let currentNiveau = ''; // 'spe' | 'tc'
 
     const SPE_CHAPTERS = [
-      { n:1, icon:'📐', name:'Second Degré'      },
-      { n:2, icon:'📈', name:'Dérivation'         },
-      { n:3, icon:'🔢', name:'Suites Numériques' },
-      { n:4, icon:'🎲', name:'Probabilités'       },
-      { n:5, icon:'⚡', name:'Automatismes'       }
+      { n: 1, icon: '📐', name: 'Second Degré' },
+      { n: 2, icon: '📈', name: 'Dérivation' },
+      { n: 3, icon: '🔢', name: 'Suites Numériques' },
+      { n: 4, icon: '🎲', name: 'Probabilités' },
+      { n: 5, icon: '⚡', name: 'Automatismes' }
     ];
 
     const TC_CHAPTERS = [
-      { n:1, icon:'🎲', name:'Probabilités'             },
-      { n:2, icon:'📈', name:'Fonctions & Dérivation'   },
-      { n:3, icon:'🔢', name:'Suites Numériques'        },
-      { n:4, icon:'📐', name:'Trigonométrie'             },
-      { n:5, icon:'⚡', name:'Automatismes'              }
+      { n: 1, icon: '🎲', name: 'Probabilités' },
+      { n: 2, icon: '📊', name: 'Fonctions et Modèles' },
+      { n: 3, icon: '🔢', name: 'Suites Numériques' },
+      { n: 4, icon: '📐', name: 'Trigonométrie' },
+      { n: 5, icon: '📉', name: 'Statistiques' }
     ];
 
     // Affiche l'overlay de sélection de filière
@@ -3903,7 +3903,7 @@
 
       let generators;
       if (currentNiveau === 'tc') {
-        generators = [null, genTC_Proba, genTC_Derivation, genTC_Suites, genTC_Trigo, genAutomatismes];
+        generators = [null, genTC_Proba, genTC_Fonctions, genTC_Suites, genTC_Trigo, genTC_Stats];
       } else {
         generators = [null, genSecondDegree, genDerivation, genSuites, genProba, genAutomatismes];
       }
@@ -6820,39 +6820,39 @@
       return mk('Erreur critique', 'Catégorie non traitée ou introuvable.', ['-'], '0', '0');
     }
 
-/* =====================================================================
-   TRONC COMMUN — Générateurs d'exercices
-   Ch.1 Probabilités · Ch.2 Fonctions & Dérivation · Ch.3 Suites · Ch.4 Trigonométrie
-   ===================================================================== */
+    /* =====================================================================
+       TRONC COMMUN — Générateurs d'exercices
+       Ch.1 Probabilités · Ch.2 Fonctions & Dérivation · Ch.3 Suites · Ch.4 Trigonométrie
+       ===================================================================== */
 
-function pct(v, dec = 0) { return (v * 100).toFixed(dec) + '\\%'; }
+    function pct(v, dec = 0) { return (v * 100).toFixed(dec) + '\\%'; }
 
-// ══════════════════════════════════════════════════════════════════
-// CH.1 TC — PROBABILITÉS
-// ══════════════════════════════════════════════════════════════════
-function genTC_Proba() {
-  const type = pickD(
-    ['tableau'],
-    ['arbre', 'tableau'],
-    ['independance', 'var_alea', 'arbre']
-  );
-  if (type === 'arbre')         return genTC_ProbaArbre();
-  if (type === 'independance')  return genTC_ProbaIndep();
-  if (type === 'var_alea')      return genTC_ProbaVarAlea();
-  return genTC_ProbaTableau();
-}
+    // ══════════════════════════════════════════════════════════════════
+    // CH.1 TC — PROBABILITÉS
+    // ══════════════════════════════════════════════════════════════════
+    function genTC_Proba() {
+      const type = pickD(
+        ['tableau'],
+        ['arbre', 'tableau'],
+        ['independance', 'var_alea', 'arbre']
+      );
+      if (type === 'arbre') return genTC_ProbaArbre();
+      if (type === 'independance') return genTC_ProbaIndep();
+      if (type === 'var_alea') return genTC_ProbaVarAlea();
+      return genTC_ProbaTableau();
+    }
 
-function genTC_ProbaTableau() {
-  const ctx = pick([
-    { pop: 'lycéens', A: 'Fille', notA: 'Garçon', B: 'pratique un sport', notB: 'ne pratique pas de sport' },
-    { pop: 'clients', A: 'Abonné premium', notA: 'Abonné standard', B: 'satisfait', notB: 'insatisfait' },
-    { pop: 'élèves', A: 'prend le bus', notA: 'ne prend pas le bus', B: 'en retard au moins une fois', notB: 'jamais en retard' }
-  ]);
-  const nAB  = rand(15, 50), nAnB = rand(10, 45), nnAB = rand(10, 40), nnAnB = rand(10, 40);
-  const nA = nAB + nAnB, nnA = nnAB + nnAnB, nB = nAB + nnAB, nnB = nAnB + nnAnB, n = nA + nnA;
-  const pAB_ok = nAB * nnA === nA * nnAB ? "sont indépendants" : "ne sont pas indépendants";
-  const table = (r1c1, r1c2, r1c3, r2c1, r2c2, r2c3, r3c1, r3c2, r3c3) =>
-    `<table style="margin:14px auto;border-collapse:collapse;font-size:13px;">
+    function genTC_ProbaTableau() {
+      const ctx = pick([
+        { pop: 'lycéens', A: 'Fille', notA: 'Garçon', B: 'pratique un sport', notB: 'ne pratique pas de sport' },
+        { pop: 'clients', A: 'Abonné premium', notA: 'Abonné standard', B: 'satisfait', notB: 'insatisfait' },
+        { pop: 'élèves', A: 'prend le bus', notA: 'ne prend pas le bus', B: 'en retard au moins une fois', notB: 'jamais en retard' }
+      ]);
+      const nAB = rand(15, 50), nAnB = rand(10, 45), nnAB = rand(10, 40), nnAnB = rand(10, 40);
+      const nA = nAB + nAnB, nnA = nnAB + nnAnB, nB = nAB + nnAB, nnB = nAnB + nnAnB, n = nA + nnA;
+      const pAB_ok = nAB * nnA === nA * nnAB ? "sont indépendants" : "ne sont pas indépendants";
+      const table = (r1c1, r1c2, r1c3, r2c1, r2c2, r2c3, r3c1, r3c2, r3c3) =>
+        `<table style="margin:14px auto;border-collapse:collapse;font-size:13px;">
       <tr><th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)"></th>
           <th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">${ctx.B}</th>
           <th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">${ctx.notB}</th>
@@ -6870,404 +6870,610 @@ function genTC_ProbaTableau() {
           <td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">${r3c2}</td>
           <td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center;font-weight:600">${r3c3}</td></tr>
     </table>`;
-  const showFull = currentDifficulty === 'facile';
-  const tbl = showFull
-    ? table(nAB, nAnB, nA, nnAB, nnAnB, nnA, nB, nnB, n)
-    : table(nAB, '?', nA, '?', nnAnB, '?', nB, '?', n);
-  return {
-    title: "Probabilités – Tableau à double entrée",
-    enonce: `On interroge un groupe de ${n} ${ctx.pop}. Le tableau ci-dessous résume les résultats.
+      const showFull = currentDifficulty === 'facile';
+      const tbl = showFull
+        ? table(nAB, nAnB, nA, nnAB, nnAnB, nnA, nB, nnB, n)
+        : table(nAB, '?', nA, '?', nnAnB, '?', nB, '?', n);
+      return {
+        title: "Probabilités – Tableau à double entrée",
+        enonce: `On interroge un groupe de ${n} ${ctx.pop}. Le tableau ci-dessous résume les résultats.
       On note $A$ l'événement « ${ctx.A.toLowerCase()} » et $B$ l'événement « ${ctx.B} ».${tbl}`,
-    questions: showFull ? [
-      `Calculer $P(A)$.`,
-      `Calculer $P(A \\cap B)$.`,
-      `Calculer $P_B(A)$, la probabilité d'être ${ctx.A.toLowerCase()} sachant ${ctx.B}.`,
-      `$A$ et $B$ sont-ils indépendants ? Justifier.`
-    ] : [
-      `Compléter le tableau (les cases « ? »).`,
-      `Calculer $P(A \\cap B)$ puis $P_B(A)$.`,
-      `Montrer que $A$ et $B$ ${pAB_ok}.`
-    ],
-    correction: `<div class="step"><div class="step-label">Tableau complété</div>
+        questions: showFull ? [
+          `Calculer $P(A)$.`,
+          `Calculer $P(A \\cap B)$.`,
+          `Calculer $P_B(A)$, la probabilité d'être ${ctx.A.toLowerCase()} sachant ${ctx.B}.`,
+          `$A$ et $B$ sont-ils indépendants ? Justifier.`
+        ] : [
+          `Compléter le tableau (les cases « ? »).`,
+          `Calculer $P(A \\cap B)$ puis $P_B(A)$.`,
+          `Montrer que $A$ et $B$ ${pAB_ok}.`
+        ],
+        correction: `<div class="step"><div class="step-label">Tableau complété</div>
       <div class="step-content">${table(nAB, nAnB, nA, nnAB, nnAnB, nnA, nB, nnB, n)}</div></div>
       <div class="step"><div class="step-label">$P(A)$ et $P(A\\cap B)$</div>
       <div class="step-content">$$P(A)=\\frac{${nA}}{${n}},\\quad P(A\\cap B)=\\frac{${nAB}}{${n}}$$</div></div>
       <div class="step"><div class="step-label">Probabilité conditionnelle</div>
-      <div class="step-content">$$P_B(A)=\\frac{${nAB}}{${nB}}\\approx ${(nAB/nB).toFixed(3)}$$</div></div>
+      <div class="step-content">$$P_B(A)=\\frac{${nAB}}{${nB}}\\approx ${(nAB / nB).toFixed(3)}$$</div></div>
       <div class="step"><div class="step-label">Indépendance</div>
       <div class="step-content">Donc $A$ et $B$ <strong>${pAB_ok}</strong>.</div></div>`
-  };
-}
+      };
+    }
 
-function genTC_ProbaArbre() {
-  const ctx = pick([
-    { nom: 'Un lycée propose deux options : $A$ (art) et $\\overline{A}$ (sport).', pA: 0.4, pBsA: 0.7, pBsnA: 0.3 },
-    { nom: 'Une urne contient des billes bleues ($A$) et rouges ($\\overline{A}$).', pA: 0.6, pBsA: 0.8, pBsnA: 0.25 },
-    { nom: 'Dans une entreprise, 35 % des salariés sont des femmes ($A$).', pA: 0.35, pBsA: 0.6, pBsnA: 0.45 }
-  ]);
-  const pA = ctx.pA, pnA = +(1-pA).toFixed(2);
-  const pBsA = ctx.pBsA, pBsnA = ctx.pBsnA, pnBsnA = +(1-pBsnA).toFixed(2);
-  const pAB  = +(pA * pBsA).toFixed(4);
-  const pnAB = +(pnA * pBsnA).toFixed(4);
-  const pB   = +(pAB + pnAB).toFixed(4);
-  const pAsB = +(pAB / pB).toFixed(4);
-  return {
-    title: "Probabilités – Arbre de probabilité",
-    enonce: `${ctx.nom}<br/>On sait que : $P(A)=${pA}$, $P_A(B)=${pBsA}$, $P_{\\overline{A}}(B)=${pBsnA}$.`,
-    questions: [
-      `Reproduire et compléter l'arbre de probabilité.`,
-      `Calculer $P(A \\cap B)$ et $P(\\overline{A} \\cap B)$.`,
-      `En déduire $P(B)$ à l'aide de la formule des probabilités totales.`,
-      `Calculer $P_B(A)$.`
-    ],
-    correction: `<div class="step"><div class="step-label">Intersections</div>
+    function genTC_ProbaArbre() {
+      const ctx = pick([
+        { nom: 'Un lycée propose deux options : $A$ (art) et $\\overline{A}$ (sport).', pA: 0.4, pBsA: 0.7, pBsnA: 0.3 },
+        { nom: 'Une urne contient des billes bleues ($A$) et rouges ($\\overline{A}$).', pA: 0.6, pBsA: 0.8, pBsnA: 0.25 },
+        { nom: 'Dans une entreprise, 35 % des salariés sont des femmes ($A$).', pA: 0.35, pBsA: 0.6, pBsnA: 0.45 }
+      ]);
+      const pA = ctx.pA, pnA = +(1 - pA).toFixed(2);
+      const pBsA = ctx.pBsA, pBsnA = ctx.pBsnA, pnBsnA = +(1 - pBsnA).toFixed(2);
+      const pAB = +(pA * pBsA).toFixed(4);
+      const pnAB = +(pnA * pBsnA).toFixed(4);
+      const pB = +(pAB + pnAB).toFixed(4);
+      const pAsB = +(pAB / pB).toFixed(4);
+      return {
+        title: "Probabilités – Arbre de probabilité",
+        enonce: `${ctx.nom}<br/>On sait que : $P(A)=${pA}$, $P_A(B)=${pBsA}$, $P_{\\overline{A}}(B)=${pBsnA}$.`,
+        questions: [
+          `Reproduire et compléter l'arbre de probabilité.`,
+          `Calculer $P(A \\cap B)$ et $P(\\overline{A} \\cap B)$.`,
+          `En déduire $P(B)$ à l'aide de la formule des probabilités totales.`,
+          `Calculer $P_B(A)$.`
+        ],
+        correction: `<div class="step"><div class="step-label">Intersections</div>
       <div class="step-content">$$P(A\\cap B)=${pA}\\times ${pBsA}=${pAB},\\quad P(\\overline{A}\\cap B)=${pnA}\\times ${pBsnA}=${pnAB}$$</div></div>
       <div class="step"><div class="step-label">Probabilités totales</div>
       <div class="step-content">$$P(B)=${pAB}+${pnAB}=${pB}$$</div></div>
       <div class="step"><div class="step-label">$P_B(A)$</div>
       <div class="step-content">$$P_B(A)=\\frac{${pAB}}{${pB}}\\approx ${pAsB}$$</div></div>`
-  };
-}
+      };
+    }
 
-function genTC_ProbaIndep() {
-  const pA = pick([0.3, 0.4, 0.5, 0.6, 0.7]);
-  const pB = pick([0.25, 0.3, 0.4, 0.5, 0.6]);
-  const indep = pick([true, false]);
-  const pAB = indep ? +(pA*pB).toFixed(4) : +(pA*pB + pick([-0.05, 0.05, 0.1, -0.1])).toFixed(4);
-  const verdict = (Math.abs(pAB - pA*pB) < 0.001) ? "indépendants" : "non indépendants";
-  return {
-    title: "Probabilités – Indépendance",
-    enonce: `Deux événements $A$ et $B$ vérifient : $P(A)=${pA}$, $P(B)=${pB}$, $P(A\\cap B)=${pAB}$.`,
-    questions: [
-      `Rappeler la définition de l'indépendance de deux événements.`,
-      `$A$ et $B$ sont-ils indépendants ? Justifier.`,
-      `Si $A$ et $B$ sont indépendants, que vaut $P_B(A)$ ?`
-    ],
-    correction: `<div class="step"><div class="step-label">Calcul</div>
-      <div class="step-content">$P(A)\\times P(B)=${+(pA*pB).toFixed(4)}$ et $P(A\\cap B)=${pAB}$.<br/>
+    function genTC_ProbaIndep() {
+      const pA = pick([0.3, 0.4, 0.5, 0.6, 0.7]);
+      const pB = pick([0.25, 0.3, 0.4, 0.5, 0.6]);
+      const indep = pick([true, false]);
+      const pAB = indep ? +(pA * pB).toFixed(4) : +(pA * pB + pick([-0.05, 0.05, 0.1, -0.1])).toFixed(4);
+      const verdict = (Math.abs(pAB - pA * pB) < 0.001) ? "indépendants" : "non indépendants";
+      return {
+        title: "Probabilités – Indépendance",
+        enonce: `Deux événements $A$ et $B$ vérifient : $P(A)=${pA}$, $P(B)=${pB}$, $P(A\\cap B)=${pAB}$.`,
+        questions: [
+          `Rappeler la définition de l'indépendance de deux événements.`,
+          `$A$ et $B$ sont-ils indépendants ? Justifier.`,
+          `Si $A$ et $B$ sont indépendants, que vaut $P_B(A)$ ?`
+        ],
+        correction: `<div class="step"><div class="step-label">Calcul</div>
+      <div class="step-content">$P(A)\\times P(B)=${+(pA * pB).toFixed(4)}$ et $P(A\\cap B)=${pAB}$.<br/>
       Donc $A$ et $B$ sont <strong>${verdict}</strong>.</div></div>
       <div class="step"><div class="step-label">Cas indépendant</div>
       <div class="step-content">Si indépendants : $P_B(A)=P(A)=${pA}$.</div></div>`
-  };
-}
+      };
+    }
 
-function genTC_ProbaVarAlea() {
-  const vals = [rand(0,2), rand(3,5), rand(6,9)];
-  const p1 = pick([0.2, 0.25, 0.3, 0.4]);
-  const p2 = pick([0.3, 0.35, 0.4]);
-  const p3 = +(1-p1-p2).toFixed(2);
-  const E  = +(vals[0]*p1 + vals[1]*p2 + vals[2]*p3).toFixed(3);
-  const E2 = +(vals[0]**2*p1 + vals[1]**2*p2 + vals[2]**2*p3).toFixed(3);
-  const V  = +(E2 - E**2).toFixed(3);
-  return {
-    title: "Variable aléatoire discrète",
-    enonce: `$X$ prend les valeurs $${vals[0]}$, $${vals[1]}$, $${vals[2]}$ avec $P(X=${vals[0]})=${p1}$ et $P(X=${vals[1]})=${p2}$.`,
-    questions: [
-      `Calculer $P(X=${vals[2]})$.`,
-      `Dresser le tableau de la loi de $X$.`,
-      `Calculer $E(X)$.`,
-      currentDifficulty === 'difficile' ? `Calculer $V(X)$ et $\\sigma(X)$.` : `Interpréter $E(X)$.`
-    ],
-    correction: `<div class="step"><div class="step-label">$P(X=${vals[2]})$</div>
+    function genTC_ProbaVarAlea() {
+      const vals = [rand(0, 2), rand(3, 5), rand(6, 9)];
+      const p1 = pick([0.2, 0.25, 0.3, 0.4]);
+      const p2 = pick([0.3, 0.35, 0.4]);
+      const p3 = +(1 - p1 - p2).toFixed(2);
+      const E = +(vals[0] * p1 + vals[1] * p2 + vals[2] * p3).toFixed(3);
+      const E2 = +(vals[0] ** 2 * p1 + vals[1] ** 2 * p2 + vals[2] ** 2 * p3).toFixed(3);
+      const V = +(E2 - E ** 2).toFixed(3);
+      return {
+        title: "Variable aléatoire discrète",
+        enonce: `$X$ prend les valeurs $${vals[0]}$, $${vals[1]}$, $${vals[2]}$ avec $P(X=${vals[0]})=${p1}$ et $P(X=${vals[1]})=${p2}$.`,
+        questions: [
+          `Calculer $P(X=${vals[2]})$.`,
+          `Dresser le tableau de la loi de $X$.`,
+          `Calculer $E(X)$.`,
+          currentDifficulty === 'difficile' ? `Calculer $V(X)$ et $\\sigma(X)$.` : `Interpréter $E(X)$.`
+        ],
+        correction: `<div class="step"><div class="step-label">$P(X=${vals[2]})$</div>
       <div class="step-content">$1-${p1}-${p2}=${p3}$</div></div>
       <div class="step"><div class="step-label">Espérance</div>
       <div class="step-content">$$E(X)=${vals[0]}\\times${p1}+${vals[1]}\\times${p2}+${vals[2]}\\times${p3}=${E}$$</div></div>
-      ${currentDifficulty==='difficile'?`<div class="step"><div class="step-label">Variance</div>
-      <div class="step-content">$V(X)=${E2}-${E}^2=${V}$, $\\sigma(X)\\approx${Math.sqrt(V).toFixed(3)}$</div></div>`:''}`
-  };
-}
+      ${currentDifficulty === 'difficile' ? `<div class="step"><div class="step-label">Variance</div>
+      <div class="step-content">$V(X)=${E2}-${E}^2=${V}$, $\\sigma(X)\\approx${Math.sqrt(V).toFixed(3)}$</div></div>` : ''}`
+      };
+    }
 
-// ══════════════════════════════════════════════════════════════════
-// CH.2 TC — FONCTIONS & DÉRIVATION
-// ══════════════════════════════════════════════════════════════════
-function genTC_Derivation() {
-  const type = pickD(
-    ['derivee_simple'],
-    ['tableau_variation', 'derivee_simple'],
-    ['etude_complete', 'tableau_variation']
-  );
-  if (type === 'tableau_variation') return genTC_DerivTableauVariation();
-  if (type === 'etude_complete')    return genTC_DerivEtudeComplete();
-  return genTC_DerivSimple();
-}
+    // ══════════════════════════════════════════════════════════════════
+    // CH.2 TC — FONCTIONS ET MODÈLES
+    // (Programme TC : taux de variation moyen, lecture graphique,
+    //  fonctions de référence, modèles affins/quadratiques/périodiques)
+    // ══════════════════════════════════════════════════════════════════
+    function genTC_Fonctions() {
+      const type = pickD(
+        ['taux_variation'],
+        ['lecture_graphique', 'taux_variation'],
+        ['modele_contextuel', 'lecture_graphique']
+      );
+      if (type === 'lecture_graphique') return genTC_FonctionsLecture();
+      if (type === 'modele_contextuel') return genTC_FonctionsModele();
+      return genTC_FonctionsTaux();
+    }
 
-function genTC_DerivSimple() {
-  const a = pick([-3,-2,-1,1,2,3]), b = pick([-4,-3,-2,-1,1,2,3,4]), c = rand(-5,5);
-  const da = 2*a, db = b;
-  return {
-    title: "Calcul d'une dérivée",
-    enonce: `Soit $f(x)=${a}x^2${b>=0?'+':''}${b}x${c>=0?'+':''}${c}$.`,
-    questions: [
-      `Rappeler les formules de dérivation usuelles.`,
-      `Calculer $f'(x)$.`,
-      `Calculer $f'(0)$ et interpréter géométriquement.`
-    ],
-    correction: `<div class="step"><div class="step-label">$f'(x)$</div>
-      <div class="step-content">$$f'(x)=${da}x${db>=0?'+':''}${db}$$</div></div>
-      <div class="step"><div class="step-label">$f'(0)$</div>
-      <div class="step-content">$f'(0)=${b}$ : pente de la tangente en $x=0$.</div></div>`
-  };
-}
+    function genTC_FonctionsTaux() {
+      const ctxs = [
+        { fn: x => 2 * x + 3, label: 'f(x)=2x+3', nom: 'une fonction affine', unite: '€/unité' },
+        { fn: x => x * x, label: 'f(x)=x^2', nom: 'la fonction carré', unite: 'm²/m' },
+        { fn: x => 3 * x - 1, label: 'f(x)=3x-1', nom: 'une fonction affine', unite: '€/unité' },
+        { fn: x => 0.5 * x * x + 1, label: 'f(x)=0{,}5x^2+1', nom: 'une fonction quadratique', unite: 'unité' }
+      ];
+      const ctx = pick(ctxs);
+      const a = rand(0, 4), b = a + pick([1, 2, 3]);
+      const fa = ctx.fn(a), fb = ctx.fn(b);
+      const tau = +((fb - fa) / (b - a)).toFixed(2);
+      return {
+        title: "Taux de variation moyen",
+        enonce: `On considère ${ctx.nom} $f$ définie par $f(x)=${ctx.label}$.`,
+        questions: [
+          `Calculer $f(${a})$ et $f(${b})$.`,
+          `Calculer le taux de variation moyen de $f$ entre $x=${a}$ et $x=${b}$.`,
+          `Interpréter ce résultat dans un contexte concret.`,
+          currentDifficulty === 'difficile' ? `Comparer $f(${a + 1})-f(${a})$ et $f(${b})-f(${b - 1})$. Que remarque-t-on ?` : `La fonction est-elle croissante ou décroissante sur cet intervalle ?`
+        ],
+        correction: `<div class="step"><div class="step-label">Images</div>
+      <div class="step-content">$f(${a})=${fa}$, $f(${b})=${fb}$</div></div>
+      <div class="step"><div class="step-label">Taux de variation</div>
+      <div class="step-content">$$\\tau=\\frac{f(${b})-f(${a})}{${b}-${a}}=\\frac{${fb}-${fa}}{${b - a}}=${tau}$$</div></div>
+      <div class="step"><div class="step-label">Interprétation</div>
+      <div class="step-content">En moyenne, quand $x$ augmente de 1 unité entre ${a} et ${b}, $f(x)$ ${tau >= 0 ? 'augmente' : 'diminue'} de $|${tau}|$ ${ctx.unite}.</div></div>`
+      };
+    }
 
-function genTC_DerivTableauVariation() {
-  const a = pick([-2,-1,1,2]), b = pick([-4,-3,-2,-1,1,2,3,4]), c = rand(-6,6);
-  const x0 = -b/(2*a);
-  const fx0 = +(a*x0*x0 + b*x0 + c).toFixed(2);
-  const varMin = a > 0;
-  return {
-    title: "Tableau de variations",
-    enonce: `Soit $f(x)=${a}x^2${b>=0?'+':''}${b}x${c>=0?'+':''}${c}$.`,
-    questions: [
-      `Calculer $f'(x)$.`,
-      `Étudier le signe de $f'(x)$ et dresser le tableau de variations.`,
-      `En déduire le ${varMin?'minimum':'maximum'} de $f$.`
-    ],
-    correction: `<div class="step"><div class="step-label">Dérivée</div>
-      <div class="step-content">$f'(x)=${2*a}x${b>=0?'+':''}${b}$, s'annule en $x=${x0}$.</div></div>
-      <div class="step"><div class="step-label">Extremum</div>
-      <div class="step-content">$f$ admet un ${varMin?'minimum':'maximum'} en $x=${x0}$ : $f(${x0})=${fx0}$.</div></div>`
-  };
-}
+    function genTC_FonctionsLecture() {
+      const pts = [
+        { a: rand(0, 3), b: rand(0, 3), c: rand(1, 4), d: rand(4, 8) }
+      ][0];
+      const ctxs = [
+        {
+          titre: "Température au cours de la journée",
+          uniteX: 'heures',
+          uniteY: '°C',
+          valeurs: [
+            [0, pick([5, 8, 10])],
+            [6, pick([8, 12, 14])],
+            [12, pick([18, 20, 22, 24])],
+            [18, pick([14, 16, 18])],
+            [24, pick([8, 10, 12])]
+          ]
+        },
+        {
+          titre: "Distance parcourue par un cycliste",
+          uniteX: 'heures',
+          uniteY: 'km',
+          valeurs: [
+            [0, 0],
+            [1, pick([15, 18, 20])],
+            [2, pick([30, 35, 38])],
+            [3, pick([45, 50, 55])],
+            [4, pick([60, 65, 70])]
+          ]
+        }
+      ];
+      const ctx = pick(ctxs);
+      const tab = ctx.valeurs;
+      const tableHTML = `<table style="margin:14px auto;border-collapse:collapse;font-size:13px;">
+    <tr><th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">$t$ (${ctx.uniteX})</th>${tab.map(([t]) => `<td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">$${t}$</td>`).join('')}</tr>
+    <tr><th style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">$f(t)$ (${ctx.uniteY})</th>${tab.map(([, v]) => `<td style="padding:7px 14px;border:1px solid rgba(255,255,255,0.15);text-align:center">$${v}$</td>`).join('')}</tr>
+  </table>`;
+      const idx = pick([1, 2, 3]);
+      const tau12 = +((tab[idx][1] - tab[idx - 1][1]) / (tab[idx][0] - tab[idx - 1][0])).toFixed(2);
+      const maxVal = tab.reduce((m, r) => r[1] > m[1] ? r : m, tab[0]);
+      return {
+        title: `Lecture de tableau de valeurs — ${ctx.titre}`,
+        enonce: `Le tableau suivant donne les valeurs de la fonction $f$ modélisant « ${ctx.titre} »${tableHTML}`,
+        questions: [
+          `Quel est le maximum observé de $f$ ? Pour quelle valeur de $t$ est-il atteint ?`,
+          `La fonction est-elle croissante ou décroissante entre $t=${tab[idx - 1][0]}$ et $t=${tab[idx][0]}$ ?`,
+          `Calculer le taux de variation moyen entre $t=${tab[idx - 1][0]}$ et $t=${tab[idx][0]}$.`,
+          currentDifficulty === 'difficile' ? `Estimer $f(${(tab[idx - 1][0] + tab[idx][0]) / 2})$ par interpolation linéaire.` : `Interpréter ce taux de variation.`
+        ],
+        correction: `<div class="step"><div class="step-label">Maximum</div>
+      <div class="step-content">Maximum $f(${maxVal[0]})=${maxVal[1]}$ ${ctx.uniteY} atteint en $t=${maxVal[0]}$ ${ctx.uniteX}.</div></div>
+      <div class="step"><div class="step-label">Taux de variation</div>
+      <div class="step-content">$$\\tau=\\frac{${tab[idx][1]}-${tab[idx - 1][1]}}{${tab[idx][0]}-${tab[idx - 1][0]}}=${tau12}\\text{ ${ctx.uniteY}/${ctx.uniteX}}$$</div></div>
+      <div class="step"><div class="step-label">Sens de variation</div>
+      <div class="step-content">$\\tau=${tau12}$ ${tau12 >= 0 ? '> 0 : $f$ est <strong>croissante</strong>' : '< 0 : $f$ est <strong>décroissante</strong>'} sur cet intervalle.</div></div>`
+      };
+    }
 
-function genTC_DerivEtudeComplete() {
-  const a = pick([-1,1]), b = pick([-3,-2,-1,1,2,3]), c = rand(-4,4), d = rand(-6,6);
-  const da=3*a, db=2*b, dc=c;
-  const discr = db*db - 4*da*dc;
-  let x1=null, x2=null;
-  if (discr>0) {
-    x1 = +((-db-Math.sqrt(discr))/(2*da)).toFixed(2);
-    x2 = +((-db+Math.sqrt(discr))/(2*da)).toFixed(2);
-    if (x1>x2) [x1,x2]=[x2,x1];
-  }
-  const fx = x => +(a*x**3+b*x**2+c*x+d).toFixed(2);
-  return {
-    title: "Étude d'une fonction cubique",
-    enonce: `Soit $f(x)=${a<0?'-':''}x^3${b>=0?'+':''}${b}x^2${c>=0?'+':''}${c}x${d>=0?'+':''}${d}$.`,
-    questions: [
-      `Calculer $f'(x)$.`,
-      `Étudier le signe de $f'(x)$ (discriminant).`,
-      `Dresser le tableau de variations et déterminer les extrema.`
-    ],
-    correction: `<div class="step"><div class="step-label">$f'(x)$</div>
-      <div class="step-content">$$f'(x)=${da}x^2${db>=0?'+':''}${db}x${dc>=0?'+':''}${dc}$$</div></div>
-      <div class="step"><div class="step-label">Discriminant $\\Delta=${discr}$</div>
-      <div class="step-content">${discr>0?`Deux racines $x_1\\approx${x1}$ et $x_2\\approx${x2}$. Extrema : $f(${x1})\\approx${fx(x1)}$ et $f(${x2})\\approx${fx(x2)}$.`:discr===0?`Racine double, pas d'extremum strict.`:`$\\Delta<0$ : $f$ strictement ${da>0?'croissante':'décroissante'} sur $\\mathbb{R}$.`}</div></div>`
-  };
-}
+    function genTC_FonctionsModele() {
+      const type = pick(['affin', 'quadratique', 'periodique']);
+      if (type === 'periodique') {
+        const T = pick([2, 4, 6, 8, 12]), A = pick([3, 5, 10, 20]);
+        return {
+          title: "Modèle périodique — fonction sinusoïdale",
+          enonce: `La pression sonore d'un son pur est modélisée par $f(t)=${A}\\sin\\!\\left(\\dfrac{2\\pi}{${T}}\\,t\\right)$, où $t$ est en secondes et $f(t)$ en pascals.`,
+          questions: [
+            `Quelle est la période $T$ de cette fonction ?`,
+            `Quelle est l'amplitude de cette oscillation ?`,
+            `Donner les valeurs de $f(0)$, $f(${T / 4})$ et $f(${T / 2})$.`,
+            currentDifficulty === 'difficile' ? `Quelle est la fréquence de ce son (en Hz) ?` : `La fonction $f$ est-elle bornée ? Justifier.`
+          ],
+          correction: `<div class="step"><div class="step-label">Période et amplitude</div>
+        <div class="step-content">Période : $T=${T}$ s. Amplitude : $A=${A}$ Pa.<br/>La fonction oscille entre $-${A}$ et $+${A}$.</div></div>
+        <div class="step"><div class="step-label">Valeurs particulières</div>
+        <div class="step-content">$f(0)=0$, $f(${T / 4})=${A}$ (maximum), $f(${T / 2})=0$.</div></div>
+        ${currentDifficulty === 'difficile' ? `<div class="step"><div class="step-label">Fréquence</div>
+        <div class="step-content">$\\nu=\\frac{1}{T}=\\frac{1}{${T}}\\approx${+(1 / T).toFixed(3)}$ Hz.</div></div>` : ''}`
+        };
+      }
+      if (type === 'quadratique') {
+        const a = pick([2, 3, 0.5, 0.1]), b = rand(0, 5);
+        const fb = +(a * b * b).toFixed(1);
+        return {
+          title: "Modèle quadratique — aire d'une surface",
+          enonce: `L'aire $A$ (en m²) d'un carré de côté $x$ (en m) est modélisée par $f(x)=${a}x^2$.`,
+          questions: [
+            `Calculer $f(${b})$. Que représente ce résultat ?`,
+            `Si l'aire doit valoir $${+(a * 9).toFixed(1)}$ m², quelle est la longueur du côté ?`,
+            `La fonction $f$ est-elle croissante sur $[0\\,;\\,+\\infty[$ ? Justifier.`,
+            currentDifficulty === 'difficile' ? `Calculer le taux de variation entre $x=2$ et $x=4$.` : `Comparer $f(2)$ et $f(3)$.`
+          ],
+          correction: `<div class="step"><div class="step-label">Image</div>
+        <div class="step-content">$f(${b})=${a}\\times${b}^2=${fb}$ m². C'est l'aire d'un carré de côté $${b}$ m.</div></div>
+        <div class="step"><div class="step-label">Antécédent</div>
+        <div class="step-content">${a}x^2=${+(a * 9).toFixed(1)} \\Leftrightarrow x^2=9 \\Leftrightarrow x=3$ m (car $x>0$).</div></div>`
+        };
+      }
+      // affin
+      const a2 = pick([15, 20, 25, 30]), b2 = rand(5, 20);
+      const x0 = rand(1, 5), fx0 = a2 * x0 + b2;
+      return {
+        title: "Modèle affine — tarification",
+        enonce: `Un prestataire facture ses services selon la formule $C(x)=${a2}x+${b2}$ euros, où $x$ est le nombre d'heures.`,
+        questions: [
+          `Calculer $C(${x0})$. Que représente ce résultat ?`,
+          `Pour quel nombre d'heures le coût est-il de $${a2 * 4 + b2}$ € ?`,
+          `Interpréter les valeurs $${a2}$ et $${b2}$ dans ce contexte.`,
+          currentDifficulty === 'difficile' ? `Calculer le taux de variation entre $x=1$ et $x=3$. Que remarques-tu ?` : `La fonction $C$ est-elle croissante ou décroissante ?`
+        ],
+        correction: `<div class="step"><div class="step-label">Image</div>
+      <div class="step-content">$C(${x0})=${a2}\\times${x0}+${b2}=${fx0}$ €. C'est le coût pour ${x0} heure(s).</div></div>
+      <div class="step"><div class="step-label">Antécédent</div>
+      <div class="step-content">${a2}x+${b2}=${a2 * 4 + b2} \\Leftrightarrow ${a2}x=${a2 * 4} \\Leftrightarrow x=4$ heures.</div></div>
+      <div class="step"><div class="step-label">Interprétation</div>
+      <div class="step-content">${a2} = coût horaire (€/h) ; ${b2} = frais fixes (€) indépendants du nombre d'heures.</div></div>`
+      };
+    }
 
-// ══════════════════════════════════════════════════════════════════
-// CH.3 TC — SUITES NUMÉRIQUES
-// ══════════════════════════════════════════════════════════════════
-function genTC_Suites() {
-  const type = pickD(
-    ['identifier'],
-    ['formule', 'identifier'],
-    ['contexte', 'formule']
-  );
-  if (type==='formule')  return genTC_SuitesFormule();
-  if (type==='contexte') return genTC_SuitesContexte();
-  return genTC_SuitesIdentifier();
-}
+    // ══════════════════════════════════════════════════════════════════
+    // CH.3 TC — SUITES NUMÉRIQUES
+    // ══════════════════════════════════════════════════════════════════
+    function genTC_Suites() {
+      const type = pickD(
+        ['identifier'],
+        ['formule', 'identifier'],
+        ['contexte', 'formule']
+      );
+      if (type === 'formule') return genTC_SuitesFormule();
+      if (type === 'contexte') return genTC_SuitesContexte();
+      return genTC_SuitesIdentifier();
+    }
 
-function genTC_SuitesIdentifier() {
-  const isArith = pick([true,false]);
-  const u0 = rand(-5,20);
-  const r = isArith ? rand(-5,8) : pick([2,3,0.5,-2]);
-  const terms = isArith
-    ? [u0,u0+r,u0+2*r,u0+3*r]
-    : [u0,+(u0*r).toFixed(2),+(u0*r*r).toFixed(2),+(u0*r**3).toFixed(2)];
-  return {
-    title: "Identifier la nature d'une suite",
-    enonce: `Suite $(u_n)$ : $${terms.map((t,i)=>`u_${i}=${t}`).join(',\\;')}\\ldots$`,
-    questions: [
-      `La suite est-elle arithmétique ou géométrique ? Justifier.`,
-      `Donner la raison et la formule explicite.`,
-      `Calculer $u_{10}$.`
-    ],
-    correction: `<div class="step"><div class="step-label">Nature</div>
-      <div class="step-content">${isArith?`Différences constantes = $${r}$ → <strong>arithmétique</strong>, $r=${r}$.`:`Rapports constants = $${r}$ → <strong>géométrique</strong>, $q=${r}$.`}</div></div>
+    function genTC_SuitesIdentifier() {
+      const isArith = pick([true, false]);
+      const u0 = rand(-5, 20);
+      const r = isArith ? rand(-5, 8) : pick([2, 3, 0.5, -2]);
+      const terms = isArith
+        ? [u0, u0 + r, u0 + 2 * r, u0 + 3 * r]
+        : [u0, +(u0 * r).toFixed(2), +(u0 * r * r).toFixed(2), +(u0 * r ** 3).toFixed(2)];
+      return {
+        title: "Identifier la nature d'une suite",
+        enonce: `Suite $(u_n)$ : $${terms.map((t, i) => `u_${i}=${t}`).join(',\\;')}\\ldots$`,
+        questions: [
+          `La suite est-elle arithmétique ou géométrique ? Justifier.`,
+          `Donner la raison et la formule explicite.`,
+          `Calculer $u_{10}$.`
+        ],
+        correction: `<div class="step"><div class="step-label">Nature</div>
+      <div class="step-content">${isArith ? `Différences constantes = $${r}$ → <strong>arithmétique</strong>, $r=${r}$.` : `Rapports constants = $${r}$ → <strong>géométrique</strong>, $q=${r}$.`}</div></div>
       <div class="step"><div class="step-label">Formule et $u_{10}$</div>
-      <div class="step-content">$u_n=${isArith?`${u0}+${r}n`:`${u0}\\times(${r})^n`}$, donc $u_{10}=${isArith?u0+10*r:+(u0*r**10).toFixed(3)}$.</div></div>`
-  };
-}
+      <div class="step-content">$u_n=${isArith ? `${u0}+${r}n` : `${u0}\\times(${r})^n`}$, donc $u_{10}=${isArith ? u0 + 10 * r : +(u0 * r ** 10).toFixed(3)}$.</div></div>`
+      };
+    }
 
-function genTC_SuitesFormule() {
-  const isArith = pick([true,false]);
-  const u0=rand(1,15), r=isArith?rand(1,6):pick([2,3]);
-  const n=rand(5,12);
-  const un = isArith ? u0+r*n : u0*r**n;
-  const S = isArith ? (n+1)*(u0+(u0+r*n))/2 : u0*(r**(n+1)-1)/(r-1);
-  return {
-    title: "Suite – termes et somme",
-    enonce: `Suite ${isArith?'arithmétique':'géométrique'}, $u_0=${u0}$, raison $${isArith?'r':'q'}=${r}$.`,
-    questions: [
-      `Formule explicite de $u_n$.`,
-      `Calculer $u_{${n}}$.`,
-      `Calculer $S=u_0+\\cdots+u_{${n}}$.`
-    ],
-    correction: `<div class="step"><div class="step-label">Résultats</div>
-      <div class="step-content">$u_n=${isArith?`${u0}+${r}n`:`${u0}\\times${r}^n`}$<br/>
+    function genTC_SuitesFormule() {
+      const isArith = pick([true, false]);
+      const u0 = rand(1, 15), r = isArith ? rand(1, 6) : pick([2, 3]);
+      const n = rand(5, 12);
+      const un = isArith ? u0 + r * n : u0 * r ** n;
+      const S = isArith ? (n + 1) * (u0 + (u0 + r * n)) / 2 : u0 * (r ** (n + 1) - 1) / (r - 1);
+      return {
+        title: "Suite – termes et somme",
+        enonce: `Suite ${isArith ? 'arithmétique' : 'géométrique'}, $u_0=${u0}$, raison $${isArith ? 'r' : 'q'}=${r}$.`,
+        questions: [
+          `Formule explicite de $u_n$.`,
+          `Calculer $u_{${n}}$.`,
+          `Calculer $S=u_0+\\cdots+u_{${n}}$.`
+        ],
+        correction: `<div class="step"><div class="step-label">Résultats</div>
+      <div class="step-content">$u_n=${isArith ? `${u0}+${r}n` : `${u0}\\times${r}^n`}$<br/>
       $u_{${n}}=${+un.toFixed(3)}$<br/>
       $S=${+S.toFixed(2)}$</div></div>`
-  };
-}
+      };
+    }
 
-function genTC_SuitesContexte() {
-  const ctx = pick([
-    { desc:'Un capital de {u0} € est placé à 5 % par an.', u0:rand(500,2000), r:1.05, type:'geo', unite:'€', question:'Au bout de combien d\'années le capital double-t-il ?' },
-    { desc:'Une entreprise augmente sa production de 200 unités par mois.', u0:rand(800,1500), r:200, type:'arith', unite:'unités', question:'Production après 2 ans ?' }
-  ]);
-  const u0=ctx.u0, isArith=ctx.type==='arith', r=ctx.r;
-  const desc=ctx.desc.replace('{u0}',u0);
-  const u12=isArith?u0+r*12:+(u0*r**12).toFixed(2);
-  return {
-    title: "Suites – Contexte",
-    enonce: `${desc} On note $u_n$ la valeur au rang $n$.`,
-    questions: [
-      `Nature de $(u_n)$, premier terme et raison.`,
-      `Formule explicite de $u_n$.`,
-      ctx.question
-    ],
-    correction: `<div class="step"><div class="step-label">Suite ${isArith?'arithmétique':'géométrique'}</div>
-      <div class="step-content">$u_n=${isArith?`${u0}+${r}n`:`${u0}\\times${r}^n`}$, $u_{12}=${u12}$ ${ctx.unite}.</div></div>`
-  };
-}
+    function genTC_SuitesContexte() {
+      const ctx = pick([
+        { desc: 'Un capital de {u0} € est placé à 5 % par an.', u0: rand(500, 2000), r: 1.05, type: 'geo', unite: '€', question: 'Au bout de combien d\'années le capital double-t-il ?' },
+        { desc: 'Une entreprise augmente sa production de 200 unités par mois.', u0: rand(800, 1500), r: 200, type: 'arith', unite: 'unités', question: 'Production après 2 ans ?' }
+      ]);
+      const u0 = ctx.u0, isArith = ctx.type === 'arith', r = ctx.r;
+      const desc = ctx.desc.replace('{u0}', u0);
+      const u12 = isArith ? u0 + r * 12 : +(u0 * r ** 12).toFixed(2);
+      return {
+        title: "Suites – Contexte",
+        enonce: `${desc} On note $u_n$ la valeur au rang $n$.`,
+        questions: [
+          `Nature de $(u_n)$, premier terme et raison.`,
+          `Formule explicite de $u_n$.`,
+          ctx.question
+        ],
+        correction: `<div class="step"><div class="step-label">Suite ${isArith ? 'arithmétique' : 'géométrique'}</div>
+      <div class="step-content">$u_n=${isArith ? `${u0}+${r}n` : `${u0}\\times${r}^n`}$, $u_{12}=${u12}$ ${ctx.unite}.</div></div>`
+      };
+    }
 
-// ══════════════════════════════════════════════════════════════════
-// CH.4 TC — TRIGONOMÉTRIE
-// ══════════════════════════════════════════════════════════════════
-function genTC_Trigo() {
-  const type = pickD(
-    ['valeurs_rem'],
-    ['equation','triangle'],
-    ['vecteurs','equation']
-  );
-  if (type==='equation')  return genTC_TrigoEquation();
-  if (type==='triangle')  return genTC_TrigoTriangle();
-  if (type==='vecteurs')  return genTC_TrigoVecteurs();
-  return genTC_TrigoValeursRem();
-}
+    // ══════════════════════════════════════════════════════════════════
+    // CH.4 TC — TRIGONOMÉTRIE
+    // (Programme TC : triangle rectangle, valeurs remarquables,
+    //  fonctions sin et cos comme fonctions périodiques)
+    // ══════════════════════════════════════════════════════════════════
+    function genTC_Trigo() {
+      const type = pickD(
+        ['valeurs_rem'],
+        ['triangle', 'valeurs_rem'],
+        ['periodique', 'triangle']
+      );
+      if (type === 'triangle') return genTC_TrigoTriangle();
+      if (type === 'periodique') return genTC_TrigoFonctionPeriodique();
+      return genTC_TrigoValeursRem();
+    }
 
-function genTC_TrigoValeursRem() {
-  const angles = [
-    { deg:30,  rad:'\\frac{\\pi}{6}', sin:'\\frac{1}{2}',   cos:'\\frac{\\sqrt{3}}{2}', tan:'\\frac{\\sqrt{3}}{3}' },
-    { deg:45,  rad:'\\frac{\\pi}{4}', sin:'\\frac{\\sqrt{2}}{2}', cos:'\\frac{\\sqrt{2}}{2}', tan:'1' },
-    { deg:60,  rad:'\\frac{\\pi}{3}', sin:'\\frac{\\sqrt{3}}{2}', cos:'\\frac{1}{2}', tan:'\\sqrt{3}' },
-    { deg:120, rad:'\\frac{2\\pi}{3}', sin:'\\frac{\\sqrt{3}}{2}', cos:'-\\frac{1}{2}', tan:'-\\sqrt{3}' },
-    { deg:150, rad:'\\frac{5\\pi}{6}', sin:'\\frac{1}{2}', cos:'-\\frac{\\sqrt{3}}{2}', tan:'-\\frac{\\sqrt{3}}{3}' }
-  ];
-  const sel = pick(angles);
-  return {
-    title: "Valeurs remarquables",
-    enonce: `Angle $\\theta=${sel.rad}$ rad ($${sel.deg}°$).`,
-    questions: [
-      `Valeur exacte de $\\sin(\\theta)$.`,
-      `Valeur exacte de $\\cos(\\theta)$.`,
-      `En déduire $\\tan(\\theta)$.`
-    ],
-    correction: `<div class="step"><div class="step-label">Valeurs</div>
+    function genTC_TrigoValeursRem() {
+      const angles = [
+        { deg: 30, rad: '\\frac{\\pi}{6}', sin: '\\frac{1}{2}', cos: '\\frac{\\sqrt{3}}{2}', tan: '\\frac{\\sqrt{3}}{3}' },
+        { deg: 45, rad: '\\frac{\\pi}{4}', sin: '\\frac{\\sqrt{2}}{2}', cos: '\\frac{\\sqrt{2}}{2}', tan: '1' },
+        { deg: 60, rad: '\\frac{\\pi}{3}', sin: '\\frac{\\sqrt{3}}{2}', cos: '\\frac{1}{2}', tan: '\\sqrt{3}' },
+        { deg: 120, rad: '\\frac{2\\pi}{3}', sin: '\\frac{\\sqrt{3}}{2}', cos: '-\\frac{1}{2}', tan: '-\\sqrt{3}' },
+        { deg: 150, rad: '\\frac{5\\pi}{6}', sin: '\\frac{1}{2}', cos: '-\\frac{\\sqrt{3}}{2}', tan: '-\\frac{\\sqrt{3}}{3}' }
+      ];
+      const sel = pick(angles);
+      return {
+        title: "Valeurs remarquables",
+        enonce: `Angle $\\theta=${sel.rad}$ rad ($${sel.deg}°$).`,
+        questions: [
+          `Valeur exacte de $\\sin(\\theta)$.`,
+          `Valeur exacte de $\\cos(\\theta)$.`,
+          `En déduire $\\tan(\\theta)$.`
+        ],
+        correction: `<div class="step"><div class="step-label">Valeurs</div>
       <div class="step-content">$\\sin=${sel.sin}$, $\\cos=${sel.cos}$, $\\tan=${sel.tan}$</div></div>`
-  };
-}
+      };
+    }
 
-function genTC_TrigoEquation() {
-  const val = pick([
-    { v:'\\frac{1}{2}',  sc:['\\frac{\\pi}{3}','\\frac{5\\pi}{3}'], ss:['\\frac{\\pi}{6}','\\frac{5\\pi}{6}'] },
-    { v:'\\frac{\\sqrt{2}}{2}', sc:['\\frac{\\pi}{4}','\\frac{7\\pi}{4}'], ss:['\\frac{\\pi}{4}','\\frac{3\\pi}{4}'] },
-    { v:'\\frac{\\sqrt{3}}{2}', sc:['\\frac{\\pi}{6}','\\frac{11\\pi}{6}'], ss:['\\frac{\\pi}{3}','\\frac{2\\pi}{3}'] }
-  ]);
-  const fct = pick(['cos','sin']);
-  const sols = fct==='cos' ? val.sc : val.ss;
-  return {
-    title: "Équation trigonométrique",
-    enonce: `Résoudre sur $[0;2\\pi[$ : $\\${fct}(x)=${val.v}$`,
-    questions: [
-      `Rappeler les valeurs remarquables du $${fct==='cos'?'cosinus':'sinus'}$.`,
-      `Donner les solutions dans $[0;2\\pi[$.`,
-      `Écrire les solutions générales.`
-    ],
-    correction: `<div class="step"><div class="step-label">Solutions</div>
-      <div class="step-content">$x=${sols[0]}$ ou $x=${sols[1]}$ (modulo $2\\pi$)</div></div>`
-  };
-}
+    function genTC_TrigoFonctionPeriodique() {
+      const contexts = [
+        { nom: 'signal sonore', unite: 'Pa', var: 't', uniteVar: 's' },
+        { nom: 'signal électrique alternatif', unite: 'V', var: 't', uniteVar: 's' },
+        { nom: 'mouvement de marée', unite: 'm', var: 't', uniteVar: 'h' }
+      ];
+      const ctx = pick(contexts);
+      const A = pick([3, 5, 10, 15, 20]);
+      const T = pick([2, 4, 6, 12, 24]);
+      const phi = pick([0, 1, 2]);
+      const fName = pick(['sin', 'cos']);
+      const formule = phi === 0
+        ? `${A}\\,\\${fName}\\!\\left(\\dfrac{2\\pi}{${T}}\\,${ctx.var}\\right)`
+        : `${A}\\,\\${fName}\\!\\left(\\dfrac{2\\pi}{${T}}\\,${ctx.var}+${phi}\\right)`;
+      const freqHz = +(1 / T).toFixed(4);
+      return {
+        title: `Fonction ${fName === 'sin' ? 'sinusoïdale' : 'cosinusoïdale'} — ${ctx.nom}`,
+        enonce: `Un ${ctx.nom} est modélisé par $f(${ctx.var})=${formule}$ (${ctx.uniteVar} → ${ctx.unite}).`,
+        questions: [
+          `Identifier la période $T$ de cette fonction.`,
+          `Quelle est l'amplitude de ce signal ?`,
+          `Calculer $f(0)$.`,
+          currentDifficulty === 'difficile' ? `Calculer la fréquence $\\nu$ en Hz, puis la pulsation $\\omega=\\dfrac{2\\pi}{T}$.` : `Sur quel intervalle de valeurs la fonction $f$ est-elle bornée ?`
+        ],
+        correction: `<div class="step"><div class="step-label">Période et amplitude</div>
+      <div class="step-content">Période : $T=${T}$ ${ctx.uniteVar}.<br/>Amplitude : $A=${A}$ ${ctx.unite}.<br/>La fonction oscille entre $-${A}$ et $+${A}$ ${ctx.unite}.</div></div>
+      <div class="step"><div class="step-label">$f(0)$</div>
+      <div class="step-content">$f(0)=${A}\\times\\${fName}(${phi})=${phi === 0 ? 0 : +(A * Math[fName](phi)).toFixed(2)}$ ${ctx.unite}.</div></div>
+      ${currentDifficulty === 'difficile' ? `<div class="step"><div class="step-label">Fréquence et pulsation</div>
+      <div class="step-content">$\\nu=\\dfrac{1}{T}=${freqHz}$ Hz, $\\omega=\\dfrac{2\\pi}{${T}}\\approx${+(2 * Math.PI / T).toFixed(3)}$ rad/${ctx.uniteVar}.</div></div>` : ''}`
+      };
+    }
 
-function genTC_TrigoTriangle() {
-  const triangles = [[3,4,5],[5,12,13],[8,15,17],[6,8,10]];
-  const [a,b,c] = pick(triangles).map(x => x*pick([1,2]));
-  const angleA = +(Math.asin(a/c)*180/Math.PI).toFixed(1);
-  return {
-    title: "Trigonométrie – Triangle rectangle",
-    enonce: `Triangle $ABC$ rectangle en $B$, avec $BC=${a}$ et $AC=${c}$.`,
-    questions: [
-      `Calculer $AB$.`,
-      `Calculer $\\sin(\\hat{A})$, $\\cos(\\hat{A})$ et $\\tan(\\hat{A})$.`,
-      `Donner $\\hat{A}$ en degrés (arrondi au dixième).`
-    ],
-    correction: `<div class="step"><div class="step-label">Résultats</div>
+    // ══════════════════════════════════════════════════════════════════
+    // CH.5 TC — STATISTIQUES DESCRIPTIVES
+    // (Programme TC : indicateurs de position et dispersion,
+    //  lecture de distributions, fluctuation d'échantillonnage)
+    // ══════════════════════════════════════════════════════════════════
+    function genTC_Stats() {
+      const type = pickD(
+        ['indicateurs'],
+        ['distribution', 'indicateurs'],
+        ['fluctuation', 'distribution']
+      );
+      if (type === 'distribution') return genTC_StatsDistribution();
+      if (type === 'fluctuation') return genTC_StatsFluct();
+      return genTC_StatsIndicateurs();
+    }
+
+    function genTC_StatsIndicateurs() {
+      const ctxs = [
+        { nom: 'notes de contrôle', unite: '/20', n: 10 },
+        { nom: 'durée de trajets (en min)', unite: 'min', n: 8 },
+        { nom: 'températures journalières (°C)', unite: '°C', n: 7 }
+      ];
+      const ctx = pick(ctxs);
+      const n = ctx.n;
+      // Génère une liste de n valeurs entières triées
+      const vals = Array.from({ length: n }, () => rand(5, 18)).sort((a, b) => a - b);
+      const mean = +(vals.reduce((s, v) => s + v, 0) / n).toFixed(2);
+      const sorted = [...vals];
+      const med = n % 2 === 0 ? +((sorted[n / 2 - 1] + sorted[n / 2]) / 2).toFixed(1) : sorted[(n - 1) / 2];
+      const q1 = sorted[Math.floor(n / 4)];
+      const q3 = sorted[Math.floor(3 * n / 4)];
+      const variance = +(vals.reduce((s, v) => s + (v - mean) ** 2, 0) / n).toFixed(2);
+      const ecartType = +Math.sqrt(variance).toFixed(2);
+      const tableRow = `<table style="margin:10px auto;border-collapse:collapse;font-size:13px;">
+    <tr><th style="padding:6px 10px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">Valeurs (${ctx.unite})</th>
+    ${vals.map(v => `<td style="padding:6px 10px;border:1px solid rgba(255,255,255,0.15);text-align:center">$${v}$</td>`).join('')}</tr></table>`;
+      return {
+        title: `Statistiques — ${ctx.nom}`,
+        enonce: `On relève les ${ctx.nom} suivantes pour $n=${n}$ observations :${tableRow}`,
+        questions: [
+          `Calculer la moyenne $\\bar{x}$.`,
+          `Déterminer la médiane.`,
+          currentDifficulty !== 'facile' ? `Déterminer les quartiles $Q_1$ et $Q_3$, puis l'étendue interquartile.` : `Donner le minimum et le maximum de la série.`,
+          currentDifficulty === 'difficile' ? `Calculer la variance $V$ puis l'écart-type $\\sigma$.` : `Interpréter la moyenne dans le contexte.`
+        ],
+        correction: `<div class="step"><div class="step-label">Moyenne</div>
+      <div class="step-content">$$\\bar{x}=\\frac{${vals.join('+')}}{${n}}=${mean}$$</div></div>
+      <div class="step"><div class="step-label">Médiane (série triée : ${sorted.join(', ')})</div>
+      <div class="step-content">$n=${n}$ ${n % 2 === 0 ? `(pair) : médiane $=\\frac{${sorted[n / 2 - 1]}+${sorted[n / 2]}}{2}=${med}$` : `(impair) : médiane = valeur centrale $=${med}$`}</div></div>
+      <div class="step"><div class="step-label">Quartiles</div>
+      <div class="step-content">$Q_1=${q1}$, $Q_3=${q3}$, étendue interquartile $=${q3 - q1}$.</div></div>
+      ${currentDifficulty === 'difficile' ? `<div class="step"><div class="step-label">Écart-type</div>
+      <div class="step-content">$V=${variance}$, $\\sigma=\\sqrt{${variance}}\\approx${ecartType}$.</div></div>` : ''}`
+      };
+    }
+
+    function genTC_StatsDistribution() {
+      const ctxs = [
+        {
+          nom: "résultats d'une enquête sur le temps de sommeil des lycéens",
+          classes: ['< 6h', '6h-7h', '7h-8h', '8h-9h', '≥ 9h'],
+          milieus: [5.5, 6.5, 7.5, 8.5, 9.5],
+          effectifs: [pick([5, 8, 10]), pick([15, 18, 20]), pick([25, 28, 30]), pick([20, 22, 24]), pick([8, 10, 12])]
+        },
+        {
+          nom: 'notes obtenues à un devoir',
+          classes: ['0-4', '5-8', '9-12', '13-16', '17-20'],
+          milieus: [2, 6.5, 10.5, 14.5, 18.5],
+          effectifs: [pick([2, 3, 4]), pick([8, 10, 12]), pick([15, 18, 20]), pick([10, 12, 14]), pick([3, 5, 7])]
+        }
+      ];
+      const ctx = pick(ctxs);
+      const n = ctx.effectifs.reduce((s, e) => s + e, 0);
+      const moy = +(ctx.effectifs.reduce((s, e, i) => s + e * ctx.milieus[i], 0) / n).toFixed(2);
+      const maxIdx = ctx.effectifs.indexOf(Math.max(...ctx.effectifs));
+      const tableHTML = `<table style="margin:14px auto;border-collapse:collapse;font-size:13px;">
+    <tr><th style="padding:6px 12px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">Classe</th>
+    ${ctx.classes.map(c => `<th style="padding:6px 12px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">${c}</th>`).join('')}</tr>
+    <tr><td style="padding:6px 12px;border:1px solid rgba(255,255,255,0.15);font-weight:600">Effectif</td>
+    ${ctx.effectifs.map(e => `<td style="padding:6px 12px;border:1px solid rgba(255,255,255,0.15);text-align:center">$${e}$</td>`).join('')}</tr>
+  </table>`;
+      const freqs = ctx.effectifs.map(e => +(e / n * 100).toFixed(1));
+      return {
+        title: `Lecture de distribution — ${ctx.nom}`,
+        enonce: `On dispose du tableau de distribution des ${ctx.nom} (total : $n=${n}$).${tableHTML}`,
+        questions: [
+          `Quelle est la classe modale (classe la plus représentée) ?`,
+          `Calculer la fréquence relative (en %) de la classe « ${ctx.classes[maxIdx]} ».`,
+          `Calculer la moyenne estimée $\\bar{x}$ à partir des milieux de classes.`,
+          currentDifficulty === 'difficile' ? `Calculer les fréquences cumulées croissantes et estimer la médiane.` : `Quelle proportion d'individus appartient aux deux premières classes ?`
+        ],
+        correction: `<div class="step"><div class="step-label">Classe modale</div>
+      <div class="step-content">Classe « ${ctx.classes[maxIdx]} » avec l'effectif le plus élevé : $${ctx.effectifs[maxIdx]}$ individus.</div></div>
+      <div class="step"><div class="step-label">Fréquence relative</div>
+      <div class="step-content">$$f=\\frac{${ctx.effectifs[maxIdx]}}{${n}}\\times 100=${freqs[maxIdx]}\\%$$</div></div>
+      <div class="step"><div class="step-label">Moyenne estimée</div>
+      <div class="step-content">$\\bar{x}=\\dfrac{${ctx.effectifs.map((e, i) => e + '\\times' + ctx.milieus[i]).join('+')}}{${n}}\\approx${moy}$.</div></div>`
+      };
+    }
+
+    function genTC_StatsFluct() {
+      const p = pick([0.3, 0.4, 0.5, 0.6, 0.7]);
+      const n = pick([50, 100, 200, 400]);
+      const sigma = +Math.sqrt(p * (1 - p) / n).toFixed(4);
+      const low = +(p - 2 * sigma).toFixed(3);
+      const high = +(p + 2 * sigma).toFixed(3);
+      const echantillon = pick([0.35, 0.42, 0.48, 0.55, 0.62]);
+      const isInInterval = echantillon >= low && echantillon <= high;
+      const ctxs = [
+        { nom: 'vaccin efficace', pop: 'patients' },
+        { nom: 'produit défectueux', pop: 'articles' },
+        { nom: 'réponse positive', pop: 'sondés' }
+      ];
+      const ctx = pick(ctxs);
+      return {
+        title: "Fluctuation d'échantillonnage",
+        enonce: `Dans une population, la proportion de « ${ctx.nom} » est $p=${p}$. On prélève un échantillon de $n=${n}$ ${ctx.pop}.`,
+        questions: [
+          `Rappeler la définition d'un intervalle de fluctuation au seuil 95 %.`,
+          `Calculer l'intervalle de fluctuation $I$ au seuil 95 % pour cet échantillon.`,
+          `Un échantillon donne une fréquence observée $f=${echantillon}$. Cette valeur est-elle compatible avec $p=${p}$ ?`,
+          currentDifficulty === 'difficile' ? `Si $f=${echantillon}$ n'est pas dans l'intervalle, quel risque commet-on en rejetant $p=${p}$ ?` : `Interpréter le résultat.`
+        ],
+        correction: `<div class="step"><div class="step-label">Intervalle de fluctuation</div>
+      <div class="step-content">$I=\\left[p-\\dfrac{1}{\\sqrt{n}}\\,;\\,p+\\dfrac{1}{\\sqrt{n}}\\right]\\approx\\left[${+(p - 1 / Math.sqrt(n)).toFixed(3)}\\,;\\,${+(p + 1 / Math.sqrt(n)).toFixed(3)}\\right]$</div></div>
+      <div class="step"><div class="step-label">Conclusion</div>
+      <div class="step-content">$f=${echantillon}$ ${isInInterval ? '∈' : '∉'} $I$ → la valeur est ${isInInterval ? '<strong>compatible</strong>' : '<strong>non compatible</strong>'} avec $p=${p}$ au seuil 95 %.</div></div>`
+      };
+    }
+
+    function genTC_TrigoTriangle() {
+      const triangles = [[3, 4, 5], [5, 12, 13], [8, 15, 17], [6, 8, 10]];
+      const [a, b, c] = pick(triangles).map(x => x * pick([1, 2]));
+      const angleA = +(Math.asin(a / c) * 180 / Math.PI).toFixed(1);
+      return {
+        title: "Trigonométrie – Triangle rectangle",
+        enonce: `Triangle $ABC$ rectangle en $B$, avec $BC=${a}$ et $AC=${c}$.`,
+        questions: [
+          `Calculer $AB$.`,
+          `Calculer $\\sin(\\hat{A})$, $\\cos(\\hat{A})$ et $\\tan(\\hat{A})$.`,
+          `Donner $\\hat{A}$ en degrés (arrondi au dixième).`
+        ],
+        correction: `<div class="step"><div class="step-label">Résultats</div>
       <div class="step-content">$AB=${b}$, $\\sin(\\hat{A})=\\frac{${a}}{${c}}$, $\\cos(\\hat{A})=\\frac{${b}}{${c}}$, $\\tan(\\hat{A})=\\frac{${a}}{${b}}$<br/>
       $\\hat{A}\\approx${angleA}°$</div></div>`
-  };
-}
+      };
+    }
 
-function genTC_TrigoVecteurs() {
-  const A=[rand(-3,3),rand(-3,3)], B=[rand(1,5),rand(1,5)], C=[rand(-5,0),rand(1,4)];
-  const AB=[B[0]-A[0],B[1]-A[1]], AC=[C[0]-A[0],C[1]-A[1]];
-  const normAB=+Math.sqrt(AB[0]**2+AB[1]**2).toFixed(3);
-  const normAC=+Math.sqrt(AC[0]**2+AC[1]**2).toFixed(3);
-  const dot=AB[0]*AC[0]+AB[1]*AC[1];
-  const collin=AB[0]*AC[1]-AB[1]*AC[0];
-  return {
-    title: "Vecteurs dans le plan",
-    enonce: `$A(${A[0]};${A[1]})$, $B(${B[0]};${B[1]})$, $C(${C[0]};${C[1]})$.`,
-    questions: [
-      `Coordonnées de $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$.`,
-      `Normes $||\\overrightarrow{AB}||$ et $||\\overrightarrow{AC}||$.`,
-      `$\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ sont-ils colinéaires ?`,
-      currentDifficulty==='difficile'?`Calculer $\\overrightarrow{AB}\\cdot\\overrightarrow{AC}$.`:''
-    ].filter(q=>q!==''),
-    correction: `<div class="step"><div class="step-label">Résultats</div>
-      <div class="step-content">$\\overrightarrow{AB}=(${AB[0]};${AB[1]})$, $\\overrightarrow{AC}=(${AC[0]};${AC[1]})$<br/>
-      $||\\overrightarrow{AB}||=${normAB}$, $||\\overrightarrow{AC}||=${normAC}$<br/>
-      Déterminant : ${collin} → ${collin===0?'<strong>colinéaires</strong>':'<strong>non colinéaires</strong>'}
-      ${currentDifficulty==='difficile'?`<br/>Produit scalaire : $${dot}$`:''}</div></div>`
-  };
-}
+    // (genTC_TrigoVecteurs supprimé : produit scalaire et colinéarité → programme Spé uniquement)
 
-// ══════════════════════════════════════════════════════════════════
-// BAC BLANC TRONC COMMUN
-// ══════════════════════════════════════════════════════════════════
-function generateBacSujetTC() {
-  const bacContentEl = document.getElementById('bac-content');
-  const bacCorrBtn   = document.getElementById('bac-show-corr-btn');
-  const bacCorrEl    = document.getElementById('bac-correction-content');
-  if (!bacContentEl || !bacCorrBtn || !bacCorrEl) return;
+    // ══════════════════════════════════════════════════════════════════
+    // BAC BLANC TRONC COMMUN
+    // ══════════════════════════════════════════════════════════════════
+    function generateBacSujetTC() {
+      const bacContentEl = document.getElementById('bac-content');
+      const bacCorrBtn = document.getElementById('bac-show-corr-btn');
+      const bacCorrEl = document.getElementById('bac-correction-content');
+      if (!bacContentEl || !bacCorrBtn || !bacCorrEl) return;
 
-  const TC_META = {
-    1:{icon:'🎲',name:'Probabilités'},
-    2:{icon:'📈',name:'Fonctions & Dérivation'},
-    3:{icon:'🔢',name:'Suites Numériques'},
-    4:{icon:'📐',name:'Trigonométrie'}
-  };
-  const generatorsR = {1:genTC_Proba, 2:genTC_Derivation, 3:genTC_Suites, 4:genTC_Trigo};
-  const generatorsC = {1:genBacTC_Proba, 2:genBacTC_Derivation, 3:genBacTC_Suites, 4:genBacTC_Trigo};
+      const TC_META = {
+        1: { icon: '🎲', name: 'Probabilités' },
+        2: { icon: '📊', name: 'Fonctions et Modèles' },
+        3: { icon: '🔢', name: 'Suites Numériques' },
+        4: { icon: '📐', name: 'Trigonométrie' },
+        5: { icon: '📉', name: 'Statistiques' }
+      };
+      const generatorsR = { 1: genTC_Proba, 2: genTC_Fonctions, 3: genTC_Suites, 4: genTC_Trigo, 5: genTC_Stats };
+      const generatorsC = { 1: genBacTC_Proba, 2: genBacTC_Fonctions, 3: genBacTC_Suites, 4: genBacTC_Trigo, 5: genBacTC_Stats };
 
-  currentBacExercises = [];
-  bacCorrEl.innerHTML = '';
-  bacCorrBtn.style.display = 'inline-flex';
+      currentBacExercises = [];
+      bacCorrEl.innerHTML = '';
+      bacCorrBtn.style.display = 'inline-flex';
 
-  for (const ch of [1,2,3,4]) {
-    const exR = generatorsR[ch](); exR._bacChapter=ch; exR._bacType='Connaissances et Calculs';
-    currentBacExercises.push(exR);
-    const exC = generatorsC[ch](); exC._bacChapter=ch; exC._bacType='Mise en situation';
-    currentBacExercises.push(exC);
-  }
+      for (const ch of [1, 2, 3, 4, 5]) {
+        const exR = generatorsR[ch](); exR._bacChapter = ch; exR._bacType = 'Connaissances et Calculs';
+        currentBacExercises.push(exR);
+        const exC = generatorsC[ch](); exC._bacChapter = ch; exC._bacType = 'Mise en situation';
+        currentBacExercises.push(exC);
+      }
 
-  bacContentEl.innerHTML = currentBacExercises.map((ex,idx) => {
-    const ch=ex._bacChapter, meta=TC_META[ch]||{icon:'',name:`Ch.${ch}`};
-    const qHTML=(ex.questions||[]).map((q,i)=>`<li data-q="${String.fromCharCode(97+i)})">${q}</li>`).join('');
-    return `<div class="exercise-card bac-exercise-card">
+      bacContentEl.innerHTML = currentBacExercises.map((ex, idx) => {
+        const ch = ex._bacChapter, meta = TC_META[ch] || { icon: '', name: `Ch.${ch}` };
+        const qHTML = (ex.questions || []).map((q, i) => `<li data-q="${String.fromCharCode(97 + i)})">${q}</li>`).join('');
+        return `<div class="exercise-card bac-exercise-card">
       <div class="bac-exercise-header">
-        <div class="bac-ex-num">Exercice ${idx+1}</div>
+        <div class="bac-ex-num">Exercice ${idx + 1}</div>
         <div class="bac-ex-chapter">${meta.icon} Ch.${ch} — ${meta.name}<br/>
           <small style="opacity:0.8;font-weight:normal">[${ex._bacType}]</small></div>
       </div>
@@ -7275,92 +7481,111 @@ function generateBacSujetTC() {
       <div class="enonce">${ex.enonce}</div>
       <ul class="question-list">${qHTML}</ul>
     </div>`;
-  }).join('');
-  setTimeout(()=>renderKatex(bacContentEl),50);
-}
+      }).join('');
+      setTimeout(() => renderKatex(bacContentEl), 50);
+    }
 
-function genBacTC_Proba() {
-  const pM=pick([0.05,0.10,0.15,0.20]);
-  const pTM=pick([0.90,0.95,0.98]), pTnM=pick([0.05,0.08,0.10]);
-  const pnM=+(1-pM).toFixed(2);
-  const pAB=+(pM*pTM).toFixed(4), pnAB=+(pnM*pTnM).toFixed(4);
-  const pT=+(pAB+pnAB).toFixed(4), vpp=+(pAB/pT).toFixed(4);
-  return {
-    title: "Test de dépistage – Probabilités totales",
-    enonce: `Test de dépistage d'une maladie $M$ : ${pct(pM)} atteints, sensibilité ${pct(pTM)}, faux positifs ${pct(pTnM)}.`,
-    questions: [
-      `Construire un arbre de probabilité.`,
-      `Calculer $P(T)$ (formule des probabilités totales).`,
-      `Calculer $P_T(M)$ (valeur prédictive positive).`,
-      `Le test est-il fiable ? Interpréter.`
-    ],
-    correction: `<div class="step"><div class="step-label">Calculs</div>
-      <div class="step-content">$P(T)=${pT}$, $P_T(M)\\approx${vpp}=${pct(vpp,1)}$.</div></div>`
-  };
-}
+    function genBacTC_Proba() {
+      const pM = pick([0.05, 0.10, 0.15, 0.20]);
+      const pTM = pick([0.90, 0.95, 0.98]), pTnM = pick([0.05, 0.08, 0.10]);
+      const pnM = +(1 - pM).toFixed(2);
+      const pAB = +(pM * pTM).toFixed(4), pnAB = +(pnM * pTnM).toFixed(4);
+      const pT = +(pAB + pnAB).toFixed(4), vpp = +(pAB / pT).toFixed(4);
+      return {
+        title: "Test de dépistage – Probabilités totales",
+        enonce: `Test de dépistage d'une maladie $M$ : ${pct(pM)} atteints, sensibilité ${pct(pTM)}, faux positifs ${pct(pTnM)}.`,
+        questions: [
+          `Construire un arbre de probabilité.`,
+          `Calculer $P(T)$ (formule des probabilités totales).`,
+          `Calculer $P_T(M)$ (valeur prédictive positive).`,
+          `Le test est-il fiable ? Interpréter.`
+        ],
+        correction: `<div class="step"><div class="step-label">Calculs</div>
+      <div class="step-content">$P(T)=${pT}$, $P_T(M)\\approx${vpp}=${pct(vpp, 1)}$.</div></div>`
+      };
+    }
 
-function genBacTC_Derivation() {
-  const a=pick([-2,-1,1,2]), b=pick([-4,-3,0,3,4]), c=rand(-5,5);
-  const x0=b===0?0:-b/(2*a);
-  const fx0=+(a*x0**2+b*x0+c).toFixed(2);
-  return {
-    title: "Optimisation d'une fonction du second degré",
-    enonce: `Bénéfice modélisé par $f(x)=${a}x^2${b>=0?'+':''}${b}x${c>=0?'+':''}${c}$ (milliers €, $x\\in[0;10]$).`,
-    questions: [
-      `Calculer $f'(x)$.`,
-      `Tableau de variations sur $[0;10]$.`,
-      `Quantité optimale et bénéfice correspondant.`
-    ],
-    correction: `<div class="step"><div class="step-label">Optimum</div>
-      <div class="step-content">$f'(x)=${2*a}x${b>=0?'+':''}${b}=0\\Rightarrow x=${x0}$. Bénéfice ${a<0?'max':'min'} : $f(${x0})=${fx0}$ milliers €.</div></div>`
-  };
-}
+    function genBacTC_Fonctions() {
+      const ctxs = [
+        { nom: 'consommation électrique (kWh)', fn: x => +(2.5 * x + 120).toFixed(1), label: 'C(x)=2{,}5x+120', var: 'x', uniteX: 'appareils', unite: 'kWh', a0: 3, b0: 7 },
+        { nom: 'population d\'une ville (milliers)', fn: x => +(0.5 * x * x + 10 * x + 200).toFixed(0), label: 'P(t)=0{,}5t^2+10t+200', var: 't', uniteX: 'années', unite: 'milliers hab.', a0: 2, b0: 6 },
+        { nom: 'intensité sonore (dB)', fn: x => +(20 * Math.sin(2 * Math.PI / 8 * x) + 60).toFixed(1), label: 'I(t)=20\\sin\\!\\left(\\tfrac{\\pi}{4}t\\right)+60', var: 't', uniteX: 's', unite: 'dB', a0: 0, b0: 4 }
+      ];
+      const ctx = pick(ctxs);
+      const fa = ctx.fn(ctx.a0), fb = ctx.fn(ctx.b0);
+      const tau = +((fb - fa) / (ctx.b0 - ctx.a0)).toFixed(2);
+      return {
+        title: `Analyse d'une fonction – ${ctx.nom}`,
+        enonce: `La fonction $f$ modélisant ${ctx.nom} est définie par $f(${ctx.var})=${ctx.label}$.`,
+        questions: [
+          `Calculer $f(${ctx.a0})$ et $f(${ctx.b0})$. Interpréter ces valeurs.`,
+          `Calculer le taux de variation moyen entre ${ctx.var}=${ctx.a0} et ${ctx.var}=${ctx.b0}.`,
+          `La fonction est-elle croissante, décroissante ou ni l'un ni l'autre sur $[${ctx.a0}\\,;\\,${ctx.b0}]$ ?`,
+          `Interpréter le taux de variation dans le contexte de l'énoncé.`
+        ],
+        correction: `<div class="step"><div class="step-label">Images</div>
+      <div class="step-content">$f(${ctx.a0})=${fa}$ ${ctx.unite}, $f(${ctx.b0})=${fb}$ ${ctx.unite}.</div></div>
+      <div class="step"><div class="step-label">Taux de variation</div>
+      <div class="step-content">$\\tau=\\dfrac{${fb}-${fa}}{${ctx.b0}-${ctx.a0}}=${tau}$ ${ctx.unite}/${ctx.uniteX}.</div></div>
+      <div class="step"><div class="step-label">Sens de variation</div>
+      <div class="step-content">$\\tau=${tau}$ ${tau > 0 ? '>0 : $f$ est <strong>croissante</strong>' : tau < 0 ? '<0 : $f$ est <strong>décroissante</strong>' : '=0 : $f$ est constante'} sur cet intervalle.</div></div>`
+      };
+    }
 
-function genBacTC_Suites() {
-  const u0=pick([1000,1500,2000]), q=pick([1.03,1.04,1.05]), n=pick([5,10,15]);
-  const un=+(u0*q**n).toFixed(2);
-  return {
-    title: "Placement financier – Suite géométrique",
-    enonce: `Capital $${u0}$ € placé à ${pct(q-1)} annuels composés. $u_n$ = capital après $n$ années.`,
-    questions: [
-      `Montrer que $(u_n)$ est géométrique. Préciser $u_0$ et $q$.`,
-      `Formule explicite de $u_n$.`,
-      `Capital après $${n}$ ans.`,
-      `Au bout de combien d'années le capital double-t-il ?`
-    ],
-    correction: `<div class="step"><div class="step-label">Résultat</div>
+    function genBacTC_Suites() {
+      const u0 = pick([1000, 1500, 2000]), q = pick([1.03, 1.04, 1.05]), n = pick([5, 10, 15]);
+      const un = +(u0 * q ** n).toFixed(2);
+      return {
+        title: "Placement financier – Suite géométrique",
+        enonce: `Capital $${u0}$ € placé à ${pct(q - 1)} annuels composés. $u_n$ = capital après $n$ années.`,
+        questions: [
+          `Montrer que $(u_n)$ est géométrique. Préciser $u_0$ et $q$.`,
+          `Formule explicite de $u_n$.`,
+          `Capital après $${n}$ ans.`,
+          `Au bout de combien d'années le capital double-t-il ?`
+        ],
+        correction: `<div class="step"><div class="step-label">Résultat</div>
       <div class="step-content">$u_n=${u0}\\times${q}^n$, $u_{${n}}\\approx${un}$ €.</div></div>`
-  };
-}
+      };
+    }
 
-function genBacTC_Trigo() {
-  const h=pick([8,10,12,15]), angle=pick([30,45,60]);
-  const d=+(h/Math.tan(angle*Math.PI/180)).toFixed(2);
-  const l=+Math.sqrt(h**2+d**2).toFixed(2);
-  return {
-    title: "Trigonométrie – Problème géométrique",
-    enonce: `Bâtiment de hauteur $${h}$ m observé sous un angle d'élévation de $${angle}°$.`,
-    questions: [
-      `Schéma annoté de la situation.`,
-      `Valeur exacte de $\\tan(${angle}°)$.`,
-      `Distance $d$ entre les deux bâtiments.`,
-      `Distance observateur–sommet.`
-    ],
-    correction: `<div class="step"><div class="step-label">Résultats</div>
+    function genBacTC_Trigo() {
+      const h = pick([8, 10, 12, 15]), angle = pick([30, 45, 60]);
+      const d = +(h / Math.tan(angle * Math.PI / 180)).toFixed(2);
+      const l = +Math.sqrt(h ** 2 + d ** 2).toFixed(2);
+      return {
+        title: "Trigonométrie – Problème géométrique",
+        enonce: `Bâtiment de hauteur $${h}$ m observé sous un angle d'élévation de $${angle}°$.`,
+        questions: [
+          `Schéma annoté de la situation.`,
+          `Valeur exacte de $\\tan(${angle}°)$.`,
+          `Distance $d$ entre les deux bâtiments.`,
+          `Distance observateur–sommet.`
+        ],
+        correction: `<div class="step"><div class="step-label">Résultats</div>
       <div class="step-content">$d=\\frac{${h}}{\\tan(${angle}°)}\\approx${d}$ m, distance observateur–sommet $\\approx${l}$ m.</div></div>`
-  };
-}
+      };
+    }
 
-// ══════════════════════════════════════════════════════════════════
-// COURS TRONC COMMUN
-// ══════════════════════════════════════════════════════════════════
-function renderCourseTC(chapter) {
-  const courseEl = document.getElementById('course-content');
-  if (!courseEl) return;
-  let html = '';
+    function genBacTC_Stats() {
+      return {
+        title: "Statistiques – Qualité industrielle",
+        enonce: `Une machine produit des pièces. Historiquement, le taux de défaut est de $p=0.05$. On prélève un échantillon de $n=100$ pièces.`,
+        questions: [`Déterminer l'intervalle de fluctuation asymptotique de la fréquence des défauts au seuil de $95\\%$.`, `Sur un échantillon, on trouve 12 pièces défectueuses. Faut-il réviser la machine ?`],
+        correction: `<div class="step"><div class="step-label">Intervalle et Décision</div><div class="step-content">Intervalle : $I = \\left[0.05 - \\frac{1}{\\sqrt{100}} ; 0.05 + \\frac{1}{\\sqrt{100}}\\right] = [-0.05 ; 0.15]$. En pratique borné à $0$, soit $[0 ; 0.15]$.<br/>Fréquence observée $f = 0.12$. Comme $0.12 \\in I$, il n'y a pas de raison statistique de s'inquiéter au seuil de $95\\%$.</div></div>`
+      };
+    }
 
-  if (chapter === 1) {
-    html = `<div class="course-grid">
+    // ══════════════════════════════════════════════════════════════════
+    // COURS TRONC COMMUN
+    // ══════════════════════════════════════════════════════════════════
+    function renderCourseTC(chapter) {
+      const courseEl = document.getElementById('course-content');
+      if (!courseEl) return;
+      let html = '';
+
+      if (chapter === 1) {
+        html = `<div class="course-grid">
     <div class="course-block"><h3>Probabilité conditionnelle</h3>
       $$P_A(B)=\\frac{P(A\\cap B)}{P(A)}$$
       <p><strong>Indépendance :</strong> $P(A\\cap B)=P(A)\\times P(B)$</p></div>
@@ -7370,27 +7595,30 @@ function renderCourseTC(chapter) {
       <p>$E(X)=\\sum x_i P(X=x_i)$</p>
       <p>$V(X)=E(X^2)-[E(X)]^2$, $\\sigma=\\sqrt{V(X)}$</p></div>
     </div>`;
-  } else if (chapter === 2) {
-    html = `<div class="course-grid">
-    <div class="course-block"><h3>Dérivées usuelles</h3>
+      } else if (chapter === 2) {
+        html = `<div class="course-grid">
+    <div class="course-block"><h3>Taux de variation moyen</h3>
+      $$\\tau_{[a;b]}=\\frac{f(b)-f(a)}{b-a}$$
+      <p>Interprétation : variation moyenne de $f$ par unité d'écart entre $a$ et $b$.</p>
+      <p><strong>Signe :</strong> $\\tau>0$ → $f$ croissante ; $\\tau<0$ → $f$ décroissante sur $[a;b]$.</p></div>
+    <div class="course-block"><h3>Fonctions de référence</h3>
       <table style="width:100%;font-size:13px;border-collapse:collapse">
-        <tr><th style="padding:5px;border:1px solid rgba(255,255,255,0.1)">$f$</th><th style="padding:5px;border:1px solid rgba(255,255,255,0.1)">$f'$</th></tr>
-        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$a$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td></tr>
-        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$ax+b$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$a$</td></tr>
-        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$x^n$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$nx^{n-1}$</td></tr>
-        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\sin x$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\cos x$</td></tr>
-        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\cos x$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$-\\sin x$</td></tr>
+        <tr><th style="padding:5px;border:1px solid rgba(255,255,255,0.1)">$f(x)$</th><th style="padding:5px;border:1px solid rgba(255,255,255,0.1)">Type</th><th style="padding:5px;border:1px solid rgba(255,255,255,0.1)">Variation</th></tr>
+        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$ax+b$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">affine</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">croissante si $a>0$</td></tr>
+        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$x^2$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">quadratique</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">décr. sur $]-\\infty;0]$, croiss. sur $[0;+\\infty[$</td></tr>
+        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\sqrt{x}$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">racine carrée</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">croissante sur $[0;+\\infty[$</td></tr>
+        <tr><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">$A\\sin\\!\\left(\\frac{2\\pi}{T}t\\right)$</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">sinusoïdale</td><td style="padding:5px;border:1px solid rgba(255,255,255,0.1);text-align:center">oscillante, période $T$, amplitude $A$</td></tr>
       </table></div>
-    <div class="course-block"><h3>Règles</h3>
-      <p>$(f+g)'=f'+g'$, $\\ (\\lambda f)'=\\lambda f'$</p>
-      <p>$(fg)'=f'g+fg'$</p></div>
-    <div class="course-block"><h3>Signe de $f'$ et variations</h3>
-      <ul><li>$f'>0$ sur $I$ → $f$ croissante</li>
-      <li>$f'<0$ sur $I$ → $f$ décroissante</li>
-      <li>$f'(a)=0$ + changement de signe → extremum</li></ul></div>
+    <div class="course-block"><h3>Modèles et contextes</h3>
+      <ul>
+        <li><strong>Modèle affine :</strong> croissance à taux constant (ex. tarification).</li>
+        <li><strong>Modèle quadratique :</strong> aires, chutes libres.</li>
+        <li><strong>Modèle périodique :</strong> phénomènes cycliques (son, marées, signal).</li>
+        <li><strong>Lecture graphique :</strong> image $f(a)$, antécédent $f(x)=k$, extremum.</li>
+      </ul></div>
     </div>`;
-  } else if (chapter === 3) {
-    html = `<div class="course-grid">
+      } else if (chapter === 3) {
+        html = `<div class="course-grid">
     <div class="course-block"><h3>Suite arithmétique</h3>
       <p>$u_{n+1}=u_n+r$</p>
       <p>$u_n=u_0+nr$</p>
@@ -7403,8 +7631,8 @@ function renderCourseTC(chapter) {
       <ul><li>$u_{n+1}-u_n=cst$ → arithmétique</li>
       <li>$u_{n+1}/u_n=cst$ → géométrique</li></ul></div>
     </div>`;
-  } else if (chapter === 4) {
-    html = `<div class="course-grid">
+      } else if (chapter === 4) {
+        html = `<div class="course-grid">
     <div class="course-block"><h3>Valeurs remarquables</h3>
       <table style="width:100%;font-size:12px;border-collapse:collapse">
         <tr><th style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1)">$\\theta$</th>
@@ -7412,25 +7640,42 @@ function renderCourseTC(chapter) {
             <th style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1)">$\\cos$</th>
             <th style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1)">$\\tan$</th></tr>
         <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$1$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td></tr>
-        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\pi}{6}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{1}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{3}$</td></tr>
-        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\pi}{4}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{2}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{2}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$1$</td></tr>
-        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\pi}{3}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{1}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\sqrt{3}$</td></tr>
-        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\pi}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$1$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">—</td></tr>
+        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$30°$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{1}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{3}$</td></tr>
+        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$45°$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{2}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{2}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$1$</td></tr>
+        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$60°$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{\\sqrt{3}}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\frac{1}{2}$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$\\sqrt{3}$</td></tr>
+        <tr><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$90°$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$1$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">$0$</td><td style="padding:4px 6px;border:1px solid rgba(255,255,255,0.1);text-align:center">—</td></tr>
       </table></div>
-    <div class="course-block"><h3>Relation fondamentale</h3>
-      $$\\sin^2\\theta+\\cos^2\\theta=1$$
-      <p>Triangle rectangle en $B$ : $\\sin\\hat{A}=\\frac{\\text{opp}}{\\text{hyp}}$, $\\cos\\hat{A}=\\frac{\\text{adj}}{\\text{hyp}}$</p></div>
-    <div class="course-block"><h3>Vecteurs</h3>
-      <p>$\\overrightarrow{AB}=(x_B-x_A;\\,y_B-y_A)$</p>
-      <p>Norme : $\\sqrt{x^2+y^2}$</p>
-      <p>Colinéarité : $x_1y_2-x_2y_1=0$</p>
-      <p>Produit scalaire : $x_1x_2+y_1y_2$</p></div>
+    <div class="course-block"><h3>Triangle rectangle</h3>
+      $$\\sin\\hat{A}=\\frac{\\text{côté opposé}}{\\text{hypoténuse}},\\quad\\cos\\hat{A}=\\frac{\\text{côté adjacent}}{\\text{hypoténuse}}$$
+      $$\\tan\\hat{A}=\\frac{\\text{côté opposé}}{\\text{côté adjacent}}$$
+      <p><strong>Pythagore :</strong> $a^2+b^2=c^2$ (avec $c$ = hypoténuse)</p>
+      <p><strong>Relation fondamentale :</strong> $\\sin^2\\theta+\\cos^2\\theta=1$</p></div>
+    <div class="course-block"><h3>Fonctions périodiques — sin et cos</h3>
+      $$f(t)=A\\,\\sin\\!\\left(\\frac{2\\pi}{T}\\,t+\\varphi\\right)$$
+      <ul>
+        <li>$A$ : <strong>amplitude</strong> (valeur max − valeur min)/2</li>
+        <li>$T$ : <strong>période</strong> (durée d'un cycle complet)</li>
+        <li>$\\nu=\\dfrac{1}{T}$ : <strong>fréquence</strong> (en Hz si $t$ en s)</li>
+        <li>La fonction oscille entre $-A$ et $+A$</li>
+      </ul></div>
     </div>`;
-  } else {
-    html = `<div class="course-grid"><div class="course-block">Choisis un chapitre.</div></div>`;
-  }
-  courseEl.innerHTML = html;
-  setTimeout(()=>renderKatex(courseEl), 50);
-}
+      } else if (chapter === 5) {
+        html = `<div class="course-grid">
+    <div class="course-block"><h3>Indicateurs de position</h3>
+      <p><strong>Moyenne :</strong> $\\bar{x} = \\dfrac{x_1 + x_2 + ... + x_n}{N}$</p>
+      <p><strong>Médiane :</strong> Valeur qui sépare la série ordonnée en deux moitiés égales (50% au-dessus, 50% en-dessous).</p></div>
+    <div class="course-block"><h3>Indicateurs de dispersion</h3>
+      <p><strong>Quartiles :</strong> $Q_1$ (au moins 25% des données lui sont $\\le$) et $Q_3$ (au moins 75% des données lui sont $\\le$).</p>
+      <p><strong>Écart-type $\\sigma$ :</strong> Mesure la dispersion globale des données autour de la moyenne.</p></div>
+    <div class="course-block"><h3>Échantillonnage</h3>
+      <p><strong>Fréquence observée $f$ :</strong> Part du caractère étudié dans l'échantillon.</p>
+      <p><strong>Intervalle de fluctuation (seuil 95%) :</strong> $\\left[ p - \\dfrac{1}{\\sqrt{n}} ; p + \\dfrac{1}{\\sqrt{n}} \\right]$ (pour $n \\ge 25$ et $0.2 \\le p \\le 0.8$).</p></div>
+    </div>`;
+      } else {
+        html = `<div class="course-grid"><div class="course-block">Choisis un chapitre.</div></div>`;
+      }
+      courseEl.innerHTML = html;
+      setTimeout(() => renderKatex(courseEl), 50);
+    }
 
   </script>
