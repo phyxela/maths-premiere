@@ -1950,7 +1950,6 @@
 
     // Envoi de l'avancement (appelé par saveStats, avec délai anti-spam)
     let _trackingTimeout = null;
-    let _lastTrackingTime = 0;
     function scheduleAvancementLog() {
       clearTimeout(_trackingTimeout);
       _trackingTimeout = setTimeout(() => {
@@ -1959,14 +1958,14 @@
         sendToSheets({
           type: 'avancement',
           name: name,
-          filiere: currentNiveau || 'spe', // NOUVEAU : On envoie la filière !
+          filiere: currentNiveau || 'spe', // <--- C'EST CECI QUI MANQUAIT !
           total: statsTotal,
           correct: statsCorrect,
           corr: statsCorr,
           bestStreak: statsBestStreak,
           chapitres: [...chapitresVus]
         });
-      }, 10000);
+      }, 10000); // envoie 10s après la dernière action (évite le flood)
     }
 
 
@@ -2506,7 +2505,8 @@
       currentChapter = null;
       document.getElementById('exercise-zone').style.display = 'none';
       closeBacZone();
-      // NOUVEAU : On charge la bonne progression
+
+      // CHARGEMENT DE LA PROGRESSION DE LA FILIERE
       loadStats();
     }
 
@@ -2526,7 +2526,7 @@
       updateDropdown();
     }
 
-    // Retourne la clé localStorage de l'utilisateur connecté selon sa filière
+    // Retourne la clé localStorage de l'utilisateur connecté
     function userKey() {
       const u = sessionStorage.getItem('mathsPremiere_user') || 'anonymous';
       const niv = currentNiveau || 'spe';
@@ -2564,15 +2564,18 @@
           statsBestStreak = d.bestStreak || 0;
           chapitresVus = new Set(d.chapitres || []);
         } else {
-          // Si on change de filière et qu'il n'y a pas de sauvegarde, on met à 0
+          // Remise à zéro pour une nouvelle filière
           statsTotal = 0; statsCorr = 0; statsCorrect = 0; statsBestStreak = 0;
           chapitresVus = new Set();
         }
+
+        // On met à jour l'affichage dans tous les cas
         document.getElementById('s-total').textContent = statsTotal;
         document.getElementById('s-corr').textContent = statsCorr;
         document.getElementById('s-ok').textContent = statsCorrect;
         const streakEl = document.getElementById('s-streak');
         if (streakEl) streakEl.textContent = statsBestStreak;
+
         updateDropdown();
       } catch (e) { }
     }
