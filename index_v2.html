@@ -1957,26 +1957,33 @@
       const name = sessionStorage.getItem('mathsPremiere_user');
       if (!name) return;
       
-      // Créer la payload
-      const payload = {
-        type: 'avancement',
-        name: name,
-        total: statsTotal,
-        correct: statsCorrect,
-        corr: statsCorr,
-        bestStreak: statsBestStreak,
-        chapitres: [...chapitresVus]
-      };
-      
       // Envoyer immédiatement si plus de 30s depuis le dernier envoi
       if (timeSinceLastSend > 30000) {
-        sendToSheets(payload);
+        sendToSheets({
+          type: 'avancement',
+          name: name,
+          total: statsTotal,
+          correct: statsCorrect,
+          corr: statsCorr,
+          bestStreak: statsBestStreak,
+          chapitres: [...chapitresVus]
+        });
         _lastTrackingTime = now;
       }
       
       // Programmer un envoi dans 10s (pour les mises à jour fréquentes)
+      // IMPORTANT: créer la payload À L'INTÉRIEUR du setTimeout pour capturer les données actuelles
       clearTimeout(_trackingTimeout);
       _trackingTimeout = setTimeout(() => {
+        const payload = {
+          type: 'avancement',
+          name: sessionStorage.getItem('mathsPremiere_user'),
+          total: statsTotal,
+          correct: statsCorrect,
+          corr: statsCorr,
+          bestStreak: statsBestStreak,
+          chapitres: [...chapitresVus]  // Données fraîches au moment de l'envoi
+        };
         sendToSheets(payload);
         _lastTrackingTime = Date.now();
       }, 10000);
@@ -2470,8 +2477,22 @@
     async function selectLevel(niv) {
       const ol = document.getElementById('level-overlay');
       if (ol) ol.style.display = 'none';
+      
+      const changedLevel = currentNiveau !== niv;
+      
+      // Réinitialiser les chapitres si on change vraiment de filière  
+      if (changedLevel) {
+        chapitresVus = new Set();  // Réinitialiser car les chapitres sont différents entre TC et SPE
+      }
+      
       currentNiveau = niv;
       sessionStorage.setItem('mathsPremiere_niveau', niv);
+      
+      // Sauvegarder la réinitialisation avec la nouvelle filière
+      if (changedLevel) {
+        saveStats();
+      }
+      
       applyNiveau(niv);
       // Sauvegarde silencieuse dans le Sheet
       const userName = sessionStorage.getItem('mathsPremiere_user');
@@ -2536,7 +2557,8 @@
           corr: statsCorr,
           correct: statsCorrect,
           bestStreak: statsBestStreak,
-          chapitres: [...chapitresVus]
+          chapitres: [...chapitresVus],
+          niveau: currentNiveau  // Sauvegarder la filière aussi
         }));
         // Mise à jour de l'interface en haut à droite
         updateDropdown();
@@ -2558,7 +2580,15 @@
           statsCorrect = d.correct || 0;
           statsBestStreak = d.bestStreak || 0;
           statsStreak = 0; // Réinitialiser la série courante
-          chapitresVus = new Set(d.chapitres || []);
+          
+          // Charger les chapitres, mais seulement si on est dans la même filière
+          if (d.niveau === currentNiveau) {
+            chapitresVus = new Set(d.chapitres || []);
+          } else {
+            // Si on change de filière, réinitialiser les chapitres
+            chapitresVus = new Set();
+          }
+          
           document.getElementById('s-total').textContent = statsTotal;
           document.getElementById('s-corr').textContent = statsCorr;
           document.getElementById('s-ok').textContent = statsCorrect;
@@ -2604,13 +2634,13 @@
       if (progressPercentEl) progressPercentEl.textContent = progressPercent + '%';
       
       // Chapitres visités - affichage amélioré
-      const labels = ['Ch.1', 'Ch.2', 'Ch.3', 'Ch.4', 'Auto'];
-      const keys = [1, 2, 3, 4, 5];
+      // Afficher seulement les chapitres de la filière actuelle
+      const chapters = currentNiveau === 'tc' ? TC_CHAPTERS : SPE_CHAPTERS;
       const container = el('dd-chapters-grid');
       if (container) {
-        container.innerHTML = labels.map((lbl, i) => {
-          const seen = chapitresVus.has(keys[i]);
-          return `<div class="chapter-badge ${seen ? 'visited' : ''}">${lbl}</div>`;
+        container.innerHTML = chapters.map((ch) => {
+          const seen = chapitresVus.has(ch.n);
+          return `<div class="chapter-badge ${seen ? 'visited' : ''}">${ch.n}</div>`;
         }).join('');
       }
     }
