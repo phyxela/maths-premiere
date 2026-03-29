@@ -1698,52 +1698,33 @@
     }
 
     @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+      to { transform: rotate(360deg); }
     }
 
-    /* =============================================
-       SYSTÈME D'ANIMATIONS GLOBAL
-       ============================================= */
+    /* ==============================================
+       ANIMATIONS – démarrent toutes invisibles,
+       le JS les déclenche au bon moment.
+       ============================================== */
 
-    /* ── Page transition overlay ── */
+    /* ── Overlay de transition (CACHÉ par défaut) ── */
     #page-transition {
+      display: none;                 /* invisible au chargement */
       position: fixed;
       inset: 0;
       z-index: 99999;
       pointer-events: none;
-      overflow: hidden;
     }
-
-    .pt-panel {
+    .pt-inner {
       position: absolute;
       inset: 0;
       background: #07090f;
-      transform: translateY(0);
-      transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
     }
-
-    .pt-logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      opacity: 0;
-      transition: opacity 0.35s ease;
-    }
-
-    .pt-logo-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      color: #e8eeff;
-      letter-spacing: -0.5px;
-    }
-
-    .pt-logo-title span { color: #60a5fa; }
-
-    .pt-logo-badge {
+    .pt-badge {
       display: inline-block;
       background: linear-gradient(135deg, #3b82f6, #60a5fa);
       color: #07090f;
@@ -1755,302 +1736,228 @@
       border-radius: 20px;
       margin-bottom: 14px;
     }
-
-    .pt-progress-wrap {
-      width: 180px;
+    .pt-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: #e8eeff;
+    }
+    .pt-title span { color: #60a5fa; }
+    .pt-bar-wrap {
+      width: 160px;
       height: 2px;
       background: rgba(59,130,246,0.15);
       border-radius: 2px;
-      margin: 16px auto 0;
+      margin-top: 20px;
       overflow: hidden;
     }
-
-    .pt-progress-bar {
+    .pt-bar-fill {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #3b82f6, #60a5fa);
       border-radius: 2px;
-      transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+      transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
     }
+    /* Animation d'entrée du panneau (slide depuis le bas) */
+    @keyframes ptSlideIn {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+    /* Animation de sortie (slide vers le haut) */
+    @keyframes ptSlideOut {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-100%); }
+    }
+    .pt-inner.slide-in  { animation: ptSlideIn  0.55s cubic-bezier(0.76,0,0.24,1) forwards; }
+    .pt-inner.slide-out { animation: ptSlideOut 0.6s  cubic-bezier(0.76,0,0.24,1) forwards; }
 
-    /* État initial : panel couvre tout */
-    #page-transition.active .pt-panel {
-      transform: translateY(0);
-    }
-    /* Exit : panel monte vers le haut */
-    #page-transition.exit .pt-panel {
-      transform: translateY(-100%);
-    }
-    #page-transition.exit .pt-logo {
-      opacity: 0;
-    }
+    /* ── Auth overlay fade-out ── */
+    #auth-overlay { transition: opacity 0.4s ease; }
+    #auth-overlay.fading { opacity: 0; pointer-events: none; }
 
-    /* ── Auth overlay animations ── */
-    #auth-overlay {
-      transition: opacity 0.5s ease;
-    }
-    #auth-overlay.fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
+    /* ── Level overlay fade ── */
+    #level-overlay { transition: opacity 0.35s ease; }
+    #level-overlay.fading { opacity: 0; pointer-events: none; }
 
-    /* ── Level overlay animation ── */
-    #level-overlay {
-      transition: opacity 0.4s ease;
-    }
-    #level-overlay.fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* ── App content reveal ── */
+    /* ── App : invisible jusqu'au reveal ── */
     #app {
       opacity: 0;
       transform: translateY(18px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition: opacity 0.55s ease, transform 0.55s ease;
     }
-    #app.revealed {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    #app.revealed { opacity: 1; transform: translateY(0); }
 
     /* ── Header stagger ── */
     header > * {
       opacity: 0;
-      transform: translateY(14px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    header.animated > * { opacity: 1; transform: translateY(0); }
-    header.animated > *:nth-child(1) { transition-delay: 0.08s; }
-    header.animated > *:nth-child(2) { transition-delay: 0.16s; }
-    header.animated > *:nth-child(3) { transition-delay: 0.24s; }
-
-    /* ── Stats bar reveal ── */
-    .stats-bar {
-      opacity: 0;
       transform: translateY(12px);
       transition: opacity 0.45s ease, transform 0.45s ease;
     }
-    .stats-bar.revealed { opacity: 1; transform: translateY(0); }
+    header.anim > *:nth-child(1) { opacity:1; transform:none; transition-delay:0.06s; }
+    header.anim > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.13s; }
+    header.anim > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.20s; }
 
-    .stat-val {
-      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    /* ── Stats bar ── */
+    .stats-bar {
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.4s ease 0.08s, transform 0.4s ease 0.08s;
     }
-    .stat-val.bump {
-      animation: statBump 0.4s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    @keyframes statBump {
-      0%   { transform: scale(1); }
-      50%  { transform: scale(1.28); }
-      100% { transform: scale(1); }
-    }
+    .stats-bar.revealed { opacity:1; transform:none; }
 
-    /* ── Diff bar reveal ── */
+    /* ── Diff bar ── */
     .diff-bar {
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.45s ease 0.1s, transform 0.45s ease 0.1s;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.4s ease 0.14s, transform 0.4s ease 0.14s;
     }
-    .diff-bar.revealed { opacity: 1; transform: translateY(0); }
+    .diff-bar.revealed { opacity:1; transform:none; }
 
-    /* ── Chapter grid stagger ── */
+    /* ── Chapter buttons : stagger via JS ── */
     .ch-btn {
       opacity: 0;
-      transform: scale(0.94) translateY(8px);
-      transition: opacity 0.35s ease, transform 0.35s ease,
+      transform: scale(0.93) translateY(8px);
+      transition: opacity 0.32s ease, transform 0.32s ease,
                   border-color 0.25s, box-shadow 0.25s;
     }
-    .ch-btn.revealed { opacity: 1; transform: scale(1) translateY(0); }
+    .ch-btn.revealed { opacity:1; transform:scale(1) translateY(0); }
 
-    /* ── Button ripple effect ── */
-    .btn {
-      position: relative;
-      overflow: hidden;
-    }
-    .btn::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      width: 0; height: 0;
-      background: rgba(255,255,255,0.25);
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .btn.rippling::after {
-      width: 300px; height: 300px;
-      opacity: 0;
-    }
-
-    /* ── Chapter button active flash ── */
+    /* ── Flash sur sélection chapitre ── */
     @keyframes chFlash {
-      0%   { box-shadow: 0 0 0 0 rgba(59,130,246,0.5); }
+      0%   { box-shadow: 0 0 0 0   rgba(59,130,246,0.55); }
       70%  { box-shadow: 0 0 0 10px rgba(59,130,246,0); }
-      100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+      100% { box-shadow: 0 0 0 0   rgba(59,130,246,0); }
     }
     .ch-btn.flash { animation: chFlash 0.45s ease; }
 
-    /* ── Exercise zone ── */
-    #exercise-zone.visible {
-      animation: zoneReveal 0.45s cubic-bezier(0.22,1,0.36,1);
+    /* ── Ripple sur .btn ── */
+    .btn { position: relative; overflow: hidden; }
+    .btn-ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      transform: scale(0);
+      animation: rippleAnim 0.55s ease-out forwards;
+      pointer-events: none;
     }
-    @keyframes zoneReveal {
-      from { opacity:0; transform: translateY(20px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-
-    /* ── Correction card reveal ── */
-    .correction-card.visible {
-      animation: corrReveal 0.5s cubic-bezier(0.22,1,0.36,1);
-    }
-    @keyframes corrReveal {
-      from { opacity:0; transform: scale(0.97) translateY(10px); }
-      to   { opacity:1; transform: scale(1) translateY(0); }
+    @keyframes rippleAnim {
+      to { transform: scale(4); opacity: 0; }
     }
 
     /* ── Feedback animations ── */
-    .feedback.correct {
-      animation: feedCorrect 0.4s cubic-bezier(0.22,1,0.36,1);
-    }
-    @keyframes feedCorrect {
-      from { opacity:0; transform: scale(0.95); }
-      to   { opacity:1; transform: scale(1); }
-    }
-    .feedback.incorrect {
-      animation: feedShake 0.4s ease;
+    .feedback.correct  { animation: feedPop   0.38s cubic-bezier(0.22,1,0.36,1); }
+    .feedback.incorrect { animation: feedShake 0.38s ease; }
+    @keyframes feedPop {
+      from { opacity:0; transform:scale(0.94); }
+      to   { opacity:1; transform:scale(1); }
     }
     @keyframes feedShake {
-      0%,100% { transform: translateX(0); }
-      20%     { transform: translateX(-6px); }
-      40%     { transform: translateX(6px); }
-      60%     { transform: translateX(-4px); }
-      80%     { transform: translateX(4px); }
+      0%,100% { transform:translateX(0); }
+      20%     { transform:translateX(-6px); }
+      40%     { transform:translateX(6px); }
+      60%     { transform:translateX(-4px); }
+      80%     { transform:translateX(4px); }
     }
 
-    /* ── Answer input focus glow ── */
-    .answer-input {
-      transition: border-color 0.2s, background 0.2s, box-shadow 0.25s;
+    /* ── Zones ── */
+    #exercise-zone.visible,
+    #bac-zone.visible,
+    #course-zone.visible {
+      animation: zoneIn 0.42s cubic-bezier(0.22,1,0.36,1);
     }
-    .answer-input:focus {
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
-    }
-    .answer-input.correct:focus {
-      box-shadow: 0 0 0 3px rgba(52,211,153,0.15);
-    }
-    .answer-input.incorrect:focus {
-      box-shadow: 0 0 0 3px rgba(248,113,113,0.12);
+    @keyframes zoneIn {
+      from { opacity:0; transform:translateY(16px); }
+      to   { opacity:1; transform:translateY(0); }
     }
 
-    /* ── Difficulty button press ── */
-    .diff-btn {
-      transition: all 0.2s ease, transform 0.12s ease;
+    /* ── Correction ── */
+    .correction-card.visible {
+      animation: corrIn 0.45s cubic-bezier(0.22,1,0.36,1);
     }
-    .diff-btn:active { transform: scale(0.94); }
+    @keyframes corrIn {
+      from { opacity:0; transform:scale(0.97) translateY(8px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
 
-    /* ── User menu dropdown refined animation ── */
-    .user-dropdown {
+    /* ── Dropdown user ── */
+    .user-dropdown.open {
+      animation: ddIn 0.26s cubic-bezier(0.22,1,0.36,1);
       transform-origin: top right;
     }
-    .user-dropdown.open {
-      animation: dropdownReveal 0.28s cubic-bezier(0.22,1,0.36,1);
-    }
-    @keyframes dropdownReveal {
-      from { opacity:0; transform: scale(0.92) translateY(-8px); }
-      to   { opacity:1; transform: scale(1) translateY(0); }
+    @keyframes ddIn {
+      from { opacity:0; transform:scale(0.92) translateY(-6px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
     }
 
-    /* ── User menu button hover ── */
-    .user-menu-btn {
-      transition: all 0.2s, transform 0.15s;
-    }
-    .user-menu-btn:active { transform: scale(0.96); }
-
-    /* ── Action buttons in dropdown ── */
-    .action-btn {
-      transition: all 0.2s ease, transform 0.12s;
-    }
-    .action-btn:active { transform: scale(0.97); }
-
-    /* ── Level cards hover ── */
+    /* ── Level cards ── */
     .level-card {
-      transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
+      transition: all 0.22s cubic-bezier(0.22,1,0.36,1);
     }
-    .level-card:hover {
-      transform: translateY(-4px) scale(1.02);
-    }
-    .level-card:active {
-      transform: scale(0.97);
-    }
-
-    /* ── Bac zone ── */
-    #bac-zone.visible {
-      animation: zoneReveal 0.45s cubic-bezier(0.22,1,0.36,1);
-    }
-
-    /* ── Course zone ── */
-    #course-zone.visible {
-      animation: zoneReveal 0.4s cubic-bezier(0.22,1,0.36,1);
-    }
+    .level-card:hover  { transform: translateY(-4px) scale(1.02); }
+    .level-card:active { transform: scale(0.97); }
 
     /* ── Save notification ── */
     #save-notification {
+      transform: translateY(8px) !important;
       transition: opacity 0.3s ease, transform 0.3s ease !important;
-      transform: translateY(8px);
     }
-    #save-notification.show {
+    #save-notification.visible-notif {
       opacity: 1 !important;
       transform: translateY(0) !important;
+      visibility: visible !important;
     }
 
-    /* ── Toast / notification pulse ── */
-    @keyframes notifSlide {
-      from { opacity:0; transform: translateX(20px); }
-      to   { opacity:1; transform: translateX(0); }
-    }
-
-    /* ── Progress bar animated fill ── */
-    .progress-bar {
-      transition: width 0.8s cubic-bezier(0.4,0,0.2,1) !important;
-    }
-
-    /* ── Login box entrance ── */
-    #auth-overlay > div {
-      animation: loginBoxIn 0.55s cubic-bezier(0.22,1,0.36,1);
-    }
-    @keyframes loginBoxIn {
-      from { opacity:0; transform: scale(0.93) translateY(20px); }
-      to   { opacity:1; transform: scale(1) translateY(0); }
-    }
-
-    /* ── Level overlay box entrance ── */
-    #level-overlay > div {
-      animation: loginBoxIn 0.45s cubic-bezier(0.22,1,0.36,1);
-    }
-
-    /* ── Streak pulse enhanced ── */
+    /* ── Streak bump ── */
     @keyframes streakPulse {
-      0%   { transform: scale(1); }
-      40%  { transform: scale(1.32); color: #fb923c; }
-      100% { transform: scale(1); }
+      0%  { transform:scale(1); }
+      45% { transform:scale(1.32); }
+      100%{ transform:scale(1); }
     }
+
+    /* ── Login box ── */
+    #auth-overlay > div {
+      animation: boxIn 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    #level-overlay > div {
+      animation: boxIn 0.42s cubic-bezier(0.22,1,0.36,1);
+    }
+    @keyframes boxIn {
+      from { opacity:0; transform:scale(0.93) translateY(18px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+
+    /* ── Answer input glow ── */
+    .answer-input { transition: border-color 0.2s, background 0.2s, box-shadow 0.22s; }
+    .answer-input:focus    { box-shadow: 0 0 0 3px rgba(59,130,246,0.14); }
+    .answer-input.correct  { box-shadow: 0 0 0 3px rgba(52,211,153,0.12); }
+    .answer-input.incorrect{ box-shadow: 0 0 0 3px rgba(248,113,113,0.10); }
+
+    /* ── Diff btn press ── */
+    .diff-btn { transition: all 0.18s ease; }
+    .diff-btn:active { transform: scale(0.93); }
+
+    /* ── Progress bar ── */
+    .progress-bar { transition: width 0.75s cubic-bezier(0.4,0,0.2,1) !important; }
+
+    /* ── Stat values bump ── */
+    @keyframes statBump {
+      0%  { transform:scale(1); }
+      50% { transform:scale(1.28); }
+      100%{ transform:scale(1); }
+    }
+    .stat-bump { animation: statBump 0.38s cubic-bezier(0.34,1.56,0.64,1); }
 
   </style>
 </head>
 
 <body>
-
-  <!-- ── Transition de page ── -->
-  <div id="page-transition" class="active">
-    <div class="pt-panel">
-      <div class="pt-logo">
-        <div class="pt-logo-badge">🔒 Accès Sécurisé</div>
-        <div class="pt-logo-title">Maths<span>Première</span></div>
-        <div class="pt-progress-wrap"><div class="pt-progress-bar" id="pt-bar"></div></div>
-      </div>
+  <!-- Panneau de transition – caché par défaut, activé par JS après login -->
+  <div id="page-transition">
+    <div class="pt-inner" id="pt-inner">
+      <div class="pt-badge">✦ MathsPremière</div>
+      <div class="pt-title">Maths<span>Première</span></div>
+      <div class="pt-bar-wrap"><div class="pt-bar-fill" id="pt-bar"></div></div>
     </div>
   </div>
+
+  <!-- Menu utilisateur flottant -->
   <div class="user-menu-wrap" id="user-menu-wrap" style="display:none">
     <button class="user-menu-btn" onclick="toggleUserMenu()">
       <span id="user-avatar">👤</span>
@@ -2318,13 +2225,10 @@
        ============================================= */
 
     function showSaveNotification() {
-      const notification = document.getElementById('save-notification');
-      if (notification) {
-        notification.classList.add('show');
-        setTimeout(() => {
-          notification.classList.remove('show');
-        }, 2000);
-      }
+      const n = document.getElementById('save-notification');
+      if (!n) return;
+      n.classList.add('visible-notif');
+      setTimeout(() => n.classList.remove('visible-notif'), 2200);
     }
 
     /* =============================================
@@ -2346,33 +2250,13 @@
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    // Si déjà connecté pendant cette session → on passe directement
+    // Si déjà connecté pendant cette session → on révèle l'app sans transition lourde
     if (sessionStorage.getItem('mathsPremiere_auth') === 'true') {
       document.getElementById('auth-overlay').style.display = 'none';
-      // Transition rapide pour session déjà active
-      const pt = document.getElementById('page-transition');
-      const ptBar = document.getElementById('pt-bar');
-      const ptLogo = pt.querySelector('.pt-logo');
-      ptLogo.style.opacity = '1';
-      setTimeout(() => { ptBar.style.width = '80%'; }, 50);
-      setTimeout(() => {
-        ptBar.style.width = '100%';
-        setTimeout(() => {
-          pt.classList.remove('active');
-          pt.classList.add('exit');
-          const app = document.getElementById('app');
-          const header = document.querySelector('header');
-          setTimeout(() => {
-            app.classList.add('revealed');
-            if (header) header.classList.add('animated');
-            document.querySelector('.stats-bar')?.classList.add('revealed');
-            document.querySelector('.diff-bar')?.classList.add('revealed');
-            document.querySelectorAll('.ch-btn').forEach((btn, i) => {
-              setTimeout(() => btn.classList.add('revealed'), i * 40);
-            });
-          }, 100);
-        }, 300);
-      }, 250);
+      // Léger délai pour laisser le DOM se construire, puis révélation fluide
+      requestAnimationFrame(() => {
+        setTimeout(() => revealApp(), 80);
+      });
     }
 
     // Focus automatique sur le champ mot de passe
@@ -2552,7 +2436,7 @@
         }
 
         // ✅ Accès accordé
-        loginBtn.innerHTML = '✅ Ouverture...'; // Petit message de succès sur le bouton
+        loginBtn.innerHTML = '✅ Ouverture...';
         const welcome = document.getElementById('auth-welcome');
         welcome.textContent = fpResult.firstLogin
           ? '✅ Bienvenue, ' + match.name + ' ! Appareil enregistré.'
@@ -2563,58 +2447,25 @@
         sessionStorage.setItem('mathsPremiere_user', match.name);
         logConnexion(match.name);
 
-        // Animation de transition cinématique
+        // Préparer les données avant la transition
+        const niv = match.niveau || sessionStorage.getItem('mathsPremiere_niveau') || '';
+        if (typeof loadStats === 'function') loadStats();
+        if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
+
+        // Lancer la transition animée après un court instant de confirmation
         setTimeout(() => {
           loginBtn.innerHTML = originalBtnText;
           loginBtn.disabled = false;
           loginBtn.style.opacity = '1';
-
-          // Fade out overlay d'auth
-          const authOverlay = document.getElementById('auth-overlay');
-          authOverlay.classList.add('fade-out');
-
-          // Afficher le panneau de transition
-          const pt = document.getElementById('page-transition');
-          const ptLogo = pt.querySelector('.pt-logo');
-          const ptBar = document.getElementById('pt-bar');
-          ptLogo.style.opacity = '1';
-          setTimeout(() => { ptBar.style.width = '100%'; }, 80);
-
-          setTimeout(() => {
-            authOverlay.style.display = 'none';
-
-            const niv = match.niveau || sessionStorage.getItem('mathsPremiere_niveau') || '';
+          playLoginTransition(() => {
+            document.getElementById('auth-overlay').style.display = 'none';
             if (niv) {
               sessionStorage.setItem('mathsPremiere_niveau', niv);
-              if (typeof loadStats === 'function') loadStats();
-              if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
               applyNiveau(niv);
             } else {
-              if (typeof loadStats === 'function') loadStats();
-              if (typeof updateUserMenu === 'function') updateUserMenu(match.name);
               showLevelSelector();
             }
-
-            // Sortie du panneau de transition
-            setTimeout(() => {
-              pt.classList.remove('active');
-              pt.classList.add('exit');
-              // Révéler le contenu de l'app
-              const app = document.getElementById('app');
-              const header = document.querySelector('header');
-              setTimeout(() => {
-                app.classList.add('revealed');
-                if (header) header.classList.add('animated');
-                document.querySelector('.stats-bar')?.classList.add('revealed');
-                document.querySelector('.diff-bar')?.classList.add('revealed');
-                // Stagger des boutons de chapitres
-                document.querySelectorAll('.ch-btn').forEach((btn, i) => {
-                  setTimeout(() => btn.classList.add('revealed'), i * 45);
-                });
-                document.getElementById('user-menu-wrap').style.display = '';
-              }, 80);
-            }, 350);
-          }, 700);
+          });
         }, 600);
 
       } catch (e) {
@@ -2847,7 +2698,7 @@
     function showLevelSelector() {
       const ol = document.getElementById('level-overlay');
       if (ol) {
-        ol.classList.remove('fade-out');
+        ol.classList.remove('fading');
         ol.style.display = 'flex';
       }
       const dd = document.getElementById('user-dropdown');
@@ -2858,31 +2709,15 @@
     async function selectLevel(niv) {
       const ol = document.getElementById('level-overlay');
       if (ol) {
-        ol.classList.add('fade-out');
-        setTimeout(() => { ol.style.display = 'none'; ol.classList.remove('fade-out'); }, 400);
+        ol.classList.add('fading');
+        setTimeout(() => { ol.style.display = 'none'; ol.classList.remove('fading'); }, 380);
       }
-
       currentNiveau = niv;
       sessionStorage.setItem('mathsPremiere_niveau', niv);
-
-      // Révéler l'app si pas encore révélée
-      const app = document.getElementById('app');
-      const header = document.querySelector('header');
-      if (!app.classList.contains('revealed')) {
-        setTimeout(() => {
-          app.classList.add('revealed');
-          if (header) header.classList.add('animated');
-          document.querySelector('.stats-bar')?.classList.add('revealed');
-          document.querySelector('.diff-bar')?.classList.add('revealed');
-          document.querySelectorAll('.ch-btn').forEach((btn, i) => {
-            setTimeout(() => btn.classList.add('revealed'), i * 50);
-          });
-        }, 200);
-      }
-
       applyNiveau(niv);
+      // Révéler l'app si pas encore fait
+      revealApp();
 
-      // Sauvegarde silencieuse de la préférence de filière dans le Sheet
       const userName = sessionStorage.getItem('mathsPremiere_user');
       if (userName) {
         sendToSheets({ type: 'set_level', name: userName, niveau: niv });
@@ -2925,14 +2760,17 @@
       if (!grid) return;
       const chapters = niv === 'tc' ? TC_CHAPTERS : SPE_CHAPTERS;
       grid.innerHTML = chapters.map(ch => `
-        <button class="ch-btn revealed" onclick="selectChapter(${ch.n}, this)">
+        <button class="ch-btn" onclick="selectChapter(${ch.n}, this)">
           <span class="ch-icon">${ch.icon}</span>
           <div class="ch-num">Chapitre ${ch.n}</div>
           <div class="ch-name">${ch.name}</div>
         </button>
       `).join('');
-      // Remettre à jour les badges visités
       updateDropdown();
+      // Stagger reveal des boutons
+      document.querySelectorAll('.ch-btn').forEach((b, i) => {
+        setTimeout(() => b.classList.add('revealed'), i * 50);
+      });
     }
 
     // Retourne la clé localStorage de l'utilisateur connecté
@@ -3312,9 +3150,8 @@
         b.classList.toggle('active', i + 1 === n);
         b.classList.remove('flash');
       });
-      // Flash sur le bouton cliqué
       if (clickedEl) {
-        void clickedEl.offsetWidth; // reflow pour relancer l'animation
+        void clickedEl.offsetWidth;
         clickedEl.classList.add('flash');
       }
 
@@ -8410,74 +8247,83 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
 
   </script>
 
-  <!-- ── Animations globales ─────────────────────────────────────── -->
+  <!-- ── Moteur d'animations global ─────────────────────────────────── -->
   <script>
-    // Ripple sur tous les .btn
+    /* ── 1. playLoginTransition(callback) ──────────────────────────────
+       Affiche le panneau de wipe, attend, appelle callback, puis le retire. */
+    function playLoginTransition(callback) {
+      const pt     = document.getElementById('page-transition');
+      const inner  = document.getElementById('pt-inner');
+      const bar    = document.getElementById('pt-bar');
+
+      pt.style.display = 'block';
+      inner.className  = 'pt-inner slide-in';
+
+      // Après l'entrée du panneau (~550ms), on déclenche la barre et le callback
+      setTimeout(() => {
+        bar.style.width = '100%';
+        setTimeout(() => {
+          if (callback) callback();
+          // Sortie du panneau
+          inner.className = 'pt-inner slide-out';
+          setTimeout(() => {
+            pt.style.display = 'none';
+            inner.className  = 'pt-inner';
+            bar.style.width  = '0%';
+            revealApp();
+          }, 620);
+        }, 500);
+      }, 480);
+    }
+
+    /* ── 2. revealApp() ────────────────────────────────────────────────
+       Révèle progressivement le contenu (header, stats, chapitres). */
+    function revealApp() {
+      const app = document.getElementById('app');
+      if (!app || app.classList.contains('revealed')) return;
+      app.classList.add('revealed');
+      const header = document.querySelector('header');
+      if (header) header.classList.add('anim');
+      document.querySelector('.stats-bar')?.classList.add('revealed');
+      document.querySelector('.diff-bar')?.classList.add('revealed');
+      document.getElementById('user-menu-wrap').style.display = '';
+    }
+
+    /* ── 3. Ripple sur tous les .btn ─────────────────────────────────── */
     document.addEventListener('click', function(e) {
       const btn = e.target.closest('.btn');
       if (!btn) return;
-      btn.classList.remove('rippling');
-      void btn.offsetWidth;
-      btn.classList.add('rippling');
-      setTimeout(() => btn.classList.remove('rippling'), 600);
+      const r    = document.createElement('span');
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      r.className = 'btn-ripple';
+      r.style.cssText = `width:${size}px;height:${size}px;`
+        + `left:${e.clientX - rect.left - size/2}px;`
+        + `top:${e.clientY - rect.top  - size/2}px;`;
+      btn.appendChild(r);
+      setTimeout(() => r.remove(), 600);
     });
 
-    // Bump animé sur les stats quand leur valeur change
-    function bumpStat(id) {
+    /* ── 4. Bump animé sur les compteurs de stats ────────────────────── */
+    ['s-total','s-corr','s-ok','s-streak'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
-      el.classList.remove('bump');
-      void el.offsetWidth;
-      el.classList.add('bump');
-      setTimeout(() => el.classList.remove('bump'), 400);
-    }
-
-    // Intercepte les mises à jour de stats pour déclencher le bump
-    const _statIds = ['s-total','s-corr','s-ok','s-streak','dd-total','dd-ok','dd-streak'];
-    const _origSetText = Object.getOwnPropertyDescriptor(Node.prototype, 'textContent').set;
-    // Patch léger : on observe via MutationObserver pour ne pas casser l'existant
-    const _statObserver = new MutationObserver(mutations => {
-      mutations.forEach(m => {
-        const el = m.target;
-        if (el && _statIds.includes(el.id)) bumpStat(el.id);
-      });
-    });
-    _statIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) _statObserver.observe(el, { childList: true, characterData: true, subtree: true });
+      new MutationObserver(() => {
+        el.classList.remove('stat-bump');
+        void el.offsetWidth;
+        el.classList.add('stat-bump');
+        setTimeout(() => el.classList.remove('stat-bump'), 400);
+      }).observe(el, { childList: true, characterData: true, subtree: true });
     });
 
-    // Hover magnétique sur les level-cards
-    document.querySelectorAll('.level-card').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const r = card.getBoundingClientRect();
-        const x = ((e.clientX - r.left) / r.width - 0.5) * 12;
-        const y = ((e.clientY - r.top) / r.height - 0.5) * 12;
-        card.style.transform = `translateY(-4px) rotateX(${-y}deg) rotateY(${x}deg) scale(1.02)`;
-      });
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
-      });
-    });
-
-    // Smooth scroll vers exercice avec offset amélioré
-    function smoothScrollTo(el, offset = 80) {
-      if (!el) return;
-      const top = el.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top, behavior: 'smooth' });
-    }
-
-    // Transition sortie pour logout
+    /* ── 5. Logout avec fondu ────────────────────────────────────────── */
     const _origLogout = window.logout;
     window.logout = function() {
-      const app = document.getElementById('app');
-      const userMenu = document.getElementById('user-menu-wrap');
-      if (app) { app.style.opacity = '0'; app.style.transform = 'translateY(12px)'; }
-      if (userMenu) userMenu.style.opacity = '0';
-      setTimeout(() => {
-        if (_origLogout) _origLogout();
-        else location.reload();
-      }, 350);
+      const app  = document.getElementById('app');
+      const menu = document.getElementById('user-menu-wrap');
+      if (app)  { app.style.transition  = 'opacity .3s, transform .3s'; app.style.opacity  = '0'; app.style.transform  = 'translateY(10px)'; }
+      if (menu) { menu.style.transition = 'opacity .3s';                 menu.style.opacity = '0'; }
+      setTimeout(() => { if (_origLogout) _origLogout(); }, 320);
     };
   </script>
 </body>
