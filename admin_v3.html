@@ -210,7 +210,124 @@
       padding: 0 24px;
       position: relative;
       z-index: 1;
+      /* État initial pour le reveal animé */
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
     }
+    #dashboard.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Overlay de transition login → dashboard (caché par défaut) ── */
+    #admin-page-transition {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      pointer-events: none;
+    }
+    .apt-inner {
+      position: absolute;
+      inset: 0;
+      background: #07090f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+    .apt-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      color: #07090f;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    .apt-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: #e8eeff;
+    }
+    .apt-title span { color: #60a5fa; }
+    .apt-sub {
+      font-size: 12px;
+      color: #7088c5;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+    .apt-bar-wrap {
+      width: 160px;
+      height: 2px;
+      background: rgba(59,130,246,0.15);
+      border-radius: 2px;
+      margin-top: 22px;
+      overflow: hidden;
+    }
+    .apt-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      border-radius: 2px;
+      transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
+    }
+    @keyframes aptSlideIn {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+    @keyframes aptSlideOut {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-100%); }
+    }
+    .apt-inner.slide-in  { animation: aptSlideIn  0.55s cubic-bezier(0.76,0,0.24,1) forwards; }
+    .apt-inner.slide-out { animation: aptSlideOut 0.6s  cubic-bezier(0.76,0,0.24,1) forwards; }
+
+    /* ── Login screen : fade-out animé ── */
+    #login-screen {
+      transition: opacity 0.35s ease;
+    }
+    #login-screen.fading {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ── Dash-header stagger ── */
+    .dash-header > * {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .dash-header.anim > *:nth-child(1) { opacity:1; transform:none; transition-delay:0.04s; }
+    .dash-header.anim > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.12s; }
+
+    /* ── Ripple sur .btn ── */
+    .btn { position: relative; overflow: hidden; }
+    .btn-ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      transform: scale(0);
+      animation: rippleAnim 0.55s linear;
+      pointer-events: none;
+    }
+    @keyframes rippleAnim {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    /* ── Logout avec slide-down ── */
+    @keyframes aptLogoutIn {
+      from { transform: translateY(-100%); }
+      to   { transform: translateY(0); }
+    }
+    .apt-inner.logout-in { animation: aptLogoutIn 0.55s cubic-bezier(0.76,0,0.24,1) forwards; }
 
     .dash-header {
       display: flex;
@@ -810,218 +927,18 @@
       font-size: 12px;
       padding: 8px 0;
     }
-
-    /* =============================================
-       SYSTÈME D'ANIMATIONS – PANEL ADMIN
-       ============================================= */
-
-    /* ── Page transition overlay ── */
-    #page-transition {
-      position: fixed;
-      inset: 0;
-      z-index: 99999;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .pt-panel {
-      position: absolute;
-      inset: 0;
-      background: #080c18;
-      transform: translateY(0);
-      transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1);
-    }
-
-    .pt-logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .pt-logo-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, #3b82f6, #60a5fa);
-      color: #080c18;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 14px;
-    }
-
-    .pt-logo-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      color: #e8eeff;
-    }
-
-    .pt-logo-title span { color: #60a5fa; }
-
-    .pt-progress-wrap {
-      width: 160px;
-      height: 2px;
-      background: rgba(59,130,246,0.15);
-      border-radius: 2px;
-      margin: 14px auto 0;
-      overflow: hidden;
-    }
-
-    .pt-progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #3b82f6, #60a5fa);
-      border-radius: 2px;
-      transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    #page-transition.exit .pt-panel {
-      transform: translateY(-100%);
-    }
-
-    /* ── Login screen animations ── */
-    #login-screen {
-      transition: opacity 0.4s ease;
-    }
-    #login-screen.fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .login-box {
-      animation: loginBoxIn 0.55s cubic-bezier(0.22,1,0.36,1);
-    }
-    @keyframes loginBoxIn {
-      from { opacity:0; transform: scale(0.93) translateY(20px); }
-      to   { opacity:1; transform: scale(1) translateY(0); }
-    }
-
-    /* ── Dashboard reveal ── */
-    #dashboard {
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
-    }
-    #dashboard.revealed {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .dash-header {
-      opacity: 0;
-      transform: translateY(-12px);
-      transition: opacity 0.45s ease 0.05s, transform 0.45s ease 0.05s;
-    }
-    #dashboard.revealed .dash-header {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .tabs {
-      opacity: 0;
-      transition: opacity 0.4s ease 0.15s;
-    }
-    #dashboard.revealed .tabs {
-      opacity: 1;
-    }
-
-    /* ── Tab panel transitions ── */
-    .tab-panel {
-      animation: none;
-    }
-    .tab-panel.active {
-      animation: tabReveal 0.35s cubic-bezier(0.22,1,0.36,1);
-    }
-    @keyframes tabReveal {
-      from { opacity:0; transform: translateY(12px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-
-    /* ── Tab button press ── */
-    .tab-btn {
-      transition: all 0.2s ease, transform 0.12s;
-    }
-    .tab-btn:active { transform: scale(0.95); }
-
-    /* ── Btn interactions ── */
-    .btn {
-      position: relative;
-      overflow: hidden;
-    }
-    .btn::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      width: 0; height: 0;
-      background: rgba(255,255,255,0.2);
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .btn.rippling::after {
-      width: 300px; height: 300px;
-      opacity: 0;
-    }
-    .btn:active { transform: scale(0.96) translateY(0) !important; }
-
-    /* ── Student / device cards ── */
-    .student-card {
-      transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    }
-    .student-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(0,0,0,0.35);
-    }
-
-    .adv-card {
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-    }
-    .adv-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-    }
-
-    /* ── Input focus glow ── */
-    input[type="password"],
-    input[type="text"],
-    input[type="number"] {
-      transition: border-color 0.2s, background 0.2s, box-shadow 0.25s !important;
-    }
-    input:focus {
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.15) !important;
-    }
-
-    /* ── Progress bar animated ── */
-    .adv-progress-fill {
-      transition: width 0.6s cubic-bezier(0.4,0,0.2,1) !important;
-    }
-
-    /* ── Logout transition ── */
-    .logout-exit #dashboard {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-
   </style>
 </head>
 
 <body>
 
-  <!-- ── Transition de page ── -->
-  <div id="page-transition">
-    <div class="pt-panel">
-      <div class="pt-logo">
-        <div class="pt-logo-badge">⚙️ Administration</div>
-        <div class="pt-logo-title">Maths<span>Première</span></div>
-        <div class="pt-progress-wrap"><div class="pt-progress-bar" id="pt-bar"></div></div>
-      </div>
+  <!-- Panneau de transition admin – caché par défaut, activé par JS après login -->
+  <div id="admin-page-transition">
+    <div class="apt-inner" id="apt-inner">
+      <div class="apt-badge">⚙️ Administration</div>
+      <div class="apt-title">Maths<span>Première</span></div>
+      <div class="apt-sub">Accès administrateur</div>
+      <div class="apt-bar-wrap"><div class="apt-bar-fill" id="apt-bar"></div></div>
     </div>
   </div>
 
@@ -1037,7 +954,7 @@
     </div>
   </div>
 
-  <div id="dashboard" style="display:none">
+  <div id="dashboard">
     <div class="dash-header">
       <div>
         <div class="badge">⚙️ Administration</div>
@@ -1145,32 +1062,19 @@
           return;
         }
 
-        document.getElementById('login-screen').classList.add('fade-out');
+        // Remettre le bouton avant la transition
         btn.innerHTML = originalText;
         btn.disabled = false;
-        const pt = document.getElementById('page-transition');
-        const ptLogo = pt.querySelector('.pt-logo');
-        const ptBar = document.getElementById('pt-bar');
-        ptLogo.style.opacity = '1';
-        setTimeout(() => { ptBar.style.width = '100%'; }, 60);
 
-        setTimeout(() => {
+        // Lancer la transition animée login → dashboard
+        playAdminTransition(() => {
           document.getElementById('login-screen').style.display = 'none';
-          const dash = document.getElementById('dashboard');
-          dash.style.display = 'block';
-
+          document.getElementById('login-screen').classList.remove('fading');
+          document.getElementById('dashboard').style.display = 'block';
           renderDevices(data);
           renderPasswords(data);
           renderRecap(data);
-
-          // Sortie du panneau + révélation
-          setTimeout(() => {
-            pt.classList.add('exit');
-            setTimeout(() => {
-              dash.classList.add('revealed');
-            }, 100);
-          }, 300);
-        }, 650);
+        });
 
       } catch (e) {
         errEl.textContent = "❌ Le serveur Google refuse la connexion.";
@@ -1181,46 +1085,60 @@
     }
 
     function logout() {
-      adminToken = null;
       const dash = document.getElementById('dashboard');
-      const ls = document.getElementById('login-screen');
-      dash.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+      // Fondu sortant du dashboard
+      dash.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
       dash.style.opacity = '0';
       dash.style.transform = 'translateY(12px)';
+
       setTimeout(() => {
-        dash.style.display = 'none';
-        dash.classList.remove('revealed');
-        dash.style.opacity = '';
-        dash.style.transform = '';
-        dash.style.transition = '';
-        ls.style.display = 'flex';
-        ls.classList.remove('fade-out');
-        ls.style.opacity = '0';
-        setTimeout(() => { ls.style.transition = 'opacity 0.35s'; ls.style.opacity = '1'; }, 20);
-        setTimeout(() => { ls.style.transition = ''; }, 400);
-      }, 350);
-      document.getElementById('admin-pwd').value = '';
-      // Réinitialiser la barre de transition
-      const pt = document.getElementById('page-transition');
-      pt.classList.remove('exit');
-      document.getElementById('pt-bar').style.width = '0';
-      pt.querySelector('.pt-logo').style.opacity = '0';
+        // Transition inverse (slide depuis le haut)
+        const pt    = document.getElementById('admin-page-transition');
+        const inner = document.getElementById('apt-inner');
+        const bar   = document.getElementById('apt-bar');
+        pt.style.display = 'block';
+        inner.className  = 'apt-inner logout-in';
+
+        setTimeout(() => {
+          bar.style.width = '100%';
+          setTimeout(() => {
+            // Réinitialiser et afficher login
+            adminToken = null;
+            dash.style.display = 'none';
+            dash.classList.remove('revealed');
+            dash.style.opacity = '';
+            dash.style.transform = '';
+            dash.style.transition = '';
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('login-screen').style.opacity = '0';
+            document.getElementById('admin-pwd').value = '';
+
+            inner.className = 'apt-inner slide-out';
+            setTimeout(() => {
+              pt.style.display = 'none';
+              inner.className  = 'apt-inner';
+              bar.style.width  = '0%';
+              // Fade-in du login screen
+              requestAnimationFrame(() => {
+                document.getElementById('login-screen').style.transition = 'opacity 0.4s ease';
+                document.getElementById('login-screen').style.opacity = '1';
+              });
+            }, 620);
+          }, 450);
+        }, 480);
+      }, 300);
     }
 
     // ── Onglets ───────────────────────────────────────────────────────────────
     function switchTab(name) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => {
-        p.classList.remove('active');
-      });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
 
+      // On cherche le bouton par son action
       const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(name));
       if (btn) btn.classList.add('active');
 
-      const panel = document.getElementById('tab-' + name);
-      if (panel) {
-        panel.classList.add('active');
-      }
+      document.getElementById('tab-' + name).classList.add('active');
     }
 
     // ── Chargement des données ────────────────────────────────────────────────
@@ -1581,65 +1499,116 @@
     function toast(msg, isErr = false) {
       const el = document.getElementById('toast');
       el.textContent = msg;
-      el.className = 'toast' + (isErr ? ' err' : '');
-      void el.offsetWidth;
-      el.classList.add('show');
+      el.className = 'toast show' + (isErr ? ' err' : '');
       clearTimeout(_toastTimer);
-      _toastTimer = setTimeout(() => { el.classList.remove('show'); }, 3000);
+      _toastTimer = setTimeout(() => { el.className = 'toast'; }, 3000);
     }
   </script>
 
-  <!-- ── Animations globales admin ─────────────────────────── -->
   <script>
-    // Ripple sur tous les .btn
+    /* ── playAdminTransition(callback) ──────────────────────────────────────
+       Wipe animé login → dashboard :
+       1. Fade-out du login screen
+       2. Slide-in du panneau de transition
+       3. Barre de chargement
+       4. callback() → swaps DOM
+       5. Slide-out du panneau
+       6. Reveal progressif du dashboard */
+    function playAdminTransition(callback) {
+      const loginScreen = document.getElementById('login-screen');
+      const pt    = document.getElementById('admin-page-transition');
+      const inner = document.getElementById('apt-inner');
+      const bar   = document.getElementById('apt-bar');
+
+      // 1. Fondu de la page de login
+      loginScreen.classList.add('fading');
+
+      setTimeout(() => {
+        // 2. Slide-in du panneau
+        pt.style.display = 'block';
+        inner.className  = 'apt-inner slide-in';
+
+        // 3. Après l'entrée (~480ms), déclenche la barre et le callback
+        setTimeout(() => {
+          bar.style.width = '100%';
+          setTimeout(() => {
+            // 4. Swap DOM : callback cache le login, affiche le dashboard
+            if (callback) callback();
+
+            // 5. Slide-out du panneau
+            inner.className = 'apt-inner slide-out';
+            setTimeout(() => {
+              pt.style.display = 'none';
+              inner.className  = 'apt-inner';
+              bar.style.width  = '0%';
+              // 6. Reveal animé du dashboard
+              revealDashboard();
+            }, 620);
+          }, 450);
+        }, 480);
+      }, 200);
+    }
+
+    /* ── revealDashboard() ──────────────────────────────────────────────────
+       Révèle progressivement le contenu du dashboard */
+    function revealDashboard() {
+      const dash = document.getElementById('dashboard');
+      if (!dash) return;
+      requestAnimationFrame(() => {
+        dash.classList.add('revealed');
+        const header = dash.querySelector('.dash-header');
+        if (header) header.classList.add('anim');
+        // Stagger des cartes de stats
+        dash.querySelectorAll('.stat-card, .tab-panel > *').forEach((el, i) => {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(10px)';
+          el.style.transition = `opacity 0.35s ease ${0.05 + i * 0.06}s, transform 0.35s ease ${0.05 + i * 0.06}s`;
+          requestAnimationFrame(() => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          });
+        });
+      });
+    }
+
+    /* ── Ripple sur tous les .btn ────────────────────────────────────────── */
     document.addEventListener('click', function(e) {
       const btn = e.target.closest('.btn');
       if (!btn) return;
-      btn.classList.remove('rippling');
-      void btn.offsetWidth;
-      btn.classList.add('rippling');
-      setTimeout(() => btn.classList.remove('rippling'), 600);
+      const r    = document.createElement('span');
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      r.className = 'btn-ripple';
+      r.style.cssText = `width:${size}px;height:${size}px;`
+        + `left:${e.clientX - rect.left - size/2}px;`
+        + `top:${e.clientY - rect.top  - size/2}px;`;
+      btn.appendChild(r);
+      setTimeout(() => r.remove(), 600);
     });
 
-    // Stagger sur les cartes au chargement d'un onglet
-    function staggerCards(selector, delay = 45) {
-      document.querySelectorAll(selector).forEach((card, i) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(10px)';
-        card.style.transition = `opacity 0.35s ease ${i * delay}ms, transform 0.35s ease ${i * delay}ms`;
-        requestAnimationFrame(() => {
-          setTimeout(() => {
-            card.style.opacity = '';
-            card.style.transform = '';
-            setTimeout(() => { card.style.transition = ''; }, 350 + i * delay);
-          }, 20);
-        });
-      });
-    }
-
-    // Observer les changements de contenu dans les onglets
-    const _staggerObs = new MutationObserver(() => {
-      staggerCards('.student-card', 40);
-      staggerCards('.adv-card', 35);
-    });
-    ['dash-content','pwd-content','recap-content-body'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) _staggerObs.observe(el, { childList: true });
-    });
-
-    // Progress bars animées après injection DOM
-    function animateProgressBars() {
-      document.querySelectorAll('.adv-progress-fill').forEach(bar => {
-        const w = bar.style.width;
-        bar.style.width = '0';
-        requestAnimationFrame(() => {
-          setTimeout(() => { bar.style.width = w; }, 30);
-        });
-      });
-    }
-    const _progressObs = new MutationObserver(animateProgressBars);
-    const _tabRecap = document.getElementById('tab-recap');
-    if (_tabRecap) _progressObs.observe(_tabRecap, { subtree: true, childList: true });
+    /* ── Tab switch : micro-transition du contenu ────────────────────────── */
+    const _origSwitchTab = window.switchTab;
+    window.switchTab = function(name) {
+      // Fade-out du panel actif
+      const current = document.querySelector('.tab-panel.active');
+      if (current) {
+        current.style.transition = 'opacity 0.15s ease';
+        current.style.opacity = '0';
+      }
+      setTimeout(() => {
+        if (_origSwitchTab) _origSwitchTab(name);
+        const active = document.querySelector('.tab-panel.active');
+        if (active) {
+          active.style.opacity = '0';
+          active.style.transform = 'translateY(6px)';
+          active.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+          requestAnimationFrame(() => {
+            active.style.opacity = '1';
+            active.style.transform = 'translateY(0)';
+          });
+        }
+      }, 150);
+    };
   </script>
 </body>
 

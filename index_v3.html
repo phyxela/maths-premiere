@@ -8255,25 +8255,35 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
       const pt     = document.getElementById('page-transition');
       const inner  = document.getElementById('pt-inner');
       const bar    = document.getElementById('pt-bar');
+      const auth   = document.getElementById('auth-overlay');
 
-      pt.style.display = 'block';
-      inner.className  = 'pt-inner slide-in';
+      // Fade-out de l'overlay de login avant le wipe
+      if (auth) {
+        auth.style.transition    = 'opacity 0.25s ease';
+        auth.style.opacity       = '0';
+        auth.style.pointerEvents = 'none';
+      }
 
-      // Après l'entrée du panneau (~550ms), on déclenche la barre et le callback
       setTimeout(() => {
-        bar.style.width = '100%';
+        pt.style.display = 'block';
+        inner.className  = 'pt-inner slide-in';
+
+        // Après l'entrée du panneau (~480ms), on déclenche la barre et le callback
         setTimeout(() => {
-          if (callback) callback();
-          // Sortie du panneau
-          inner.className = 'pt-inner slide-out';
+          bar.style.width = '100%';
           setTimeout(() => {
-            pt.style.display = 'none';
-            inner.className  = 'pt-inner';
-            bar.style.width  = '0%';
-            revealApp();
-          }, 620);
-        }, 500);
-      }, 480);
+            if (callback) callback();
+            // Sortie du panneau
+            inner.className = 'pt-inner slide-out';
+            setTimeout(() => {
+              pt.style.display = 'none';
+              inner.className  = 'pt-inner';
+              bar.style.width  = '0%';
+              revealApp();
+            }, 620);
+          }, 500);
+        }, 480);
+      }, 220);
     }
 
     /* ── 2. revealApp() ────────────────────────────────────────────────
@@ -8287,6 +8297,14 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
       document.querySelector('.stats-bar')?.classList.add('revealed');
       document.querySelector('.diff-bar')?.classList.add('revealed');
       document.getElementById('user-menu-wrap').style.display = '';
+
+      // Ré-déclenche le stagger des chapitres APRÈS que #app soit visible
+      // (ils ont peut-être déjà received revealed pendant la transition invisible)
+      const btns = document.querySelectorAll('.ch-btn');
+      btns.forEach(b => b.classList.remove('revealed'));
+      btns.forEach((b, i) => {
+        setTimeout(() => b.classList.add('revealed'), 80 + i * 55);
+      });
     }
 
     /* ── 3. Ripple sur tous les .btn ─────────────────────────────────── */
