@@ -5232,30 +5232,34 @@
 
       const corr = `
     <div class="step">
-      <div class="step-label">1) Données</div>
+      <div class="step-label">a) Données de l'énoncé</div>
       <div class="step-content">
-        $$P(M)=${pctRaw(prev)},\\quad P(\\overline{M})=${pctRaw(100 - prev)}.$$
-        $$P_{M}(T)=${pctRaw(sens)}.$$
-        $$P_{\\overline{M}}(\\overline{T})=${pctRaw(spec)}\\Rightarrow P_{\\overline{M}}(T)=${pctRaw(100 - spec)}.$$
+        D'après les valeurs de l'énoncé :<br/>
+        $P(M)=${pctRaw(prev)}, donc $P(\\overline{M})=1 - ${pctRaw(prev)} = ${pctRaw(100 - prev)}.<br/>
+        La sensibilité est $P_{M}(T)=${pctRaw(sens)}.<br/>
+        La spécificité est $P_{\\overline{M}}(\\overline{T})=${pctRaw(spec)}, donc $P_{\\overline{M}}(T)=${pctRaw(100 - spec)}.
       </div>
     </div>
     <div class="step">
-      <div class="step-label">2) Intersection</div>
+      <div class="step-label">b) Calcul de l'intersection</div>
       <div class="step-content">
-        $$P(M\\cap T)=P(M)\\times P_{M}(T)=${pctRaw(prev)}\\times ${pctRaw(sens)}=${(pMcapT).toFixed(6)}.$$
+        $$P(M\\cap T)=P(M)\\times P_{M}(T)=${pctRaw(prev)}\\times ${pctRaw(sens)}= \boxed{${+(pMcapT).toFixed(4)}}$$
       </div>
     </div>
     <div class="step">
-      <div class="step-label">3) Probabilités totales</div>
+      <div class="step-label">c) Loi des probabilités totales</div>
       <div class="step-content">
-        $$P(T)=P(M)\\times P_{M}(T)+P(\\overline{M})\\times P_{\\overline{M}}(T).$$
-        $$P(T)=${pctRaw(prev)}\\times ${pctRaw(sens)}+${pctRaw(100 - prev)}\\times ${pctRaw(100 - spec)}=${(pT).toFixed(6)}.$$
+        Le test positif $T$ peut être obtenu avec les malades ou les non-malades :<br/>
+        $P(T)=P(M \\cap T) + P(\\overline{M} \\cap T) = P(M) \\times P_{M}(T) + P(\\overline{M}) \\times P_{\\overline{M}}(T)$<br/>
+        $P(T)= ${+(pMcapT).toFixed(4)} + (${+(pNotM).toFixed(2)} \\times ${+(pT_notM).toFixed(2)})$<br/>
+        $P(T)= ${+(pMcapT).toFixed(4)} + ${+(pNotM * pT_notM).toFixed(4)} = \boxed{${+(pT).toFixed(4)}}$$
       </div>
     </div>
     <div class="step result">
-      <div class="step-label">4) Bayes</div>
+      <div class="step-label">d) Calcul de la probabilité inversée (Bayes)</div>
       <div class="step-content">
-        $$P_{T}(M)=\\frac{P(M\\cap T)}{P(T)}=\\frac{${(pMcapT).toFixed(6)}}{${(pT).toFixed(6)}}\\approx ${(pM_given_T).toFixed(4)}.$$
+        On cherche $P_{T}(M)$, la probabilité d'être malade sachant que le test est positif :<br/>
+        $$P_{T}(M)=\\frac{P(M\\cap T)}{P(T)}=\\frac{${+(pMcapT).toFixed(4)}}{${+(pT).toFixed(4)}}\\approx \\boxed{${(pM_given_T).toFixed(4)}}$$
       </div>
     </div>
         `;
@@ -7642,7 +7646,8 @@
         const svg = createSVGGrid(f, { xMin: -5, xMax: 5, yMin: -5, yMax: 5, curveColor: 'var(--orange)' });
         const expected = (a === 1 ? '' : a === -1 ? '-' : a) + 'x' + (b > 0 ? '+' : '-') + (Math.abs(b) === 1 ? '' : Math.abs(b)) + 'y' + (c > 0 ? '+' : c === 0 ? '' : '-') + (c === 0 ? '' : Math.abs(c)) + '=0';
 
-        return mk('Équation de droite', `Déterminer une équation cartésienne de la droite tracée :<br/>${svg}`, ['Format `ax+by+c=0`.'], expected, "Lecture de deux points et résolution.", { placeholder: 'Ex : 2x+3y-4=0' });
+        const corr = `<div class="step"><div class="step-label">Méthode</div><div class="step-content">On lit deux points sur la droite, par exemple $A(0; ${(-c / b).toFixed(1)})$ et un autre point. On cherche $(a, b, c)$ tels que $ax+by+c=0$.</div></div><div class="step result"><div class="step-label">Équation</div><div class="step-content">En identifiant le vecteur directeur et l'ordonnée à l'origine, on obtient : $\\boxed{${expected.replace('=0', '')} = 0}$.</div></div>`;
+        return mk('Équation de droite', `Déterminer une équation cartésienne de la droite tracée :<br/>${svg}`, ['Format `ax+by+c=0`.'], expected, corr, { placeholder: 'Ex : 2x+3y-4=0' });
       }
 
       if (type === 'graphique_inequation_produit') {
@@ -7654,16 +7659,17 @@
           curveColor: 'var(--purple)',
           extraCurves: [{ f: g, color: 'var(--orange)' }]
         });
-        const expected = `]-inf;-1]U[1;2]`; // signs: f+, g+ on ]-inf;-1]; f-, g+ on [-1,1]; f+, g+ on [1,2]; f+, g- on [2,+inf[
-        // Wait: f(x) = x^2-1 is >0 on ]-inf,-1]U[1,+inf[
-        // g(x) = -0.5(x-2) is >0 on ]-inf,2]
-        // f*g >= 0:
-        // ]-inf, -1]: f+ g+ -> +
-        // [-1, 1]: f- g+ -> -
-        // [1, 2]: f+ g+ -> +
-        // [2, +inf[: f+ g- -> -
-        // So expected is ]-inf;-1]U[1;2]
-        return mk('Inéquations complexes', `Déterminer l'ensemble des solutions de l'inéquation $f(x) \\times g(x) \\ge 0$ à partir des courbes de $f$ (violet) et $g$ (orange) :<br/>${svg}`, ['Format `]-inf;a]U[b;c]`.'], expected, "Étude du signe de chaque fonction sur le graphique.", { placeholder: 'Ex : ]-inf;-1]U[1;2]' });
+        const expected = `]-inf;-1]U[1;2]`;
+        const corr = `<div class="step"><div class="step-label">Analyse des signes</div><div class="step-content">On cherche où $f(x)$ et $g(x)$ sont de même signe (produit positif).<br/>
+        • $f$ (violet) est positive sur $]-\\infty; -1] \\cup [1; +\\infty[$.<br/>
+        • $g$ (orange) est positive sur $]-\\infty; 2]$.<br/>
+        On dresse un petit tableau mental de signes :<br/>
+        - Sur $]-\\infty; -1]$, $+$ par $+$ donne (+).<br/>
+        - Sur $[-1; 1]$, $-$ par $+$ donne (-).<br/>
+        - Sur $[1; 2]$, $+$ par $+$ donne (+).<br/>
+        - Après $2$, $+$ par $-$ donne (-).</div></div>
+        <div class="step result"><div class="step-label">Solution</div><div class="step-content">Le produit est positif sur $\\boxed{]-\\infty; -1] \\cup [1; 2]}$.</div></div>`;
+        return mk('Inéquations complexes', `Déterminer l'ensemble des solutions de l'inéquation $f(x) \\times g(x) \\ge 0$ à partir des courbes de $f$ (violet) et $g$ (orange) :<br/>${svg}<br/><small style="color:var(--text-dim)">Format attendu : <code>]-inf;-1]U[1;2]</code></small>`, [], expected, corr, { placeholder: 'Ex : ]-inf;-1]U[1;2]' });
       }
 
       if (type === 'tableauxSignes') {
@@ -7740,7 +7746,7 @@
    Ch.1 Infos Chiffrées · Ch.2 Fct Affines · Ch.3 Suites Arith · Ch.4 Proba · Ch.5 Suites Géom
    ===================================================================== */
 
-    function pct(v, dec = 0) { return (v * 100).toFixed(dec) + '\\%'; }
+    function formatPct(v, dec = 0) { return (v * 100).toFixed(dec) + '\\%'; }
 
     // ══════════════════════════════════════════════════════════════════
     // CH.1 TC — INFORMATIONS CHIFFRÉES (Proportions, Évolutions)
@@ -8235,7 +8241,64 @@ def seuil():
     // CH.6 TC — AUTOMATISMES (Fractions, Équations, Pourcentages)
     // ══════════════════════════════════════════════════════════════════
     function genTC_Automatismes() {
-      const type = pick(['fraction', 'equation', 'pourcentage', 'developpement']);
+      const type = pick(['fraction', 'equation', 'pourcentage', 'developpement', 'proportion', 'evolution', 'lecture_graphique']);
+
+      if (type === 'proportion') {
+        const total = pick([200, 500, 1000, 2000]);
+        const sub = pick([20, 50, 100, 250]);
+        const p = (sub / total) * 100;
+        return {
+          isAuto: true,
+          title: "⚡ Automatisme – Proportion",
+          enonce: `Dans un groupe de $${total}$ personnes, $${sub}$ pratiquent un instrument.<br/>Quelle est la proportion (en %) de musiciens ?`,
+          questions: [`Donner le pourcentage.`],
+          interactiveAnswer: `${p}`,
+          answerPlaceholder: "Ex: 15",
+          correction: `<div class="step result"><div class="step-label">Calcul de proportion</div>
+        <div class="step-content">La proportion est donnée par $p = \\frac{\\text{Sous-effectif}}{\\text{Effectif total}} = \\frac{${sub}}{${total}} = ${sub / total}$.<br/>
+        En pourcentage : $p = ${sub / total} \\times 100 = \\boxed{${p} \\%}$.</div></div>`
+        };
+      }
+
+      if (type === 'evolution') {
+        const vD = rand(50, 200);
+        const t = pick([5, 10, 15, 20, 25]);
+        const cm = 1 + t / 100;
+        const vA = +(vD * cm).toFixed(2);
+        return {
+          isAuto: true,
+          title: "⚡ Automatisme – Évolution",
+          enonce: `Une valeur de $${vD}$ € augmente de $${t} \\%$.<br/>Calculer sa valeur finale.`,
+          questions: [`Donner le nouveau prix.`],
+          interactiveAnswer: `${vA}`,
+          answerPlaceholder: `Ex: ${vA}`,
+          correction: `<div class="step result"><div class="step-label">Coefficient Multiplicateur</div>
+        <div class="step-content">Une hausse de $${t} \\%$ correspond à un $CM = 1 + \\frac{${t}}{100} = ${cm}$.<br/>
+        Valeur finale $V_A = V_D \\times CM = ${vD} \\times ${cm} = \\boxed{${vA}}$.</div></div>`
+        };
+      }
+
+      if (type === 'lecture_graphique') {
+        const a = pick([-2, -1, 1, 2]);
+        const b = pick([-2, -1, 0, 1, 2]);
+        const f = (x) => a * x + b;
+        const svg = createSVGGrid(f, { xMin: -5, xMax: 5, yMin: -5, yMax: 5, curveColor: 'var(--blue-acc)' });
+        const expected = a === 1 ? 'x' : a === -1 ? '-x' : `${a}x`;
+        const res = expected + (b > 0 ? `+${b}` : b === 0 ? '' : b);
+        return {
+          isAuto: true,
+          title: "⚡ Automatisme – Lecture Graphique",
+          enonce: `Déterminer l'expression de la fonction affine $f(x) = ax+b$ tracée :<br/>${svg}`,
+          questions: [`Donner $f(x)$ sous la forme ax+b.`],
+          interactiveAnswer: res,
+          answerPlaceholder: "Ex: 2x+3",
+          correction: `<div class="step"><div class="step-label">Lecture de b</div>
+        <div class="step-content">L'ordonnée à l'origine (quand $x=0$) est $\\boxed{b = ${b}}$.</div></div>
+        <div class="step result"><div class="step-label">Calcul de a</div>
+        <div class="step-content">Quand $x$ augmente de 1, $y$ augmente de ${a}. Donc $\\boxed{a = ${a}}$.<br/>
+        On a donc $f(x) = \\boxed{${res}}$.</div></div>`
+        };
+      }
 
       if (type === 'fraction') {
         const b = pick([2, 3, 4, 5, 7]);
@@ -8348,7 +8411,7 @@ def seuil():
           interactiveAnswer: findX ? xVal.toString() : yVal.toString(),
           correction: `<div class="step"><div class="step-label">Méthode de lecture</div>
           <div class="step-content">
-            ${findX ? `On trace la droite horizontale $y = ${yVal}$. Les solutions sont les abscisses des points d'intersection.` : `On part de $x = ${xVal}$ sur l'axe horizontal, on rejoint la courbe verticalement, puis on lit l'ordonnée correspondante.`}
+            ${findX ? `On trace la droite horizontale $y = ${yVal}$. Les points d'intersection de cette droite avec la courbe nous donnent les antécédents en lisant leurs abscisses.` : `On repère $x = ${xVal}$ sur l'axe des abscisses. On monte (ou on descend) jusqu'à la courbe, puis on lit l'ordonnée correspondante sur l'axe vertical.`}
           </div></div>
           <div class="step result"><div class="step-label">Résultat</div>
           <div class="step-content">On trouve <strong>$${fn.name}(${xVal}) = ${yVal}$</strong>.</div></div>`
@@ -8373,9 +8436,9 @@ def seuil():
             `Donner l'ensemble des solutions sous forme d'intervalle.`
           ],
           correction: `<div class="step"><div class="step-label">Analyse visuelle</div>
-          <div class="step-content">L'inéquation $${fn.name}(x) \\ge ${k}$ signifie qu'on cherche les zones où la courbe est <strong>au-dessus</strong> de la droite horizontale $y = ${k}$.</div></div>
+          <div class="step-content">L'inéquation $${fn.name}(x) \\ge ${k}$ signifie qu'on cherche les valeurs de $x$ pour lesquelles la courbe est <strong>au-dessus de la droite horizontale $y = ${k}$</strong> (ou posée dessus).</div></div>
           <div class="step result"><div class="step-label">Ensemble de solutions</div>
-          <div class="step-content">En observant les points d'intersection, on détermine l'intervalle des abscisses correspondantes.</div></div>`
+          <div class="step-content">En relevant les abscisses des points de la courbe situés dans cette zone, on obtient l'intervalle solution. <br/>Par exemple, si la courbe coupe $y=${k}$ en $x_1$ et $x_2$ et reste au-dessus entre les deux, la solution est $[x_1 ; x_2]$.</div></div>`
         };
       }
 
@@ -8392,9 +8455,9 @@ def seuil():
             `Quel est le minimum de la fonction $${fn.name}$ sur cet intervalle ?`
           ],
           correction: `<div class="step"><div class="step-label">Lecture des sommets</div>
-          <div class="step-content">On cherche le point le plus haut et le point le plus bas de la courbe.</div></div>
+          <div class="step-content">Le <strong>maximum</strong> est l'ordonnée du point le plus haut de la courbe. Le <strong>minimum</strong> est l'ordonnée du point le plus bas de la courbe sur l'intervalle considéré.</div></div>
           <div class="step result"><div class="step-label">Extremums</div>
-          <div class="step-content">Le maximum est la valeur en ordonnée. Le minimum est la valeur en ordonnée du point le plus bas.</div></div>`
+          <div class="step-content">On lit les valeurs sur l'axe des ordonnées. L'abscisse du point donne la valeur en laquelle l'extremum est atteint.</div></div>`
         };
       }
     }
@@ -8410,78 +8473,35 @@ def seuil():
 
       const TC_META = {
         1: { icon: '📊', name: 'Informations Chiffrées' },
-        2: { icon: '📈', name: 'Fonctions Affines et Modélisation' },
-        3: { icon: '➕', name: 'Croissance Linéaire (Suites Arithmétiques)' },
-        4: { icon: '🎲', name: 'Probabilités et Conditionnement' },
-        5: { icon: '✖️', name: 'Croissance Exponentielle (Suites Géométriques)' },
+        2: { icon: '📈', name: 'Fonctions Affines' },
+        3: { icon: '➕', name: 'Suites Arithmétiques' },
+        4: { icon: '🎲', name: 'Probabilités' },
+        5: { icon: '✖️', name: 'Suites Géométriques' },
+        6: { icon: '⚡', name: 'Automatismes' },
         7: { icon: '🔍', name: 'Généralités sur les Fonctions' }
       };
 
-      currentBacExercises = [
-        {
-          _bacChapter: 1, _bacType: 'Mise en situation économique',
-          title: "Évolution du pouvoir d'achat",
-          enonce: `Le loyer d'un étudiant était de 400€ l'année dernière. Il subit une augmentation de 4% cette année. Son budget courses (qui était de 200€) subit une inflation de 15%.`,
-          questions: [
-            `Calculer le nouveau montant du loyer et le nouveau budget courses.`,
-            `Calculer le budget total (loyer + courses) initial, puis le nouveau budget total.`,
-            `En déduire le taux d'évolution global du budget de cet étudiant (en %).`
-          ],
-          correction: `<div class="step"><div class="step-label">Nouveaux montants</div><div class="step-content">Loyer : $400 \\times 1.04 = 416$€.<br/>Courses : $200 \\times 1.15 = 230$€.</div></div><div class="step"><div class="step-label">Budget global</div><div class="step-content">Budget initial : $400 + 200 = 600$€.<br/>Nouveau budget : $416 + 230 = 646$€.</div></div><div class="step"><div class="step-label">Taux d'évolution global</div><div class="step-content">Taux = $\\frac{\\text{Valeur Finale} - \\text{Valeur Initiale}}{\\text{Valeur Initiale}} = \\frac{646 - 600}{600} = \\frac{46}{600} \\approx 0.0767$.<br/>L'augmentation globale est de **7,67%** (et non pas une simple moyenne de 4% et 15%).</div></div>`
-        },
-        {
-          _bacChapter: 2, _bacType: 'Problème d\'optimisation',
-          title: "Comparaison de tarifs de location",
-          enonce: `Une agence de location de trottinettes propose deux tarifs :<br/>
-      - **Tarif A** : 5€ de prise en charge puis 0.15€ la minute.<br/>
-      - **Tarif B** : Aucun frais de prise en charge, mais 0.35€ la minute.<br/>
-      On note $x$ le temps d'utilisation en minutes, $f(x)$ le coût avec le tarif A, et $g(x)$ avec le tarif B.`,
-          questions: [
-            `Donner les expressions des fonctions affines $f(x)$ et $g(x)$.`,
-            `Résoudre l'inéquation $f(x) < g(x)$.`,
-            `Conclure sur le choix le plus avantageux pour le client en fonction de son temps d'utilisation.`
-          ],
-          correction: `<div class="step"><div class="step-label">Modélisation</div><div class="step-content">$f(x) = 0.15x + 5$<br/>$g(x) = 0.35x$.</div></div><div class="step"><div class="step-label">Inéquation (Point mort)</div><div class="step-content">$0.15x + 5 < 0.35x \\iff 5 < 0.20x \\iff x > \\frac{5}{0.20} \\iff x > 25$.</div></div><div class="step"><div class="step-label">Conclusion</div><div class="step-content">Pour des trajets de moins de 25 minutes, le Tarif B est plus avantageux. Pour des trajets de plus de 25 minutes, le tarif A devient moins cher grâce à son coût minute plus faible.</div></div>`
-        },
-        {
-          _bacChapter: 3, _bacType: 'Croissance Linéaire',
-          title: "Déploiement de panneaux solaires",
-          enonce: `Une commune installe des panneaux solaires. Elle en installe 150 la première année (année 1). Puis, l'équipe technique étant rodée, elle augmente la cadence et installe 40 panneaux supplémentaires chaque année par rapport à l'année précédente. On note $u_n$ le nombre de panneaux installés lors de l'année $n$.`,
-          questions: [
-            `Donner la nature de la suite $(u_n)$ ainsi que son premier terme $u_1$ et sa raison.`,
-            `Exprimer $u_n$ en fonction de $n$.`,
-            `Combien de panneaux seront installés lors de la 10ème année ?`,
-            `Combien de panneaux **au total** auront été installés sur la commune de l'année 1 à l'année 10 incluse ?`
-          ],
-          correction: `<div class="step"><div class="step-label">Modélisation</div><div class="step-content">Ajout constant = suite arithmétique de premier terme $u_1=150$ et de raison $r=40$.</div></div><div class="step"><div class="step-label">Expression et Calcul</div><div class="step-content">$u_n = u_1 + (n-1)r = 150 + 40(n-1)$.<br/>$u_{10} = 150 + 40(9) = 150 + 360 = 510$ panneaux installés l'année 10.</div></div><div class="step"><div class="step-label">Somme totale</div><div class="step-content">$S = 10 \\times \\frac{u_1 + u_{10}}{2} = 10 \\times \\frac{150 + 510}{2} = 10 \\times \\frac{660}{2} = 3300$ panneaux installés en tout en 10 ans.</div></div>`
-        },
-        {
-          _bacChapter: 4, _bacType: 'Problème de Santé Publique',
-          title: "Dépistage et Faux Positifs",
-          enonce: `Une maladie virale affecte 2% d'une population. Un test de dépistage est créé :<br/>
-      - Si on est malade, le test est positif à 98%.<br/>
-      - Si on est sain, le test est négatif à 95% (spécificité).<br/>
-      On note $M$ l'événement "être malade" et $T$ "avoir un test positif".`,
-          questions: [
-            `Construire un arbre de probabilités complet.`,
-            `Calculer la probabilité qu'une personne soit malade et ait un test positif.`,
-            `Calculer $P(T)$, la probabilité qu'un test pris au hasard soit positif.`,
-            `Une personne reçoit un résultat positif. Quelle est la probabilité qu'elle soit réellement malade ? Conclure sur l'efficacité du test.`
-          ],
-          correction: `<div class="step"><div class="step-label">Données de l'arbre</div><div class="step-content">$P(M)=0.02$, $P(\\overline{M})=0.98$.<br/>$P_M(T)=0.98$, $P_M(\\overline{T})=0.02$.<br/>$P_{\\overline{M}}(\\overline{T})=0.95$, $P_{\\overline{M}}(T)=0.05$.</div></div><div class="step"><div class="step-label">Intersection et Total</div><div class="step-content">$P(M \\cap T) = 0.02 \\times 0.98 = 0.0196$.<br/>$P(T) = P(M \\cap T) + P(\\overline{M} \\cap T) = 0.0196 + (0.98 \\times 0.05) = 0.0196 + 0.0490 = 0.0686$.</div></div><div class="step"><div class="step-label">Formule de Bayes</div><div class="step-content">$P_T(M) = \\frac{P(M \\cap T)}{P(T)} = \\frac{0.0196}{0.0686} \\approx 0.286$.<br/>Malgré un "bon" test, à cause de la rareté de la maladie, une personne testée positive n'a que **28.6% de chances** d'être réellement malade. Beaucoup de faux positifs !</div></div>`
-        },
-        {
-          _bacChapter: 5, _bacType: 'Croissance Exponentielle et Algorithme',
-          title: "Épargne et intérêts composés",
-          enonce: `Lina place 2000€ sur un compte bloqué rémunéré à 3% par an (intérêts composés). On note $v_n$ la somme sur le compte après $n$ années.`,
-          questions: [
-            `Justifier que $(v_n)$ est une suite géométrique dont on donnera la raison.`,
-            `Exprimer $v_n$ en fonction de $n$, puis calculer la somme disponible au bout de 10 ans.`,
-            `Écrire en langage naturel (ou en Python) un algorithme permettant de déterminer au bout de combien d'années le capital de Lina aura dépassé 3000€.`
-          ],
-          correction: `<div class="step"><div class="step-label">Modélisation</div><div class="step-content">Une hausse de 3% correspond à une multiplication par $1 + \\frac{3}{100} = 1.03$. C'est donc une suite géométrique de raison $q = 1.03$ et de premier terme $v_0 = 2000$.</div></div><div class="step"><div class="step-label">Calcul à 10 ans</div><div class="step-content">$v_n = 2000 \\times 1.03^n$.<br/>$v_{10} = 2000 \\times 1.03^{10} \\approx 2687.83$ €.</div></div><div class="step"><div class="step-label">Algorithme de Seuil</div><div class="step-content"><code>n = 0<br/>v = 2000<br/>while v < 3000:<br/>&nbsp;&nbsp;&nbsp;&nbsp;v = v * 1.03<br/>&nbsp;&nbsp;&nbsp;&nbsp;n = n + 1<br/>print(n)</code></div></div>`
+      const generators = {
+        1: genTC_Chiffres,
+        2: genTC_Affines,
+        3: genTC_SuitesArith,
+        4: genTC_Proba,
+        5: genTC_SuitesGeom,
+        6: genTC_Automatismes,
+        7: genTC_Fonctions
+      };
+
+      currentBacExercises = [];
+      const chapters = [1, 2, 3, 4, 5, 6, 7];
+
+      for (const ch of chapters) {
+        if (generators[ch]) {
+          const ex = generators[ch]();
+          ex._bacChapter = ch;
+          ex._bacType = ch === 6 ? 'Automatisme' : 'Problème de synthèse';
+          currentBacExercises.push(ex);
         }
-      ];
+      }
 
       bacCorrEl.innerHTML = '';
       bacCorrBtn.style.display = 'inline-flex';
