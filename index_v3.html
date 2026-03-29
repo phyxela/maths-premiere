@@ -1698,7 +1698,9 @@
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     /* ==============================================
@@ -1708,12 +1710,14 @@
 
     /* ── Overlay de transition (CACHÉ par défaut) ── */
     #page-transition {
-      display: none;                 /* invisible au chargement */
+      display: none;
+      /* invisible au chargement */
       position: fixed;
       inset: 0;
       z-index: 99999;
       pointer-events: none;
     }
+
     .pt-inner {
       position: absolute;
       inset: 0;
@@ -1724,6 +1728,7 @@
       justify-content: center;
       gap: 0;
     }
+
     .pt-badge {
       display: inline-block;
       background: linear-gradient(135deg, #3b82f6, #60a5fa);
@@ -1736,47 +1741,83 @@
       border-radius: 20px;
       margin-bottom: 14px;
     }
+
     .pt-title {
       font-family: 'Playfair Display', serif;
       font-size: 2.2rem;
       color: #e8eeff;
     }
-    .pt-title span { color: #60a5fa; }
+
+    .pt-title span {
+      color: #60a5fa;
+    }
+
     .pt-bar-wrap {
       width: 160px;
       height: 2px;
-      background: rgba(59,130,246,0.15);
+      background: rgba(59, 130, 246, 0.15);
       border-radius: 2px;
       margin-top: 20px;
       overflow: hidden;
     }
+
     .pt-bar-fill {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #3b82f6, #60a5fa);
       border-radius: 2px;
-      transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
+      transition: width 0.55s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     /* Animation d'entrée du panneau (slide depuis le bas) */
     @keyframes ptSlideIn {
-      from { transform: translateY(100%); }
-      to   { transform: translateY(0); }
+      from {
+        transform: translateY(100%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
     }
+
     /* Animation de sortie (slide vers le haut) */
     @keyframes ptSlideOut {
-      from { transform: translateY(0); }
-      to   { transform: translateY(-100%); }
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-100%);
+      }
     }
-    .pt-inner.slide-in  { animation: ptSlideIn  0.55s cubic-bezier(0.76,0,0.24,1) forwards; }
-    .pt-inner.slide-out { animation: ptSlideOut 0.6s  cubic-bezier(0.76,0,0.24,1) forwards; }
+
+    .pt-inner.slide-in {
+      animation: ptSlideIn 0.55s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+    }
+
+    .pt-inner.slide-out {
+      animation: ptSlideOut 0.6s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+    }
 
     /* ── Auth overlay fade-out ── */
-    #auth-overlay { transition: opacity 0.4s ease; }
-    #auth-overlay.fading { opacity: 0; pointer-events: none; }
+    #auth-overlay {
+      transition: opacity 0.4s ease;
+    }
+
+    #auth-overlay.fading {
+      opacity: 0;
+      pointer-events: none;
+    }
 
     /* ── Level overlay fade ── */
-    #level-overlay { transition: opacity 0.35s ease; }
-    #level-overlay.fading { opacity: 0; pointer-events: none; }
+    #level-overlay {
+      transition: opacity 0.35s ease;
+    }
+
+    #level-overlay.fading {
+      opacity: 0;
+      pointer-events: none;
+    }
 
     /* ── App : invisible jusqu'au reveal ── */
     #app {
@@ -1784,120 +1825,233 @@
       transform: translateY(18px);
       transition: opacity 0.55s ease, transform 0.55s ease;
     }
-    #app.revealed { opacity: 1; transform: translateY(0); }
+
+    #app.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     /* ── Header stagger ── */
-    header > * {
+    header>* {
       opacity: 0;
       transform: translateY(12px);
       transition: opacity 0.45s ease, transform 0.45s ease;
     }
-    header.anim > *:nth-child(1) { opacity:1; transform:none; transition-delay:0.06s; }
-    header.anim > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.13s; }
-    header.anim > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.20s; }
+
+    header.anim>*:nth-child(1) {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.06s;
+    }
+
+    header.anim>*:nth-child(2) {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.13s;
+    }
+
+    header.anim>*:nth-child(3) {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.20s;
+    }
 
     /* ── Stats bar ── */
     .stats-bar {
-      opacity: 0; transform: translateY(10px);
+      opacity: 0;
+      transform: translateY(10px);
       transition: opacity 0.4s ease 0.08s, transform 0.4s ease 0.08s;
     }
-    .stats-bar.revealed { opacity:1; transform:none; }
+
+    .stats-bar.revealed {
+      opacity: 1;
+      transform: none;
+    }
 
     /* ── Diff bar ── */
     .diff-bar {
-      opacity: 0; transform: translateY(8px);
+      opacity: 0;
+      transform: translateY(8px);
       transition: opacity 0.4s ease 0.14s, transform 0.4s ease 0.14s;
     }
-    .diff-bar.revealed { opacity:1; transform:none; }
+
+    .diff-bar.revealed {
+      opacity: 1;
+      transform: none;
+    }
 
     /* ── Chapter buttons : stagger via JS ── */
     .ch-btn {
       opacity: 0;
       transform: scale(0.93) translateY(8px);
       transition: opacity 0.32s ease, transform 0.32s ease,
-                  border-color 0.25s, box-shadow 0.25s;
+        border-color 0.25s, box-shadow 0.25s;
     }
-    .ch-btn.revealed { opacity:1; transform:scale(1) translateY(0); }
+
+    .ch-btn.revealed {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
 
     /* ── Flash sur sélection chapitre ── */
     @keyframes chFlash {
-      0%   { box-shadow: 0 0 0 0   rgba(59,130,246,0.55); }
-      70%  { box-shadow: 0 0 0 10px rgba(59,130,246,0); }
-      100% { box-shadow: 0 0 0 0   rgba(59,130,246,0); }
+      0% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.55);
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+      }
     }
-    .ch-btn.flash { animation: chFlash 0.45s ease; }
+
+    .ch-btn.flash {
+      animation: chFlash 0.45s ease;
+    }
 
     /* ── Ripple sur .btn ── */
-    .btn { position: relative; overflow: hidden; }
+    .btn {
+      position: relative;
+      overflow: hidden;
+    }
+
     .btn-ripple {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255,255,255,0.22);
+      background: rgba(255, 255, 255, 0.22);
       transform: scale(0);
       animation: rippleAnim 0.55s ease-out forwards;
       pointer-events: none;
     }
+
     @keyframes rippleAnim {
-      to { transform: scale(4); opacity: 0; }
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
     }
 
     /* ── Feedback animations ── */
-    .feedback.correct  { animation: feedPop   0.38s cubic-bezier(0.22,1,0.36,1); }
-    .feedback.incorrect { animation: feedShake 0.38s ease; }
-    @keyframes feedPop {
-      from { opacity:0; transform:scale(0.94); }
-      to   { opacity:1; transform:scale(1); }
+    .feedback.correct {
+      animation: feedPop 0.38s cubic-bezier(0.22, 1, 0.36, 1);
     }
+
+    .feedback.incorrect {
+      animation: feedShake 0.38s ease;
+    }
+
+    @keyframes feedPop {
+      from {
+        opacity: 0;
+        transform: scale(0.94);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
     @keyframes feedShake {
-      0%,100% { transform:translateX(0); }
-      20%     { transform:translateX(-6px); }
-      40%     { transform:translateX(6px); }
-      60%     { transform:translateX(-4px); }
-      80%     { transform:translateX(4px); }
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-6px);
+      }
+
+      40% {
+        transform: translateX(6px);
+      }
+
+      60% {
+        transform: translateX(-4px);
+      }
+
+      80% {
+        transform: translateX(4px);
+      }
     }
 
     /* ── Zones ── */
     #exercise-zone.visible,
     #bac-zone.visible,
     #course-zone.visible {
-      animation: zoneIn 0.42s cubic-bezier(0.22,1,0.36,1);
+      animation: zoneIn 0.42s cubic-bezier(0.22, 1, 0.36, 1);
     }
+
     @keyframes zoneIn {
-      from { opacity:0; transform:translateY(16px); }
-      to   { opacity:1; transform:translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ── Correction ── */
     .correction-card.visible {
-      animation: corrIn 0.45s cubic-bezier(0.22,1,0.36,1);
+      animation: corrIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     }
+
     @keyframes corrIn {
-      from { opacity:0; transform:scale(0.97) translateY(8px); }
-      to   { opacity:1; transform:scale(1) translateY(0); }
+      from {
+        opacity: 0;
+        transform: scale(0.97) translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     /* ── Dropdown user ── */
     .user-dropdown.open {
-      animation: ddIn 0.26s cubic-bezier(0.22,1,0.36,1);
+      animation: ddIn 0.26s cubic-bezier(0.22, 1, 0.36, 1);
       transform-origin: top right;
     }
+
     @keyframes ddIn {
-      from { opacity:0; transform:scale(0.92) translateY(-6px); }
-      to   { opacity:1; transform:scale(1) translateY(0); }
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     /* ── Level cards ── */
     .level-card {
-      transition: all 0.22s cubic-bezier(0.22,1,0.36,1);
+      transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .level-card:hover  { transform: translateY(-4px) scale(1.02); }
-    .level-card:active { transform: scale(0.97); }
+
+    .level-card:hover {
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    .level-card:active {
+      transform: scale(0.97);
+    }
 
     /* ── Save notification ── */
     #save-notification {
       transform: translateY(8px) !important;
       transition: opacity 0.3s ease, transform 0.3s ease !important;
     }
+
     #save-notification.visible-notif {
       opacity: 1 !important;
       transform: translateY(0) !important;
@@ -1906,44 +2060,89 @@
 
     /* ── Streak bump ── */
     @keyframes streakPulse {
-      0%  { transform:scale(1); }
-      45% { transform:scale(1.32); }
-      100%{ transform:scale(1); }
+      0% {
+        transform: scale(1);
+      }
+
+      45% {
+        transform: scale(1.32);
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
 
     /* ── Login box ── */
-    #auth-overlay > div {
-      animation: boxIn 0.5s cubic-bezier(0.22,1,0.36,1);
+    #auth-overlay>div {
+      animation: boxIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    #level-overlay > div {
-      animation: boxIn 0.42s cubic-bezier(0.22,1,0.36,1);
+
+    #level-overlay>div {
+      animation: boxIn 0.42s cubic-bezier(0.22, 1, 0.36, 1);
     }
+
     @keyframes boxIn {
-      from { opacity:0; transform:scale(0.93) translateY(18px); }
-      to   { opacity:1; transform:scale(1) translateY(0); }
+      from {
+        opacity: 0;
+        transform: scale(0.93) translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     /* ── Answer input glow ── */
-    .answer-input { transition: border-color 0.2s, background 0.2s, box-shadow 0.22s; }
-    .answer-input:focus    { box-shadow: 0 0 0 3px rgba(59,130,246,0.14); }
-    .answer-input.correct  { box-shadow: 0 0 0 3px rgba(52,211,153,0.12); }
-    .answer-input.incorrect{ box-shadow: 0 0 0 3px rgba(248,113,113,0.10); }
+    .answer-input {
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.22s;
+    }
+
+    .answer-input:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
+    }
+
+    .answer-input.correct {
+      box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.12);
+    }
+
+    .answer-input.incorrect {
+      box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.10);
+    }
 
     /* ── Diff btn press ── */
-    .diff-btn { transition: all 0.18s ease; }
-    .diff-btn:active { transform: scale(0.93); }
+    .diff-btn {
+      transition: all 0.18s ease;
+    }
+
+    .diff-btn:active {
+      transform: scale(0.93);
+    }
 
     /* ── Progress bar ── */
-    .progress-bar { transition: width 0.75s cubic-bezier(0.4,0,0.2,1) !important; }
+    .progress-bar {
+      transition: width 0.75s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
 
     /* ── Stat values bump ── */
     @keyframes statBump {
-      0%  { transform:scale(1); }
-      50% { transform:scale(1.28); }
-      100%{ transform:scale(1); }
-    }
-    .stat-bump { animation: statBump 0.38s cubic-bezier(0.34,1.56,0.64,1); }
+      0% {
+        transform: scale(1);
+      }
 
+      50% {
+        transform: scale(1.28);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .stat-bump {
+      animation: statBump 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
   </style>
 </head>
 
@@ -1953,7 +2152,9 @@
     <div class="pt-inner" id="pt-inner">
       <div class="pt-badge">✦ MathsPremière</div>
       <div class="pt-title">Maths<span>Première</span></div>
-      <div class="pt-bar-wrap"><div class="pt-bar-fill" id="pt-bar"></div></div>
+      <div class="pt-bar-wrap">
+        <div class="pt-bar-fill" id="pt-bar"></div>
+      </div>
     </div>
   </div>
 
@@ -8252,33 +8453,41 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
     /* ── 1. playLoginTransition(callback) ──────────────────────────────
        Affiche le panneau de wipe, attend, appelle callback, puis le retire. */
     function playLoginTransition(callback) {
-      const pt     = document.getElementById('page-transition');
-      const inner  = document.getElementById('pt-inner');
-      const bar    = document.getElementById('pt-bar');
-      const auth   = document.getElementById('auth-overlay');
+      const pt = document.getElementById('page-transition');
+      const inner = document.getElementById('pt-inner');
+      const bar = document.getElementById('pt-bar');
+      const auth = document.getElementById('auth-overlay');
 
       // Fade-out de l'overlay de login avant le wipe
       if (auth) {
-        auth.style.transition    = 'opacity 0.25s ease';
-        auth.style.opacity       = '0';
+        auth.style.transition = 'opacity 0.25s ease';
+        auth.style.opacity = '0';
         auth.style.pointerEvents = 'none';
       }
 
       setTimeout(() => {
         pt.style.display = 'block';
-        inner.className  = 'pt-inner slide-in';
+        inner.className = 'pt-inner slide-in';
 
         // Après l'entrée du panneau (~480ms), on déclenche la barre et le callback
         setTimeout(() => {
           bar.style.width = '100%';
           setTimeout(() => {
-            if (callback) callback();
-            // Sortie du panneau
+
+            // --- DÉBUT DE LA CORRECTION ---
+            try {
+              if (callback) callback();
+            } catch (error) {
+              console.error("Erreur silencieuse interceptée pendant le login :", error);
+            }
+            // --- FIN DE LA CORRECTION ---
+
+            // Sortie du panneau (s'exécutera toujours maintenant !)
             inner.className = 'pt-inner slide-out';
             setTimeout(() => {
               pt.style.display = 'none';
-              inner.className  = 'pt-inner';
-              bar.style.width  = '0%';
+              inner.className = 'pt-inner';
+              bar.style.width = '0%';
               revealApp();
             }, 620);
           }, 500);
@@ -8308,22 +8517,22 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
     }
 
     /* ── 3. Ripple sur tous les .btn ─────────────────────────────────── */
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn');
       if (!btn) return;
-      const r    = document.createElement('span');
+      const r = document.createElement('span');
       const rect = btn.getBoundingClientRect();
       const size = Math.max(rect.width, rect.height);
       r.className = 'btn-ripple';
       r.style.cssText = `width:${size}px;height:${size}px;`
-        + `left:${e.clientX - rect.left - size/2}px;`
-        + `top:${e.clientY - rect.top  - size/2}px;`;
+        + `left:${e.clientX - rect.left - size / 2}px;`
+        + `top:${e.clientY - rect.top - size / 2}px;`;
       btn.appendChild(r);
       setTimeout(() => r.remove(), 600);
     });
 
     /* ── 4. Bump animé sur les compteurs de stats ────────────────────── */
-    ['s-total','s-corr','s-ok','s-streak'].forEach(id => {
+    ['s-total', 's-corr', 's-ok', 's-streak'].forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       new MutationObserver(() => {
@@ -8336,11 +8545,11 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
 
     /* ── 5. Logout avec fondu ────────────────────────────────────────── */
     const _origLogout = window.logout;
-    window.logout = function() {
-      const app  = document.getElementById('app');
+    window.logout = function () {
+      const app = document.getElementById('app');
       const menu = document.getElementById('user-menu-wrap');
-      if (app)  { app.style.transition  = 'opacity .3s, transform .3s'; app.style.opacity  = '0'; app.style.transform  = 'translateY(10px)'; }
-      if (menu) { menu.style.transition = 'opacity .3s';                 menu.style.opacity = '0'; }
+      if (app) { app.style.transition = 'opacity .3s, transform .3s'; app.style.opacity = '0'; app.style.transform = 'translateY(10px)'; }
+      if (menu) { menu.style.transition = 'opacity .3s'; menu.style.opacity = '0'; }
       setTimeout(() => { if (_origLogout) _origLogout(); }, 320);
     };
   </script>
