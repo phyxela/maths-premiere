@@ -2892,7 +2892,8 @@
       { n: 3, icon: '➕', name: 'Suites Arithmétiques' },
       { n: 4, icon: '🎲', name: 'Probabilités' },
       { n: 5, icon: '✖️', name: 'Suites Géométriques' },
-      { n: 6, icon: '⚡', name: 'Automatismes' }
+      { n: 6, icon: '⚡', name: 'Automatismes' },
+      { n: 7, icon: '🔍', name: 'Généralités sur les Fonctions' }
     ];
 
     // Affiche l'overlay de sélection de filière
@@ -4674,7 +4675,7 @@
 
       let generators;
       if (currentNiveau === 'tc') {
-        generators = [null, genTC_Chiffres, genTC_Affines, genTC_SuitesArith, genTC_Proba, genTC_SuitesGeom, genTC_Automatismes];
+        generators = [null, genTC_Chiffres, genTC_Affines, genTC_SuitesArith, genTC_Proba, genTC_SuitesGeom, genTC_Automatismes, genTC_Fonctions];
       } else {
         generators = [null, genSecondDegree, genDerivation, genSuites, genProba, genAutomatismes];
       }
@@ -7602,7 +7603,44 @@
     // CH.1 TC — INFORMATIONS CHIFFRÉES (Proportions, Évolutions)
     // ══════════════════════════════════════════════════════════════════
     function genTC_Chiffres() {
-      const type = pickD(['proportion'], ['successives', 'proportion'], ['reciproque', 'successives']);
+      const type = pickD(['proportion', 'tableau'], ['successives', 'proportion', 'tableau'], ['reciproque', 'successives', 'tableau']);
+
+      if (type === 'tableau') {
+        const categories = pick([
+          { row: ['Sportif', 'Non sportif'], col: ['Externe', 'Pensionnaire'], context: 'élèves d\'un lycée' },
+          { row: ['Client < 30 ans', 'Client ≥ 30 ans'], col: ['Satisfait', 'Non satisfait'], context: 'clients d\'un magasin' }
+        ]);
+        const a=rand(40,100), b=rand(20,60), c=rand(30,70), d=rand(50,120);
+        const row1Tot = a + b, row2Tot = c + d;
+        const col1Tot = a + c, col2Tot = b + d;
+        const total = a + b + c + d;
+
+        return {
+          title: "Proportions et Tableaux d'effectifs",
+          enonce: `On a interrogé un groupe de ${total} ${categories.context}. Les résultats sont consignés dans le tableau suivant :
+          <table class="table-exercise">
+            <thead>
+              <tr><th></th><th>${categories.col[0]}</th><th>${categories.col[1]}</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>${categories.row[0]}</th><td>${a}</td><td>${b}</td><td>${row1Tot}</td></tr>
+              <tr><th>${categories.row[1]}</th><td>${c}</td><td>${d}</td><td>${row2Tot}</td></tr>
+              <tr><th>Total</th><td>${col1Tot}</td><td>${col2Tot}</td><td>${total}</td></tr>
+            </tbody>
+          </table>`,
+          questions: [
+            `Quelle est la proportion de ${categories.row[0].toLowerCase()} parmi l'ensemble des personnes interrogées ?`,
+            `Quelle est la proportion de ${categories.col[1].toLowerCase()} parmi les ${categories.row[1].toLowerCase()} ?`,
+            `Exprimer ces deux résultats en pourcentage arrondis à 0.1%.`
+          ],
+          correction: `<div class="step"><div class="step-label">Proportion globale</div>
+          <div class="step-content">L'effectif total est de ${total}. L'effectif des ${categories.row[0].toLowerCase()} est de ${row1Tot}.<br/>
+          $p_1 = \\frac{${row1Tot}}{${total}} \\approx ${+(row1Tot/total).toFixed(3)}$, soit <strong>${+(row1Tot/total*100).toFixed(1)}%</strong>.</div></div>
+          <div class="step result"><div class="step-label">Proportion sous-population</div>
+          <div class="step-content">On se restreint aux ${categories.row[1].toLowerCase()} (total de la ligne = ${row2Tot}). L'effectif des ${categories.col[1].toLowerCase()} dans cette catégorie est de ${d}.<br/>
+          $p_2 = \\frac{${d}}{${row2Tot}} \\approx ${+(d/row2Tot).toFixed(3)}$, soit <strong>${+(d/row2Tot*100).toFixed(1)}%</strong>.</div></div>`
+        };
+      }
 
       if (type === 'successives') {
         const ev1 = pick([-20, -10, -5, 5, 10, 20]);
@@ -7675,7 +7713,35 @@
     // CH.2 TC — FONCTIONS AFFINES (Croissance linéaire)
     // ══════════════════════════════════════════════════════════════════
     function genTC_Affines() {
-      const type = pickD(['calcul'], ['calcul', 'signe'], ['modélisation']);
+      const type = pickD(['graphique'], ['calcul', 'signe', 'graphique'], ['modélisation', 'graphique']);
+
+      if (type === 'graphique') {
+        const a = pick([-2, -1.5, -1, -0.5, 0.5, 1, 1.5, 2]);
+        const b = pick([-3, -2, -1, 0, 1, 2, 3]);
+        const f = (x) => a * x + b;
+        const svg = createSVGGrid(f, {
+          xMin: -5, xMax: 5, yMin: -5, yMax: 5, width: 400, height: 300,
+          curveColor: 'var(--orange)', curveWidth: 3
+        });
+        return {
+          title: "Lecture graphique d'une fonction affine",
+          enonce: `On a tracé ci-dessous la représentation graphique d'une fonction affine $f(x) = ax + b$.
+          <div style="margin: 15px 0;">${svg}</div>`,
+          questions: [
+            `Lire graphiquement l'ordonnée à l'origine $b$.`,
+            `Déterminer graphiquement le coefficient directeur $a$.`,
+            `Donner l'expression de $f(x)$.`
+          ],
+          interactiveAnswer: `${a}x${b >= 0 ? '+' + b : b}`,
+          answerPlaceholder: `${a}x+${b}`,
+          correction: `<div class="step"><div class="step-label">Ordonnée à l'origine</div>
+          <div class="step-content">L'ordonnée à l'origine $b$ est l'ordonnée du point où la droite coupe l'axe vertical. On lit <strong>$b = ${b}$</strong>.</div></div>
+          <div class="step"><div class="step-label">Coefficient directeur</div>
+          <div class="step-content">On part d'un point de la grille (ex: l'ordonnée à l'origine). On avance de 1 vers la droite. Pour retomber sur la droite, on doit ${a > 0 ? 'monter' : 'descendre'} de ${Math.abs(a)}. Donc <strong>$a = ${a}$</strong>.</div></div>
+          <div class="step result"><div class="step-label">Equation</div>
+          <div class="step-content">$$f(x) = ${a}x ${b > 0 ? '+ ' + b : b < 0 ? '- ' + Math.abs(b) : ''}$$</div></div>`
+        };
+      }
 
       if (type === 'signe') {
         const a = pick([-3, -2, 2, 3, 4]);
@@ -7820,7 +7886,50 @@
     // CH.4 TC — PROBABILITÉS (Arbres, Tableaux, Conditionnelles)
     // ══════════════════════════════════════════════════════════════════
     function genTC_Proba() {
-      const type = pickD(['arbre'], ['arbre', 'indep'], ['bayes', 'indep']);
+      const type = pickD(['arbre', 'tableau'], ['arbre', 'indep', 'tableau'], ['bayes', 'indep', 'tableau']);
+
+      if (type === 'tableau') {
+        const total = rand(20, 50) * 10;
+        const p1 = rand(30, 60);
+        const nA = Math.round(total * p1 / 100);
+        const nAnA = total - nA;
+        const p2 = rand(40, 70);
+        const nAB = Math.round(nA * p2 / 100);
+        const nAnB = nA - nAB;
+        const p3 = rand(20, 50);
+        const nAnAB = Math.round(nAnA * p3 / 100);
+        const nAnAnB = nAnA - nAnAB;
+        const nB = nAB + nAnAB;
+        const nAnB_total = nAnB + nAnAnB;
+
+        return {
+          title: "Probabilités et Tableaux de contingence",
+          enonce: `Dans un groupe de ${total} personnes, certains possèdent un vélo ($V$) et d'autres non. On sait également si ces personnes habitent en ville ($C$) ou à la campagne.
+          <table class="table-exercise">
+            <thead>
+              <tr><th></th><th>Vélo ($V$)</th><th>Pas de vélo ($\\overline{V}$)</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Ville ($C$)</th><td>${nAB}</td><td>${nAnB}</td><td>${nA}</td></tr>
+              <tr><th>Campagne ($\\overline{C}$)</th><td>${nAnAB}</td><td>${nAnAnB}</td><td>${nAnA}</td></tr>
+              <tr><th>Total</th><td>${nB}</td><td>${nAnB_total}</td><td>${total}</td></tr>
+            </tbody>
+          </table>`,
+          questions: [
+            `On choisit une personne au hasard. Calculer $P(V)$.`,
+            `Calculer la probabilité que la personne n'ait pas de vélo sachant qu'elle habite en ville.`,
+            `Calculer $P_V(C)$. Arrondir à 0.01 près.`
+          ],
+          correction: `<div class="step"><div class="step-label">Probabilité simple</div>
+          <div class="step-content">$P(V) = \\frac{\\text{Total Vélo}}{\\text{Total global}} = \\frac{${nB}}{${total}} = ${+(nB/total).toFixed(3)}$.</div></div>
+          <div class="step"><div class="step-label">Conditionnelle (ligne)</div>
+          <div class="step-content">Sachant que la personne habite en ville, on regarde uniquement la ligne "Ville" (Effectif = ${nA}).<br/>
+          $P_C(\\overline{V}) = \\frac{${nAnB}}{${nA}} = ${+(nAnB/nA).toFixed(3)}$.</div></div>
+          <div class="step result"><div class="step-label">Conditionnelle (colonne)</div>
+          <div class="step-content">Sachant que la personne a un vélo, on regarde uniquement la colonne "Vélo" (Effectif = ${nB}).<br/>
+          $P_V(C) = \\frac{${nAB}}{${nB}} \\approx <strong>${+(nAB/nB).toFixed(2)}</strong>$.</div></div>`
+        };
+      }
 
       if (type === 'indep') {
         const pA = pick([0.4, 0.5, 0.6]);
@@ -8058,7 +8167,92 @@ def seuil():
       };
     }
 
+    // ══════════════════════════════════════════════════════════════════
+    // CH.7 TC — GÉNÉRALITÉS SUR LES FONCTIONS
+    // ══════════════════════════════════════════════════════════════════
+    function genTC_Fonctions() {
+      const type = pick(['lecture', 'inequation', 'extremum', 'lecture']);
 
+      // Base functions for variety
+      const functions = [
+        { f: (x) => 0.5 * x * x - 2, name: 'f', color: 'var(--purple)', label: 'x^2' },
+        { f: (x) => -0.2 * x * x + 3, name: 'g', color: 'var(--orange)', label: '-x^2' },
+        { f: (x) => 0.1 * x * x * x - x + 1, name: 'h', color: 'var(--green)', label: 'x^3' }
+      ];
+      const fn = pick(functions);
+
+      if (type === 'lecture') {
+        const xList = [-2, -1, 0, 1, 2];
+        const xVal = pick(xList);
+        const yVal = +fn.f(xVal).toFixed(1);
+        const findX = Math.random() > 0.5;
+
+        const svg = createSVGGrid(fn.f, {
+          xMin: -5, xMax: 5, yMin: -4, yMax: 6,
+          curveColor: fn.color,
+          showPoints: findX ? [] : [{ x: xVal, y: yVal, color: 'var(--blue-acc)' }]
+        });
+
+        return {
+          title: "Lecture d'images et d'antécédents",
+          enonce: `On considère la fonction $${fn.name}$ dont la courbe est donnée ci-dessous.
+          <div style="margin: 15px 0;">${svg}</div>`,
+          questions: [
+            findX ? `Déterminer graphiquement le ou les éventuel(s) antécédent(s) de ${yVal} par $${fn.name}$.` : `Déterminer graphiquement l'image de ${xVal} par la fonction $${fn.name}$.`,
+            `En déduire la notation correspondante (ex: $${fn.name}(...) = ...$).`
+          ],
+          interactiveAnswer: findX ? xVal.toString() : yVal.toString(),
+          correction: `<div class="step"><div class="step-label">Méthode de lecture</div>
+          <div class="step-content">
+            ${findX ? `On trace la droite horizontale $y = ${yVal}$. Les solutions sont les abscisses des points d'intersection.` : `On part de $x = ${xVal}$ sur l'axe horizontal, on rejoint la courbe verticalement, puis on lit l'ordonnée correspondante.`}
+          </div></div>
+          <div class="step result"><div class="step-label">Résultat</div>
+          <div class="step-content">On trouve <strong>$${fn.name}(${xVal}) = ${yVal}$</strong>.</div></div>`
+        };
+      }
+
+      if (type === 'inequation') {
+        const k = pick([-1, 0, 1, 2]);
+        const svg = createSVGGrid(fn.f, {
+          xMin: -5, xMax: 5, yMin: -4, yMax: 6,
+          curveColor: fn.color,
+          tangent: { f: (x) => k } // Use tangent field as a simple horizontal line hack
+        });
+
+        return {
+          title: "Résolution graphique d'inéquation",
+          enonce: `On considère la fonction $${fn.name}$ représentée ci-dessous.
+          <div style="margin: 15px 0;">${svg}</div>`,
+          questions: [
+            `Résoudre graphiquement l'inéquation $${fn.name}(x) \\ge ${k}$.`,
+            `Donner l'ensemble des solutions sous forme d'intervalle.`
+          ],
+          correction: `<div class="step"><div class="step-label">Analyse visuelle</div>
+          <div class="step-content">L'inéquation $${fn.name}(x) \\ge ${k}$ signifie qu'on cherche les zones où la courbe est <strong>au-dessus</strong> de la droite horizontale $y = ${k}$.</div></div>
+          <div class="step result"><div class="step-label">Ensemble de solutions</div>
+          <div class="step-content">En observant les points d'intersection, on détermine l'intervalle des abscisses correspondantes.</div></div>`
+        };
+      }
+
+      if (type === 'extremum') {
+        const svg = createSVGGrid(fn.f, {
+          xMin: -5, xMax: 5, yMin: -4, yMax: 6, curveColor: fn.color
+        });
+        return {
+          title: "Extremums d'une fonction",
+          enonce: `On considère la fonction $${fn.name}$ sur l'intervalle $[-5 ; 5]$.
+          <div style="margin: 15px 0;">${svg}</div>`,
+          questions: [
+            `Quel est le maximum de la fonction $${fn.name}$ sur cet intervalle ? En quelle valeur est-il atteint ?`,
+            `Quel est le minimum de la fonction $${fn.name}$ sur cet intervalle ?`
+          ],
+          correction: `<div class="step"><div class="step-label">Lecture des sommets</div>
+          <div class="step-content">On cherche le point le plus haut et le point le plus bas de la courbe.</div></div>
+          <div class="step result"><div class="step-label">Extremums</div>
+          <div class="step-content">Le maximum est la valeur en ordonnée. Le minimum est la valeur en ordonnée du point le plus bas.</div></div>`
+        };
+      }
+    }
 
     // ══════════════════════════════════════════════════════════════════
     // BAC BLANC TRONC COMMUN
@@ -8074,7 +8268,8 @@ def seuil():
         2: { icon: '📈', name: 'Fonctions Affines et Modélisation' },
         3: { icon: '➕', name: 'Croissance Linéaire (Suites Arithmétiques)' },
         4: { icon: '🎲', name: 'Probabilités et Conditionnement' },
-        5: { icon: '✖️', name: 'Croissance Exponentielle (Suites Géométriques)' }
+        5: { icon: '✖️', name: 'Croissance Exponentielle (Suites Géométriques)' },
+        7: { icon: '🔍', name: 'Généralités sur les Fonctions' }
       };
 
       currentBacExercises = [
@@ -8344,6 +8539,38 @@ def seuil():
   </div>
 </div>`;
 
+      } else if (chapter === 7) {
+        html = `<div class="course-section">
+  <div class="course-section-title">1) Images et Antécédents</div>
+  <div class="course-def"><span class="block-title">Lecture graphique</span>
+    Pour une fonction $f$ représentée par une courbe $\\mathcal{C}_f$ :<br/>
+    • L'<b>image</b> de $x$ par $f$ est l'ordonnée du point de la courbe d'abscisse $x$. On la lit sur l'axe vertical (Y).<br/>
+    • Un <b>antécédent</b> de $y$ par $f$ est l'abscisse d'un point de la courbe d'ordonnée $y$. On le lit sur l'axe horizontal (X). Une valeur $y$ peut avoir zéro, un ou plusieurs antécédents.
+  </div>
+  <div class="course-method"><span class="block-title">Résoudre $f(x) = k$</span>
+    Graphiquement, les solutions sont les abscisses des points d'intersection de la courbe $\\mathcal{C}_f$ avec la droite horizontale d'équation $y = k$.
+  </div>
+</div>
+
+<div class="course-section">
+  <div class="course-section-title">2) Variations et Extremums</div>
+  <div class="course-def"><span class="block-title">Croissance et Décroissance</span>
+    • Une fonction est <b>croissante</b> sur un intervalle si sa courbe "monte" quand on la parcourt de gauche à droite.<br/>
+    • Une fonction est <b>décroissante</b> sur un intervalle si sa courbe "descend".
+  </div>
+  <div class="course-prop"><span class="block-title">Maximum et Minimum</span>
+    • Le <b>maximum</b> d'une fonction sur un intervalle est la plus grande valeur prise par $f(x)$. C'est le sommet le plus haut de la courbe.<br/>
+    • Le <b>minimum</b> est la plus petite valeur prise par $f(x)$. C'est le point le plus bas.
+  </div>
+</div>
+
+<div class="course-section">
+  <div class="course-section-title">3) Inéquations Graphiques</div>
+  <div class="course-method"><span class="block-title">Résoudre $f(x) > k$ ou $f(x) > g(x)$</span>
+    • $f(x) > k$ : On cherche les intervalles de $x$ pour lesquels la courbe $\\mathcal{C}_f$ est située <b>au-dessus</b> de la droite horizontale $y = k$.<br/>
+    • $f(x) > g(x)$ : On cherche les intervalles de $x$ pour lesquels la courbe $\\mathcal{C}_f$ est située <b>au-dessus</b> de la courbe $\\mathcal{C}_g$.
+  </div>
+</div>`;
       } else if (chapter === 5) {
         html = `<div class="course-section">
   <div class="course-section-title">1) Suites Géométriques (Croissance Exponentielle Discrète)</div>
