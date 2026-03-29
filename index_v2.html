@@ -1959,7 +1959,7 @@
         sendToSheets({
           type: 'avancement',
           name: name,
-          filiere: currentNiveau, // <--- NOUVEAU
+          filiere: currentNiveau, // <--- NOUVEAU : Envoi de la filière
           total: statsTotal,
           correct: statsCorrect,
           corr: statsCorr,
@@ -2563,13 +2563,15 @@
           statsBestStreak = d.bestStreak || 0;
           chapitresVus = new Set(d.chapitres || []);
         } else {
-          // Si pas de données pour cette filière, on repart à zéro
+          // Nouvelle filière = compteurs à zéro
           statsTotal = 0; statsCorr = 0; statsCorrect = 0; statsBestStreak = 0;
           chapitresVus = new Set();
         }
         document.getElementById('s-total').textContent = statsTotal;
         document.getElementById('s-corr').textContent = statsCorr;
         document.getElementById('s-ok').textContent = statsCorrect;
+        const streakEl = document.getElementById('s-streak');
+        if (streakEl) streakEl.textContent = statsBestStreak;
         updateDropdown();
       } catch (e) { }
     }
