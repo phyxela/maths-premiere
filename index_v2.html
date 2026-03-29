@@ -1314,21 +1314,21 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
       animation: fadeIn 0.2s ease;
     }
-    
+
     /* Scrollbar personnalisée */
     .user-dropdown::-webkit-scrollbar {
       width: 8px;
     }
-    
+
     .user-dropdown::-webkit-scrollbar-track {
       background: rgba(59, 130, 246, 0.05);
     }
-    
+
     .user-dropdown::-webkit-scrollbar-thumb {
       background: rgba(59, 130, 246, 0.25);
       border-radius: 4px;
     }
-    
+
     .user-dropdown::-webkit-scrollbar-thumb:hover {
       background: rgba(59, 130, 246, 0.4);
     }
@@ -1724,7 +1724,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Barre de progression globale -->
       <div class="progress-section">
         <div class="progress-header">
@@ -1735,7 +1735,7 @@
           <div class="progress-bar" id="dd-progress-bar"></div>
         </div>
       </div>
-      
+
       <!-- Stats principales -->
       <div class="stats-grid-main">
         <div class="stat-card stat-exercises">
@@ -1755,7 +1755,7 @@
           <div class="stat-card-label">🔥 Série</div>
         </div>
       </div>
-      
+
       <!-- Corrections vues -->
       <div class="corrections-section">
         <div class="section-title">📚 Corrections consultées</div>
@@ -1764,7 +1764,7 @@
           <div class="corrections-label">sur <span id="dd-total-ref">0</span> exercices</div>
         </div>
       </div>
-      
+
       <!-- Chapitres visités -->
       <div class="chapters-section">
         <div class="section-title">📖 Chapitres abordés</div>
@@ -1772,7 +1772,7 @@
           <!-- Générés dynamiquement -->
         </div>
       </div>
-      
+
       <!-- Actions -->
       <div class="actions-section">
         <button class="action-btn action-change" onclick="showLevelSelector()">
@@ -1952,40 +1952,20 @@
     let _trackingTimeout = null;
     let _lastTrackingTime = 0;
     function scheduleAvancementLog() {
-      const now = Date.now();
-      const timeSinceLastSend = now - _lastTrackingTime;
-      const name = sessionStorage.getItem('mathsPremiere_user');
-      if (!name) return;
-      
-      // Envoyer immédiatement si plus de 30s depuis le dernier envoi
-      if (timeSinceLastSend > 30000) {
+      clearTimeout(_trackingTimeout);
+      _trackingTimeout = setTimeout(() => {
+        const name = sessionStorage.getItem('mathsPremiere_user');
+        if (!name) return;
         sendToSheets({
           type: 'avancement',
           name: name,
+          filiere: currentNiveau, // <--- NOUVEAU
           total: statsTotal,
           correct: statsCorrect,
           corr: statsCorr,
           bestStreak: statsBestStreak,
           chapitres: [...chapitresVus]
         });
-        _lastTrackingTime = now;
-      }
-      
-      // Programmer un envoi dans 10s (pour les mises à jour fréquentes)
-      // IMPORTANT: créer la payload À L'INTÉRIEUR du setTimeout pour capturer les données actuelles
-      clearTimeout(_trackingTimeout);
-      _trackingTimeout = setTimeout(() => {
-        const payload = {
-          type: 'avancement',
-          name: sessionStorage.getItem('mathsPremiere_user'),
-          total: statsTotal,
-          correct: statsCorrect,
-          corr: statsCorr,
-          bestStreak: statsBestStreak,
-          chapitres: [...chapitresVus]  // Données fraîches au moment de l'envoi
-        };
-        sendToSheets(payload);
-        _lastTrackingTime = Date.now();
       }, 10000);
     }
 
@@ -1993,7 +1973,7 @@
     /* =============================================
        NOTIFICATIONS ET FEEDBACK UTILISATEUR
        ============================================= */
-    
+
     function showSaveNotification() {
       const notification = document.getElementById('save-notification');
       if (notification) {
@@ -2477,22 +2457,22 @@
     async function selectLevel(niv) {
       const ol = document.getElementById('level-overlay');
       if (ol) ol.style.display = 'none';
-      
+
       const changedLevel = currentNiveau !== niv;
-      
+
       // Réinitialiser les chapitres si on change vraiment de filière  
       if (changedLevel) {
         chapitresVus = new Set();  // Réinitialiser car les chapitres sont différents entre TC et SPE
       }
-      
+
       currentNiveau = niv;
       sessionStorage.setItem('mathsPremiere_niveau', niv);
-      
+
       // Sauvegarder la réinitialisation avec la nouvelle filière
       if (changedLevel) {
         saveStats();
       }
-      
+
       applyNiveau(niv);
       // Sauvegarde silencieuse dans le Sheet
       const userName = sessionStorage.getItem('mathsPremiere_user');
@@ -2526,6 +2506,7 @@
       currentChapter = null;
       document.getElementById('exercise-zone').style.display = 'none';
       closeBacZone();
+      loadStats(); // <--- NOUVEAU : On charge la progression spécifique à cette filière
     }
 
     // Génère dynamiquement la grille de chapitres
@@ -2544,10 +2525,11 @@
       updateDropdown();
     }
 
-    // Retourne la clé localStorage de l'utilisateur connecté
+    // Retourne la clé localStorage de l'utilisateur connecté selon sa filière
     function userKey() {
       const u = sessionStorage.getItem('mathsPremiere_user') || 'anonymous';
-      return 'mathsPremiere_stats_' + u.toLowerCase().replace(/\s+/g, '_');
+      const niv = currentNiveau || 'defaut';
+      return 'mathsPremiere_stats_' + u.toLowerCase().replace(/\s+/g, '_') + '_' + niv;
     }
 
     function saveStats() {
@@ -2579,22 +2561,15 @@
           statsCorr = d.corr || 0;
           statsCorrect = d.correct || 0;
           statsBestStreak = d.bestStreak || 0;
-          statsStreak = 0; // Réinitialiser la série courante
-          
-          // Charger les chapitres, mais seulement si on est dans la même filière
-          if (d.niveau === currentNiveau) {
-            chapitresVus = new Set(d.chapitres || []);
-          } else {
-            // Si on change de filière, réinitialiser les chapitres
-            chapitresVus = new Set();
-          }
-          
-          document.getElementById('s-total').textContent = statsTotal;
-          document.getElementById('s-corr').textContent = statsCorr;
-          document.getElementById('s-ok').textContent = statsCorrect;
-          const streakEl = document.getElementById('s-streak');
-          if (streakEl) streakEl.textContent = '0';
+          chapitresVus = new Set(d.chapitres || []);
+        } else {
+          // Si pas de données pour cette filière, on repart à zéro
+          statsTotal = 0; statsCorr = 0; statsCorrect = 0; statsBestStreak = 0;
+          chapitresVus = new Set();
         }
+        document.getElementById('s-total').textContent = statsTotal;
+        document.getElementById('s-corr').textContent = statsCorr;
+        document.getElementById('s-ok').textContent = statsCorrect;
         updateDropdown();
       } catch (e) { }
     }
@@ -2603,36 +2578,36 @@
     function updateDropdown() {
       const name = sessionStorage.getItem('mathsPremiere_user') || '—';
       const el = (id) => document.getElementById(id);
-      
+
       // Nom et infos
       const profileName = el('dd-name');
       if (profileName) profileName.textContent = name;
-      
+
       // Stats principales
       const total = parseInt(el('dd-total')?.textContent || '0');
       const correct = parseInt(el('dd-ok')?.textContent || '0');
-      
+
       el('dd-total').textContent = statsTotal;
       el('dd-ok').textContent = statsCorrect;
       el('dd-streak').textContent = statsBestStreak;
-      
+
       // Taux de réussite
       const successRate = statsTotal > 0 ? Math.round((statsCorrect / statsTotal) * 100) : 0;
       const rateEl = el('dd-success-rate');
       if (rateEl) rateEl.textContent = successRate + '%';
-      
+
       // Corrections
       el('dd-corr').textContent = statsCorr;
       el('dd-total-ref').textContent = statsTotal;
-      
+
       // Barre de progression
       const progressPercent = Math.min(100, Math.round((statsCorrect / Math.max(1, statsTotal)) * 100));
       const progressBar = el('dd-progress-bar');
       if (progressBar) progressBar.style.width = progressPercent + '%';
-      
+
       const progressPercentEl = el('dd-progress-percent');
       if (progressPercentEl) progressPercentEl.textContent = progressPercent + '%';
-      
+
       // Chapitres visités - affichage amélioré
       // Afficher seulement les chapitres de la filière actuelle
       const chapters = currentNiveau === 'tc' ? TC_CHAPTERS : SPE_CHAPTERS;
@@ -2650,17 +2625,17 @@
       const label = document.getElementById('user-menu-name');
       const ddName = document.getElementById('dd-name');
       const avatarBubble = document.getElementById('dd-avatar-bubble');
-      
+
       if (wrap) wrap.style.display = 'block';
       if (label) label.textContent = name;
       if (ddName) ddName.textContent = name;
-      
+
       // Mettre à jour le bubble avec la première lettre du nom
       if (avatarBubble) {
         const firstLetter = name.charAt(0).toUpperCase();
         avatarBubble.textContent = firstLetter;
       }
-      
+
       loadStats();
     }
 
@@ -7549,9 +7524,9 @@
       const diffOrRatio = [];
       for (let i = 1; i < terms.length; i++) {
         if (isArith) {
-          diffOrRatio.push(+(terms[i] - terms[i-1]).toFixed(2));
+          diffOrRatio.push(+(terms[i] - terms[i - 1]).toFixed(2));
         } else {
-          diffOrRatio.push(+(terms[i] / terms[i-1]).toFixed(2));
+          diffOrRatio.push(+(terms[i] / terms[i - 1]).toFixed(2));
         }
       }
       return {
@@ -7735,7 +7710,7 @@
       const iqr = q3 - q1;
       const variance = +(vals.reduce((s, v) => s + (v - mean) ** 2, 0) / n).toFixed(2);
       const ecartType = +Math.sqrt(variance).toFixed(2);
-      const min = vals[0], max = vals[n-1];
+      const min = vals[0], max = vals[n - 1];
       const tableRow = `<table style="margin:10px auto;border-collapse:collapse;font-size:13px;">
     <tr><th style="padding:6px 10px;border:1px solid rgba(255,255,255,0.15);background:rgba(59,130,246,0.15)">Valeurs (${ctx.unite})</th>
     ${vals.map(v => `<td style="padding:6px 10px;border:1px solid rgba(255,255,255,0.15);text-align:center">${v}</td>`).join('')}</tr></table>`;
@@ -7751,7 +7726,7 @@
         correction: `<div class="step"><div class="step-label">Moyenne</div><div class="step-content">$$\\bar{x}=\\frac{${vals.join('+')}}{${n}}=${mean}$$</div></div>
         <div class="step"><div class="step-label">Médiane (série triée : ${sorted.join(', ')})</div><div class="step-content">$n=${n}$ ${n % 2 === 0 ? `(pair) : \\text{médiane}=\\frac{${sorted[n / 2 - 1]}+${sorted[n / 2]}}{2}=${med}$` : `(impair) : \\text{médiane} = ${med}$`}</div></div>
         <div class="step"><div class="step-label">Quartiles et intervalle interquartile</div><div class="step-content">$Q_1=${q1}$, $Q_3=${q3}$, intervalle interquartile $=[${q1}\\,;\\,${q3}]$, étendue $=${iqr}$</div></div>
-        ${currentDifficulty === 'difficile' ? `<div class="step"><div class="step-label">Variance et écart-type</div><div class="step-content">$$V=\\frac{\\sum(x_i-\\bar{x})^2}{n}=${variance}$$$$\\sigma=\\sqrt{V}\\approx${ecartType}$$</div></div>` : `<div class="step"><div class="step-label">Étendue</div><div class="step-content">$\\text{min}=${min}, \\text{max}=${max}, \\text{étendue}=${max-min}$</div></div>`}`
+        ${currentDifficulty === 'difficile' ? `<div class="step"><div class="step-label">Variance et écart-type</div><div class="step-content">$$V=\\frac{\\sum(x_i-\\bar{x})^2}{n}=${variance}$$$$\\sigma=\\sqrt{V}\\approx${ecartType}$$</div></div>` : `<div class="step"><div class="step-label">Étendue</div><div class="step-content">$\\text{min}=${min}, \\text{max}=${max}, \\text{étendue}=${max - min}$</div></div>`}`
       };
     }
 
@@ -7844,8 +7819,8 @@
           `Calculer aussi l'angle $\\hat{C}$.`,
           currentDifficulty === 'difficile' ? `Vérifier que $\\sin^2(\\hat{A}) + \\cos^2(\\hat{A}) = 1$.` : `Vérifier que $\\hat{A} + \\hat{C} = 90°$.`
         ],
-        correction: `<div class="step"><div class="step-label">Théorème de Pythagore</div><div class="step-content">$${a}^2 + ${b}^2 = ${a*a} + ${b*b} = ${c*c} = ${c}^2$ ✓</div></div>
-        <div class="step"><div class="step-label">Valeurs trigonométriques</div><div class="step-content">$\\sin(\\hat{A})=\\frac{${a}}{${c}}\\approx${(a/c).toFixed(3)}$<br/>$\\cos(\\hat{A})=\\frac{${b}}{${c}}\\approx${(b/c).toFixed(3)}$<br/>$\\tan(\\hat{A})=\\frac{${a}}{${b}}\\approx${(a/b).toFixed(3)}$</div></div>
+        correction: `<div class="step"><div class="step-label">Théorème de Pythagore</div><div class="step-content">$${a}^2 + ${b}^2 = ${a * a} + ${b * b} = ${c * c} = ${c}^2$ ✓</div></div>
+        <div class="step"><div class="step-label">Valeurs trigonométriques</div><div class="step-content">$\\sin(\\hat{A})=\\frac{${a}}{${c}}\\approx${(a / c).toFixed(3)}$<br/>$\\cos(\\hat{A})=\\frac{${b}}{${c}}\\approx${(b / c).toFixed(3)}$<br/>$\\tan(\\hat{A})=\\frac{${a}}{${b}}\\approx${(a / b).toFixed(3)}$</div></div>
         <div class="step"><div class="step-label">Angles</div><div class="step-content">$\\hat{A}\\approx${angleA}°$, $\\hat{C}\\approx${angleC}°$ (donc $\\hat{A} + \\hat{C} \\approx 90°$)</div></div>`
       };
     }
@@ -8005,7 +7980,7 @@
         correction: `<div class="step"><div class="step-label">Valeur exacte de $\\tan(${angle}°)$</div><div class="step-content">$\\tan(${angle}°)=${tanExact}$</div></div>
         <div class="step"><div class="step-label">Distance horizontale</div><div class="step-content">$$d=\\frac{h}{\\tan(${angle}°)}=\\frac{${h}}{${tanExact}}\\approx${d}\\text{ m}$$</div></div>
         <div class="step"><div class="step-label">Distance observateur–sommet</div><div class="step-content">$$l=\\sqrt{${h}^2+${d}^2}\\approx${l}\\text{ m}$$</div></div>
-        <div class="step"><div class="step-label">Vérification</div><div class="step-content">$${h}^2 + ${d}^2 \\approx ${l*l}$ ✓</div></div>`
+        <div class="step"><div class="step-label">Vérification</div><div class="step-content">$${h}^2 + ${d}^2 \\approx ${l * l}$ ✓</div></div>`
       };
     }
 

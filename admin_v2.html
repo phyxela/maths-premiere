@@ -8,36 +8,44 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap"
     rel="stylesheet">
-    <style>
+  <style>
     /* =============================================
        DESIGN SYSTEM – Academic Blue & Black
        ============================================= */
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap');
 
     :root {
-      --bg:       #080c18;
-      --bg-mid:   #0f1726;
-      --bg-lt:    #182540;
-      --blue:     #3b82f6;
-      --blue-lt:  #60a5fa;
+      --bg: #080c18;
+      --bg-mid: #0f1726;
+      --bg-lt: #182540;
+      --blue: #3b82f6;
+      --blue-lt: #60a5fa;
       --blue-xlt: #93c5fd;
-      --text:     #dde6ff;
+      --text: #dde6ff;
       --text-dim: #7088c5;
-      --green:    #34d399;
-      --red:      #f87171;
-      --orange:   #fb923c;
+      --green: #34d399;
+      --red: #f87171;
+      --orange: #fb923c;
       --r-sm: 8px;
       --r-md: 14px;
       --r-lg: 20px;
-      --border: rgba(59,130,246,0.18);
-      --border-dim: rgba(59,130,246,0.09);
-      --shadow: 0 8px 32px rgba(0,0,0,0.55);
-      --shadow-sm: 0 2px 12px rgba(0,0,0,0.35);
+      --border: rgba(59, 130, 246, 0.18);
+      --border-dim: rgba(59, 130, 246, 0.09);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+      --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.35);
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       background: var(--bg);
@@ -52,11 +60,13 @@
 
     body::before {
       content: '';
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       background:
-        radial-gradient(ellipse at 15% 15%, rgba(59,130,246,0.07) 0%, transparent 50%),
-        radial-gradient(ellipse at 85% 85%, rgba(99,102,241,0.07) 0%, transparent 50%);
-      pointer-events: none; z-index: 0;
+        radial-gradient(ellipse at 15% 15%, rgba(59, 130, 246, 0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 85%, rgba(99, 102, 241, 0.07) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     /* ── Login ── */
@@ -65,7 +75,8 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      position: relative; z-index: 1;
+      position: relative;
+      z-index: 1;
     }
 
     .login-box {
@@ -77,7 +88,7 @@
       border-radius: var(--r-lg);
       padding: 44px 40px;
       text-align: center;
-      box-shadow: var(--shadow), 0 0 0 1px rgba(59,130,246,0.05);
+      box-shadow: var(--shadow), 0 0 0 1px rgba(59, 130, 246, 0.05);
     }
 
     .badge {
@@ -102,7 +113,9 @@
       letter-spacing: -0.3px;
     }
 
-    h1 span { color: var(--blue-lt); }
+    h1 span {
+      color: var(--blue-lt);
+    }
 
     .sub {
       color: var(--text-dim);
@@ -115,8 +128,8 @@
     input[type="number"],
     input[type="text"] {
       width: 100%;
-      background: rgba(255,255,255,0.04);
-      border: 1.5px solid rgba(59,130,246,0.2);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px solid rgba(59, 130, 246, 0.2);
       border-radius: var(--r-sm);
       padding: 11px 16px;
       color: var(--text);
@@ -129,7 +142,7 @@
 
     input:focus {
       border-color: var(--blue);
-      background: rgba(59,130,246,0.05);
+      background: rgba(59, 130, 246, 0.05);
     }
 
     .btn {
@@ -142,7 +155,9 @@
       transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
     }
 
-    .btn:hover { transform: translateY(-2px); }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
 
     .btn-gold {
       background: linear-gradient(135deg, var(--blue), var(--blue-lt));
@@ -150,10 +165,12 @@
       padding: 12px 28px;
       font-size: 14px;
       width: 100%;
-      box-shadow: 0 4px 18px rgba(59,130,246,0.3);
+      box-shadow: 0 4px 18px rgba(59, 130, 246, 0.3);
     }
 
-    .btn-gold:hover { box-shadow: 0 6px 24px rgba(59,130,246,0.45); }
+    .btn-gold:hover {
+      box-shadow: 0 6px 24px rgba(59, 130, 246, 0.45);
+    }
 
     .btn-red {
       background: var(--red);
@@ -191,7 +208,8 @@
       max-width: 920px;
       margin: 0 auto;
       padding: 0 24px;
-      position: relative; z-index: 1;
+      position: relative;
+      z-index: 1;
     }
 
     .dash-header {
@@ -211,7 +229,9 @@
       color: #e8eeff;
     }
 
-    .dash-title span { color: var(--blue-lt); }
+    .dash-title span {
+      color: var(--blue-lt);
+    }
 
     .user-card {
       background: var(--bg-mid);
@@ -223,7 +243,9 @@
       transition: border-color 0.2s;
     }
 
-    .user-card:hover { border-color: var(--border); }
+    .user-card:hover {
+      border-color: var(--border);
+    }
 
     .user-card-header {
       display: flex;
@@ -274,24 +296,26 @@
     }
 
     .slot-ok {
-      background: rgba(52,211,153,0.12);
+      background: rgba(52, 211, 153, 0.12);
       color: var(--green);
-      border: 1px solid rgba(52,211,153,0.28);
+      border: 1px solid rgba(52, 211, 153, 0.28);
     }
 
     .slot-warn {
-      background: rgba(251,146,60,0.12);
+      background: rgba(251, 146, 60, 0.12);
       color: var(--orange);
-      border: 1px solid rgba(251,146,60,0.28);
+      border: 1px solid rgba(251, 146, 60, 0.28);
     }
 
     .slot-full {
-      background: rgba(248,113,113,0.12);
+      background: rgba(248, 113, 113, 0.12);
       color: var(--red);
-      border: 1px solid rgba(248,113,113,0.28);
+      border: 1px solid rgba(248, 113, 113, 0.28);
     }
 
-    .devices-list { padding: 10px 24px 16px; }
+    .devices-list {
+      padding: 10px 24px 16px;
+    }
 
     .device-row {
       display: flex;
@@ -300,12 +324,16 @@
       padding: 10px 0;
       gap: 12px;
       flex-wrap: wrap;
-      border-bottom: 1px solid rgba(59,130,246,0.06);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.06);
     }
 
-    .device-row:last-child { border-bottom: none; }
+    .device-row:last-child {
+      border-bottom: none;
+    }
 
-    .device-info { font-size: 13px; }
+    .device-info {
+      font-size: 13px;
+    }
 
     .device-browser {
       color: #e8eeff;
@@ -339,7 +367,7 @@
       right: 24px;
       z-index: 9999;
       background: var(--bg-mid);
-      border: 1px solid rgba(52,211,153,0.3);
+      border: 1px solid rgba(52, 211, 153, 0.3);
       color: var(--green);
       font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
@@ -352,10 +380,13 @@
       pointer-events: none;
     }
 
-    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     .toast.err {
-      border-color: rgba(248,113,113,0.35);
+      border-color: rgba(248, 113, 113, 0.35);
       color: var(--red);
     }
 
@@ -391,15 +422,23 @@
       border-radius: var(--r-sm) var(--r-sm) 0 0;
     }
 
-    .tab-btn:hover { color: var(--text); background: rgba(59,130,246,0.04); }
+    .tab-btn:hover {
+      color: var(--text);
+      background: rgba(59, 130, 246, 0.04);
+    }
 
     .tab-btn.active {
       color: var(--blue-lt);
       border-bottom-color: var(--blue-lt);
     }
 
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
 
     /* ── Gestion mots de passe ── */
     .pwd-card {
@@ -416,7 +455,9 @@
       transition: border-color 0.2s;
     }
 
-    .pwd-card:hover { border-color: var(--border); }
+    .pwd-card:hover {
+      border-color: var(--border);
+    }
 
     .pwd-name {
       font-family: 'Playfair Display', serif;
@@ -434,7 +475,7 @@
     }
 
     .pwd-input {
-      background: rgba(59,130,246,0.04);
+      background: rgba(59, 130, 246, 0.04);
       border: 1.5px solid var(--border);
       border-radius: var(--r-sm);
       padding: 8px 14px;
@@ -448,7 +489,7 @@
 
     .pwd-input:focus {
       border-color: var(--blue);
-      background: rgba(59,130,246,0.08);
+      background: rgba(59, 130, 246, 0.08);
     }
 
     .nopassword-toggle {
@@ -462,19 +503,19 @@
       padding: 6px 14px;
       border-radius: var(--r-sm);
       border: 1px solid var(--border-dim);
-      background: rgba(255,255,255,0.02);
+      background: rgba(255, 255, 255, 0.02);
       transition: all 0.2s;
       user-select: none;
     }
 
     .nopassword-toggle:hover {
-      border-color: rgba(251,146,60,0.35);
+      border-color: rgba(251, 146, 60, 0.35);
       color: var(--orange);
     }
 
     .nopassword-toggle.active {
-      background: rgba(251,146,60,0.1);
-      border-color: rgba(251,146,60,0.4);
+      background: rgba(251, 146, 60, 0.1);
+      border-color: rgba(251, 146, 60, 0.4);
       color: var(--orange);
     }
 
@@ -486,20 +527,20 @@
     }
 
     .pwd-status.has-pwd {
-      background: rgba(52,211,153,0.1);
-      border: 1px solid rgba(52,211,153,0.28);
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.28);
       color: var(--green);
     }
 
     .pwd-status.no-pwd {
-      background: rgba(251,146,60,0.1);
-      border: 1px solid rgba(251,146,60,0.28);
+      background: rgba(251, 146, 60, 0.1);
+      border: 1px solid rgba(251, 146, 60, 0.28);
       color: var(--orange);
     }
 
     .pwd-status.no-config {
-      background: rgba(107,126,181,0.1);
-      border: 1px solid rgba(107,126,181,0.2);
+      background: rgba(107, 126, 181, 0.1);
+      border: 1px solid rgba(107, 126, 181, 0.2);
       color: var(--text-dim);
     }
 
@@ -522,11 +563,11 @@
     .admin-table td {
       padding: 14px 20px;
       text-align: left;
-      border-bottom: 1px solid rgba(59,130,246,0.07);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.07);
     }
 
     .admin-table th {
-      background: rgba(59,130,246,0.06);
+      background: rgba(59, 130, 246, 0.06);
       color: var(--blue-lt);
       font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
@@ -534,8 +575,13 @@
       letter-spacing: 1.2px;
     }
 
-    .admin-table tr:last-child td { border-bottom: none; }
-    .admin-table tr:hover td { background: rgba(59,130,246,0.03); }
+    .admin-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .admin-table tr:hover td {
+      background: rgba(59, 130, 246, 0.03);
+    }
 
     .hash-cell {
       font-family: 'JetBrains Mono', monospace;
@@ -612,7 +658,7 @@
       display: inline-block;
       width: 18px;
       height: 18px;
-      border: 2px solid rgba(59,130,246,0.2);
+      border: 2px solid rgba(59, 130, 246, 0.2);
       border-top-color: var(--blue-lt);
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
@@ -620,13 +666,30 @@
       vertical-align: middle;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--bg-lt); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(59,130,246,0.4); }
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-lt);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(59, 130, 246, 0.4);
+    }
   </style>
 </head>
 
@@ -693,6 +756,7 @@
               <th>👤 Élève</th>
               <th>🔑 Empreinte (Hash SHA-256)</th>
               <th>🔓 Statut</th>
+              <th>📊 Progression</th>
             </tr>
           </thead>
           <tbody id="recap-content-body">
@@ -840,18 +904,7 @@
                 <button class="btn btn-green" onclick="setLimit('${esc(name)}')">Appliquer</button>
               </div>
               <span class="slot-badge ${slotClass}">${count} / ${limit} appareils</span>
-              <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
-                <span style="font-size:12px;color:var(--text-dim)">Filière :</span>
-                <select id="niveau-${safeName(name)}" style="
-                  background:var(--bg-lt);border:1px solid var(--border);border-radius:6px;
-                  color:var(--text);padding:4px 10px;font-size:12px;cursor:pointer;"
-                  onchange="setNiveau('${esc(name)}', this.value)">
-                  <option value="" ${!(data.passwords[name]?.niveau) ? 'selected' : ''}>— Non défini —</option>
-                  <option value="spe" ${data.passwords[name]?.niveau === 'spe' ? 'selected' : ''}>📐 Spécialité</option>
-                  <option value="tc"  ${data.passwords[name]?.niveau === 'tc'  ? 'selected' : ''}>📊 Tronc Commun</option>
-                </select>
-              </div>
-              ${count > 0 ? `<button class="btn btn-red" style="margin-top:6px" onclick="deleteAll('${esc(name)}')">Tout supprimer</button>` : ''}
+              ${count > 0 ? `<button class="btn btn-red" onclick="deleteAll('${esc(name)}')">Tout supprimer</button>` : ''}
             </div>
           </div>`;
 
@@ -902,18 +955,10 @@
           ? `<span class="pwd-status no-pwd">🔓 Sans mot de passe</span>`
           : (hasHash ? `<span class="pwd-status has-pwd">🔒 Mot de passe défini</span>` : `<span class="pwd-status no-config">⚠️ Non configuré</span>`);
 
-        const niv = pwd?.niveau;
-        const nivHtml = niv === 'spe'
-          ? `<span style="font-size:11px;background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.25);padding:2px 8px;border-radius:12px;font-family:monospace">📐 Spécialité</span>`
-          : niv === 'tc'
-          ? `<span style="font-size:11px;background:rgba(129,140,248,0.12);color:#818cf8;border:1px solid rgba(129,140,248,0.25);padding:2px 8px;border-radius:12px;font-family:monospace">📊 Tronc Commun</span>`
-          : `<span style="font-size:11px;color:var(--text-dim);font-family:monospace">— filière non définie —</span>`;
-
         html += `
         <div class="pwd-card" id="pwd-card-${safeName(name)}">
           <div class="pwd-name">👤 ${esc(name)}</div>
           ${statusHtml}
-          ${nivHtml}
           <div class="pwd-controls">
             <input class="pwd-input" type="password" id="pwd-input-${safeName(name)}"
                    placeholder="Nouveau mot de passe…" ${noPassword ? 'disabled style="opacity:0.3"' : ''}>
@@ -937,6 +982,7 @@
       ]);
 
       const passwords = data.passwords || {};
+      const advancements = data.advancements || {}; // NOUVEAU : On récupère les avancements
       const tbody = document.getElementById('recap-content-body');
       tbody.innerHTML = '';
 
@@ -945,12 +991,38 @@
         const hash = (pwd && pwd.hash) ? pwd.hash : '—';
         const noPassword = pwd && pwd.noPassword;
 
+        // --- NOUVEAU : Construction des statistiques ---
+        const adv = advancements[name];
+        let statsHtml = '';
+
+        if (adv) {
+          if (adv.spe) {
+            statsHtml += `<div style="margin-bottom:8px; line-height: 1.4;">
+              <span class="badge" style="background:var(--blue-lt); padding:2px 6px; font-size:10px; margin-bottom:0">Spé</span> 
+              <span style="color:var(--green); font-weight:bold;">${adv.spe.correct}/${adv.spe.total}</span> (🔥 ${adv.spe.bestStreak})
+              <br/><small style="color:var(--text-dim); font-size:11px;">Ch: ${adv.spe.chapitres}</small>
+            </div>`;
+          }
+          if (adv.tc) {
+            statsHtml += `<div style="line-height: 1.4;">
+              <span class="badge" style="background:var(--orange); color:white; padding:2px 6px; font-size:10px; margin-bottom:0">TC</span> 
+              <span style="color:var(--green); font-weight:bold;">${adv.tc.correct}/${adv.tc.total}</span> (🔥 ${adv.tc.bestStreak})
+              <br/><small style="color:var(--text-dim); font-size:11px;">Ch: ${adv.tc.chapitres}</small>
+            </div>`;
+          }
+        }
+
+        if (!statsHtml) {
+          statsHtml = `<span style="color:var(--text-dim); font-style:italic;">Aucune donnée</span>`;
+        }
+        // ------------------------------------------------
+
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td style="font-weight:600; color:var(--gold-lt)">${esc(name)}</td>
+          <td style="font-weight:600; color:var(--text)">${esc(name)}</td>
           <td class="hash-cell">${noPassword ? '<span style="color:var(--orange)">[ACCÈS LIBRE]</span>' : esc(hash)}</td>
           <td>${noPassword ? '🔓 Libre' : '🔒 Protégé'}</td>
-        `;
+          <td>${statsHtml}</td> `;
         tbody.appendChild(row);
       }
     }
@@ -1055,19 +1127,6 @@
 
     // ── Utilitaires ───────────────────────────────────────────────────────────
     function safeName(name) { return name.toLowerCase().replace(/[^a-z0-9]/g, '_'); }
-
-    async function setNiveau(name, niveau) {
-      try {
-        const res = await apiPost({ type: 'admin_set_level', name, niveau });
-        if (res.success) {
-          const sel = document.getElementById('niveau-' + safeName(name));
-          if (sel) { sel.style.borderColor = 'var(--green)'; setTimeout(() => sel.style.borderColor = 'var(--border)', 1500); }
-          toast('✅ Filière mise à jour');
-        } else {
-          alert('Erreur : ' + (res.error || 'inconnue'));
-        }
-      } catch (e) { toast('❌ ' + e.message, true); }
-    }
     function esc(str) {
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
