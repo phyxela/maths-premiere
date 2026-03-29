@@ -7418,7 +7418,7 @@
           const v2 = (signBase * parseFloat(base2)).toFixed(2);
           const expected = (v1 * v1 > v2 * v2) ? '>' : '<';
           const corr = `<div class="step"><div class="step-label">Règle</div><div class="step-content">La fonction carré est croissante sur $[0 \\,;\\, +\\infty[$ et décroissante sur $]-\\infty \\,;\\, 0]$.<br/>Comme $${v1} ${signBase === 1 ? (v1 > v2 ? '>' : '<') : (v1 > v2 ? '>' : '<')} ${v2}$ et qu'ils sont de signe ${signBase === 1 ? 'positif' : 'négatif'}, on a : $(${v1})^2 ${expected} (${v2})^2$.</div></div><div class="step result"><div class="step-label">Réponse</div><div class="step-content">$\\boxed{${expected}}$</div></div>`;
-          return mk('Comparaison de carrés', `Comparer : $$(${v1})^2 \\text{ et } (${v2})^2$$`, ['Répondre par `>`, `<` ou `=`.'], expected, corr, { placeholder: 'Ex : <' });
+          return mk('Comparaison de carrés', `Comparer : $$\\boxed{(${v1})^2 \\text{ et } (${v2})^2}$$`, ['Répondre par `>`, `<` ou `=`.'], expected, corr, { placeholder: 'Ex : <' });
         } else if (type === 'comparaisons_inverses') {
           const base1 = (randInt(11, 59) / 10).toFixed(2);
           const base2 = (parseFloat(base1) + pick([-0.11, -0.05, 0.05, 0.11])).toFixed(2);
@@ -7426,15 +7426,15 @@
           const v1 = (signBase * parseFloat(base1)).toFixed(2);
           const v2 = (signBase * parseFloat(base2)).toFixed(2);
           const expected = (1 / v1 > 1 / v2) ? '>' : '<';
-          const corr = `<div class="step"><div class="step-label">Règle</div><div class="step-content">La fonction inverse est strictement décroissante sur $]-\\infty \\,;\\, 0[$ et sur $]0 \\,;\\, +\\infty[$.<br/>L'ordre est donc inversé.</div></div><div class="step result"><div class="step-label">Réponse</div><div class="step-content">$\\boxed{${expected}}$</div></div>`;
-          return mk('Comparaison d\'inverses', `Comparer : $$\\dfrac{1}{${v1}} \\text{ et } \\dfrac{1}{${v2}}$$`, ['Répondre par `>`, `<` ou `=`.'], expected, corr, { placeholder: 'Ex : >' });
+          const corr = `<div class="step result"><div class="step-label">Règle de l'inverse</div><div class="step-content">On compare les inverses de $${v1}$ et $${v2}$. Comme $x \\mapsto 1/x$ est décroissante sur chaque intervalle de définition, l'ordre est inversé : $$\\boxed{\\dfrac{1}{${v1}} ${expected} \\dfrac{1}{${v2}}}$$</div></div>`;
+          return mk('Comparaison d\'inverses', `Comparer les expressions suivantes : $$\\boxed{\\dfrac{1}{${v1}} \\text{ et } \\dfrac{1}{${v2}}}$$`, ['Répondre par `>`, `<` ou `=`.'], expected, corr, { placeholder: 'Ex : >' });
         } else {
           const a = pick([1, 2, 3, 4, 5, 7, 8]), b = pick([2, 3, 4, 5, 7, 9]);
           const c = pick([1, 2, 3, 4, 5, 7, 8]), d = pick([2, 3, 4, 5, 7, 9]);
           const expected = (a / b > c / d) ? '>' : (Math.abs(a / b - c / d) < 1e-9 ? '=' : '<');
           const ansLabel = expected === '=' ? '=' : (expected === '>' ? '>' : '<');
           const corr = `<div class="step result"><div class="step-label">Mise au même dénominateur</div><div class="step-content">$\\frac{${a}\\times${d}}{${b}\\times${d}} = \\frac{${a * d}}{${b * d}}$ et $\\frac{${c}\\times${b}}{${d}\\times${b}} = \\frac{${c * b}}{${b * d}}$. Donc $\\boxed{${ansLabel}}$</div></div>`;
-          return mk('Comparaisons standard', `Comparer $$\\dfrac{${a}}{${b}}\\text{ et }\\dfrac{${c}}{${d}}$$`, ['Répondre par `>`, `<` ou `=`.'], expected, corr, { placeholder: 'Ex : >' });
+          return mk('Comparaisons standard', `Comparer les deux fractions suivantes : $$\\boxed{\\dfrac{${a}}{${b}} \\text{ et } \\dfrac{${c}}{${d}}}$$`, ['Répondre par `>`, `<` ou `=`.'], expected, corr, { placeholder: 'Ex : >' });
         }
       }
 
@@ -7453,14 +7453,14 @@
           const den = a * c - b;
           const expected = `${num}/${den}`;
           const corr = `<div class="step result"><div class="step-label">Calcul</div><div class="step-content">$\\dfrac{1}{${a} - \\frac{${b}}{${c}}} = \\dfrac{1}{\\frac{${a * c}-${b}}{${c}}} = \\dfrac{${num}}{${den}}$</div></div>`;
-          return mk('Fractions complexes', `Calculer : $$A = \\dfrac{1}{${a} - \\dfrac{${b}}{${c}}}$$`, ['Donner la fraction irréductible.'], expected, corr, { placeholder: 'Ex : 3/5' });
+          return mk('Fractions complexes', `Calculer l'expression suivante : $$\\boxed{A = \\dfrac{1}{${a} - \\dfrac{${b}}{${c}}}}$$`, ['Donner la fraction irréductible.'], expected, corr, { placeholder: 'Ex : 3/5' });
         } else {
           const a = randInt(1, 7), b = pick([2, 3, 4, 5, 7, 9]);
           const c = randInt(1, 7), d = b * pick([2, 3]);
           const expectedNum = (a * (d / b)) + c;
           const corr = `<div class="step result"><div class="step-label">Même dénominateur</div><div class="step-content">$\\frac{${a}\\times${d / b}}{${b}\\times${d / b}} + \\frac{${c}}{${d}} = \\frac{${a * (d / b)}+${c}}{${d}} = \\frac{${expectedNum}}{${d}}$</div></div>`;
           const expected = `${expectedNum}/${d}`;
-          return mk('Opérations sur les fractions', `Calculer : $$\\dfrac{${a}}{${b}} + \\dfrac{${c}}{${d}}$$`, ['Donner la fraction.'], expected, corr, { placeholder: 'Ex : 11/12' });
+          return mk('Opérations sur les fractions', `Calculer la somme suivante : $$\\boxed{\\dfrac{${a}}{${b}} + \\dfrac{${c}}{${d}}}$$`, ['Donner la fraction.'], expected, corr, { placeholder: 'Ex : 11/12' });
         }
       }
 
@@ -7471,7 +7471,7 @@
         const k1 = randInt(2, 4), k2 = randInt(2, 4), k3 = randInt(2, 4);
         const resK = k1 * a - k2 * b + k3 * c;
         const expected = `${resK}sqrt(${base})`;
-        const enonce = `Simplifier : $$A = ${k1}\\sqrt{${sqA}} - ${k2}\\sqrt{${sqB}} + ${k3}\\sqrt{${sqC}}$$`;
+        const enonce = `Simplifier l'expression suivante : $$\\boxed{A = ${k1}\\sqrt{${sqA}} - ${k2}\\sqrt{${sqB}} + ${k3}\\sqrt{${sqC}}}$$`;
         const corr = `<div class="step"><div class="step-label">Décomposition</div><div class="step-content">$\\sqrt{${sqA}} = \\sqrt{${a}^2 \\times ${base}} = ${a}\\sqrt{${base}}$<br/>$\\sqrt{${sqB}} = \\sqrt{${b}^2 \\times ${base}} = ${b}\\sqrt{${base}}$<br/>$\\sqrt{${sqC}} = \\sqrt{${c}^2 \\times ${base}} = ${c}\\sqrt{${base}}$</div></div><div class="step result"><div class="step-label">Réponse</div><div class="step-content">Expression = $${k1}(${a}\\sqrt{${base}}) - ${k2}(${b}\\sqrt{${base}}) + ${k3}(${c}\\sqrt{${base}}) = (${k1 * a} - ${k2 * b} + ${k3 * c})\\sqrt{${base}} = \\boxed{${resK}\\sqrt{${base}}}$.</div></div>`;
         return mk('Simplification de racines', enonce, ['Donner la forme k*sqrt(n) ou k*sqrt(n)'], expected, corr, { placeholder: 'Ex : 28*sqrt(6)' });
       }
@@ -7481,8 +7481,9 @@
         const sqB = b * b * a, sqC = c * c * a;
         const res = Math.pow(b - c, 2) * a;
         const expected = `${res}`;
+        const enonce = `Simplifier le carré suivant : $$\\boxed{B = (\\sqrt{${sqB}} - \\sqrt{${sqC}})^2}$$`;
         const corr = `<div class="step"><div class="step-label">Simplification</div><div class="step-content">$\\sqrt{${sqB}} = ${b}\\sqrt{${a}}$ et $\\sqrt{${sqC}} = ${c}\\sqrt{${a}}$.<br/>L'expression devient $(${b}\\sqrt{${a}} - ${c}\\sqrt{${a}})^2 = ((${b - c})\\sqrt{${a}})^2$.</div></div><div class="step result"><div class="step-label">Calcul final</div><div class="step-content">$(${b - c})^2 \\times (\\sqrt{${a}})^2 = ${Math.pow(b - c, 2)} \\times ${a} = \\boxed{${res}}$.</div></div>`;
-        return mk('Carré de racines', `Simplifier : $$B = (\\sqrt{${sqB}} - \\sqrt{${sqC}})^2$$`, ['Valeur entière.'], expected, corr, { placeholder: 'Ex : 12' });
+        return mk('Carré de racines', enonce, ['Valeur entière.'], expected, corr, { placeholder: 'Ex : 12' });
       }
 
       if (type === 'fractions_inconnue') {
@@ -7490,7 +7491,7 @@
         const sumNum = a * c + b;
         const expected = `${c}/${sumNum}`;
         const corr = `<div class="step result"><div class="step-label">Calcul</div><div class="step-content">$\\frac{1}{R} = \\frac{${a * c}+${b}}{${c}} = \\frac{${sumNum}}{${c}}$. En passant à l'inverse : $R = \\frac{${c}}{${sumNum}}$.</div></div>`;
-        return mk('Recherche d\'inconnue', `Trouver $R$ sachant que : $$\\dfrac{1}{R} = ${a} + \\dfrac{${b}}{${c}}$$`, ['Donner la fraction irréductible pour R.'], expected, corr, { placeholder: 'Ex : 3/7' });
+        return mk('Recherche d\'inconnue', `Trouver la valeur de $R$ satisfaisant l'égalité : $$\\boxed{\\dfrac{1}{R} = ${a} + \\dfrac{${b}}{${c}}}$$`, ['Donner la fraction irréductible pour R.'], expected, corr, { placeholder: 'Ex : 3/7' });
       }
 
       if (type.startsWith('puissances')) {
@@ -7507,7 +7508,7 @@
           const resPow = op === '*' ? p + q : p - q;
           const expected = `${base}^${resPow}`;
           const corr = `<div class="step result"><div class="step-label">Réponse</div><div class="step-content">Application des formules : $a^n \\times a^m = a^{n+m}$ ou $a^n / a^m = a^{n-m}$.<br/>$\\boxed{${expected}}$</div></div>`;
-          return mk('Propriétés des puissances', `Écrire sous la forme d'une seule puissance : $$${base < 0 ? `(${base})` : base}^{${p}} ${op === '*' ? '\\times' : '\\div'} ${base < 0 ? `(${base})` : base}^{${q}}$$`, ['Format `a^n` ou `(-a)^n`.'], expected, corr, { alternatives: [base < 0 ? `(${base})^${resPow}` : expected], placeholder: 'Ex : (-3)^5' });
+          return mk('Propriétés des puissances', `Écrire sous la forme d'une seule puissance l'expression : $$\\boxed{${base < 0 ? `(${base})` : base}^{${p}} ${op === '*' ? '\\times' : '\\div'} ${base < 0 ? `(${base})` : base}^{${q}}}$$`, ['Format `a^n` ou `(-a)^n`.'], expected, corr, { alternatives: [base < 0 ? `(${base})^${resPow}` : expected], placeholder: 'Ex : (-3)^5' });
         }
       }
 
@@ -7528,7 +7529,7 @@
             eq = `${valStr}\\text{ cm}^2`; ex = '\\text{m}^2'; ans = val / 10000;
           }
           const corr = `<div class="step result"><div class="step-label">Tableau de conversion</div><div class="step-content">$1\\text{ m}^2 = 10\\,000\\text{ cm}^2$. Par proportionnalité, on trouve $\\boxed{${ans}}$.</div></div>`;
-          return mk('Conversions (Aires)', `Convertir $${eq}$ en $${ex}$.`, ['Valeur numérique.'], `${ans}`, corr, { placeholder: 'Ex : 15000' });
+          return mk('Conversions (Aires)', `Convertir la surface $${eq}$ en $${ex}$ : $$\\boxed{${eq} = \\dots \\, ${ex}}$$`, ['Valeur numérique.'], `${ans}`, corr, { placeholder: 'Ex : 15000' });
 
         } else if (type === 'unites_volume') {
           const sens = pick([true, false]);
@@ -7539,7 +7540,7 @@
             eq = `${valStr}\\text{ dm}^3`; ex = '\\text{m}^3'; ans = val / 1000;
           }
           const corr = `<div class="step result"><div class="step-label">Capacités</div><div class="step-content">$1\\text{ m}^3 = 1000\\text{ dm}^3 = 1000\\text{ L}$. La réponse est $\\boxed{${ans}}$.</div></div>`;
-          return mk('Conversions (Volumes)', `Convertir $${eq}$ en $${ex}$.`, ['Valeur numérique sans unité.'], `${ans}`, corr, { placeholder: 'Ex : 2500' });
+          return mk('Conversions (Volumes)', `Convertir le volume $${eq}$ en $${ex}$ : $$\\boxed{${eq} = \\dots \\, ${ex}}$$`, ['Valeur numérique sans unité.'], `${ans}`, corr, { placeholder: 'Ex : 2500' });
 
         } else {
           const sens = pick([true, false]);
@@ -7623,8 +7624,8 @@
         const pA = 0.4, pBn = 0.3, pAuB = 0.9;
         const pB = 1 - pBn;
         const pAiB = +(pA + pB - pAuB).toFixed(2);
-        const corr = `<div class="step"><div class="step-label">Formule</div><div class="step-content">$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$</div></div><div class="step result"><div class="step-label">Calcul</div><div class="step-content">$P(B) = 1 - P(\\bar{B}) = 1 - ${pBn} = ${pB}$.<br/>$P(A \\cap B) = ${pA} + ${pB} - ${pAuB} = \\boxed{${pAiB}}$.</div></div>`;
-        return mk('Relations Probabilités', `Sachant que $P(A)=${pA}$, $P(\\bar{B})=${pBn}$ et $P(A \\cup B)=${pAuB}$, calculer $P(A \\cap B)$.`, ['Valeur décimale.'], `${pAiB}`, corr, { placeholder: 'Ex : 0.2' });
+        const corr = `<div class="step"><div class="step-label">Formule</div><div class="step-content">$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$</div></div><div class="step result"><div class="step-label">Calcul</div><div class="step-content">$P(B) = 1 - P(\\overline{B}) = 1 - ${pBn} = ${pB}$.<br/>$P(A \\cap B) = ${pA} + ${pB} - ${pAuB} = \\boxed{${pAiB}}$.</div></div>`;
+        return mk('Relations Probabilités', `Sachant que $P(A)=${pA}$, $P(\\overline{B})=${pBn}$ et $P(A \\cup B)=${pAuB}$, calculer $P(A \\cap B)$.`, ['Valeur décimale.'], `${pAiB}`, corr, { placeholder: 'Ex : 0.2' });
       }
 
       if (type === 'valeur_absolue_ineq') {
@@ -7632,7 +7633,7 @@
         const b = a * a;
         const expected = `]-inf;-${a}]U[${a};+inf[`;
         const corr = `<div class="step"><div class="step-label">Définition</div><div class="step-content">$|X|=X \\iff X \\ge 0$.</div></div><div class="step result"><div class="step-label">Résolution</div><div class="step-content">$x^2 - ${b} \\ge 0 \\iff x^2 \\ge ${b} \\iff x \\le -${a}$ ou $x \\ge ${a}$.<br/>Soit $\\boxed{]-\\infty ; -${a}] \\cup [${a} ; +\\infty[}$.</div></div>`;
-        return mk('Valeur absolue', `Résoudre dans $\\mathbb{R}$ : $$|x^2 - ${b}| = x^2 - ${b}$$`, ['Format `]-inf;a]U[b;+inf[`.'], expected, corr, { alternatives: [`]-infinity;-${a}]U[${a};+infinity[`], placeholder: 'Ex : ]-inf;-3]U[3;+inf[' });
+        return mk('Valeur absolue', `Résoudre dans $\\mathbb{R}$ : $$\\boxed{|x^2 - ${b}| = x^2 - ${b}}$$`, ['Format `]-inf;-a]U[a;+inf[`.'], expected, corr, { alternatives: [`]-infinity;-${a}]U[${a};+infinity[`], placeholder: 'Ex : ]-inf;-3]U[3;+inf[' });
       }
 
       if (type === 'graphique_droite_cartesienne') {
@@ -7696,12 +7697,12 @@
           const k = randInt(2, 9);
           const expected = `1/${k}`;
           const corr = `<div class="step result"><div class="step-label">Inverse</div><div class="step-content">Le passage à l'inverse donne immédiatement : $x=\\frac{1}{${k}}$.</div></div>`;
-          return mk('Équations de référence', `Résoudre sur $\\mathbb{R}^*$ : $$\\dfrac{1}{x} = ${k}$$`, ['Fraction.'], expected, corr, { placeholder: 'Ex : 1/5' });
+          return mk('Équations de référence', `Résoudre sur $\\mathbb{R}^*$ : $$\\boxed{\\dfrac{1}{x} = ${k}}$$`, ['Donner la valeur sous forme de fraction.'], expected, corr, { placeholder: 'Ex : 1/5' });
         } else {
           const a = pick([2, 3, 4, 5]), x = nonZeroSigned(), b = nonZeroSigned();
           const c = a * x + b;
-          const corr = `<div class="step result"><div class="step-label">Isolement de x</div><div class="step-content">${a}x = ${c} - (${b}) = ${c - b} d'où $x = \\frac{${c - b}}{${a}} = ${x}$.</div></div>`;
-          return mk('Équation du 1er degré', `Résoudre : $$${a}x${b > 0 ? `+${b}` : b} = ${c}$$`, ['Valeur de $x$.'], `${x}`, corr, { placeholder: 'Ex : -3' });
+          const corr = `<div class="step result"><div class="step-label">Isolement de x</div><div class="step-content">${a}x = ${c} - (${b}) = ${c - b}$ d'où $\\boxed{x = \\frac{${c - b}}{${a}} = ${x}}$.</div></div>`;
+          return mk('Équation du 1er degré', `Résoudre l'équation suivante : $$\\boxed{${a}x${b > 0 ? `+${b}` : b} = ${c}}$$`, ['Valeur de $x$.'], `${x}`, corr, { placeholder: 'Ex : -3' });
         }
       }
 
@@ -7719,7 +7720,7 @@
           const bCarre = b * b;
           const expected = sign === '+' ? `${aCarre}x^2+${doubleProduit}x+${bCarre}` : `${aCarre}x^2-${doubleProduit}x+${bCarre}`;
           const corr = `<div class="step result"><div class="step-label">Identité remarquable</div><div class="step-content">$(A ${sign} B)^2 = A^2 ${sign} 2AB + B^2$.<br/>Ici $(${a}x)^2 ${sign} 2(${a}x)(${b}) + ${b}^2 = \\boxed{${expected}}$</div></div>`;
-          return mk('Identité remarquable', `Développer et réduire : $$(${a}x ${sign} ${b})^2$$`, ['Format `ax^2+bx+c`.'], expected, corr, { alternatives: [expected.replace('+', ' + ').replace('-', ' - ')], placeholder: 'Ex : 9x^2-12x+4' });
+          return mk('Identité remarquable', `Développer et réduire l'expression : $$\\boxed{(${a}x ${sign} ${b})^2}$$`, ['Format `ax^2+bx+c`.'], expected, corr, { alternatives: [expected.replace('+', ' + ').replace('-', ' - ')], placeholder: 'Ex : 9x^2-12x+4' });
         }
       }
 
@@ -7727,7 +7728,7 @@
         const a = randInt(2, 6);
         const expected = `(x-${a})(x+${a})`;
         const corr = `<div class="step result"><div class="step-label">Identité remarquable (Différence de carrés)</div><div class="step-content">$A^2-B^2 = (A-B)(A+B)$.<br/>Ici $x^2 - ${a}^2 = \\boxed{${expected}}$</div></div>`;
-        return mk('Factorisations', `Factoriser l'expression : $$x^2 - ${a * a}$$`, ['Format `(x-a)(x+b)`.'], expected, corr, { alternatives: [`(x+${a})(x-${a})`], placeholder: 'Ex : (x-3)(x+3)' });
+        return mk('Factorisations', `Factoriser l'expression suivante : $$\\boxed{x^2 - ${a * a}}$$`, ['Format `(x-a)(x+b)`.'], expected, corr, { alternatives: [`(x+${a})(x-${a})`], placeholder: 'Ex : (x-3)(x+3)' });
       }
 
       // Fallback de sécurité (ne devrait jamais être atteint)
@@ -7867,8 +7868,9 @@
         });
         return {
           title: "Lecture graphique d'une fonction affine",
-          enonce: `On a tracé ci-dessous la représentation graphique d'une fonction affine $f(x) = ax + b$.
-          <div style="margin: 15px 0;">${svg}</div>`,
+          enonce: `La droite ci-dessous représente une fonction $f(x) = ax + b$.<br/>
+          <div style="margin: 15px 0;">${svg}</div>
+          L'objectif est de trouver l'expression de $f(x)$ : $\\boxed{f(x) = ax + b}$`,
           questions: [
             `Lire graphiquement l'ordonnée à l'origine $b$.`,
             `Déterminer graphiquement le coefficient directeur $a$.`,
@@ -7892,10 +7894,10 @@
         const root = fracInput(-b, a);
         return {
           title: "Signe d'une fonction affine",
-          enonce: `Soit $f$ la fonction affine définie par $f(x) = ${a}x ${b > 0 ? '+ ' + b : '- ' + Math.abs(b)}$.`,
+          enonce: `On considère la fonction affine $f$ définie par : $\\boxed{f(x) = ${a}x ${b > 0 ? '+ ' + b : '- ' + Math.abs(b)}}$`,
           questions: [
-            `Déterminer l'abscisse pour laquelle $f(x) = 0$.`,
-            `Dresser le tableau de signes de $f(x)$ sur $\\mathbb{R}$.`
+            `Déterminer l'abscisse $x$ pour laquelle $f(x) = 0$.`,
+            `Dresser le tableau de signes de $f(x)$ sur l'intervalle $\\mathbb{R}$.`
           ],
           correction: `<div class="step"><div class="step-label">Racine</div>
         <div class="step-content">$${a}x ${b > 0 ? '+ ' + b : '- ' + Math.abs(b)} = 0 \\iff ${a}x = ${-b} \\iff x = \\frac{${-b}}{${a}} = ${root}$.</div></div>
@@ -7913,7 +7915,7 @@
         const val = rand(4, 10);
         return {
           title: "Modélisation par une fonction affine",
-          enonce: `Un artisan plombier facture ses interventions selon un modèle affine : des frais de déplacement fixes de ${cf} €, plus ${ch} € par heure de travail. On note $x$ la durée de l'intervention en heures et $P(x)$ le prix total.`,
+          enonce: `Un artisan plombier facture ses interventions selon un modèle affine : des frais de déplacement fixes de ${cf} €, plus ${ch} € par heure de travail. On note $x$ la durée de l'intervention en heures et $P(x)$ le prix total. L'objectif est de trouver l'expression de $P(x)$ : $\\boxed{P(x) = ax + b}$`,
           questions: [
             `Donner l'expression de $P(x)$ en fonction de $x$. Quel est le coefficient directeur ?`,
             `Combien coûtera une intervention de ${val} heures ?`,
@@ -8080,10 +8082,10 @@
         const pAB = indep ? +(pA * pB).toFixed(2) : +(pA * pB + pick([0.05, -0.05])).toFixed(2);
         return {
           title: "Indépendance d'événements",
-          enonce: `Deux événements $A$ et $B$ vérifient : $P(A)=${pA}$, $P(B)=${pB}$ et $P(A \\cap B)=${pAB}$.`,
+          enonce: `Deux événements $A$ et $B$ vérifient les probabilités suivantes : $$\\boxed{P(A)=${pA} \\,;\\, P(B)=${pB} \\,;\\, P(A \\cap B)=${pAB}}$$`,
           questions: [
-            `Que signifie mathématiquement que deux événements sont indépendants ?`,
-            `Les événements $A$ et $B$ sont-ils indépendants ?`,
+            `Rappeler la condition mathématique d'indépendance de deux événements.`,
+            `Les événements $A$ et $B$ sont-ils indépendants ? Justifier.`,
             `Calculer la probabilité de la réunion $P(A \\cup B)$.`
           ],
           correction: `<div class="step"><div class="step-label">Indépendance</div>
@@ -8190,7 +8192,7 @@ def seuil():
         const u0 = pick([50, 100, 200]);
         return {
           title: "Croissance exponentielle – Décroissance",
-          enonce: `Lors d'un traitement médical, la quantité de principe actif présente dans le sang diminue de ${baisse}% par heure. À $t=0$, on injecte $u_0 = ${u0}$ mg. On note $u_n$ la quantité restante après $n$ heures.`,
+          enonce: `Lors d'un traitement médical, la quantité de principe actif présente dans le sang diminue de ${baisse}% par heure. À $t=0$, on injecte une dose de $${u0}$ mg. On note $u_n$ la quantité restante après $n$ heures : $$\\boxed{u_0 = ${u0}}$$`,
           questions: [
             `Justifier que $(u_n)$ est une suite géométrique dont on donnera la raison.`,
             `Exprimer $u_n$ en fonction de $n$.`,
@@ -8244,7 +8246,7 @@ def seuil():
         return {
           isAuto: true,
           title: "⚡ Automatisme – Fractions",
-          enonce: `Calculer et donner le résultat sous forme de fraction irréductible : $$\\frac{${a}}{${b}} ${op} ${c}$$`,
+          enonce: `Calculer et donner le résultat sous forme de fraction irréductible : $$\\boxed{A = \\frac{${a}}{${b}} ${op} ${c}}$$`,
           questions: [`Effectuer le calcul.`],
           interactiveAnswer: fracInput(num, b),
           answerPlaceholder: `Ex: ${num}/${b}`,
@@ -8262,8 +8264,8 @@ def seuil():
         return {
           isAuto: true,
           title: "⚡ Automatisme – Équation du 1er degré",
-          enonce: `Résoudre l'équation suivante : $$${a}x ${b >= 0 ? '+' + b : '-' + Math.abs(b)} = ${c}$$`,
-          questions: [`Donner la valeur de $x$.`],
+          enonce: `Résoudre l'équation suivante : $$\\boxed{${a}x ${b >= 0 ? '+' + b : '-' + Math.abs(b)} = ${c}}$$`,
+          questions: [`Donner la valeur de l'inconnue $x$.`],
           interactiveAnswer: ans,
           answerPlaceholder: `Ex: ${ans}`,
           correction: `<div class="step result"><div class="step-label">Isolement de x</div>
@@ -8280,8 +8282,8 @@ def seuil():
         return {
           isAuto: true,
           title: "⚡ Automatisme – Pourcentages",
-          enonce: `Calculer $${pct}\\%$ de $${val}$.`,
-          questions: [`Donner le résultat.`],
+          enonce: `Calculer la valeur suivante : $$\\boxed{${pct}\\% \\text{ de } ${val}}$$`,
+          questions: [`Donner le résultat numérique.`],
           interactiveAnswer: ans.toString(),
           answerPlaceholder: `Ex: ${ans}`,
           correction: `<div class="step result"><div class="step-label">Astuce de calcul</div>
@@ -8337,7 +8339,7 @@ def seuil():
 
         return {
           title: "Lecture d'images et d'antécédents",
-          enonce: `On considère la fonction $${fn.name}$ dont la courbe est donnée ci-dessous.
+          enonce: `On considère la fonction $${fn.name}$ dont la courbe est donnée ci-dessous.<br/>
           <div style="margin: 15px 0;">${svg}</div>`,
           questions: [
             findX ? `Déterminer graphiquement le ou les éventuel(s) antécédent(s) de ${yVal} par $${fn.name}$.` : `Déterminer graphiquement l'image de ${xVal} par la fonction $${fn.name}$.`,
@@ -8363,10 +8365,11 @@ def seuil():
 
         return {
           title: "Résolution graphique d'inéquation",
-          enonce: `On considère la fonction $${fn.name}$ représentée ci-dessous.
-          <div style="margin: 15px 0;">${svg}</div>`,
+          enonce: `On considère la fonction $${fn.name}$ représentée ci-dessous.<br/>
+          <div style="margin: 15px 0;">${svg}</div>
+          Résoudre graphiquement l'inéquation : $$\\boxed{${fn.name}(x) \\ge ${k}}$$`,
           questions: [
-            `Résoudre graphiquement l'inéquation $${fn.name}(x) \\ge ${k}$.`,
+            `Identifier la zone de la courbe située au-dessus de la droite $y = ${k}$.`,
             `Donner l'ensemble des solutions sous forme d'intervalle.`
           ],
           correction: `<div class="step"><div class="step-label">Analyse visuelle</div>
