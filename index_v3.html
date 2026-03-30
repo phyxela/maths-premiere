@@ -4967,7 +4967,15 @@
         1: genSecondDegree,
         2: genDerivation,
         3: genSuites,
-        4: genProba,
+        // On exclut 'bac_test'/'depistage' déjà couverts par generatorsConcrets[4].
+        // Sans cette exclusion, deux exercices dépistage identiques peuvent
+        // apparaître dans le même sujet BAC.
+        4: () => {
+          const type = pick(['arbre', 'tableau', 'indep']);
+          if (type === 'indep') return genProbaIndependanceTableau();
+          if (type === 'arbre') return genProbaArbre();
+          return genProbaTableDouble();
+        },
         5: genAutomatismes
       };
 
@@ -5255,7 +5263,7 @@
       <div class="step-content">
         $v_n=u_n-${L}$ donc :
         $$v_{n+1}=u_{n+1}-${L}=(${pLatex}\\,u_n+${k})-${L}=${pLatex}\\,u_n+(${k}-${L}).$$
-        Or, ${k} = L(1-${pLatex}) = ${L}(1-${pLatex}) = ${L} - ${Math.round(L * p)}$, donc le terme constant vaut exactement $k - L = ${k} - ${L} = ${k - L}$. On factorise alors par $${pLatex}$ :
+        Or, $${k} = L(1-${pLatex}) = ${L}(1-${pLatex}) = ${L} - ${Math.round(L * p)}$, donc le terme constant vaut exactement $k - L = ${k} - ${L} = ${k - L}$. On factorise alors par $${pLatex}$ :
         $$v_{n+1}=${pLatex}(u_n-${L})=${pLatex}\\,v_n.$$
         Ainsi $(v_n)$ est géométrique de raison $q=${pLatex}$ et
         $$v_0=u_0-${L}=${u0 - L}.$$
@@ -5324,9 +5332,9 @@
       <div class="step-label">1) Données de l'énoncé</div>
       <div class="step-content">
         D'après les valeurs de l'énoncé :<br/>
-        $P(M)=${pctRaw(prev)}, donc $P(\\overline{M})=1 - ${pctRaw(prev)} = ${pctRaw(100 - prev)}.<br/>
-        La sensibilité est $P_{M}(T)=${pctRaw(sens)}.<br/>
-        La spécificité est $P_{\\overline{M}}(\\overline{T})=${pctRaw(spec)}, donc $P_{\\overline{M}}(T)=${pctRaw(100 - spec)}.
+        $P(M)=${pctRaw(prev)}$, donc $P(\\overline{M})=1 - ${pctRaw(prev)} = ${pctRaw(100 - prev)}$.<br/>
+        La sensibilité est $P_{M}(T)=${pctRaw(sens)}$.<br/>
+        La spécificité est $P_{\\overline{M}}(\\overline{T})=${pctRaw(spec)}$, donc $P_{\\overline{M}}(T)=${pctRaw(100 - spec)}$.
       </div>
     </div>
     <div class="step">
@@ -5368,7 +5376,7 @@
 
       const enonce = `
     Problème géométrique (optimisation).<br/><br/>
-    On dispose d’un carré $ABCD$ de côté ${L} cm. On place $M \\in [AB]$, $N \\in [BC]$, $P \\in [CD]$, $Q \\in [DA]$ tels que :
+    On dispose d’un carré $ABCD$ de côté ${L}$ cm. On place $M \\in [AB]$, $N \\in [BC]$, $P \\in [CD]$, $Q \\in [DA]$ tels que :
     $$AM = BN = CP = DQ = x.$$
     On s’intéresse à l’aire du quadrilatère $MNPQ$.
   `;
