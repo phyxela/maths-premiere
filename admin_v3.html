@@ -721,7 +721,7 @@
       background: var(--bg-mid);
       border: 1px solid var(--border-dim);
       border-radius: var(--r-md);
-      overflow: hidden;
+      overflow-x: auto;
       margin-bottom: 30px;
     }
 
@@ -1128,6 +1128,57 @@
     .logs-table-scroll {
       max-height: 520px;
       overflow-y: auto;
+      overflow-x: auto;
+    }
+
+    /* ── Barre live ─────────────────────────────────────────────── */
+    .logs-live-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      background: rgba(59, 130, 246, 0.06);
+      border-bottom: 1px solid var(--border-dim);
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .logs-live-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .logs-live-badge.live-active {
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--green);
+      animation: pulse-live 2s ease-in-out infinite;
+    }
+
+    .logs-live-badge.live-inactive {
+      background: rgba(107, 128, 181, 0.12);
+      color: var(--text-dim);
+    }
+
+    @keyframes pulse-live {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .logs-live-label strong {
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
     }
   </style>
 </head>
@@ -1232,6 +1283,10 @@
     </div>
 
     <div id="tab-logs" class="tab-panel">
+      <div class="logs-live-bar">
+        <span id="logs-live-badge" class="logs-live-badge live-inactive">● LIVE</span>
+        <span class="logs-live-label">Dernière mise à jour : <strong id="logs-live-ts">—</strong></span>
+      </div>
       <div class="logs-toolbar">
         <input class="logs-search" id="logs-search-input" type="text" placeholder="🔍 Filtrer par élève…"
           oninput="filterLogs()">
@@ -1399,12 +1454,13 @@
     function switchTab(name) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-
-      // On cherche le bouton par son action
       const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(name));
       if (btn) btn.classList.add('active');
-
       document.getElementById('tab-' + name).classList.add('active');
+
+      // Polling : actif seulement sur l'onglet logs
+      if (name === 'logs') startLogsPolling();
+      else stopLogsPolling();
     }
 
     // ── Chargement des données ────────────────────────────────────────────────
@@ -1704,6 +1760,53 @@
           </tr>`;
       }).join('');
     }
+
+    // ─── Polling temps réel des logs ────────────────────────────────────────
+    let _logsPollingInterval = null;
+    const LOGS_POLL_MS = 10000; // 10 secondes
+
+    async function fetchLogsOnly() {
+      if (!adminToken) return;
+      try {
+        const url = SCRIPT_URL + '?action=get_logs&token=' + encodeURIComponent(adminToken);
+        const data = await fetch(url).then(r => r.json());
+        if (data.error || !data.logs) return;
+        _allLogs = data.logs;
+        filterLogs();
+        updateLiveBadge();
+      } catch (_) { /* silencieux */ }
+    }
+
+    function startLogsPolling() {
+      if (_logsPollingInterval) return; // déjà actif
+      fetchLogsOnly(); // fetch immédiat à l'ouverture de l'onglet
+      _logsPollingInterval = setInterval(fetchLogsOnly, LOGS_POLL_MS);
+      setLiveBadge(true);
+    }
+
+    function stopLogsPolling() {
+      clearInterval(_logsPollingInterval);
+      _logsPollingInterval = null;
+      setLiveBadge(false);
+    }
+
+    function setLiveBadge(active) {
+      const badge = document.getElementById('logs-live-badge');
+      if (!badge) return;
+      badge.className = 'logs-live-badge ' + (active ? 'live-active' : 'live-inactive');
+      badge.title = active ? 'Mise à jour automatique toutes les 10 s' : 'Polling arrêté';
+    }
+
+    function updateLiveBadge() {
+      const ts = document.getElementById('logs-live-ts');
+      if (!ts) return;
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      ts.textContent = `${h}:${m}:${s}`;
+    }
+    // ────────────────────────────────────────────────────────────────────────
 
     function getLogTypeBadgeClass(type) {
       if (type === 'connexion') return 'log-type-connexion';

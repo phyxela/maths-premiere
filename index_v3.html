@@ -8828,13 +8828,13 @@ def seuil():
   <div class="course-def"><span class="block-title">Définition & Calcul</span>
     La proportion $p$ d'une sous-population $A$ (ex: les élèves gauchers) d'effectif $n_A$ dans une population globale $E$ (ex: tout le lycée) d'effectif $N$ se calcule par :
     $$p = \\frac{n_A}{N}$$
-    On l'exprime généralement en pourcentage (en multipliant par $100$).<br/>
-    <strong>Exemple :</strong> Si un lycée de $1200$ élèves compte $300$ gauchers, la proportion est $p = \\frac{300}{1200} = 0.25$, soit $25\\%$.
+    On l'exprime généralement en pourcentage (en multipliant par $100\\%$).<br/>
+    <strong>Exemple :</strong> Si un lycée de $1200$ élèves compte $300$ gauchers, la proportion est $p = \\frac{300}{1200} = 0{,}25$, soit $25\\%$.
   </div>
   <div class="course-prop"><span class="block-title">Proportion de proportion (Inclusions successives)</span>
     Si $A$ est une sous-population de $B$ (proportion $p_1$), et $B$ une sous-population de $C$ (proportion $p_2$), alors la proportion globale de $A$ dans $C$ est le <strong>produit</strong> des proportions :
     $$p_{globale} = p_1 \\times p_2$$
-    <strong>Exemple :</strong> Si $60\\%$ des élèves sont des filles ($p_2=0.6$), et que $10\\%$ des filles font du rugby ($p_1=0.1$), alors la proportion de filles rugbywomen dans le lycée est de $0.6 \\times 0.1 = 0.06$, soit $6\\%$.
+    <strong>Exemple :</strong> Si $60\\%$ des élèves sont des filles ($p_2=0{,}6$), et que $10\\%$ des filles font du rugby ($p_1=0{,}1$), alors la proportion de filles rugbywomen dans le lycée est de $0{,}6 \\times 0{,}1 = 0{,}06$, soit $6\\%$.
   </div>
 </div>
 
@@ -8848,8 +8848,8 @@ def seuil():
   <div class="course-prop"><span class="block-title">Le Coefficient Multiplicateur (CM)</span>
     C'est l'outil indispensable pour calculer des évolutions successives ! Appliquer une évolution de $t\\%$ revient à multiplier la valeur de départ par un coefficient multiplicateur :
     $$CM = 1 + \\frac{t}{100}$$
-    <strong>Exemple de Hausse :</strong> Une hausse de 15% correspond à un $CM = 1 + 0.15 = 1.15$.<br/>
-    <strong>Exemple de Baisse :</strong> Une baisse de 20% correspond à un $CM = 1 - 0.20 = 0.80$.
+    <strong>Exemple de Hausse :</strong> Une hausse de $15\\%$ correspond à un $CM = 1 + 0{,}15 = 1{,}15$.<br/>
+    <strong>Exemple de Baisse :</strong> Une baisse de $20\\%$ correspond à un $CM = 1 - 0{,}20 = 0{,}80$.
   </div>
 </div>
 
@@ -8858,7 +8858,7 @@ def seuil():
   <div class="course-method"><span class="block-title">Évolutions successives</span>
     <strong>Attention piège !</strong> Les pourcentages d'évolution <strong>NE S'ADDITIONNENT PAS</strong>. On doit <strong>multiplier</strong> les coefficients multiplicateurs entre eux.<br/>
     $$CM_{global} = CM_1 \\times CM_2 \\times \\dots$$
-    <em>Exemple :</em> Une hausse de 10% ($CM = 1.1$) suivie d'une baisse de 10% ($CM = 0.9$) donne un $CM_{global} = 1.1 \\times 0.9 = 0.99$. La valeur a donc globalement <strong>baissé</strong> de 1%.
+    <em>Exemple :</em> Une hausse de $10\\%$ ($CM = 1{,}1$) suivie d'une baisse de $10\\%$ ($CM = 0{,}9$) donne un $CM_{global} = 1{,}1 \\times 0{,}9 = 0{,}99$. La valeur a donc globalement <strong>baissé</strong> de $1\\%$.
   </div>
   <div class="course-method"><span class="block-title">Évolution réciproque</span>
     C'est l'évolution qu'il faut appliquer pour "revenir en arrière" à la valeur initiale.<br/>
@@ -8877,7 +8877,7 @@ def seuil():
     • Le nombre $b$ est l'<strong>ordonnée à l'origine</strong>. C'est la valeur de la fonction quand $x = 0$ (le point de départ sur l'axe vertical).
   </div>
   <div class="course-ex"><span class="block-title">Exemple de la vraie vie</span>
-    Un plombier facture 40€ de déplacement (frais fixes = $b$) puis 50€ par heure de travail (coût variable = $a$).<br/>
+    Un plombier facture $40€$ de déplacement (frais fixes = $b$) puis $50€$ par heure de travail (coût variable = $a$).<br/>
     Le prix total pour $x$ heures de travail est modélisé par la fonction affine : $P(x) = 50x + 40$.
   </div>
 </div>
@@ -8923,16 +8923,16 @@ def seuil():
     $$u_{n+1} = u_n + r$$
   </div>
   <div class="course-ex"><span class="block-title">Exemple concret</span>
-    Tu possèdes 50€ dans ta tirelire ($u_0 = 50$). Chaque mois, tu y ajoutes exactement 15€ ($r = 15$).<br/>
-    Le mois suivant tu auras $u_1 = 50 + 15 = 65$€.<br/>
-    Le mois d'après $u_2 = 65 + 15 = 80$€.
+    Tu possèdes $50€$ dans ta tirelire ($u_0 = 50$). Chaque mois, tu y ajoutes exactement $15€$ ($r = 15$).<br/>
+    Le mois suivant tu auras $u_1 = 50 + 15 = 65€$.<br/>
+    Le mois d'après $u_2 = 65 + 15 = 80€$.
   </div>
 </div>
 
 <div class="course-section">
   <div class="course-section-title">3) Formule Explicite (Saut dans le temps)</div>
   <div class="course-prop"><span class="block-title">Calculer n'importe quel terme</span>
-    Pour éviter de calculer tous les mois intermédiaires pour connaître ta tirelire dans 20 mois, on utilise la formule explicite :
+    Pour éviter de calculer tous les mois intermédiaires pour connaître ta tirelire dans $20$ mois, on utilise la formule explicite :
     $$u_n = u_0 + n \\times r$$
     <em>(Si la suite commence à $u_1$, la formule devient $u_n = u_1 + (n-1) \\times r$).</em>
   </div>
@@ -8946,9 +8946,9 @@ def seuil():
 <div class="course-section">
   <div class="course-section-title">4) Somme de termes successifs</div>
   <div class="course-method"><span class="block-title">Formule de Gauss</span>
-    Pour additionner très vite tous les termes consécutifs d'une suite arithmétique (ex: calculer ton épargne totale si tu mets 10€, puis 15€, puis 20€...), on utilise :
+    Pour additionner très vite tous les termes consécutifs d'une suite arithmétique (ex: calculer ton épargne totale si tu mets $10€$, puis $15€$, puis $20€$...), on utilise :
     $$S = \\text{Nombre de termes} \\times \\frac{\\text{Premier terme} + \\text{Dernier terme}}{2}$$
-    <em>Attention au comptage des termes ! De $u_0$ à $u_{10}$, il y a 11 termes (et non 10).</em>
+    <em>Attention au comptage des termes ! De $u_0$ à $u_{10}$, il y a $11$ termes (et non $10$).</em>
   </div>
 </div>`;
 
@@ -8962,7 +8962,7 @@ def seuil():
   </div>
   <div class="course-ex"><span class="block-title">Exemple concret</span>
     On tire au sort une carte dans un jeu. <br/>Quelle est la probabilité de tirer un "Roi" ($B$) <strong>sachant</strong> qu'on a tiré une carte "Rouge" ($A$) ?<br/>
-    L'univers s'est réduit aux seules cartes rouges (16 cartes). Parmi elles, il n'y a que 2 Rois. Donc $P_A(B) = \\frac{2}{16} = \\frac{1}{8}$.
+    L'univers s'est réduit aux seules cartes rouges ($16$ cartes). Parmi elles, il n'y a que $2$ Rois. Donc $P_A(B) = \\frac{2}{16} = \\frac{1}{8}$.
   </div>
 </div>
 
@@ -8999,8 +8999,8 @@ def seuil():
   <div class="course-section-title">1) Images et Antécédents</div>
   <div class="course-def"><span class="block-title">Lecture graphique</span>
     Pour une fonction $f$ représentée par une courbe $\\mathcal{C}_f$ :<br/>
-    • L'<b>image</b> de $x$ par $f$ est l'ordonnée du point de la courbe d'abscisse $x$. On la lit sur l'axe vertical (Y).<br/>
-    • Un <b>antécédent</b> de $y$ par $f$ est l'abscisse d'un point de la courbe d'ordonnée $y$. On le lit sur l'axe horizontal (X). Une valeur $y$ peut avoir zéro, un ou plusieurs antécédents.
+    • L'<b>image</b> de $x$ par $f$ est l'ordonnée du point de la courbe d'abscisse $x$. On la lit sur l'axe vertical ($Y$).<br/>
+    • Un <b>antécédent</b> de $y$ par $f$ est l'abscisse d'un point de la courbe d'ordonnée $y$. On le lit sur l'axe horizontal ($X$). Une valeur $y$ peut avoir zéro, un ou plusieurs antécédents.
   </div>
   <div class="course-method"><span class="block-title">Résoudre $f(x) = k$</span>
     Graphiquement, les solutions sont les abscisses des points d'intersection de la courbe $\\mathcal{C}_f$ avec la droite horizontale d'équation $y = k$.
@@ -9048,9 +9048,9 @@ def seuil():
     <em>Rappel : les puissances se calculent avant les multiplications !</em>
   </div>
   <div class="course-thm"><span class="block-title">Sens de variation (en supposant $u_0 > 0$)</span>
-    L'évolution dépend du fait que la raison soit supérieure ou inférieure à 1 :<br/>
-    • Si $q > 1$, on multiplie par "plus que 1", la valeur grossit : la suite est <strong>croissante</strong> et s'envole vers l'infini (croissance exponentielle).<br/>
-    • Si $0 < q < 1$, on multiplie par "moins que 1" (ex: 0.8), la valeur rétrécit : la suite est <strong>décroissante</strong> et tendra lentement vers zéro (décroissance radioactive).
+    L'évolution dépend du fait que la raison soit supérieure ou inférieure à $1$ :<br/>
+    • Si $q > 1$, on multiplie par "plus que $1$", la valeur grossit : la suite est <strong>croissante</strong> et s'envole vers l'infini (croissance exponentielle).<br/>
+    • Si $0 < q < 1$, on multiplie par "moins que $1$" (ex: $0{,}8$), la valeur rétrécit : la suite est <strong>décroissante</strong> et tendra lentement vers zéro (décroissance radioactive).
   </div>
 </div>
 
@@ -9075,7 +9075,7 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
   <div class="course-method"><span class="block-title">Addition et Soustraction</span>
     On ne peut additionner ou soustraire deux fractions que si elles ont <strong>le même dénominateur</strong>.<br/>
     $$\\frac{a}{c} + \\frac{b}{c} = \\frac{a+b}{c}$$
-    <em>Exemple :</em> $\\frac{2}{3} + \\frac{5}{4}$. On choisit un dénominateur commun (12). $\\frac{2 \\times 4}{3 \\times 4} + \\frac{5 \\times 3}{4 \\times 3} = \\frac{8}{12} + \\frac{15}{12} = \\frac{23}{12}$.
+    <em>Exemple :</em> $\\frac{2}{3} + \\frac{5}{4}$. On choisit un dénominateur commun ($12$). $\\frac{2 \\times 4}{3 \\times 4} + \\frac{5 \\times 3}{4 \\times 3} = \\frac{8}{12} + \\frac{15}{12} = \\frac{23}{12}$.
   </div>
   <div class="course-method"><span class="block-title">Multiplication et Division</span>
     • <strong>Multiplication :</strong> On multiplie les numérateurs entre eux, et les dénominateurs entre eux (pas besoin de dénominateur commun !).<br/>
@@ -9115,7 +9115,7 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
   </div>
   <div class="course-thm"><span class="block-title">Identités Remarquables (à savoir par cœur)</span>
     1. Le carré d'une somme : $(a+b)^2 = a^2 + 2ab + b^2$<br/>
-    2. Le carré d'une différence : $(a-b)^2 = a^2 - 2ab + b^2$<br/>
+    2. Le carré d'une différence : $(a-b)^2 = a^2 - 2ab + b^2$ (Attention au double produit !)<br/>
     3. La différence de deux carrés : $(a-b)(a+b) = a^2 - b^2$
   </div>
 </div>`;
