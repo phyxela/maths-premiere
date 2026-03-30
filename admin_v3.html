@@ -1248,6 +1248,18 @@
           <option value="admin_set_password">admin_set_password</option>
           <option value="admin_toggle_nopassword">admin_toggle_nopassword</option>
           <option value="admin_set_level">admin_set_level</option>
+          <optgroup label="── Interactions élève ──">
+            <option value="select_chapter">select_chapter</option>
+            <option value="set_difficulty">set_difficulty</option>
+            <option value="generate_exercise">generate_exercise</option>
+            <option value="answer_submit">answer_submit</option>
+            <option value="view_correction">view_correction</option>
+            <option value="view_course">view_course</option>
+            <option value="open_bac">open_bac</option>
+            <option value="generate_bac">generate_bac</option>
+            <option value="view_bac_correction">view_bac_correction</option>
+            <option value="logout">logout</option>
+          </optgroup>
         </select>
         <span class="logs-count" id="logs-count">— entrées</span>
       </div>
@@ -1698,6 +1710,9 @@
       if (type === 'avancement') return 'log-type-avancement';
       if (type === 'set_level') return 'log-type-set_level';
       if (type.startsWith('admin_')) return 'log-type-admin';
+      if (['answer_submit', 'view_correction', 'view_bac_correction'].includes(type)) return 'log-type-avancement';
+      if (['select_chapter', 'set_difficulty', 'generate_exercise', 'generate_bac', 'open_bac'].includes(type)) return 'log-type-connexion';
+      if (['logout', 'view_course'].includes(type)) return 'log-type-set_level';
       return 'log-type-other';
     }
 

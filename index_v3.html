@@ -2423,6 +2423,30 @@
       }, 10000); // envoie 10s après la dernière action (évite le flood)
     }
 
+    // ─── Log granulaire des interactions élève ──────────────────────────────
+    const _eventQueue = [];
+    let _flushTimeout = null;
+
+    function logEvent(action, details = {}) {
+      const name = sessionStorage.getItem('mathsPremiere_user');
+      if (!name) return;
+      _eventQueue.push({ action, details, name });
+      clearTimeout(_flushTimeout);
+      // Flush immédiat si file trop longue, sinon dans 15s
+      if (_eventQueue.length >= 20) flushEventQueue();
+      else _flushTimeout = setTimeout(flushEventQueue, 15000);
+    }
+
+    function flushEventQueue() {
+      clearTimeout(_flushTimeout);
+      if (!_eventQueue.length) return;
+      const batch = _eventQueue.splice(0); // vide la queue
+      sendToSheets({ type: 'log_events', events: batch });
+    }
+
+    // Flush sur fermeture de page (best-effort)
+    window.addEventListener('beforeunload', flushEventQueue);
+    // ────────────────────────────────────────────────────────────────────────
 
     /* =============================================
        NOTIFICATIONS ET FEEDBACK UTILISATEUR
@@ -3113,6 +3137,8 @@
 
     // Déconnexion : vide la session, réaffiche le mur de connexion
     function logout() {
+      logEvent('logout', { filiere: currentNiveau });
+      flushEventQueue();
       sessionStorage.removeItem('mathsPremiere_auth');
       sessionStorage.removeItem('mathsPremiere_user');
       // Réinitialise l'affichage
@@ -3366,6 +3392,7 @@
         feedbackEl.innerHTML = `<div class="feedback correct">✅ Correct ! ${statsStreak > 1 ? '🔥 Série de ' + statsStreak + ' !' : 'Bravo !'}</div>`;
         if (corrBtn) corrBtn.style.display = 'inline-flex';
         saveStats();
+        logEvent('answer_submit', { chapter: currentChapter, result: 'correct', attempt: checkAttempts, title: currentExercise?.title });
       } else {
         statsStreak = 0;
         const streakEl = document.getElementById('s-streak');
@@ -3377,6 +3404,7 @@
       <div class="feedback-note">${attemptsLeft > 0 ? attemptsLeft + ' essai' + (attemptsLeft > 1 ? 's' : '') + ' restant' + (attemptsLeft > 1 ? 's' : '') + '. ' : ''}Utilise le point pour les décimaux et / pour les fractions.</div>`;
         if (checkAttempts >= 2 && corrBtn) corrBtn.style.display = 'inline-flex';
         saveStats();
+        logEvent('answer_submit', { chapter: currentChapter, result: 'incorrect', attempt: checkAttempts, title: currentExercise?.title });
       }
     }
 
@@ -3391,6 +3419,7 @@
 
     function setDifficulty(level) {
       currentDifficulty = level;
+      logEvent('set_difficulty', { level });
       document.querySelectorAll('.diff-btn').forEach(b => {
         b.classList.remove('active');
         if (b.classList.contains(level)) b.classList.add('active');
@@ -3403,6 +3432,7 @@
     function selectChapter(n, clickedEl) {
       closeBacZone();
       currentChapter = n;
+      logEvent('select_chapter', { chapter: n, filiere: currentNiveau });
       if (typeof chapitresVus !== 'undefined') {
         chapitresVus.add(n);
         saveStats();
@@ -3458,9 +3488,11 @@
       if (content.style.display === 'none') {
         content.style.display = 'block';
         btn.innerHTML = '📖 Masquer le cours';
+        logEvent('view_course', { chapter: currentChapter, action: 'show' });
       } else {
         content.style.display = 'none';
         btn.innerHTML = '📖 Afficher le cours';
+        logEvent('view_course', { chapter: currentChapter, action: 'hide' });
       }
     }
 
@@ -4762,6 +4794,7 @@
       }
 
       currentExercise = generators[currentChapter]();
+      logEvent('generate_exercise', { chapter: currentChapter, filiere: currentNiveau, title: currentExercise.title });
       renderExercise(currentExercise);
       statsTotal++;
       document.getElementById('s-total').textContent = statsTotal;
@@ -4830,6 +4863,7 @@
       ${currentExercise.correction}
     </div>`;
       statsCorr++;
+      logEvent('view_correction', { chapter: currentChapter, title: currentExercise?.title });
       document.getElementById('s-corr').textContent = statsCorr;
       saveStats();
       if (showCorrBtn) showCorrBtn.style.display = 'none';
@@ -4874,6 +4908,7 @@
     }
 
     function openBacZone() {
+      logEvent('open_bac', { filiere: currentNiveau });
       currentChapter = null;
       currentExercise = null;
       closeBacZone();
@@ -4910,6 +4945,7 @@
     }
 
     function generateBacSujet() {
+      logEvent('generate_bac', { filiere: currentNiveau, difficulty: currentDifficulty });
       if (currentNiveau === 'tc') { generateBacSujetTC(); return; }
       const bacContentEl = document.getElementById('bac-content');
       const bacCorrBtn = document.getElementById('bac-show-corr-btn');
@@ -4990,6 +5026,7 @@
     }
 
     function showBacCorrection() {
+      logEvent('view_bac_correction', { filiere: currentNiveau });
       const bacCorrBtn = document.getElementById('bac-show-corr-btn');
       const bacCorrEl = document.getElementById('bac-correction-content');
       if (!bacCorrEl || !currentBacExercises || !currentBacExercises.length) return;
