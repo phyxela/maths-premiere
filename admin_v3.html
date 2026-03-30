@@ -215,6 +215,7 @@
       transform: translateY(16px);
       transition: opacity 0.55s ease, transform 0.55s ease;
     }
+
     #dashboard.revealed {
       opacity: 1;
       transform: translateY(0);
@@ -228,6 +229,7 @@
       z-index: 99999;
       pointer-events: none;
     }
+
     .apt-inner {
       position: absolute;
       inset: 0;
@@ -238,6 +240,7 @@
       justify-content: center;
       gap: 0;
     }
+
     .apt-badge {
       display: inline-block;
       background: linear-gradient(135deg, #3b82f6, #60a5fa);
@@ -250,12 +253,17 @@
       border-radius: 20px;
       margin-bottom: 14px;
     }
+
     .apt-title {
       font-family: 'Playfair Display', serif;
       font-size: 2.2rem;
       color: #e8eeff;
     }
-    .apt-title span { color: #60a5fa; }
+
+    .apt-title span {
+      color: #60a5fa;
+    }
+
     .apt-sub {
       font-size: 12px;
       color: #7088c5;
@@ -264,70 +272,117 @@
       text-transform: uppercase;
       margin-top: 8px;
     }
+
     .apt-bar-wrap {
       width: 160px;
       height: 2px;
-      background: rgba(59,130,246,0.15);
+      background: rgba(59, 130, 246, 0.15);
       border-radius: 2px;
       margin-top: 22px;
       overflow: hidden;
     }
+
     .apt-bar-fill {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #3b82f6, #60a5fa);
       border-radius: 2px;
-      transition: width 0.55s cubic-bezier(0.4,0,0.2,1);
+      transition: width 0.55s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     @keyframes aptSlideIn {
-      from { transform: translateY(100%); }
-      to   { transform: translateY(0); }
+      from {
+        transform: translateY(100%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
     }
+
     @keyframes aptSlideOut {
-      from { transform: translateY(0); }
-      to   { transform: translateY(-100%); }
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-100%);
+      }
     }
-    .apt-inner.slide-in  { animation: aptSlideIn  0.55s cubic-bezier(0.76,0,0.24,1) forwards; }
-    .apt-inner.slide-out { animation: aptSlideOut 0.6s  cubic-bezier(0.76,0,0.24,1) forwards; }
+
+    .apt-inner.slide-in {
+      animation: aptSlideIn 0.55s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+    }
+
+    .apt-inner.slide-out {
+      animation: aptSlideOut 0.6s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+    }
 
     /* ── Login screen : fade-out animé ── */
     #login-screen {
       transition: opacity 0.35s ease;
     }
+
     #login-screen.fading {
       opacity: 0;
       pointer-events: none;
     }
 
     /* ── Dash-header stagger ── */
-    .dash-header > * {
+    .dash-header>* {
       opacity: 0;
       transform: translateY(10px);
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    .dash-header.anim > *:nth-child(1) { opacity:1; transform:none; transition-delay:0.04s; }
-    .dash-header.anim > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.12s; }
+
+    .dash-header.anim>*:nth-child(1) {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.04s;
+    }
+
+    .dash-header.anim>*:nth-child(2) {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.12s;
+    }
 
     /* ── Ripple sur .btn ── */
-    .btn { position: relative; overflow: hidden; }
+    .btn {
+      position: relative;
+      overflow: hidden;
+    }
+
     .btn-ripple {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255,255,255,0.18);
+      background: rgba(255, 255, 255, 0.18);
       transform: scale(0);
       animation: rippleAnim 0.55s linear;
       pointer-events: none;
     }
+
     @keyframes rippleAnim {
-      to { transform: scale(4); opacity: 0; }
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
     }
 
     /* ── Logout avec slide-down ── */
     @keyframes aptLogoutIn {
-      from { transform: translateY(-100%); }
-      to   { transform: translateY(0); }
+      from {
+        transform: translateY(-100%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
     }
-    .apt-inner.logout-in { animation: aptLogoutIn 0.55s cubic-bezier(0.76,0,0.24,1) forwards; }
+
+    .apt-inner.logout-in {
+      animation: aptLogoutIn 0.55s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+    }
 
     .dash-header {
       display: flex;
@@ -927,6 +982,153 @@
       font-size: 12px;
       padding: 8px 0;
     }
+
+    /* ── Onglet Logs ── */
+    .logs-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .logs-search {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px solid rgba(59, 130, 246, 0.2);
+      border-radius: var(--r-sm);
+      padding: 9px 14px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 0;
+    }
+
+    .logs-search:focus {
+      border-color: var(--blue);
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .logs-select {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px solid rgba(59, 130, 246, 0.2);
+      border-radius: var(--r-sm);
+      padding: 9px 14px;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .logs-select:focus {
+      border-color: var(--blue);
+    }
+
+    .logs-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    .log-type-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .log-type-connexion {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--blue-lt);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .log-type-avancement {
+      background: rgba(52, 211, 153, 0.12);
+      color: var(--green);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+    }
+
+    .log-type-admin {
+      background: rgba(248, 113, 113, 0.12);
+      color: var(--red);
+      border: 1px solid rgba(248, 113, 113, 0.3);
+    }
+
+    .log-type-set_level {
+      background: rgba(251, 146, 60, 0.12);
+      color: var(--orange);
+      border: 1px solid rgba(251, 146, 60, 0.3);
+    }
+
+    .log-type-other {
+      background: rgba(107, 126, 181, 0.10);
+      color: var(--text-dim);
+      border: 1px solid rgba(107, 126, 181, 0.2);
+    }
+
+    .logs-table-wrap {
+      background: var(--bg-mid);
+      border: 1px solid var(--border-dim);
+      border-radius: var(--r-md);
+      overflow: hidden;
+    }
+
+    #logs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    #logs-table th,
+    #logs-table td {
+      padding: 11px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.06);
+    }
+
+    #logs-table th {
+      background: rgba(59, 130, 246, 0.06);
+      color: var(--blue-lt);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    #logs-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    #logs-table tr:hover td {
+      background: rgba(59, 130, 246, 0.03);
+    }
+
+    .log-details-cell {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      max-width: 320px;
+      word-break: break-all;
+    }
+
+    .logs-table-scroll {
+      max-height: 520px;
+      overflow-y: auto;
+    }
   </style>
 </head>
 
@@ -938,7 +1140,9 @@
       <div class="apt-badge">⚙️ Administration</div>
       <div class="apt-title">Maths<span>Première</span></div>
       <div class="apt-sub">Accès administrateur</div>
-      <div class="apt-bar-wrap"><div class="apt-bar-fill" id="apt-bar"></div></div>
+      <div class="apt-bar-wrap">
+        <div class="apt-bar-fill" id="apt-bar"></div>
+      </div>
     </div>
   </div>
 
@@ -966,6 +1170,7 @@
       <button class="tab-btn active" onclick="switchTab('appareils')">🖥️ Appareils</button>
       <button class="tab-btn" onclick="switchTab('passwords')">🔑 Gestion Accès</button>
       <button class="tab-btn" onclick="switchTab('recap')">📋 Récapitulatif</button>
+      <button class="tab-btn" onclick="switchTab('logs')">📜 Historique</button>
     </div>
 
     <div id="tab-appareils" class="tab-panel active">
@@ -998,11 +1203,17 @@
     <div id="tab-recap" class="tab-panel">
       <!-- Filtres filière -->
       <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; align-items:center;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">Filtrer :</span>
-        <button class="tab-btn active" id="filter-all"   onclick="filterRecap('all')"   style="font-size:11px;padding:7px 16px;">Toutes les filières</button>
-        <button class="tab-btn"        id="filter-spe"   onclick="filterRecap('spe')"   style="font-size:11px;padding:7px 16px;">📐 Spécialité</button>
-        <button class="tab-btn"        id="filter-tc"    onclick="filterRecap('tc')"    style="font-size:11px;padding:7px 16px;">📊 Tronc Commun</button>
-        <button class="tab-btn"        id="filter-none"  onclick="filterRecap('none')"  style="font-size:11px;padding:7px 16px;">⚠️ Aucune activité</button>
+        <span
+          style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;">Filtrer
+          :</span>
+        <button class="tab-btn active" id="filter-all" onclick="filterRecap('all')"
+          style="font-size:11px;padding:7px 16px;">Toutes les filières</button>
+        <button class="tab-btn" id="filter-spe" onclick="filterRecap('spe')" style="font-size:11px;padding:7px 16px;">📐
+          Spécialité</button>
+        <button class="tab-btn" id="filter-tc" onclick="filterRecap('tc')" style="font-size:11px;padding:7px 16px;">📊
+          Tronc Commun</button>
+        <button class="tab-btn" id="filter-none" onclick="filterRecap('none')"
+          style="font-size:11px;padding:7px 16px;">⚠️ Aucune activité</button>
       </div>
       <div class="admin-table-container">
         <table class="admin-table">
@@ -1017,6 +1228,48 @@
           <tbody id="recap-content-body">
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <div id="tab-logs" class="tab-panel">
+      <div class="logs-toolbar">
+        <input class="logs-search" id="logs-search-input" type="text" placeholder="🔍 Filtrer par élève…"
+          oninput="filterLogs()">
+        <select class="logs-select" id="logs-type-filter" onchange="filterLogs()">
+          <option value="">Tous les types</option>
+          <option value="connexion">connexion</option>
+          <option value="avancement">avancement</option>
+          <option value="set_level">set_level</option>
+          <option value="admin_add_student">admin_add_student</option>
+          <option value="admin_delete_student">admin_delete_student</option>
+          <option value="admin_delete_device">admin_delete_device</option>
+          <option value="admin_delete_all_devices">admin_delete_all_devices</option>
+          <option value="admin_set_limit">admin_set_limit</option>
+          <option value="admin_set_password">admin_set_password</option>
+          <option value="admin_toggle_nopassword">admin_toggle_nopassword</option>
+          <option value="admin_set_level">admin_set_level</option>
+        </select>
+        <span class="logs-count" id="logs-count">— entrées</span>
+      </div>
+      <div class="logs-table-scroll">
+        <div class="logs-table-wrap">
+          <table id="logs-table">
+            <thead>
+              <tr>
+                <th>🕒 Date</th>
+                <th>👤 Élève / Acteur</th>
+                <th>⚡ Type</th>
+                <th>📄 Détails</th>
+              </tr>
+            </thead>
+            <tbody id="logs-tbody">
+              <tr>
+                <td colspan="4" style="text-align:center;color:var(--text-dim);font-style:italic;padding:32px;">Aucun
+                  log chargé.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -1074,6 +1327,7 @@
           renderDevices(data);
           renderPasswords(data);
           renderRecap(data);
+          renderLogs(data);
         });
 
       } catch (e) {
@@ -1093,11 +1347,11 @@
 
       setTimeout(() => {
         // Transition inverse (slide depuis le haut)
-        const pt    = document.getElementById('admin-page-transition');
+        const pt = document.getElementById('admin-page-transition');
         const inner = document.getElementById('apt-inner');
-        const bar   = document.getElementById('apt-bar');
+        const bar = document.getElementById('apt-bar');
         pt.style.display = 'block';
-        inner.className  = 'apt-inner logout-in';
+        inner.className = 'apt-inner logout-in';
 
         setTimeout(() => {
           bar.style.width = '100%';
@@ -1116,8 +1370,8 @@
             inner.className = 'apt-inner slide-out';
             setTimeout(() => {
               pt.style.display = 'none';
-              inner.className  = 'apt-inner';
-              bar.style.width  = '0%';
+              inner.className = 'apt-inner';
+              bar.style.width = '0%';
               // Fade-in du login screen
               requestAnimationFrame(() => {
                 document.getElementById('login-screen').style.transition = 'opacity 0.4s ease';
@@ -1156,6 +1410,7 @@
         renderDevices(data);
         renderPasswords(data);
         renderRecap(data);
+        renderLogs(data);
       } catch (e) {
         const errHtml = `<div class="loading" style="color:var(--red)">❌ Erreur : ${e.message}</div>`;
         document.getElementById('dash-content').innerHTML = errHtml;
@@ -1280,7 +1535,7 @@
 
     function filterRecap(mode) {
       // Mise à jour des boutons filtre
-      ['all','spe','tc','none'].forEach(f => {
+      ['all', 'spe', 'tc', 'none'].forEach(f => {
         const btn = document.getElementById('filter-' + f);
         if (btn) btn.classList.toggle('active', f === mode);
       });
@@ -1295,7 +1550,7 @@
         ...Object.keys(data.passwords || {})
       ]);
 
-      const passwords   = data.passwords   || {};
+      const passwords = data.passwords || {};
       const advancements = data.advancements || {};
       const tbody = document.getElementById('recap-content-body');
       tbody.innerHTML = '';
@@ -1303,9 +1558,9 @@
       // Fonction utilitaire pour générer une belle carte de stats
       const buildAdvCard = (advData, label, badgeClass) => {
         if (!advData || parseInt(advData.total) === 0) return '';
-        const total   = parseInt(advData.total)   || 0;
+        const total = parseInt(advData.total) || 0;
         const correct = parseInt(advData.correct) || 0;
-        const streak  = parseInt(advData.bestStreak) || 0;
+        const streak = parseInt(advData.bestStreak) || 0;
         const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
         let color = 'var(--red)';
         if (pct >= 70) color = 'var(--green)';
@@ -1353,17 +1608,17 @@
         const noPassword = pwd && pwd.noPassword;
         const adv = advancements[name] || {};
 
-        const hasSpe  = adv.spe  && parseInt(adv.spe.total)  > 0;
-        const hasTc   = adv.tc   && parseInt(adv.tc.total)   > 0;
-        const hasAny  = hasSpe || hasTc;
+        const hasSpe = adv.spe && parseInt(adv.spe.total) > 0;
+        const hasTc = adv.tc && parseInt(adv.tc.total) > 0;
+        const hasAny = hasSpe || hasTc;
 
         // Filtrage
-        if (filterMode === 'spe'  && !hasSpe)  continue;
-        if (filterMode === 'tc'   && !hasTc)   continue;
-        if (filterMode === 'none' && hasAny)   continue;
+        if (filterMode === 'spe' && !hasSpe) continue;
+        if (filterMode === 'tc' && !hasTc) continue;
+        if (filterMode === 'none' && hasAny) continue;
 
-        const speHtml = buildAdvCard(adv.spe, 'Spécialité',   'badge-spe');
-        const tcHtml  = buildAdvCard(adv.tc,  'Tronc Commun', 'badge-tc');
+        const speHtml = buildAdvCard(adv.spe, 'Spécialité', 'badge-spe');
+        const tcHtml = buildAdvCard(adv.tc, 'Tronc Commun', 'badge-tc');
 
         let statsHtml = '<div class="adv-grid">';
         if (speHtml || tcHtml) {
@@ -1389,6 +1644,61 @@
         row.innerHTML = `<td colspan="4" style="text-align:center;color:var(--text-dim);font-style:italic;padding:24px;">Aucun élève ne correspond à ce filtre.</td>`;
         tbody.appendChild(row);
       }
+    }
+
+    // ── Onglet Logs ───────────────────────────────────────────────────────────
+
+    // Stockage des logs pour le filtrage client-side
+    let _allLogs = [];
+
+    function renderLogs(data) {
+      _allLogs = data.logs || [];
+      filterLogs();
+    }
+
+    function filterLogs() {
+      const searchVal = (document.getElementById('logs-search-input')?.value || '').toLowerCase().trim();
+      const typeVal = (document.getElementById('logs-type-filter')?.value || '').toLowerCase();
+      const tbody = document.getElementById('logs-tbody');
+      if (!tbody) return;
+
+      // Filtrage
+      const filtered = _allLogs.filter(log => {
+        const matchName = !searchVal || log.name.toLowerCase().includes(searchVal);
+        const matchType = !typeVal || log.type.toLowerCase().includes(typeVal);
+        return matchName && matchType;
+      });
+
+      // Mise à jour du compteur
+      const countEl = document.getElementById('logs-count');
+      if (countEl) countEl.textContent = `${filtered.length} entrée${filtered.length !== 1 ? 's' : ''}`;
+
+      // Rendu
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--text-dim);font-style:italic;padding:32px;">Aucun résultat.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(log => {
+        const badgeClass = getLogTypeBadgeClass(log.type);
+        return `
+          <tr>
+            <td style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);white-space:nowrap;">
+              ${esc(log.date)}
+            </td>
+            <td style="font-weight:600;color:var(--text);">${esc(log.name)}</td>
+            <td><span class="log-type-badge ${badgeClass}">${esc(log.type)}</span></td>
+            <td class="log-details-cell">${esc(log.details)}</td>
+          </tr>`;
+      }).join('');
+    }
+
+    function getLogTypeBadgeClass(type) {
+      if (type === 'connexion') return 'log-type-connexion';
+      if (type === 'avancement') return 'log-type-avancement';
+      if (type === 'set_level') return 'log-type-set_level';
+      if (type.startsWith('admin_')) return 'log-type-admin';
+      return 'log-type-other';
     }
 
     // ── Actions API ───────────────────────────────────────────────────────────
@@ -1516,9 +1826,9 @@
        6. Reveal progressif du dashboard */
     function playAdminTransition(callback) {
       const loginScreen = document.getElementById('login-screen');
-      const pt    = document.getElementById('admin-page-transition');
+      const pt = document.getElementById('admin-page-transition');
       const inner = document.getElementById('apt-inner');
-      const bar   = document.getElementById('apt-bar');
+      const bar = document.getElementById('apt-bar');
 
       // 1. Fondu de la page de login
       loginScreen.classList.add('fading');
@@ -1526,7 +1836,7 @@
       setTimeout(() => {
         // 2. Slide-in du panneau
         pt.style.display = 'block';
-        inner.className  = 'apt-inner slide-in';
+        inner.className = 'apt-inner slide-in';
 
         // 3. Après l'entrée (~480ms), déclenche la barre et le callback
         setTimeout(() => {
@@ -1539,8 +1849,8 @@
             inner.className = 'apt-inner slide-out';
             setTimeout(() => {
               pt.style.display = 'none';
-              inner.className  = 'apt-inner';
-              bar.style.width  = '0%';
+              inner.className = 'apt-inner';
+              bar.style.width = '0%';
               // 6. Reveal animé du dashboard
               revealDashboard();
             }, 620);
@@ -1572,23 +1882,23 @@
     }
 
     /* ── Ripple sur tous les .btn ────────────────────────────────────────── */
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn');
       if (!btn) return;
-      const r    = document.createElement('span');
+      const r = document.createElement('span');
       const rect = btn.getBoundingClientRect();
       const size = Math.max(rect.width, rect.height);
       r.className = 'btn-ripple';
       r.style.cssText = `width:${size}px;height:${size}px;`
-        + `left:${e.clientX - rect.left - size/2}px;`
-        + `top:${e.clientY - rect.top  - size/2}px;`;
+        + `left:${e.clientX - rect.left - size / 2}px;`
+        + `top:${e.clientY - rect.top - size / 2}px;`;
       btn.appendChild(r);
       setTimeout(() => r.remove(), 600);
     });
 
     /* ── Tab switch : micro-transition du contenu ────────────────────────── */
     const _origSwitchTab = window.switchTab;
-    window.switchTab = function(name) {
+    window.switchTab = function (name) {
       // Fade-out du panel actif
       const current = document.querySelector('.tab-panel.active');
       if (current) {
