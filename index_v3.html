@@ -8793,22 +8793,23 @@ print(n)                 # Affiche l'année de dépassement</pre>
         <div class="step-content">D'après la formule des probabilités totales :<br/>
         $P(B) = P(A \\cap B) + P(\\overline{A} \\cap B) = ${pA_inter_B} + (${pNotA} \\times ${pBsnA}) = ${pA_inter_B} + ${pNotA_inter_B} = \\boxed{${pB}}$.</div></div>`
       };
+    }
 
-      // ══════════════════════════════════════════════════════════════════
-      // CH.5 TC — SUITES GÉOMÉTRIQUES (Croissance exponentielle)
-      // ══════════════════════════════════════════════════════════════════
-      function genTC_SuitesGeom() {
-        const type = pickD(['terme_general'], ['contexte', 'somme'], ['algorithme', 'contexte']);
-        const fr = (n) => String(n).replace('.', '{,}');
+    // ══════════════════════════════════════════════════════════════════
+    // CH.5 TC — SUITES GÉOMÉTRIQUES (Croissance exponentielle)
+    // ══════════════════════════════════════════════════════════════════
+    function genTC_SuitesGeom() {
+      const type = pickD(['terme_general'], ['contexte', 'somme'], ['algorithme', 'contexte']);
+      const fr = (n) => String(n).replace('.', '{,}');
 
-        if (type === 'algorithme') {
-          const q = pick([1.05, 1.10, 1.20]);
-          const p = Math.round((q - 1) * 100);
-          const u0 = pick([1000, 2000]);
-          const seuil = u0 * 2;
-          return {
-            title: "Suite géométrique et Seuil via Algorithmique",
-            enonce: `Le prix d'un terrain de ${u0} € augmente de ${p}% par an. On modélise ce prix par une suite $(v_n)$. On cherche à savoir en quelle année le prix aura doublé (dépassera ${seuil} €).<br/>
+      if (type === 'algorithme') {
+        const q = pick([1.05, 1.10, 1.20]);
+        const p = Math.round((q - 1) * 100);
+        const u0 = pick([1000, 2000]);
+        const seuil = u0 * 2;
+        return {
+          title: "Suite géométrique et Seuil via Algorithmique",
+          enonce: `Le prix d'un terrain de ${u0} € augmente de ${p}% par an. On modélise ce prix par une suite $(v_n)$. On cherche à savoir en quelle année le prix aura doublé (dépassera ${seuil} €).<br/>
       On propose l'algorithme Python suivant :
 <pre style="background:#111; padding:10px; border-radius:5px; color:#fff; font-family:monospace; margin-top:10px;">
 def seuil():
@@ -8819,12 +8820,12 @@ def seuil():
         n = n + 1
     return n
 </pre>`,
-            questions: [
-              `Justifier que l'augmentation de ${p}% correspond au coefficient multiplicateur $q = ${q}$.`,
-              `Que représente la variable <code>n</code> dans ce programme ?`,
-              `Résoudre manuellement ou à la calculatrice le problème posé en calculant les termes successifs.`
-            ],
-            correction: `<div class="step"><div class="step-label">Coefficient multiplicateur</div>
+          questions: [
+            `Justifier que l'augmentation de ${p}% correspond au coefficient multiplicateur $q = ${q}$.`,
+            `Que représente la variable <code>n</code> dans ce programme ?`,
+            `Résoudre manuellement ou à la calculatrice le problème posé en calculant les termes successifs.`
+          ],
+          correction: `<div class="step"><div class="step-label">Coefficient multiplicateur</div>
         <div class="step-content">Une hausse de ${p}\\,\\%$ correspond à un coefficient $CM = 1 + \\dfrac{${p}}{100} = \\boxed{${q}}$. C'est la raison de la suite géométrique.</div></div>
         <div class="step"><div class="step-label">Algorithme</div>
         <div class="step-content">La variable <code>n</code> sert de compteur d'années. La boucle <code>while</code> s'arrête dès que le prix $v$ dépasse le double du prix initial ($${seuil}\\text{ €}$).</div></div>
@@ -8834,52 +8835,51 @@ def seuil():
         $v_7 = ${u0} \\times ${q}^7 \\approx ${+(u0 * Math.pow(q, 7)).toFixed(0)}$<br/>
         $v_8 = ${u0} \\times ${q}^8 \\approx ${+(u0 * Math.pow(q, 8)).toFixed(0)}$<br/>
         C'est au bout de $\\boxed{${Math.ceil(Math.log(2) / Math.log(q))}}$ ans que le prix aura doublé.</div></div>`
-          };
-        }
+        };
+      }
 
-        if (type === 'contexte') {
-          const q = pick([0.80, 0.85, 0.90]);
-          const baisse = Math.round((1 - q) * 100);
-          const u0 = pick([50, 100, 200]);
-          return {
-            title: "Croissance exponentielle – Décroissance",
-            enonce: `Lors d'un traitement médical, la quantité de principe actif présente dans le sang diminue de ${baisse}% par heure. À $t=0$, on injecte une dose de $${u0}$ mg. On note $u_n$ la quantité restante après $n$ heures : $$\\boxed{u_0 = ${u0}}$$`,
-            questions: [
-              `Justifier que $(u_n)$ est une suite géométrique dont on donnera la raison.`,
-              `Exprimer $u_n$ en fonction de $n$.`,
-              `Quelle est la limite de cette suite lorsque $n$ tend vers l'infini ? Interpréter biologiquement.`
-            ],
-            correction: `<div class="step"><div class="step-label">Raison</div>
+      if (type === 'contexte') {
+        const q = pick([0.80, 0.85, 0.90]);
+        const baisse = Math.round((1 - q) * 100);
+        const u0 = pick([50, 100, 200]);
+        return {
+          title: "Croissance exponentielle – Décroissance",
+          enonce: `Lors d'un traitement médical, la quantité de principe actif présente dans le sang diminue de ${baisse}% par heure. À $t=0$, on injecte une dose de $${u0}$ mg. On note $u_n$ la quantité restante après $n$ heures : $$\\boxed{u_0 = ${u0}}$$`,
+          questions: [
+            `Justifier que $(u_n)$ est une suite géométrique dont on donnera la raison.`,
+            `Exprimer $u_n$ en fonction de $n$.`,
+            `Quelle est la limite de cette suite lorsque $n$ tend vers l'infini ? Interpréter biologiquement.`
+          ],
+          correction: `<div class="step"><div class="step-label">Raison</div>
         <div class="step-content">Baisser de $${baisse}\\,\\%$ correspond à un coefficient multiplicateur $q = 1 - 0.${baisse} = ${q}$.<br/>$u_{n+1} = ${q} \\times u_n$. La suite est géométrique de raison $\\boxed{${q}}$.</div></div>
         <div class="step"><div class="step-label">Terme général</div>
         <div class="step-content">$$u_n = u_0 \\times q^n = ${u0} \\times ${q}^n$$</div></div>
         <div class="step result"><div class="step-label">Limite</div>
         <div class="step-content">Comme $0 < ${q} < 1$, on a $\\lim_{n \\to +\\infty} ${q}^n = 0$.<br/>Donc $\\lim_{n \\to +\\infty} u_n = 0$. À long terme, le produit disparaît totalement de l'organisme.</div></div>`
-          };
-        }
+        };
+      }
 
-        // Terme général basique + somme
-        const u0 = rand(2, 5);
-        const q = pick([2, 3]);
-        const n = rand(4, 6);
-        const un = u0 * Math.pow(q, n);
-        const sum = u0 * (Math.pow(q, n + 1) - 1) / (q - 1);
-        return {
-          title: "Propriétés d'une suite géométrique",
-          enonce: `Soit $(u_n)$ la suite géométrique de premier terme $u_0 = ${u0}$ et de raison $q = ${q}$.`,
-          questions: [
-            `Exprimer $u_n$ en fonction de $n$.`,
-            `Calculer $u_{${n}}$.`,
-            `Rappeler la formule de la somme des termes d'une suite géométrique, puis calculer $S = u_0 + u_1 + \\dots + u_{${n}}$.`
-          ],
-          correction: `<div class="step"><div class="step-label">Terme général</div>
+      // Terme général basique + somme
+      const u0 = rand(2, 5);
+      const q = pick([2, 3]);
+      const n = rand(4, 6);
+      const un = u0 * Math.pow(q, n);
+      const sum = u0 * (Math.pow(q, n + 1) - 1) / (q - 1);
+      return {
+        title: "Propriétés d'une suite géométrique",
+        enonce: `Soit $(u_n)$ la suite géométrique de premier terme $u_0 = ${u0}$ et de raison $q = ${q}$.`,
+        questions: [
+          `Exprimer $u_n$ en fonction de $n$.`,
+          `Calculer $u_{${n}}$.`,
+          `Rappeler la formule de la somme des termes d'une suite géométrique, puis calculer $S = u_0 + u_1 + \\dots + u_{${n}}$.`
+        ],
+        correction: `<div class="step"><div class="step-label">Terme général</div>
       <div class="step-content">La formule est $u_n = u_0 \\times q^n$. Ici : $u_n = ${u0} \\times ${q}^n$.<br/>
       $u_{${n}} = ${u0} \\times ${q}^{${n}} = ${u0} \\times ${Math.pow(q, n)} = \\boxed{${un}}$.</div></div>
       <div class="step result"><div class="step-label">Somme</div>
       <div class="step-content">La formule est $S = \\text{Premier terme} \\times \\dfrac{q^{\\text{Nb termes}} - 1}{q - 1}$.<br/>
       Il y a $${n + 1}$ termes. $S = ${u0} \\times \\dfrac{${q}^{${n + 1}} - 1}{${q} - 1} = ${u0} \\times \\dfrac{${Math.pow(q, n + 1)} - 1}{${q - 1}} = \\boxed{${sum}}$.</div></div>`
-        };
-      }
+      };
     }
 
     // ══════════════════════════════════════════════════════════════════
