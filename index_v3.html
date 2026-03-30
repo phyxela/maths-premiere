@@ -15,6 +15,9 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
     onload="document.addEventListener('DOMContentLoaded', function(){ renderKatex(); }); if(document.readyState!=='loading') renderKatex();"></script>
 
+  <!-- math.js – vérification algébrique des expressions -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/13.2.0/math.min.js"></script>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3255,8 +3258,8 @@
       if (!s) return NaN;
       // Nettoyage pour une évaluation sécurisée légère
       let expr = s.replace(/sqrt\((\d+(?:\.\d+)?)\)/g, 'Math.sqrt($1)')
-                  .replace(/(\d+)\/(\d+)/g, '($1/$2)');
-      
+        .replace(/(\d+)\/(\d+)/g, '($1/$2)');
+
       // On n'autorise que les chiffres, opérateurs de base, parenthèses et Math.sqrt
       if (!/^[0-9.+\-*/()Math.sqrt ]+$/.test(expr)) {
         // Si ça ressemble encore à une fraction simple a/b
@@ -3281,19 +3284,54 @@
       const exp = normalizeStr(expected);
       if (user === exp) return true;
       if (alternatives.some(a => normalizeStr(a) === user)) return true;
-      
+
       // Comparaison numérique (tolère fractions, sqrt, décimaux)
       const uVal = evalMath(user);
       const eVal = evalMath(exp);
-      
+
       if (!isNaN(uVal) && !isNaN(eVal) && Math.abs(uVal - eVal) < 0.001) return true;
-      
+
       for (const alt of alternatives) {
         const aVal = evalMath(normalizeStr(alt));
         if (!isNaN(uVal) && !isNaN(aVal) && Math.abs(uVal - aVal) < 0.001) return true;
       }
+      // Comparaison algébrique (réponses contenant x)
+      if (/x/i.test(userRaw) && algebricMatch(userRaw, expected)) return true;
       return false;
     }
+
+    // ─── Vérification algébrique via math.js ────────────────────────────────
+    function normalizeForMathJS(s) {
+      return s
+        .trim()
+        .replace(/\s/g, '')
+        .replace(/,/g, '.')
+        .replace(/²/g, '^2')
+        .replace(/³/g, '^3')
+        .replace(/(\d)(x)/gi, '$1*$2')   // 6x → 6*x
+        .replace(/\)(x)/gi, ')*x')        // )(x → )*(x
+        .replace(/\)(\d)/g, ')*$1');      // )2  → )*2
+    }
+
+    function algebricMatch(userRaw, expected) {
+      if (typeof math === 'undefined') return false;
+      try {
+        const u = normalizeForMathJS(userRaw);
+        const e = normalizeForMathJS(expected);
+        // Évaluer aux 4 points tests distincts ; équivalence si diff < 0.01 partout
+        const pts = [1.7, -2.3, 0.31, 7.09];
+        return pts.every(xv => {
+          const uv = math.evaluate(u, { x: xv });
+          const ev = math.evaluate(e, { x: xv });
+          return typeof uv === 'number' && typeof ev === 'number'
+            && isFinite(uv) && isFinite(ev)
+            && Math.abs(uv - ev) < 0.01;
+        });
+      } catch (_) {
+        return false;
+      }
+    }
+    // ────────────────────────────────────────────────────────────────────────
 
     function checkAnswer() {
       const inputEl = document.getElementById('user-answer');
@@ -3753,7 +3791,7 @@
             if (isFinite(y) && y >= yMin - 3 && y <= yMax + 3) {
               pts.push(`${xTo(x).toFixed(1)},${yTo(y).toFixed(1)}`);
             } else if (pts.length > 0 && pts[pts.length - 1] !== '') {
-              pts.push(''); 
+              pts.push('');
             }
           } catch (e) { /* skip */ }
         }
@@ -5791,16 +5829,19 @@
 
     function genDerivation() {
       const typePool = {
-        facile: ['poly', 'tangente'],
-        moyen: ['poly', 'produit', 'quotient', 'tangente', 'variations', 'bacEtude', 'lectureTangente', 'coutmoyen'],
-        difficile: ['coutmoyen', 'produit', 'quotient', 'tangente', 'variations', 'bacEtude', 'lectureTangente']
+        facile: ['poly', 'polyAlg', 'tangente'],
+        moyen: ['poly', 'polyAlg', 'produit', 'produitAlg', 'quotient', 'quotientAlg', 'tangente', 'variations', 'bacEtude', 'lectureTangente', 'coutmoyen'],
+        difficile: ['coutmoyen', 'produit', 'produitAlg', 'quotient', 'quotientAlg', 'tangente', 'variations', 'bacEtude', 'lectureTangente']
       };
       const type = pick(typePool[currentDifficulty]);
       if (type === 'coutmoyen') return genDerivCoutMoyen();
       if (type === 'bacEtude') return genBacSecondDegreeEtDerivation();
       if (type === 'lectureTangente') return genDerivLectureTangente();
+      if (type === 'polyAlg') return genDerivPolyAlg();
       if (type === 'poly') return genDerivPoly();
+      if (type === 'produitAlg') return genDerivProduitAlg();
       if (type === 'produit') return genDerivProduit();
+      if (type === 'quotientAlg') return genDerivQuotientAlg();   // ← nouveau
       if (type === 'quotient') return genDerivQuotient();
       if (type === 'variations') return genDerivVariations();
       return genDerivTangente();
@@ -5992,6 +6033,80 @@
       };
     }
 
+    // ─── Nouveau : demande l'expression complète f'(x) → vérif algébrique ──
+    function genDerivPolyAlg() {
+      // Même tirage que genDerivPoly
+      const deg = currentDifficulty === 'facile' ? 2 : pick([2, 3]);
+      const bPool = {
+        facile: [1, 2, 3, 4],
+        moyen: [-3, -2, -1, 1, 2, 3],
+        difficile: [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]
+      };
+      const a = deg === 3 ? pickD([1, 2], [-2, -1, 1, 2], [-3, -2, -1, 1, 2, 3]) : 0;
+      const b = pick(bPool[currentDifficulty]);
+      const c = randD(0, 4, -4, 4, -6, 6);
+      const d = randD(0, 5, -5, 5, -8, 8);
+
+      // Chaînes LaTeX pour l'énoncé
+      let fStr;
+      if (deg === 3) {
+        fStr = `${coef(a, 'x', 3)} ${b >= 0 ? '+' : ''} ${poly(b, c, d)}`;
+      } else {
+        fStr = poly(b, c, d);
+      }
+
+      // Coefficients de f'(x)
+      const fpA = deg === 3 ? 3 * a : 0;
+      const fpB = 2 * b;
+      const fpC = c;
+
+      // Expression LaTeX de f'(x)
+      const fpLatex = deg === 3
+        ? `${coef(fpA, 'x', 2)} ${fpB >= 0 ? '+' : ''} ${poly(fpB, fpC, 0).replace(/\s*\+\s*0$/, '').trim()}`
+        : poly(fpB, fpC, 0).replace(/\s*\+\s*0$/, '').trim() || '0';
+
+      // Expression math.js de f'(x) (utilisée comme interactiveAnswer)
+      // On construit une chaîne que math.evaluate() accepte
+      const parts = [];
+      if (fpA !== 0) parts.push(`${fpA}*x^2`);
+      if (fpB !== 0) parts.push(`${fpB}*x`);
+      if (fpC !== 0) parts.push(`${fpC}`);
+      const fpMathJS = parts.length ? parts.join('+').replace(/\+\-/g, '-') : '0';
+
+      const corr = `
+    <div class="step">
+      <div class="step-label">Rappel – Règles de dérivation</div>
+      <div class="step-content">$(x^n)' = nx^{n-1}$ &nbsp;|&nbsp; $(k)' = 0$ &nbsp;|&nbsp; $(u+v)' = u'+v'$</div>
+    </div>
+    <div class="step">
+      <div class="step-label">Dérivée terme par terme</div>
+      <div class="step-content">
+        $f(x) = ${fStr}$<br/>
+        ${deg === 3 ? `$(${coef(a, 'x', 3)})' = ${coef(fpA, 'x', 2)}$<br/>` : ''}
+        $(${coef(b, 'x', 2)})' = ${coef(fpB, 'x', 1) || '0'}$<br/>
+        $(${coef(c, 'x', 1)})' = ${c}$<br/>
+        $(${d})' = 0$
+      </div>
+    </div>
+    <div class="step result">
+      <div class="step-label">Résultat $f'(x)$</div>
+      <div class="step-content">$$f'(x) = ${fpLatex}$$</div>
+    </div>`;
+
+      return {
+        title: '📈 Dérivée d\'un polynôme – expression complète',
+        enonce: `Soit $f$ définie sur $\\mathbb{R}$ par $f(x) = ${fStr}$.`,
+        questions: [`Calculer $f'(x)$.`],
+        interactiveAnswer: fpMathJS,          // ex : "6*x^2+4*x-2"
+        interactivePrompt: `Saisir $f'(x)$ :`,
+        answerPlaceholder: deg === 3
+          ? 'Ex : 6x^2 + 4x - 2'
+          : 'Ex : 4x + 3',
+        correction: corr
+      };
+    }
+    // ────────────────────────────────────────────────────────────────────────
+
     function genDerivProduit() {
       const aP = pickD([-2, -1, 1, 2], [-3, -2, -1, 1, 2, 3], [-4, -3, -2, -1, 1, 2, 3, 4]);
       const b = randD(-3, 3, -4, 4, -6, 6);
@@ -6040,6 +6155,72 @@
         correction: corr
       };
     }
+
+    // ─── Nouveau : dérivée du produit – saisie de f'(x) complet ────────────
+    function genDerivProduitAlg() {
+      // Même tirage que genDerivProduit
+      const aP = pickD([-2, -1, 1, 2], [-3, -2, -1, 1, 2, 3], [-4, -3, -2, -1, 1, 2, 3, 4]);
+      const b = randD(-3, 3, -4, 4, -6, 6);
+      const c = pickD([-1, 1, 2], [-2, -1, 1, 2], [-3, -2, -1, 1, 2, 3]);
+      const d = randD(-3, 3, -4, 4, -6, 6);
+      const e = randD(-4, 4, -5, 5, -8, 8);
+
+      // Chaînes LaTeX des facteurs
+      const uStr = `${coef(aP, 'x', 1)} ${b >= 0 ? `+ ${b}` : `- ${Math.abs(b)}`}`;
+      const vStr = poly(c, d, e);
+
+      // Dérivées
+      const upStr = `${aP}`;                                         // u' = aP
+      const vpStr = poly(2 * c, d, 0).replace(/\s*\+\s*0$/, '') || '0';  // v' = 2cx+d
+
+      // Coefficients de f'(x) développé = pa·x² + pb·x + pc
+      const pa = 3 * aP * c;
+      const pb = 2 * aP * d + 2 * b * c;
+      const pc = aP * e + b * d;
+
+      const fpLatex = poly(pa, pb, pc) || '0';
+
+      // Chaîne math.js pour algebricMatch
+      const parts = [];
+      if (pa !== 0) parts.push(`${pa}*x^2`);
+      if (pb !== 0) parts.push(`${pb}*x`);
+      if (pc !== 0) parts.push(`${pc}`);
+      const fpMathJS = parts.length ? parts.join('+').replace(/\+\-/g, '-') : '0';
+
+      const corr = `
+    <div class="step">
+      <div class="step-label">Rappel – $(u \\cdot v)' = u'v + uv'$</div>
+      <div class="step-content"></div>
+    </div>
+    <div class="step">
+      <div class="step-label">Étape 1 – Identifier $u$, $v$ et leurs dérivées</div>
+      <div class="step-content">
+        $u(x) = ${uStr}$ &nbsp;→&nbsp; $u'(x) = ${upStr}$<br/>
+        $v(x) = ${vStr}$ &nbsp;→&nbsp; $v'(x) = ${vpStr}$
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-label">Étape 2 – Appliquer la formule</div>
+      <div class="step-content">$f'(x) = ${upStr}(${vStr}) + (${uStr})(${vpStr})$</div>
+    </div>
+    <div class="step result">
+      <div class="step-label">Étape 3 – Développer et réduire</div>
+      <div class="step-content">$$f'(x) = ${fpLatex}$$</div>
+    </div>`;
+
+      return {
+        title: '📈 Dérivée d\'un produit – expression complète',
+        enonce: `Soit $f$ définie sur $\\mathbb{R}$ par $f(x) = (${uStr})(${vStr})$.`,
+        questions: [
+          `Calculer $f'(x)$ à l'aide de $(uv)' = u'v + uv'$, puis développer et réduire.`
+        ],
+        interactiveAnswer: fpMathJS,
+        interactivePrompt: `Saisir $f'(x)$ développé et réduit :`,
+        answerPlaceholder: 'Ex : 6x² + 4x - 2',
+        correction: corr
+      };
+    }
+    // ────────────────────────────────────────────────────────────────────────
 
     function genDerivQuotient() {
       let a, b, c, d;
@@ -6091,6 +6272,75 @@
         correction: corr
       };
     }
+
+    // ─── Nouveau : dérivée du quotient – saisie de f'(x) complet ────────────
+    function genDerivQuotientAlg() {
+      let a, b, c, d;
+      do {
+        a = pickD([-2, -1, 1, 2], [-3, -2, -1, 1, 2, 3], [-4, -3, -2, -1, 1, 2, 3, 4]);
+        b = randD(-4, 4, -5, 5, -8, 8);
+        c = pickD([-2, -1, 1, 2], [-3, -2, -1, 1, 2, 3], [-4, -3, -2, -1, 1, 2, 3, 4]);
+        d = randD(-4, 4, -5, 5, -8, 8);
+      } while (a * d - b * c === 0 || c === 0 || d === 0);
+
+      const nd = a * d - b * c;   // numérateur de f'(x), constant
+
+      const uStr = `${coef(a, 'x', 1)} ${b >= 0 ? `+ ${b}` : `- ${Math.abs(b)}`}`;
+      const vStr = `${coef(c, 'x', 1)} ${d >= 0 ? `+ ${d}` : `- ${Math.abs(d)}`}`;
+
+      // LaTeX de f'(x)
+      const fpLatex = `\\dfrac{${nd}}{(${vStr})^2}`;
+
+      // Chaîne math.js : nd / (cx+d)^2
+      // normalizeForMathJS ne gère pas les fractions → on la fournit déjà propre
+      const fpMathJS = `${nd}/((${c}*x+${d})^2)`;
+
+      // Point d'exclusion pour l'énoncé
+      const exclusion = frac(-d, c);   // -d/c simplifié
+
+      const corr = `
+    <div class="step">
+      <div class="step-label">Rappel – $\\left(\\dfrac{u}{v}\\right)' = \\dfrac{u'v - uv'}{v^2}$</div>
+      <div class="step-content"></div>
+    </div>
+    <div class="step">
+      <div class="step-label">Étape 1 – Identifier $u$, $v$ et leurs dérivées</div>
+      <div class="step-content">
+        $u(x) = ${uStr}$ &nbsp;→&nbsp; $u'(x) = ${a}$<br/>
+        $v(x) = ${vStr}$ &nbsp;→&nbsp; $v'(x) = ${c}$
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-label">Étape 2 – Calculer le numérateur $u'v - uv'$</div>
+      <div class="step-content">
+        $${a}(${vStr}) - ${c}(${uStr})$<br/>
+        $= ${a * c > 0 ? a * c : `(${a * c})`}x ${a * d >= 0 ? `+ ${a * d}` : `- ${Math.abs(a * d)}`}
+           ${b * c >= 0 ? `- ${b * c}` : `+ ${Math.abs(b * c)}`}x ${b * d >= 0 ? `- ${b * d}` : `+ ${Math.abs(b * d)}`}$<br/>
+        $= ${nd}$
+      </div>
+    </div>
+    <div class="step result">
+      <div class="step-label">Résultat</div>
+      <div class="step-content">
+        $$f'(x) = ${fpLatex}$$
+        ${nd > 0 ? '$f$ est <strong>strictement croissante</strong> sur chaque intervalle de définition.' : nd < 0 ? '$f$ est <strong>strictement décroissante</strong> sur chaque intervalle de définition.' : '$f$ est constante.'}
+      </div>
+    </div>`;
+
+      return {
+        title: '📈 Dérivée d\'un quotient – expression complète',
+        enonce: `Soit $f$ définie sur $\\mathbb{R} \\setminus \\left\\lbrace ${exclusion} \\right\\rbrace$ par $$f(x) = \\frac{${uStr}}{${vStr}}$$`,
+        questions: [
+          `Calculer $f'(x)$ à l'aide de $\\left(\\dfrac{u}{v}\\right)' = \\dfrac{u'v-uv'}{v^2}$.`,
+          `En déduire le sens de variation de $f$.`
+        ],
+        interactiveAnswer: fpMathJS,
+        interactivePrompt: `Saisir $f'(x)$ (sous forme de fraction avec /) :`,
+        answerPlaceholder: 'Ex : 5/(2x+3)^2',
+        correction: corr
+      };
+    }
+    // ────────────────────────────────────────────────────────────────────────
 
     function genDerivTangente() {
       const a = pickD([-1, 1], [-2, -1, 1, 2], [-3, -2, -1, 1, 2, 3]);
@@ -7784,7 +8034,7 @@
           ],
           correction: `<div class="step"><div class="step-label">Proportion globale</div>
           <div class="step-content">L'effectif total est de ${total}. L'effectif des ${categories.row[0].toLowerCase()} est de ${row1Tot}.<br/>
-          $p_1 = \\frac{1}{${total/row1Tot}} \\approx ${+(row1Tot / total).toFixed(3)}$ soit approx. $\\boxed{${+(row1Tot / total * 100).toFixed(1)}\\,\\%}$.</div></div>
+          $p_1 = \\frac{1}{${total / row1Tot}} \\approx ${+(row1Tot / total).toFixed(3)}$ soit approx. $\\boxed{${+(row1Tot / total * 100).toFixed(1)}\\,\\%}$.</div></div>
           <div class="step result"><div class="step-label">Proportion sous-population</div>
           <div class="step-content">On se restreint aux ${categories.row[1].toLowerCase()} (total de la ligne = $${row2Tot}$). L'effectif des ${categories.col[1].toLowerCase()} dans cette catégorie est de $${d}$.<br/>
           $p_2 = \\frac{${d}}{${row2Tot}} \\approx ${+(d / row2Tot).toFixed(3)}$ soit approx. $\\boxed{${+(d / row2Tot * 100).toFixed(1)}\\,\\%}$.</div></div>`
