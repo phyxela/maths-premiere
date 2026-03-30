@@ -4958,6 +4958,7 @@
     function generateBacSujet() {
       logEvent('generate_bac', { filiere: currentNiveau, difficulty: currentDifficulty });
       if (currentNiveau === 'tc') { generateBacSujetTC(); return; }
+
       const bacContentEl = document.getElementById('bac-content');
       const bacCorrBtn = document.getElementById('bac-show-corr-btn');
       const bacCorrEl = document.getElementById('bac-correction-content');
@@ -4967,9 +4968,6 @@
         1: genSecondDegree,
         2: genDerivation,
         3: genSuites,
-        // On exclut 'bac_test'/'depistage' déjà couverts par generatorsConcrets[4].
-        // Sans cette exclusion, deux exercices dépistage identiques peuvent
-        // apparaître dans le même sujet BAC.
         4: () => {
           const type = pick(['arbre', 'tableau', 'indep']);
           if (type === 'indep') return genProbaIndependanceTableau();
@@ -5000,18 +4998,37 @@
       bacCorrEl.innerHTML = '';
       bacCorrBtn.style.display = 'inline-flex';
 
-      // l'utilisateur veut couvrir TOUS les chapitres
+      // --- SYSTÈME ANTI-DOUBLON ---
+      // Cette fonction génère un exercice et vérifie que son titre n'est pas déjà dans le sujet.
+      function getUniqueEx(generatorFn) {
+        let ex;
+        let isDuplicate = true;
+        let attempts = 0;
+
+        while (isDuplicate && attempts < 15) {
+          ex = generatorFn(); // On génère un exercice
+          // On regarde s'il y a déjà un exercice avec le même titre dans currentBacExercises
+          isDuplicate = currentBacExercises.some(existingEx => existingEx.title === ex.title);
+          attempts++;
+        }
+        return ex;
+      }
+      // ----------------------------
+
       const selectedChapters = [1, 2, 3, 4, 5, 6];
 
       for (const ch of selectedChapters) {
+        // 1. On tire un exercice rapide unique
         if (generatorsRapides[ch]) {
-          const exRapide = generatorsRapides[ch]();
+          const exRapide = getUniqueEx(generatorsRapides[ch]);
           exRapide._bacChapter = ch;
           exRapide._bacType = 'Connaissances et Calculs';
           currentBacExercises.push(exRapide);
         }
+
+        // 2. On tire un exercice concret unique
         if (generatorsConcrets[ch]) {
-          const exConcret = generatorsConcrets[ch]();
+          const exConcret = getUniqueEx(generatorsConcrets[ch]);
           exConcret._bacChapter = ch;
           exConcret._bacType = 'Mise en situation (Problème)';
           currentBacExercises.push(exConcret);
@@ -5041,7 +5058,7 @@
           `;
       }).join('');
 
-      setTimeout(() => renderKatex(bacContentEl), 150);
+      setTimeout(() => { if (typeof renderKatex === 'function') renderKatex(bacContentEl); }, 150);
     }
 
 
