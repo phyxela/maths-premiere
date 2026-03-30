@@ -5044,72 +5044,7 @@
       setTimeout(() => renderKatex(bacContentEl), 150);
     }
 
-    function generateBacSujetTC() {
-      const bacContentEl = document.getElementById('bac-content');
-      const bacCorrBtn = document.getElementById('bac-show-corr-btn');
-      const bacCorrEl = document.getElementById('bac-correction-content');
-      if (!bacContentEl || !bacCorrBtn || !bacCorrEl) return;
 
-      currentBacExercises = [];
-      bacCorrEl.innerHTML = '';
-      bacCorrBtn.style.display = 'inline-flex';
-
-      // On rassemble les générateurs d'exercices du Tronc Commun
-      const tcGenerators = [
-        { ch: 1, gen: genTC_Chiffres, type: 'Informations Chiffrées' },
-        { ch: 2, gen: genTC_Affines, type: 'Fonctions Affines' },
-        { ch: 3, gen: genTC_SuitesArith, type: 'Suites Arithmétiques' },
-        { ch: 4, gen: genTC_Proba, type: 'Probabilités' },
-        { ch: 5, gen: genTC_SuitesGeom, type: 'Suites Géométriques' },
-        { ch: 7, gen: genTC_Fonctions, type: 'Généralités sur les Fonctions' }
-      ];
-
-      // On génère un exercice de chaque chapitre pour constituer le sujet
-      for (const item of tcGenerators) {
-        if (typeof item.gen === 'function') {
-          const ex = item.gen();
-          ex._bacChapter = item.ch;
-          ex._bacType = item.type;
-          currentBacExercises.push(ex);
-        }
-      }
-
-      const CHAPTER_META = {
-        1: { icon: '📊', name: 'Informations Chiffrées' },
-        2: { icon: '📈', name: 'Fonctions Affines' },
-        3: { icon: '➕', name: 'Suites Arithmétiques' },
-        4: { icon: '🎲', name: 'Probabilités' },
-        5: { icon: '✖️', name: 'Suites Géométriques' },
-        6: { icon: '⚡', name: 'Automatismes' },
-        7: { icon: '🔍', name: 'Généralités sur les Fonctions' }
-      };
-
-      // On affiche le sujet à l'écran
-      bacContentEl.innerHTML = currentBacExercises.map((ex, idx) => {
-        const ch = ex._bacChapter;
-        const meta = CHAPTER_META[ch] || { icon: '', name: `Chapitre ${ch}` };
-        const questionsHTML = (ex.questions || []).map((q, i) =>
-          `<li data-q="${String.fromCharCode(97 + i)})">${q}</li>`
-        ).join('');
-
-        return `
-          <div class="exercise-card bac-exercise-card">
-            <div class="bac-exercise-header">
-              <div class="bac-ex-num">Exercice ${idx + 1}</div>
-              <div class="bac-ex-chapter">${meta.icon} Chapitre ${ch} — ${meta.name}</div>
-            </div>
-            <h3>${ex.title}</h3>
-            <div class="enonce">${ex.enonce}</div>
-            <ul class="question-list">
-              ${questionsHTML}
-            </ul>
-          </div>
-        `;
-      }).join('');
-
-      // On relance KaTeX pour afficher correctement les maths
-      setTimeout(() => { if (typeof renderKatex === 'function') renderKatex(bacContentEl); }, 150);
-    }
 
     function showBacCorrection() {
       logEvent('view_bac_correction', { filiere: currentNiveau });
@@ -9181,7 +9116,31 @@ def seuil():
       const bacCorrEl = document.getElementById('bac-correction-content');
       if (!bacContentEl || !bacCorrBtn || !bacCorrEl) return;
 
-      const TC_META = {
+      currentBacExercises = [];
+      bacCorrEl.innerHTML = '';
+      bacCorrBtn.style.display = 'inline-flex';
+
+      // 1. Construction SÉCURISÉE de la liste des générateurs
+      // On vérifie que la fonction existe vraiment avant de l'ajouter au sujet
+      const tcGenerators = [];
+      if (typeof genTC_Chiffres !== 'undefined') tcGenerators.push({ ch: 1, gen: genTC_Chiffres, type: 'Informations Chiffrées' });
+      if (typeof genTC_Affines !== 'undefined') tcGenerators.push({ ch: 2, gen: genTC_Affines, type: 'Fonctions Affines' });
+      if (typeof genTC_SuitesArith !== 'undefined') tcGenerators.push({ ch: 3, gen: genTC_SuitesArith, type: 'Suites Arithmétiques' });
+      if (typeof genTC_Proba !== 'undefined') tcGenerators.push({ ch: 4, gen: genTC_Proba, type: 'Probabilités' });
+      if (typeof genTC_SuitesGeom !== 'undefined') tcGenerators.push({ ch: 5, gen: genTC_SuitesGeom, type: 'Suites Géométriques' });
+      if (typeof genTC_Fonctions !== 'undefined') tcGenerators.push({ ch: 7, gen: genTC_Fonctions, type: 'Généralités sur les Fonctions' });
+
+      // 2. On génère un exercice de chaque chapitre trouvé
+      for (const item of tcGenerators) {
+        if (typeof item.gen === 'function') {
+          const ex = item.gen();
+          ex._bacChapter = item.ch;
+          ex._bacType = item.type;
+          currentBacExercises.push(ex);
+        }
+      }
+
+      const CHAPTER_META = {
         1: { icon: '📊', name: 'Informations Chiffrées' },
         2: { icon: '📈', name: 'Fonctions Affines' },
         3: { icon: '➕', name: 'Suites Arithmétiques' },
@@ -9191,46 +9150,36 @@ def seuil():
         7: { icon: '🔍', name: 'Généralités sur les Fonctions' }
       };
 
-      const generators = {
-        1: genTC_Chiffres,
-        2: genTC_Affines,
-        3: genTC_SuitesArith,
-        4: genTC_Proba,
-        5: genTC_SuitesGeom,
-        6: genTC_Automatismes,
-        7: genTC_Fonctions
-      };
-
-      currentBacExercises = [];
-      const chapters = [1, 2, 3, 4, 5, 6, 7];
-
-      for (const ch of chapters) {
-        if (generators[ch]) {
-          const ex = generators[ch]();
-          ex._bacChapter = ch;
-          ex._bacType = ch === 6 ? 'Automatisme' : 'Problème de synthèse';
-          currentBacExercises.push(ex);
-        }
+      // Sécurité si aucune fonction n'a été trouvée
+      if (currentBacExercises.length === 0) {
+        bacContentEl.innerHTML = "<p style='text-align:center; color:var(--red, red); padding: 2rem;'>Erreur : Aucun exercice trouvé. Les noms des fonctions génératrices ne correspondent pas.</p>";
+        return;
       }
 
-      bacCorrEl.innerHTML = '';
-      bacCorrBtn.style.display = 'inline-flex';
-
+      // 3. Affichage
       bacContentEl.innerHTML = currentBacExercises.map((ex, idx) => {
-        const ch = ex._bacChapter, meta = TC_META[ch] || { icon: '', name: `Ch.${ch}` };
-        const qHTML = (ex.questions || []).map((q, i) => `<li data-q="${String.fromCharCode(97 + i)})">${q}</li>`).join('');
-        return `<div class="exercise-card bac-exercise-card">
-      <div class="bac-exercise-header">
-        <div class="bac-ex-num">Exercice ${idx + 1}</div>
-        <div class="bac-ex-chapter">${meta.icon} Ch.${ch} — ${meta.name}<br/>
-          <small style="opacity:0.8;font-weight:normal">[${ex._bacType}]</small></div>
-      </div>
-      <h3>${ex.title}</h3>
-      <div class="enonce">${ex.enonce}</div>
-      <ul class="question-list">${qHTML}</ul>
-    </div>`;
+        const ch = ex._bacChapter;
+        const meta = CHAPTER_META[ch] || { icon: '', name: `Chapitre ${ch}` };
+        const questionsHTML = (ex.questions || []).map((q, i) =>
+          `<li data-q="${String.fromCharCode(97 + i)})">${q}</li>`
+        ).join('');
+
+        return `
+          <div class="exercise-card bac-exercise-card">
+            <div class="bac-exercise-header">
+              <div class="bac-ex-num">Exercice ${idx + 1}</div>
+              <div class="bac-ex-chapter">${meta.icon} Chapitre ${ch} — ${meta.name}</div>
+            </div>
+            <h3>${ex.title}</h3>
+            <div class="enonce">${ex.enonce}</div>
+            <ul class="question-list">
+              ${questionsHTML}
+            </ul>
+          </div>
+        `;
       }).join('');
-      setTimeout(() => renderKatex(bacContentEl), 150);
+
+      setTimeout(() => { if (typeof renderKatex === 'function') renderKatex(bacContentEl); }, 150);
     }
 
 
