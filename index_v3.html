@@ -5163,8 +5163,11 @@
     <div class="step">
       <div class="step-label">4) Tangente en $x=${x0}$</div>
       <div class="step-content">
-        $$f'(${x0})=${fpx0},\\quad f(${x0})=${fx0}.$$
-        $$T:\\ y=f'(${x0})(x-${x0})+f(${x0}).$$
+        On calcule d'abord les valeurs numériques :<br/>
+        $$f(${x0})=${a}\\times(${x0})^2 ${b >= 0 ? `+${b}` : `${b}`}\\times${x0} ${c >= 0 ? `+${c}` : `${c}`}=${a * x0 * x0} ${b * x0 >= 0 ? `+${b * x0}` : `${b * x0}`} ${c >= 0 ? `+${c}` : `${c}`}=${fx0}$$
+        $$f'(${x0})=2\\times(${a})\\times${x0}+(${b})=${2 * a * x0}+(${b})=${fpx0}$$
+        L'équation de la tangente est $T:\\; y=f'(${x0})(x-${x0})+f(${x0})$ :<br/>
+        $$T:\\; y=${fpx0}(x-${x0})+${fx0}$$
         Donc :
         $$\\boxed{${tangenteDev}}$$
       </div>
@@ -5240,9 +5243,9 @@
       <div class="step-label">3) Suite auxiliaire</div>
       <div class="step-content">
         $v_n=u_n-${L}$ donc :
-        $$v_{n+1}=u_{n+1}-${L}=(${pLatex}\\,u_n+${k})-${L}=${pLatex}(u_n-${L})+(${k}-${L}(1-${pLatex})).$$
-        Or $${k}=${L}(1-${pLatex})$, donc :
-        $$v_{n+1}=${pLatex}\\,v_n.$$
+        $$v_{n+1}=u_{n+1}-${L}=(${pLatex}\\,u_n+${k})-${L}=${pLatex}\\,u_n+(${k}-${L}).$$
+        Or, ${k} = L(1-${pLatex}) = ${L}(1-${pLatex}) = ${L} - ${Math.round(L * p)}$, donc le terme constant vaut exactement $k - L = ${k} - ${L} = ${k - L}$. On factorise alors par $${pLatex}$ :
+        $$v_{n+1}=${pLatex}(u_n-${L})=${pLatex}\\,v_n.$$
         Ainsi $(v_n)$ est géométrique de raison $q=${pLatex}$ et
         $$v_0=u_0-${L}=${u0 - L}.$$
       </div>
@@ -5532,7 +5535,14 @@
         $\\Delta = (${fpB})^2 - 4(${3 * a})(${c}) = ${fpB * fpB} - ${12 * a * c} = ${fpB * fpB - 12 * a * c}$.<br/>
         $\\Delta > 0$, il y a deux racines distinctes :<br/>
         $x_1 = \\dfrac{-(${fpB}) - \\sqrt{\\Delta}}{2(${3 * a})} = ${r1}$ et $x_2 = \\dfrac{-(${fpB}) + \\sqrt{\\Delta}}{2(${3 * a})} = ${r2}$ (en ordonnant).<br/>
-        Le coefficient de $x^2$ est ${3 * a} ${a > 0 ? '> 0' : '< 0'}, donc $f'(x)$ est du signe de $a$ à l'extérieur des racines.
+        Le coefficient de $x^2$ est ${3 * a} ${a > 0 ? '> 0' : '< 0'}, donc $f'(x)$ est du signe de $a$ à l'extérieur des racines.<br/><br/>
+        <strong>Tableau de signes de $f'(x)$ :</strong>
+        <div style="overflow-x:auto;margin:8px 0">
+          <table class="sign-table">
+            <tr><th>$x$</th><th>$-\\infty$</th><th></th><th>$${r1}$</th><th></th><th>$${r2}$</th><th></th><th>$+\\infty$</th></tr>
+            <tr><th>$f'(x)$</th><td></td><td class="${a > 0 ? 'pos' : 'neg'}">${a > 0 ? '+' : '−'}</td><td class="zero">0</td><td class="${a > 0 ? 'neg' : 'pos'}">${a > 0 ? '−' : '+'}</td><td class="zero">0</td><td class="${a > 0 ? 'pos' : 'neg'}">${a > 0 ? '+' : '−'}</td><td></td></tr>
+          </table>
+        </div>
       </div>
     </div>
     <div class="step result">
@@ -6186,7 +6196,9 @@
       const corr = `
     <div class="step">
       <div class="step-label">Rappel – $(u \\cdot v)' = u'v + uv'$</div>
-      <div class="step-content"></div>
+      <div class="step-content">
+        <em>Conditions :</em> $u$ et $v$ doivent être dérivables sur leur domaine. On identifie les deux facteurs, on calcule chaque dérivée séparément, puis on substitue dans la formule. Le développement final se fait terme à terme.
+      </div>
     </div>
     <div class="step">
       <div class="step-label">Étape 1 – Identifier $u$, $v$</div>
@@ -6201,7 +6213,9 @@
     </div>
     <div class="step result">
       <div class="step-label">Résultat développé</div>
-      <div class="step-content">$$f'(x) = ${fpStr}$$</div>
+      <div class="step-content">$$f'(x) = ${fpStr}$$
+        En particulier, $f'(0) = ${pc}$.
+      </div>
     </div>`;
 
       return {
@@ -6252,7 +6266,9 @@
       const corr = `
     <div class="step">
       <div class="step-label">Rappel – $(u \\cdot v)' = u'v + uv'$</div>
-      <div class="step-content"></div>
+      <div class="step-content">
+        <em>Conditions :</em> $u$ et $v$ doivent être dérivables. On identifie les deux facteurs, on calcule chaque dérivée séparément, puis on substitue dans la formule. Développer ensuite terme à terme et regrouper les termes de même degré.
+      </div>
     </div>
     <div class="step">
       <div class="step-label">Étape 1 – Identifier $u$, $v$ et leurs dérivées</div>
@@ -6301,7 +6317,9 @@
       const corr = `
     <div class="step">
       <div class="step-label">Rappel – $\\left(\\frac{u}{v}\\right)' = \\frac{u'v - uv'}{v^2}$</div>
-      <div class="step-content"></div>
+      <div class="step-content">
+        <em>Conditions :</em> $v$ ne doit pas s'annuler sur le domaine. Le numérateur se calcule terme à terme : $u'v - uv'$. Le dénominateur est toujours $v^2$ (jamais $2v$). La valeur interdite est celle qui annule $v$.
+      </div>
     </div>
     <div class="step">
       <div class="step-label">Étape 1 – Calculer $u'$ et $v'$</div>
@@ -6317,6 +6335,7 @@
       <div class="step-label">Résultat</div>
       <div class="step-content">
         $$f'(x) = \\frac{${nd}}{(${vStr})^2}$$
+        En particulier, $f'(0) = \\dfrac{${nd}}{(${d})^2} = ${f0}$.<br/>
         ${nd > 0 ? '$f$ est <strong>strictement croissante</strong> sur chaque intervalle de définition.' : nd < 0 ? '$f$ est <strong>strictement décroissante</strong> sur chaque intervalle de définition.' : '$f$ est <strong>constante</strong>.'}
       </div>
     </div>`;
@@ -6363,7 +6382,9 @@
       const corr = `
     <div class="step">
       <div class="step-label">Rappel – $\\left(\\dfrac{u}{v}\\right)' = \\dfrac{u'v - uv'}{v^2}$</div>
-      <div class="step-content"></div>
+      <div class="step-content">
+        <em>Méthode :</em> Le numérateur se calcule terme à terme ($u'v - uv'$) — attention au signe moins. Le dénominateur est toujours $v^2$ (jamais $2v$). La valeur interdite est celle qui annule $v$ ; on l'exclut du domaine.
+      </div>
     </div>
     <div class="step">
       <div class="step-label">Étape 1 – Identifier $u$, $v$ et leurs dérivées</div>
@@ -6551,10 +6572,14 @@
       <div class="step-content">$$u_n = ${u0} \\times \\left(${qStr}\\right)^n$$</div>
     </div>
     <div class="step result">
-      <div class="step-label">Limite</div>
+      <div class="step-label">Limite et comportement</div>
       <div class="step-content">
-        ${Math.abs(q) < 1 ? `$|q|<1$ → $\\displaystyle\\lim_{n\\to+\\infty} u_n = 0$.` : Math.abs(q) > 1 ? `$|q|>1$ → $|u_n|\\to+\\infty$.` : `$q = 1$ → suite constante.`}
-        ${q < 0 ? '<br/><em>Les termes alternent en signe.</em>' : ''}
+        ${Math.abs(q) < 1
+          ? `$|q| = |${qStr}| < 1$ → $\\displaystyle\\lim_{n\\to+\\infty} u_n = 0$. La suite <strong>${q > 0 ? 'décroît' : 'alterne en signe et ses valeurs absolues décroissent'}</strong> vers $0$ (décroissance géométrique).${q < 0 ? '<br/><em>Comme $q < 0$, les termes alternent de signe : $u_0 > 0$, $u_1 < 0$, $u_2 > 0$, etc.</em>' : ''}`
+          : Math.abs(q) > 1
+            ? `$|q| = |${qStr}| > 1$ → $|u_n| \\to +\\infty$ : la suite <strong>diverge</strong>.${q > 0 ? ` Comme $q > 0$ et $u_0 = ${u0} > 0$, la suite est strictement <strong>croissante</strong> et $u_n \\to +\\infty$.` : ` Comme $q < 0$, les termes alternent de signe (${u0} > 0$, $${u0 * q} < 0$, …) et $|u_n| \\to +\\infty$.`}`
+            : `$q = 1$ → suite constante égale à $${u0}$.`
+        }
       </div>
     </div>`;
 
@@ -6619,11 +6644,18 @@
       <div class="step-content">$$\\sum_{k=0}^{n-1} u_1 q^k = u_1 \\cdot \\frac{q^n - 1}{q - 1}$$</div>
     </div>
     <div class="step">
-      <div class="step-label">Calcul de $q^n = ${q}^{${n}}$</div>
+      <div class="step-label">Étape 1 – Expression de $u_n$</div>
+      <div class="step-content">
+        On part de $u_1$ et on multiplie $(n-1)$ fois par $q = ${q}$ pour atteindre $u_n$.<br/>
+        $$u_n = u_1 \\times q^{n-1} = ${u1} \\times ${q}^{n-1}$$
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-label">Étape 2 – Calcul de $q^n = ${q}^{${n}}$</div>
       <div class="step-content">$${q}^{${n}} = ${qn}$</div>
     </div>
     <div class="step result">
-      <div class="step-label">Résultat</div>
+      <div class="step-label">Étape 3 – Résultat de la somme</div>
       <div class="step-content">$$S = ${u1} \\times \\frac{${qn} - 1}{${q} - 1} = ${u1} \\times ${(qn - 1) / (q - 1)} = ${S}$$</div>
     </div>`;
 
@@ -6709,14 +6741,23 @@
 
       const corr = `
     <div class="step result">
-      <div class="step-label">Calcul de comparaison</div>
+      <div class="step-label">Algorithme et calcul de comparaison</div>
       <div class="step-content">
         On modélise l'offre A par une suite arithmétique : $u_n = ${u0} + ${ajoute}n$.<br/>
         On modélise l'offre B par une suite géométrique : $v_n = ${v0} \\times ${q.toString().replace('.', ',')}^n$.<br/><br/>
-        En calculant les premiers termes à la calculatrice, on trouve :<br/>
-        Pour $n = ${n - 1}$ : $u_{${n - 1}} = ${u0 + ajoute * (n - 1)}$ et $v_{${n - 1}} \\approx ${(v0 * Math.pow(q, n - 1)).toFixed(2)}$<br/>
-        Pour $n = ${n}$ : $u_{${n}} = ${u0 + ajoute * n}$ et $v_{${n}} \\approx ${(v0 * Math.pow(q, n)).toFixed(2)}$<br/><br/>
-        C'est donc à l'année $n = ${n}$ que l'offre B devient plus avantageuse.
+        On cherche le premier entier $n$ tel que $v_n > u_n$. On utilise une boucle <code>while</code> en Python :<br/>
+        <pre style="background:rgba(255,255,255,0.05); padding:10px; border-radius:5px; font-family:monospace; margin:10px 0; font-size:13px; line-height:1.6;">u = ${u0}
+v = ${v0}
+n = 0
+while v <= u:
+    u = u + ${ajoute}      # Suite arithmétique : on ajoute la raison
+    v = v * ${q}         # Suite géométrique : on multiplie par q
+    n = n + 1            # On incrémente le compteur d'années
+print(n)                 # Affiche l'année de dépassement</pre>
+        En calculant les premiers termes à la calculatrice, on confirme :<br/>
+        Pour $n = ${n - 1}$ : $u_{${n - 1}} = ${u0 + ajoute * (n - 1)}$ et $v_{${n - 1}} \\approx ${(v0 * Math.pow(q, n - 1)).toFixed(2)}$ → Offre B $${(v0 * Math.pow(q, n - 1)) <= (u0 + ajoute * (n - 1)) ? '\\leq' : '>'}$ Offre A<br/>
+        Pour $n = ${n}$ : $u_{${n}} = ${u0 + ajoute * n}$ et $v_{${n}} \\approx ${(v0 * Math.pow(q, n)).toFixed(2)}$ → Offre B $>$ Offre A ✓<br/><br/>
+        C'est donc à l'année $n = \\boxed{${n}}$ que l'offre B devient plus avantageuse.
       </div>
     </div>
   `;
@@ -7034,9 +7075,10 @@
       </div>
     </div>
     <div class="step result">
-      <div class="step-label">Réponse</div>
+      <div class="step-label">Vérification par la définition</div>
       <div class="step-content">
-        $$P_{\\text{${ctx.row}}}(\\text{${ctx.col}}) = ${pMusicGivenS}$$
+        On peut vérifier : $P(\\text{${ctx.row}}) \\times P_{\\text{${ctx.row}}}(\\text{${ctx.col}}) = \\dfrac{${r1}}{${n}} \\times \\dfrac{${a}}{${r1}} = \\dfrac{${a}}{${n}}$,<br/>
+        ce qui est bien égal à $P(\\text{${ctx.row}} \\cap \\text{${ctx.col}})$ lu dans le tableau. ✓
       </div>
     </div>
   `;
@@ -7260,8 +7302,10 @@
     <div class="step">
       <div class="step-label">1) Forme factorisée de $f(x)$</div>
       <div class="step-content">
-        On cherche les racines de $f(x)=0$. On peut calculer le discriminant avec $a=${a}$, $b=${fpB}$, $c=${fpC}$.<br/>
-        On trouve $x_1 = ${r1}$ et $x_2 = ${r2}$.<br/>
+        On cherche les racines de $f(x)=0$ avec $a=${a}$, $b=${fpB}$, $c=${fpC}$.<br/>
+        $$\\Delta = b^2 - 4ac = (${fpB})^2 - 4 \\times ${a} \\times (${fpC}) = ${fpB * fpB} - (${4 * a * fpC}) = ${fpB * fpB - 4 * a * fpC}$$
+        $\\Delta > 0$ donc deux racines réelles distinctes :<br/>
+        $$x_1 = \\frac{-(${fpB}) - \\sqrt{${fpB * fpB - 4 * a * fpC}}}{2 \\times ${a}} = ${r1}, \\quad x_2 = \\frac{-(${fpB}) + \\sqrt{${fpB * fpB - 4 * a * fpC}}}{2 \\times ${a}} = ${r2}$$
         La forme factorisée est $f(x) = ${a > 1 ? a : ''}(x ${r1 <= 0 ? '+ ' + (-r1) : '- ' + r1})(x ${r2 <= 0 ? '+ ' + (-r2) : '- ' + r2})$.<br/>
         Les points d'intersection sont $\\boxed{A(${r1} \\,;\\, 0)}$ et $\\boxed{B(${r2} \\,;\\, 0)}$.
       </div>
@@ -7323,6 +7367,139 @@
         `En déduire l'ensemble des solutions de l'inéquation.`
       ];
 
+      const r1sorted = Math.min(r1, r2);
+      const r2sorted = Math.max(r1, r2);
+      // Determine positions of the three special values on the number line
+      const vals = [r1sorted, r2sorted, valForbidden].sort((x, y) => x - y);
+      // Build sign table rows dynamically
+      // For numerator: sign of a outside roots [r1sorted, r2sorted], opposite between
+      function numSign(pos) {
+        if (pos === r1sorted || pos === r2sorted) return 'zero';
+        if ((pos < r1sorted || pos > r2sorted)) return a > 0 ? 'pos' : 'neg';
+        return a > 0 ? 'neg' : 'pos';
+      }
+      function denSign(pos) {
+        if (pos === valForbidden) return 'dbl';
+        return (pos < valForbidden ? (b1 < 0 ? 'neg' : 'pos') : (b1 < 0 ? 'pos' : 'neg'));
+      }
+      // Global sign = product
+      function globalSign(pos) {
+        if (pos === r1sorted || pos === r2sorted) return 'zero';
+        if (pos === valForbidden) return 'dbl';
+        const n = numSign(pos) === 'pos' ? 1 : -1;
+        const d2 = denSign(pos) === 'pos' ? 1 : -1;
+        return n * d2 > 0 ? 'pos' : 'neg';
+      }
+      // Intervals between the 3 critical values
+      const midPoints = [
+        r1sorted - 1,
+        (vals[0] + vals[1]) / 2,
+        (vals[1] + vals[2]) / 2,
+        r2sorted + 1
+      ];
+      // Rebuild ordered special vals for table columns
+      const allVals = [r1sorted, r2sorted, valForbidden].sort((x, y) => x - y);
+      const colsInside = [allVals[0], (allVals[0] + allVals[1]) / 2, allVals[1], (allVals[1] + allVals[2]) / 2, allVals[2]];
+
+      // Helper to render sign cell
+      function signCell(type) {
+        if (type === 'zero') return `<td class="zero">0</td>`;
+        if (type === 'dbl')  return `<td style="border-left:3px solid var(--red);border-right:3px solid var(--red);color:var(--red)">∥</td>`;
+        if (type === 'pos')  return `<td class="pos">+</td>`;
+        return `<td class="neg">−</td>`;
+      }
+      // Compute sign for each zone (4 zones between ±∞ and the 3 vals)
+      const zoneNums = [allVals[0] - 1, (allVals[0] + allVals[1]) / 2, (allVals[1] + allVals[2]) / 2, allVals[2] + 1];
+      const numRow = zoneNums.map(x => signCell(numSign(x))).join('');
+      const denRow = zoneNums.map(x => signCell(denSign(x))).join('');
+      const glbRow = zoneNums.map(x => signCell(globalSign(x))).join('');
+
+      // Build solution set based on the inequality
+      function buildSolutionSet() {
+        let intervals = [];
+        const zones = [
+          { lo: '-\\infty', hi: allVals[0], loOpen: true, hiOpen: true },
+          { lo: allVals[0], hi: allVals[1], loOpen: true, hiOpen: true },
+          { lo: allVals[1], hi: allVals[2], loOpen: true, hiOpen: true },
+          { lo: allVals[2], hi: '+\\infty', loOpen: true, hiOpen: true }
+        ];
+        const isStrict = ineq === '> 0' || ineq === '< 0';
+        const wantPos = ineq.includes('>');
+        // boundaries: r1sorted and r2sorted can be included if ≥ or ≤
+        // valForbidden always excluded
+        for (let i = 0; i < 4; i++) {
+          const midX = zoneNums[i];
+          const gs = globalSign(midX);
+          const matches = (wantPos && gs === 'pos') || (!wantPos && gs === 'neg');
+          if (!matches) continue;
+          let lo = zones[i].lo.toString(), hi = zones[i].hi.toString();
+          let loB = ']', hiB = '[';
+          if (!isStrict) {
+            if (lo === allVals[0].toString() || lo === allVals[1].toString() || lo === allVals[2].toString()) loB = '[';
+            if (hi === allVals[0].toString() || hi === allVals[1].toString() || hi === allVals[2].toString()) hiB = ']';
+          }
+          if (lo === valForbidden.toString()) loB = ']';
+          if (hi === valForbidden.toString()) hiB = '[';
+          intervals.push(`${loB}${lo}\\,;\\,${hi}${hiB}`);
+        }
+        // Also check boundary vals
+        if (!isStrict) {
+          if (wantPos) {
+            // include roots of numerator
+            if (globalSign(r1sorted - 0.001) !== 'pos' && globalSign(r1sorted + 0.001) !== 'pos') intervals.push(`\\{${r1sorted}\\}`);
+            if (globalSign(r2sorted - 0.001) !== 'pos' && globalSign(r2sorted + 0.001) !== 'pos') intervals.push(`\\{${r2sorted}\\}`);
+          }
+        }
+        if (intervals.length === 0) return `\\emptyset`;
+        return intervals.join(' \\cup ');
+      }
+      const solutionSet = buildSolutionSet();
+
+      const signTableHTML = `
+  <div style="overflow-x:auto;margin:14px 0">
+  <table class="sign-table">
+    <tr>
+      <th>$x$</th>
+      <th>$-\\infty$</th>
+      ${allVals.map(v => `<th>$${v}$</th><th></th>`).join('')}
+      <th>$+\\infty$</th>
+    </tr>
+    <tr>
+      <th>Numérateur $${num_str}$</th>
+      <td></td>
+      ${allVals.map((v, i) => {
+        const before = zoneNums[i] !== undefined ? signCell(numSign(zoneNums[i])) : '<td></td>';
+        const at = signCell(v === r1sorted || v === r2sorted ? 'zero' : (v === valForbidden ? 'dbl' : numSign(v)));
+        return before + at;
+      }).join('')}
+      ${signCell(numSign(allVals[2] + 1))}
+      <td></td>
+    </tr>
+    <tr>
+      <th>Dénominateur $${den_str}$</th>
+      <td></td>
+      ${allVals.map((v, i) => {
+        const before = zoneNums[i] !== undefined ? signCell(denSign(zoneNums[i])) : '<td></td>';
+        const at = signCell(v === valForbidden ? 'dbl' : denSign(v));
+        return before + at;
+      }).join('')}
+      ${signCell(denSign(allVals[2] + 1))}
+      <td></td>
+    </tr>
+    <tr>
+      <th>Quotient</th>
+      <td></td>
+      ${allVals.map((v, i) => {
+        const before = signCell(globalSign(zoneNums[i]));
+        const at = signCell(v === r1sorted || v === r2sorted ? 'zero' : (v === valForbidden ? 'dbl' : globalSign(v)));
+        return before + at;
+      }).join('')}
+      ${signCell(globalSign(allVals[2] + 1))}
+      <td></td>
+    </tr>
+  </table>
+  </div>`;
+
       const corr = `
     <div class="step">
       <div class="step-label">1) Valeur interdite</div>
@@ -7341,15 +7518,16 @@
     <div class="step">
       <div class="step-label">3) Tableau de signes</div>
       <div class="step-content">
-        • Le numérateur est du signe de $a= ${a}$ à l'extérieur des racines ($${Math.min(r1, r2)}$ et $${Math.max(r1, r2)}$).<br/>
-        • Le dénominateur s'annule en $${valForbidden}$ et est du signe de $a'= ${b1}$ après $${valForbidden}$.
+        On range les valeurs remarquables dans l'ordre croissant, puis on détermine le signe de chaque facteur :<br/>
+        ${signTableHTML}
       </div>
     </div>
     <div class="step result">
       <div class="step-label">4) Ensemble solution</div>
       <div class="step-content">
-        À partir de la ligne globale du tableau de signe, on détermine les intervalles où le signe correspond à l'inégalité $${ineq}$.<br/>
-        Attention à exclure la valeur interdite $${valForbidden}$ des solutions (crochet ouvert).
+        On lit sur la ligne "Quotient" les intervalles où le signe correspond à l'inégalité $${ineq}$.<br/>
+        La valeur interdite $${valForbidden}$ est toujours exclue (double barre).<br/>
+        $$\\mathcal{S} = ${solutionSet}$$
       </div>
     </div>
   `;
@@ -7452,18 +7630,63 @@
       </div>
     </div>
     <div class="step">
-      <div class="step-label">3) Tableau de signes</div>
+      <div class="step-label">3) Tableau de signes de $f'(x)$</div>
       <div class="step-content">
-        On place les valeurs $x = ${x1}$ (annulation du carré sans changement de signe), $x = ${fracInput(-b2, a2)}$ (changement de signe) et la valeur interdite $x = ${fracInput(-b3, a3)}$ avec une double barre.<br/>
-        Le coefficient multiplicateur est $a = ${a2}$, donc le signe après la racine change.
+        Les trois valeurs à ordonner : $x = ${fracInput(-b2, a2)}$ (changement de signe), $x = ${x1}$ (annulation du carré, sans changement de signe), $x = ${fracInput(-b3, a3)}$ (valeur interdite, double barre).<br/>
+        <div style="overflow-x:auto;margin:10px 0">
+        <table class="sign-table">
+          <tr>
+            <th>$x$</th>
+            <th>$-\\infty$</th>
+            ${[fracInput(-b2, a2), x1, fracInput(-b3, a3)].map(v => `<th>$${v}$</th><th></th>`).join('')}
+            <th>$+\\infty$</th>
+          </tr>
+          <tr>
+            <th>$(${varX1sq})$</th>
+            <td></td>
+            <td class="${a2 < 0 ? 'pos' : 'pos'}">+</td>
+            <td class="zero">0</td>
+            <td class="pos">+</td>
+            <td></td>
+            <td class="pos">+</td>
+            <td></td>
+          </tr>
+          <tr>
+            <th>$(${a2}x ${b2 >= 0 ? '+ ' + b2 : '- ' + Math.abs(b2)})$</th>
+            <td></td>
+            <td class="${a2 > 0 ? 'neg' : 'pos'}">${a2 > 0 ? '−' : '+'}</td>
+            <td class="zero">0</td>
+            <td class="${a2 > 0 ? 'pos' : 'neg'}">${a2 > 0 ? '+' : '−'}</td>
+            <td></td>
+            <td style="border-left:3px solid var(--red);border-right:3px solid var(--red);color:var(--red)">∥</td>
+            <td class="${a2 > 0 ? 'pos' : 'neg'}">${a2 > 0 ? '+' : '−'}</td>
+          </tr>
+          <tr>
+            <th>$f'(x)$</th>
+            <td></td>
+            <td class="${a2 > 0 ? 'neg' : 'pos'}">${a2 > 0 ? '−' : '+'}</td>
+            <td class="zero">0</td>
+            <td class="${a2 > 0 ? 'pos' : 'neg'}">${a2 > 0 ? '+' : '−'}</td>
+            <td class="zero">0</td>
+            <td style="border-left:3px solid var(--red);border-right:3px solid var(--red);color:var(--red)">∥</td>
+            <td class="${a2 > 0 ? 'pos' : 'neg'}">${a2 > 0 ? '+' : '−'}</td>
+          </tr>
+        </table>
+        </div>
       </div>
     </div>
     <div class="step result">
-      <div class="step-label">4) Variations</div>
+      <div class="step-label">4) Variations de $f$</div>
       <div class="step-content">
-        • Sur les intervalles où $f'(x) > 0$, $f$ est croissante.<br/>
-        • Sur les intervalles où $f'(x) < 0$, $f$ est décroissante.<br/>
-        • Les tangentes horizontales sont en $x = ${x1}$ et $x = ${fracInput(-b2, a2)}$.
+        On lit directement les intervalles sur la ligne $f'(x)$ :<br/>
+        ${a2 > 0
+          ? `• $f$ est <strong>décroissante</strong> sur $]-\\infty\\,;\\,${fracInput(-b2, a2)}]$.<br/>
+        • $f$ est <strong>croissante</strong> sur $[${fracInput(-b2, a2)}\\,;\\,${fracInput(-b3, a3)}[$ et sur $]${fracInput(-b3, a3)}\\,;\\,+\\infty[$.<br/>
+        • En $x = ${x1}$, $f'(${x1}) = 0$ mais $f'$ ne change pas de signe : c'est un <em>palier horizontal</em> (ni maximum ni minimum).`
+          : `• $f$ est <strong>croissante</strong> sur $]-\\infty\\,;\\,${fracInput(-b2, a2)}]$.<br/>
+        • $f$ est <strong>décroissante</strong> sur $[${fracInput(-b2, a2)}\\,;\\,${fracInput(-b3, a3)}[$ et sur $]${fracInput(-b3, a3)}\\,;\\,+\\infty[$.<br/>
+        • En $x = ${x1}$, $f'(${x1}) = 0$ mais $f'$ ne change pas de signe : c'est un <em>palier horizontal</em> (ni maximum ni minimum).`
+        }
       </div>
     </div>
   `;
@@ -7509,7 +7732,8 @@
     <div class="step">
       <div class="step-label">1) Tableau d'état complet</div>
       <div class="step-content">
-        <div style="overflow-x:auto">
+        À chaque itération, on calcule d'abord <code>s = s + ${coeff}*k</code>, puis <code>k</code> passe à la valeur suivante. La colonne <code>k = –</code> correspond à l'état initial <em>avant</em> le début de la boucle.<br/>
+        <div style="overflow-x:auto;margin:10px 0">
         <table class="sign-table">
           <tr><th><code>k</code></th>${tableRowsK}</tr>
           <tr><th><code>s</code></th>${tableRowsS}</tr>
@@ -8114,10 +8338,10 @@
           ],
           correction: `<div class="step"><div class="step-label">Proportion globale</div>
           <div class="step-content">L'effectif total est de ${total}. L'effectif des ${categories.row[0].toLowerCase()} est de ${row1Tot}.<br/>
-          $p_1 = \\frac{1}{${total / row1Tot}} \\approx ${+(row1Tot / total).toFixed(3)}$ soit approx. $\\boxed{${+(row1Tot / total * 100).toFixed(1)}\\,\\%}$.</div></div>
+          $p_1 = \\dfrac{${row1Tot}}{${total}} \\approx ${+(row1Tot / total).toFixed(3)}$ soit approx. $\\boxed{${+(row1Tot / total * 100).toFixed(1)}\\,\\%}$.</div></div>
           <div class="step result"><div class="step-label">Proportion sous-population</div>
           <div class="step-content">On se restreint aux ${categories.row[1].toLowerCase()} (total de la ligne = $${row2Tot}$). L'effectif des ${categories.col[1].toLowerCase()} dans cette catégorie est de $${d}$.<br/>
-          $p_2 = \\frac{${d}}{${row2Tot}} \\approx ${+(d / row2Tot).toFixed(3)}$ soit approx. $\\boxed{${+(d / row2Tot * 100).toFixed(1)}\\,\\%}$.</div></div>`
+          $p_2 = \\dfrac{${d}}{${row2Tot}} \\approx ${+(d / row2Tot).toFixed(3)}$ soit approx. $\\boxed{${+(d / row2Tot * 100).toFixed(1)}\\,\\%}$.</div></div>`
         };
       }
 
@@ -8136,7 +8360,7 @@
             `En déduire le taux d'évolution global en pourcentage.`
           ],
           correction: `<div class="step"><div class="step-label">Coefficients multiplicateurs</div>
-        <div class="step-content">$CM_1 = 1 ${ev1 > 0 ? '+' : '-'} \\frac{${Math.abs(ev1)}}{100} = ${cm1}$<br/>$CM_2 = 1 ${ev2 > 0 ? '+' : '-'} \\frac{${Math.abs(ev2)}}{100} = ${cm2}$</div></div>
+        <div class="step-content">$CM_1 = 1 ${ev1 > 0 ? '+' : '-'} \\dfrac{${Math.abs(ev1)}}{100} = ${cm1}$<br/>$CM_2 = 1 ${ev2 > 0 ? '+' : '-'} \\dfrac{${Math.abs(ev2)}}{100} = ${cm2}$</div></div>
         <div class="step"><div class="step-label">Évolution globale</div>
         <div class="step-content">On <strong>multiplie</strong> les coefficients successifs : $CM_{global} = ${cm1} \\times ${cm2} = ${cmG}$.</div></div>
         <div class="step result"><div class="step-label">Taux d'évolution</div>
@@ -8158,9 +8382,9 @@
             `Quel taux d'évolution faut-il appliquer pour que l'action retrouve sa valeur initiale ?`
           ],
           correction: `<div class="step"><div class="step-label">Coefficient initial</div>
-        <div class="step-content">$CM = 1 ${ev > 0 ? '+' : '-'} \\frac{${Math.abs(ev)}}{100} = ${cm}$</div></div>
+        <div class="step-content">$CM = 1 ${ev > 0 ? '+' : '-'} \\dfrac{${Math.abs(ev)}}{100} = ${cm}$</div></div>
         <div class="step"><div class="step-label">Coefficient réciproque</div>
-        <div class="step-content">Pour compenser, on divise par $CM$. L'évolution réciproque a pour coefficient :<br/>$CM_{rec} = \\frac{1}{CM} = \\frac{1}{${cm}} \\approx ${cmR}$</div></div>
+        <div class="step-content">Pour compenser, on divise par $CM$. L'évolution réciproque a pour coefficient :<br/>$CM_{rec} = \\dfrac{1}{CM} = \\dfrac{1}{${cm}} \\approx ${cmR}$</div></div>
         <div class="step result"><div class="step-label">Taux réciproque</div>
         <div class="step-content">$T_{rec} = CM_{rec} - 1 = ${cmR} - 1 = ${cmR - 1}$.<br/>Il faut appliquer une ${evR > 0 ? '<strong>hausse</strong>' : '<strong>baisse</strong>'} d'environ <strong>${Math.abs(evR)}%</strong> pour revenir à la valeur de départ.</div></div>`
         };
@@ -8181,10 +8405,10 @@
           `Quelle est la proportion globale d'élèves qui sont des filles pratiquant l'option artistique ? (en %)`
         ],
         correction: `<div class="step"><div class="step-label">Calcul des effectifs</div>
-      <div class="step-content">Nombre de filles : $N_F = ${total} \\times \\frac{${pA}}{100} = ${nA}$.<br/>
-      Filles faisant de l'art : $N_{F \\cap Art} = ${nA} \\times \\frac{${pB}}{100} = ${nB}$.</div></div>
+      <div class="step-content">Nombre de filles : $N_F = ${total} \\times \\dfrac{${pA}}{100} = ${nA}$.<br/>
+      Filles faisant de l'art : $N_{F \\cap Art} = ${nA} \\times \\dfrac{${pB}}{100} = ${nB}$.</div></div>
       <div class="step result"><div class="step-label">Proportion de proportion</div>
-      <div class="step-content">Proportion globale = $\\frac{${pA}}{100} \\times \\frac{${pB}}{100} = ${pA / 100} \\times ${pB / 100} = ${+(pA * pB / 10000).toFixed(4)}$.<br/>Soit <strong>${+(pA * pB / 100).toFixed(2)}%</strong> des élèves.</div></div>`
+      <div class="step-content">Proportion globale = $\\dfrac{${pA}}{100} \\times \\dfrac{${pB}}{100} = ${pA / 100} \\times ${pB / 100} = ${+(pA * pB / 10000).toFixed(4)}$.<br/>Soit <strong>${+(pA * pB / 100).toFixed(2)}%</strong> des élèves.</div></div>`
       };
     }
 
@@ -8236,7 +8460,7 @@
             `Dresser le tableau de signes de $f(x)$ sur l'intervalle $\\mathbb{R}$.`
           ],
           correction: `<div class="step"><div class="step-label">Racine</div>
-        <div class="step-content">$${a}x ${b > 0 ? '+ ' + b : '- ' + Math.abs(b)} = 0 \\iff ${a}x = ${-b} \\iff x = \\frac{${-b}}{${a}} = \\boxed{${root}}$.</div></div>
+        <div class="step-content">$${a}x ${b > 0 ? '+ ' + b : '- ' + Math.abs(b)} = 0 \\iff ${a}x = ${-b} \\iff x = \\dfrac{${-b}}{${a}} = \\boxed{${root}}$.</div></div>
         <div class="step result"><div class="step-label">Tableau de signes</div>
         <div class="step-content">Le coefficient directeur est $a = ${a}$. Il est <strong>${a > 0 ? 'positif (fonction croissante)' : 'négatif (fonction décroissante)'}</strong>.<br/>
         La fonction est donc du signe de $-a$ avant la racine, et du signe de $a$ après.<br/>
@@ -8281,7 +8505,7 @@
           `En déduire l'expression algébrique complète de $f(x)$.`
         ],
         correction: `<div class="step"><div class="step-label">Coefficient directeur</div>
-      <div class="step-content">$a = \\frac{y_B - y_A}{x_B - x_A} = \\frac{${yB} - ${yA < 0 ? '(' + yA + ')' : yA}}{${xB} - ${xA < 0 ? '(' + xA + ')' : xA}} = \\frac{${yB - yA}}{${xB - xA}} = \\boxed{${a}}$.</div></div>
+      <div class="step-content">$a = \\dfrac{y_B - y_A}{x_B - x_A} = \\dfrac{${yB} - ${yA < 0 ? '(' + yA + ')' : yA}}{${xB} - ${xA < 0 ? '(' + xA + ')' : xA}} = \\dfrac{${yB - yA}}{${xB - xA}} = \\boxed{${a}}$.</div></div>
       <div class="step"><div class="step-label">Ordonnée à l'origine</div>
       <div class="step-content">L'équation est de la forme $y = ${a}x + b$. On utilise le point $A$ :<br/>
       $${yA} = ${a} \\times (${xA}) + b \\iff ${yA} = ${a * xA} + b \\iff b = ${yA} - (${a * xA}) = \\boxed{${b}}$.</div></div>
@@ -8314,9 +8538,9 @@
         <div class="step-content">On utilise la formule $u_n = u_0 + n \\times r$ :<br/>
         $u_{${n}} = u_0 + ${n} \\times r = ${u0} + ${n} \\times ${r} = ${u0} + ${n * r} = \\boxed{${un}}$.</div></div>
         <div class="step result"><div class="step-label">Somme</div>
-        <div class="step-content">On utilise la formule : $S = \\text{Nombre de termes} \\times \\frac{\\text{Premier} + \\text{Dernier}}{2}$<br/>
-        De $u_0$ à $u_{${n}}$, il y a $${n + 1}$ termes.<br/>
-        $S = ${n + 1} \\times \\frac{u_0 + u_{${n}}}{2} = ${n + 1} \\times \\frac{${u0} + ${un}}{2} = ${n + 1} \\times \\frac{${u0 + un}}{2} = \\boxed{${sum}}$.</div></div>`
+        <div class="step-content">On utilise la formule : $S = \\text{Nombre de termes} \\times \\dfrac{\\text{Premier} + \\text{Dernier}}{2}$<br/>
+        De $u_0$ à $u_{${n}}$, il y a $${n + 1}$ termes (on compte les rangs $0, 1, 2, \\ldots, ${n}$, soit $${n} - 0 + 1 = ${n + 1}$ termes).<br/>
+        $S = ${n + 1} \\times \\dfrac{u_0 + u_{${n}}}{2} = ${n + 1} \\times \\dfrac{${u0} + ${un}}{2} = ${n + 1} \\times \\dfrac{${u0 + un}}{2} = \\boxed{${sum}}$.</div></div>`
         };
       }
 
@@ -8403,13 +8627,13 @@
             `Calculer $P_V(C)$. Arrondir à 0.01 près.`
           ],
           correction: `<div class="step"><div class="step-label">Probabilité simple</div>
-          <div class="step-content">$P(V) = \\frac{\\text{Total Vélo}}{\\text{Total global}} = \\frac{${nB}}{${total}} = ${+(nB / total).toFixed(3)}$.</div></div>
+          <div class="step-content">$P(V) = \\dfrac{\\text{Total Vélo}}{\\text{Total global}} = \\dfrac{${nB}}{${total}} = ${+(nB / total).toFixed(3)}$.</div></div>
           <div class="step"><div class="step-label">Conditionnelle (ligne)</div>
           <div class="step-content">Sachant que la personne habite en ville, on regarde uniquement la ligne "Ville" (Effectif = ${nA}).<br/>
-          $P_C(\\overline{V}) = \\frac{${nAnB}}{${nA}} = ${+(nAnB / nA).toFixed(3)}$.</div></div>
+          $P_C(\\overline{V}) = \\dfrac{${nAnB}}{${nA}} = ${+(nAnB / nA).toFixed(3)}$.</div></div>
           <div class="step result"><div class="step-label">Conditionnelle (colonne)</div>
           <div class="step-content">Sachant que la personne a un vélo, on regarde uniquement la colonne "Vélo" (Effectif = ${nB}).<br/>
-          $P_V(C) = \\frac{${nAB}}{${nB}} \\approx <strong>${+(nAB / nB).toFixed(2)}</strong>$.</div></div>`
+          $P_V(C) = \\dfrac{${nAB}}{${nB}} \\approx <strong>${+(nAB / nB).toFixed(2)}</strong>$.</div></div>`
         };
       }
 
@@ -8452,11 +8676,47 @@
             `Calculer la probabilité $P(T)$ que le test soit positif.`,
             `La personne a un test positif. Quelle est la probabilité qu'elle soit réellement malade ? (Calculer $P_T(M)$ à $10^{-3}$ près).`
           ],
-          correction: `<div class="step"><div class="step-label">Probabilités totales</div>
+          correction: `<div class="step"><div class="step-label">Arbre pondéré (Q1)</div>
+        <div class="step-content">
+          On construit l'arbre avec les deux niveaux $M/\\overline{M}$ puis $T/\\overline{T}$ :<br/>
+          <div style="overflow-x:auto;margin:10px 0">
+          <svg viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg" style="max-width:460px;width:100%;font-family:'JetBrains Mono',monospace;font-size:12px;fill:var(--text)">
+            <!-- Root -->
+            <circle cx="60" cy="110" r="5" fill="var(--blue-lt)"/>
+            <!-- M branch -->
+            <line x1="65" y1="105" x2="195" y2="55" stroke="var(--blue-lt)" stroke-width="1.5"/>
+            <text x="115" y="68" fill="var(--green)" font-size="11">$P(M)=${pM}$</text>
+            <circle cx="200" cy="52" r="5" fill="var(--blue-lt)"/>
+            <text x="207" y="55" font-size="11">$M$</text>
+            <!-- M ∩ T -->
+            <line x1="205" y1="48" x2="335" y2="28" stroke="var(--blue-lt)" stroke-width="1.5"/>
+            <text x="255" y="28" fill="var(--green)" font-size="11">$P_M(T)=${pT_M}$</text>
+            <text x="340" y="32" font-size="11">$T$ → $P(M\\cap T)=${pMcapT}$</text>
+            <!-- M ∩ T̄ -->
+            <line x1="205" y1="56" x2="335" y2="76" stroke="var(--blue-lt)" stroke-width="1.5"/>
+            <text x="255" y="75" fill="var(--text-dim)" font-size="11">$${(1-pT_M).toFixed(2)}$</text>
+            <text x="340" y="80" font-size="11">$\\overline{T}$</text>
+            <!-- M̄ branch -->
+            <line x1="65" y1="115" x2="195" y2="165" stroke="var(--blue-lt)" stroke-width="1.5"/>
+            <text x="105" y="160" fill="var(--text-dim)" font-size="11">$P(\\overline{M})=${1-pM}$</text>
+            <circle cx="200" cy="168" r="5" fill="var(--blue-lt)"/>
+            <text x="207" y="172" font-size="11">$\\overline{M}$</text>
+            <!-- M̄ ∩ T -->
+            <line x1="205" y1="164" x2="335" y2="144" stroke="var(--blue-lt)" stroke-width="1.5"/>
+            <text x="248" y="143" fill="var(--red)" font-size="11">$P_{\\overline{M}}(T)=${pT_nM}$</text>
+            <text x="340" y="148" font-size="11">$T$ → $P(\\overline{M}\\cap T)=${+((1-pM)*pT_nM).toFixed(4)}$</text>
+            <!-- M̄ ∩ T̄ -->
+            <line x1="205" y1="172" x2="335" y2="192" stroke="var(--blue-lt)" stroke-width="1.5"/>
+            <text x="255" y="196" fill="var(--text-dim)" font-size="11">$${(1-pT_nM).toFixed(2)}$</text>
+            <text x="340" y="196" font-size="11">$\\overline{T}$</text>
+          </svg>
+          </div>
+        </div></div>
+        <div class="step"><div class="step-label">Probabilités totales (Q2)</div>
         <div class="step-content">$P(T) = P(M \\cap T) + P(\\overline{M} \\cap T) = P(M)P_M(T) + P(\\overline{M})P_{\\overline{M}}(T)$<br/>
         $P(T) = ${pM} \\times ${pT_M} + ${1 - pM} \\times ${pT_nM} = ${pMcapT} + ${+((1 - pM) * pT_nM).toFixed(4)} = \\boxed{${+pT.toFixed(4)}}$.</div></div>
-        <div class="step result"><div class="step-label">Formule de Bayes</div>
-        <div class="step-content">$P_T(M) = \\frac{P(M \\cap T)}{P(T)} = \\frac{${pMcapT}}{${+pT.toFixed(4)}} \\approx \\boxed{${+(pMcapT / pT).toFixed(3)}}$.</div></div>`
+        <div class="step result"><div class="step-label">Formule de Bayes (Q3)</div>
+        <div class="step-content">$P_T(M) = \\dfrac{P(M \\cap T)}{P(T)} = \\dfrac{${pMcapT}}{${+pT.toFixed(4)}} \\approx \\boxed{${+(pMcapT / pT).toFixed(3)}}$.</div></div>`
         };
       }
 
@@ -8513,7 +8773,7 @@ def seuil():
             `Résoudre manuellement ou à la calculatrice le problème posé en calculant les termes successifs.`
           ],
           correction: `<div class="step"><div class="step-label">Coefficient multiplicateur</div>
-        <div class="step-content">Une hausse de ${p}\\,\\% correspond à un coefficient $CM = 1 + \\frac{${p}}{100} = \\boxed{${q}}$. C'est la raison de la suite géométrique.</div></div>
+        <div class="step-content">Une hausse de ${p}\\,\\%$ correspond à un coefficient $CM = 1 + \\dfrac{${p}}{100} = \\boxed{${q}}$. C'est la raison de la suite géométrique.</div></div>
         <div class="step"><div class="step-label">Algorithme</div>
         <div class="step-content">La variable <code>n</code> sert de compteur d'années. La boucle <code>while</code> s'arrête dès que le prix $v$ dépasse le double du prix initial ($${seuil}\\text{ €}$).</div></div>
         <div class="step result"><div class="step-label">Calcul des termes</div>
@@ -8564,8 +8824,8 @@ def seuil():
       <div class="step-content">La formule est $u_n = u_0 \\times q^n$. Ici : $u_n = ${u0} \\times ${q}^n$.<br/>
       $u_{${n}} = ${u0} \\times ${q}^{${n}} = ${u0} \\times ${Math.pow(q, n)} = \\boxed{${un}}$.</div></div>
       <div class="step result"><div class="step-label">Somme</div>
-      <div class="step-content">La formule est $S = \\text{Premier terme} \\times \\frac{q^{\\text{Nb termes}} - 1}{q - 1}$.<br/>
-      Il y a $${n + 1}$ termes. $S = ${u0} \\times \\frac{${q}^{${n + 1}} - 1}{${q} - 1} = ${u0} \\times \\frac{${Math.pow(q, n + 1)} - 1}{${q - 1}} = \\boxed{${sum}}$.</div></div>`
+      <div class="step-content">La formule est $S = \\text{Premier terme} \\times \\dfrac{q^{\\text{Nb termes}} - 1}{q - 1}$.<br/>
+      Il y a $${n + 1}$ termes. $S = ${u0} \\times \\dfrac{${q}^{${n + 1}} - 1}{${q} - 1} = ${u0} \\times \\dfrac{${Math.pow(q, n + 1)} - 1}{${q - 1}} = \\boxed{${sum}}$.</div></div>`
       };
     }
 
@@ -8588,7 +8848,7 @@ def seuil():
           interactiveAnswer: `${p}`,
           answerPlaceholder: "Ex: 15",
           correction: `<div class="step result"><div class="step-label">Calcul de proportion</div>
-        <div class="step-content">La proportion est donnée par $p = \\frac{\\text{Sous-effectif}}{\\text{Effectif total}} = \\frac{${sub}}{${total}} = ${sub / total}$.<br/>
+        <div class="step-content">La proportion est donnée par $p = \\dfrac{\\text{Sous-effectif}}{\\text{Effectif total}} = \\dfrac{${sub}}{${total}} = ${sub / total}$.<br/>
         En pourcentage : $p = ${sub / total} \\times 100 = \\boxed{${p}\\,\\%}$.</div></div>`
         };
       }
@@ -8606,7 +8866,7 @@ def seuil():
           interactiveAnswer: `${vA}`,
           answerPlaceholder: `Ex: ${vA}`,
           correction: `<div class="step result"><div class="step-label">Coefficient Multiplicateur</div>
-        <div class="step-content">Une hausse de $${t}\\,\\%$ correspond à un coefficient $CM = 1 + \\frac{${t}}{100} = ${cm}$.<br/>
+        <div class="step-content">Une hausse de $${t}\\,\\%$ correspond à un coefficient $CM = 1 + \\dfrac{${t}}{100} = ${cm}$.<br/>
         Valeur finale $V_A = V_D \\times CM = ${vD} \\times ${cm} = \\boxed{${vA}\\text{ €}}$.</div></div>`
         };
       }
@@ -8647,7 +8907,7 @@ def seuil():
           interactiveAnswer: fracInput(num, b),
           answerPlaceholder: `Ex: ${num}/${b}`,
           correction: `<div class="step result"><div class="step-label">Mise au même dénominateur</div>
-        <div class="step-content">$\\frac{${a}}{${b}} ${op} ${c} = \\frac{${a}}{${b}} ${op} \\frac{${c * b}}{${b}} = \\frac{${a} ${op} ${c * b}}{${b}} = \\boxed{\\frac{${num}}{${b}}}$.</div></div>`
+        <div class="step-content">$\\dfrac{${a}}{${b}} ${op} ${c} = \\dfrac{${a}}{${b}} ${op} \\dfrac{${c * b}}{${b}} = \\dfrac{${a} ${op} ${c * b}}{${b}} = \\boxed{\\dfrac{${num}}{${b}}}$.</div></div>`
         };
       }
 
@@ -8667,7 +8927,7 @@ def seuil():
           correction: `<div class="step result"><div class="step-label">Isolement de $x$</div>
         <div class="step-content">$${a}x = ${c} ${b >= 0 ? '- ' + b : '+ ' + Math.abs(b)}$<br/>
         $${a}x = ${c - b}$<br/>
-        $x = \\frac{${c - b}}{${a}} ${((c - b) % a === 0) ? `= \\boxed{${(c - b) / a}}` : `= \\boxed{\\frac{${c - b}}{${a}}}`}$</div></div>`
+        $x = \\dfrac{${c - b}}{${a}} ${((c - b) % a === 0) ? `= \\boxed{${(c - b) / a}}` : `= \\boxed{\\dfrac{${c - b}}{${a}}}`}$</div></div>`
         };
       }
 
@@ -8684,7 +8944,7 @@ def seuil():
           answerPlaceholder: `Ex: ${ans}`,
           correction: `<div class="step result"><div class="step-label">Astuce de calcul</div>
         <div class="step-content">Prendre $${pct}\\,\\%$ revient à ${pct === 10 ? 'diviser par 10' : pct === 20 ? 'diviser par 5' : pct === 25 ? 'diviser par 4' : 'diviser par 2'}.<br/>
-        $${val} \\times \\frac{${pct}}{100} = \\boxed{${ans}}$.</div></div>`
+        $${val} \\times \\dfrac{${pct}}{100} = \\boxed{${ans}}$.</div></div>`
         };
       }
 
