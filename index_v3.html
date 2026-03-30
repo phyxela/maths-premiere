@@ -30,6 +30,8 @@
        DESIGN SYSTEM – Academic Blue & Black
        ============================================= */
     :root {
+      --blue-acc: #93c5fd;
+      --cream: #e8eeff;
       --bg: #07090f;
       --bg-mid: #0e1525;
       --bg-lt: #182038;
@@ -1109,6 +1111,29 @@
       font-size: 16px;
     }
 
+    /* --------- Tables --------- */
+    .table-exercise {
+      border-collapse: collapse;
+      margin: 12px auto;
+      font-size: 14px;
+    }
+
+    .table-exercise th,
+    .table-exercise td {
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      text-align: center;
+    }
+
+    .table-exercise th {
+      background: var(--blue-dim);
+      color: var(--blue-lt);
+    }
+
+    .table-exercise td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
     /* --------- Bac probability tables --------- */
     .bac-table {
       border-collapse: collapse;
@@ -1223,20 +1248,6 @@
     /* --------- Streak animation --------- */
     .stat-streak {
       color: #fb923c;
-    }
-
-    @keyframes streakPulse {
-      0% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.25);
-      }
-
-      100% {
-        transform: scale(1);
-      }
     }
 
     .streak-animate {
@@ -3163,7 +3174,7 @@
     // Réinitialise la progression de l'utilisateur connecté (filière courante uniquement)
     function resetUserStats() {
       const filiereLabel = currentNiveau === 'tc' ? 'Tronc Commun' : 'Spécialité';
-      if (!confirm(`Réinitialiser ta progression en ${filiereLabel} ? Cette action est irréversible.\n\nL'autre filière n'est pas affectée.`)) return;
+      if (!confirm(`Réinitialiser ta progression en ${filiereLabel} ? Cette action est irréversible.\n\nl'autre filière n'est pas affectée.`)) return;
       localStorage.removeItem(userKey());
       statsTotal = 0; statsCorr = 0; statsCorrect = 0;
       statsStreak = 0; statsBestStreak = 0;
@@ -3980,7 +3991,7 @@
 
         <div class="course-thm">
           <span class="block-title">Théorème – Résolution</span>
-          L'équation $ax^2 + bx + c = 0$ admet :<br/><br/>
+          l'équation $ax^2 + bx + c = 0$ admet :<br/><br/>
           <b>1er cas : $\\Delta > 0$</b> — Deux solutions distinctes :
           $$x_1 = \\frac{-b - \\sqrt{\\Delta}}{2a} \\qquad \\text{et} \\qquad x_2 = \\frac{-b + \\sqrt{\\Delta}}{2a}$$
           <i>Graphiquement : la parabole coupe l'axe des abscisses en deux points.</i><br/><br/>
@@ -4516,7 +4527,7 @@
           <span class="block-title">Vocabulaire</span>
           • <b>Expérience aléatoire</b> : expérience dont on ne peut pas prévoir le résultat avec certitude.<br/>
           • <b>Univers $\\Omega$</b> : ensemble de toutes les issues possibles.<br/>
-          • <b>Événement</b> : sous-ensemble de $\\Omega$. L'événement « impossible » est l'ensemble vide $\\emptyset$, l'événement « certain » est l'univers $\\Omega$.
+          • <b>Événement</b> : sous-ensemble de $\\Omega$. l'événement « impossible » est l'ensemble vide $\\emptyset$, l'événement « certain » est l'univers $\\Omega$.
         </div>
 
         <div class="course-prop">
@@ -4711,12 +4722,12 @@
           <h3>Activité 2 : Écriture scientifique & conversions</h3>
           <div class="course-def">
             <span class="block-title">Rappel</span>
-            L'écriture scientifique d'un nombre positif est de la forme $a \\times 10^k$ avec $1 \\le a < 10$ et $k \\in \\mathbb{Z}$.<br/>
-            L'ordre de grandeur est la puissance de $10$ la plus proche. Si $a \\ge 5$, on passe à $10^{k+1}$.
+            l'écriture scientifique d'un nombre positif est de la forme $a \\times 10^k$ avec $1 \\le a < 10$ et $k \\in \\mathbb{Z}$.<br/>
+            l'ordre de grandeur est la puissance de $10$ la plus proche. Si $a \\ge 5$, on passe à $10^{k+1}$.
           </div>
           <div class="course-ex">
             <span class="block-title">Exemple</span>
-            $x = 45\\,000 = 4,5 \\times 10^4$. L'ordre de grandeur est $10^4$ car $4,5 < 5$.
+            $x = 45\\,000 = 4,5 \\times 10^4$. l'ordre de grandeur est $10^4$ car $4,5 < 5$.
           </div>
           
           <div class="course-method">
@@ -4731,7 +4742,7 @@
           <h3>Activité 3 : Isoler et modéliser</h3>
           <div class="course-method">
             <span class="block-title">Isoler une variable</span>
-            L'objectif est d'isoler une variable (souvent $x$ ou une variable physique) : on procède par opérations inverses successives.
+            l'objectif est d'isoler une variable (souvent $x$ ou une variable physique) : on procède par opérations inverses successives.
           </div>
           <div class="course-ex">
             <span class="block-title">Exemple – Vitesse</span>
@@ -4981,7 +4992,7 @@
       bacCorrEl.innerHTML = '';
       bacCorrBtn.style.display = 'inline-flex';
 
-      // L'utilisateur veut couvrir TOUS les chapitres
+      // l'utilisateur veut couvrir TOUS les chapitres
       const selectedChapters = [1, 2, 3, 4, 5, 6];
 
       for (const ch of selectedChapters) {
@@ -5166,7 +5177,7 @@
         On calcule d'abord les valeurs numériques :<br/>
         $$f(${x0})=${a}\\times(${x0})^2 ${b >= 0 ? `+${b}` : `${b}`}\\times${x0} ${c >= 0 ? `+${c}` : `${c}`}=${a * x0 * x0} ${b * x0 >= 0 ? `+${b * x0}` : `${b * x0}`} ${c >= 0 ? `+${c}` : `${c}`}=${fx0}$$
         $$f'(${x0})=2\\times(${a})\\times${x0}+(${b})=${2 * a * x0}+(${b})=${fpx0}$$
-        L'équation de la tangente est $T:\\; y=f'(${x0})(x-${x0})+f(${x0})$ :<br/>
+        l'équation de la tangente est $T:\\; y=f'(${x0})(x-${x0})+f(${x0})$ :<br/>
         $$T:\\; y=${fpx0}(x-${x0})+${fx0}$$
         Donc :
         $$\\boxed{${tangenteDev}}$$
@@ -5454,7 +5465,7 @@
       <div class="step-content">
         Le coefficient de $x^2$ est $-${a} < 0$. $B(x)$ est une parabole tournée vers le bas.
         Elle est positive ou nulle <strong>entre ses racines</strong>.<br/>
-        L'entreprise est rentable pour $x \\in [${x1} \\,;\\, ${x2}]$.<br/>
+        l'entreprise est rentable pour $x \\in [${x1} \\,;\\, ${x2}]$.<br/>
         Cela correspond à une production entre <strong>${x1 * 1000}</strong> et <strong>${x2 * 1000}</strong> articles.
       </div>
     </div>
@@ -5770,7 +5781,7 @@
     </div>
     <div class="step result">
       <div class="step-label">Étape 3 – Conclusion</div>
-      <div class="step-content">L'ensemble solution de ${instr} est : ${conclusion}</div>
+      <div class="step-content">l'ensemble solution de ${instr} est : ${conclusion}</div>
     </div>`;
 
       return {
@@ -5855,7 +5866,7 @@
     <div class="step result">
       <div class="step-label">3) Équation de la tangente</div>
       <div class="step-content">
-        L'équation d'une tangente en $a$ est $y = f'(a)(x-a) + f(a)$.<br/>
+        l'équation d'une tangente en $a$ est $y = f'(a)(x-a) + f(a)$.<br/>
         $\\Rightarrow y = ${slopeA}(x ${xA < 0 ? '+ ' + (-xA) : '- ' + xA}) + (${yA})$<br/>
         $\\Rightarrow y = ${slopeA}x ${-slopeA * xA >= 0 ? '+' : ''} ${-slopeA * xA} + (${yA})$<br/>
         <strong>$\\Rightarrow y = ${tangStr}$</strong>
@@ -6454,7 +6465,9 @@
     <div class="step result">
       <div class="step-label">Étape 3 – Équation de la tangente</div>
       <div class="step-content">
-        $y = ${fpx0}(x ${x0 <= 0 ? `+ ${-x0}` : `- ${x0}`}) + (${fx0})$<br/>
+        $y = ${x0 === 0
+          ? `${fpx0}x + (${fx0})`
+          : `${fpx0}(x ${x0 < 0 ? `+ ${-x0}` : `- ${x0}`}) + (${fx0})`}$<br/>
         $$\\boxed{y = ${fpx0}x ${cstT >= 0 ? `+ ${cstT}` : `- ${Math.abs(cstT)}`}}$$
         Point de tangence : $A(${x0}\\,;\\,${fx0})$.
       </div>
@@ -6587,7 +6600,6 @@
         title: '🔢 Suite géométrique',
         enonce: `Soit $(u_n)$ définie par $u_0 = ${u0}$ et $u_{n+1} = ${qStr} \\times u_n$ pour tout $n \\in \\mathbb{N}$.`,
         questions: [
-          `Calculer $u_2$.`,
           'Montrer que $(u_n)$ est géométrique. Préciser la raison.',
           'Exprimer $u_n$ en fonction de $n$.',
           `Calculer $u_1$, $u_2$, $u_3$.`,
@@ -6689,6 +6701,7 @@
         $v_{n+1} = u_{n+1} - ${alpha}$<br/>
         $v_{n+1} = (${aStr} u_n + ${b}) - ${alpha}$<br/>
         $v_{n+1} = ${aStr} u_n ${b - alpha >= 0 ? '+ ' + (b - alpha) : '- ' + Math.abs(b - alpha)}$<br/>
+        Or $${k} - ${L} \\times (1 - ${aStr}) = ${k} - ${L * (1 - a)} = 0$, donc :<br/>
         Factorisons par $${aStr}$ :<br/>
         $v_{n+1} = ${aStr} (u_n - ${alpha}) = ${aStr} v_n$.<br/><br/>
         La suite $(v_n)$ est donc une suite géométrique de raison $q = ${aStr}$ et de premier terme $v_0 = u_0 - ${alpha} = ${u0Str} - ${alpha} = ${v0Str}$.
@@ -6769,7 +6782,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
           `À la calculatrice ou par algorithme, déterminer l'année $n$ à partir de laquelle $v_n > u_n$.`,
         ],
         interactiveAnswer: n.toString(),
-        interactivePrompt: `L'année de dépassement $n$ :`,
+        interactivePrompt: `l'année de dépassement $n$ :`,
         answerPlaceholder: `ex: 5`,
         correction: corr
       };
@@ -6811,7 +6824,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
       <div class="step-label">Complétion de l'algorithme</div>
       <div class="step-content">
         Pour une suite arithmétique de raison $r = ${add}$, on passe d'un terme au suivant en ajoutant la raison.<br/>
-        L'instruction manquante est donc <code>u = u + ${add}</code>.
+        l'instruction manquante est donc <code>u = u + ${add}</code>.
       </div>
     </div>
   ` : `
@@ -6820,7 +6833,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
       <div class="step-content">
         La boucle <code>while</code> doit s'exécuter tant que le seuil n'est pas dépassé.<br/>
         La condition manquante porte sur la variable de la suite, donc <code>v</code>.<br/>
-        L'instruction est <code>while v < ${seuil}:</code>. La réponse attendue est donc <code>v</code>.
+        l'instruction est <code>while v < ${seuil}:</code>. La réponse attendue est donc <code>v</code>.
       </div>
     </div>
   `;
@@ -6875,7 +6888,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
     <li>Le test est positif pour ${Math.round(pT_sachant_M * 100)} % des personnes malades.</li>
     <li>Le test est négatif pour ${Math.round(pNonT_sachant_NonM * 100)} % des personnes saines.</li>
   </ul>
-  Un individu est tiré au hasard. On note $M$ l'événement "l'individu est malade" et $T$ l'événement "le test est positif".<br/>L'individu a un test positif. On cherche à déterminer la valeur prédictive positive du test, c'est-à-dire la probabilité qu'il soit réellement malade sachant que son test est positif.`;
+  Un individu est tiré au hasard. On note $M$ l'événement "l'individu est malade" et $T$ l'événement "le test est positif".<br/>l'individu a un test positif. On cherche à déterminer la valeur prédictive positive du test, c'est-à-dire la probabilité qu'il soit réellement malade sachant que son test est positif.`;
 
       const corr = `
     <div class="step">
@@ -7313,7 +7326,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
     <div class="step">
       <div class="step-label">2) Sommet de $\\mathcal{C}_h$</div>
       <div class="step-content">
-        L'expression de $h$ est sous forme canonique : $h(x) = m(x-\\alpha)^2 + \\beta$.<br/>
+        l'expression de $h$ est sous forme canonique : $h(x) = m(x-\\alpha)^2 + \\beta$.<br/>
         Ici $\\alpha = ${alpha}$ et $\\beta = ${beta}$.<br/>
         Le sommet est donc $\\boxed{S(${alpha} \\,;\\, ${beta})}$.
       </div>
@@ -7570,14 +7583,14 @@ print(n)                 # Affiche l'année de dépassement</pre>
       <div class="step-label">2) Tangente en $x = ${x2}$</div>
       <div class="step-content">
         Au point $B(${x2} ; ${y2})$, la tangente est également horizontale ($f'(${x2}) = 0$).<br/>
-        L'équation de sa tangente est simplement $y = ${y2}$.
+        l'équation de sa tangente est simplement $y = ${y2}$.
       </div>
     </div>
     <div class="step result">
       <div class="step-label">3) Tangente à l'origine</div>
       <div class="step-content">
         On sait que $f(0) = 0$ (passe par l'origine) et $f'(0) = ${m0}$.<br/>
-        L'équation de la tangente est $y = f'(0)(x - 0) + f(0)$.<br/>
+        l'équation de la tangente est $y = f'(0)(x - 0) + f(0)$.<br/>
         Soit $y = ${m0}x$.
       </div>
     </div>
@@ -7739,7 +7752,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
           <tr><th><code>s</code></th>${tableRowsS}</tr>
         </table>
         </div>
-        <div class="feedback-note" style="margin-top:10px;">L'instruction <code>range(${start}, ${end + 1})</code> génère les nombres entiers de ${start} jusqu'à ${end} inclus.</div>
+        <div class="feedback-note" style="margin-top:10px;">l'instruction <code>range(${start}, ${end + 1})</code> génère les nombres entiers de ${start} jusqu'à ${end} inclus.</div>
       </div>
     </div>
     <div class="step result">
@@ -8040,7 +8053,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
         const res = Math.pow(b - c, 2) * a;
         const expected = `${res}`;
         const enonce = `Simplifier le carré suivant : $$\\boxed{B = (\\sqrt{${sqB}} - \\sqrt{${sqC}})^2}$$`;
-        const corr = `<div class="step"><div class="step-label">Simplification</div><div class="step-content">$\\sqrt{${sqB}} = ${b}\\sqrt{${a}}$ et $\\sqrt{${sqC}} = ${c}\\sqrt{${a}}$.<br/>L'expression devient $(${b}\\sqrt{${a}} - ${c}\\sqrt{${a}})^2 = ((${b - c})\\sqrt{${a}})^2$.</div></div><div class="step result"><div class="step-label">Calcul final</div><div class="step-content">$(${b - c})^2 \\times (\\sqrt{${a}})^2 = ${Math.pow(b - c, 2)} \\times ${a} = \\boxed{${res}}$.</div></div>`;
+        const corr = `<div class="step"><div class="step-label">Simplification</div><div class="step-content">$\\sqrt{${sqB}} = ${b}\\sqrt{${a}}$ et $\\sqrt{${sqC}} = ${c}\\sqrt{${a}}$.<br/>l'expression devient $(${b}\\sqrt{${a}} - ${c}\\sqrt{${a}})^2 = ((${b - c})\\sqrt{${a}})^2$.</div></div><div class="step result"><div class="step-label">Calcul final</div><div class="step-content">$(${b - c})^2 \\times (\\sqrt{${a}})^2 = ${Math.pow(b - c, 2)} \\times ${a} = \\boxed{${res}}$.</div></div>`;
         return mk('Carré de racines', enonce, ['Valeur entière.'], expected, corr, { placeholder: 'Ex : 12' });
       }
 
@@ -8057,7 +8070,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
           const a = pick([2, 4, 5]);
           const zeros = pick([2, 3, 4]);
           const expected = `${1 / (a * a)}e${-2 * zeros}`;
-          const corr = `<div class="step result"><div class="step-label">Réponse</div><div class="step-content">L'inverse du carré de $x=${a}\\times 10^{${zeros}}$ est $\\frac{1}{(${a}\\times 10^{${zeros}})^2} = \\frac{1}{${a * a}\\times 10^{${2 * zeros}}} = ${1 / (a * a)}\\times 10^{-${2 * zeros}}$.</div></div>`;
+          const corr = `<div class="step result"><div class="step-label">Réponse</div><div class="step-content">l'inverse du carré de $x=${a}\\times 10^{${zeros}}$ est $\\frac{1}{(${a}\\times 10^{${zeros}})^2} = \\frac{1}{${a * a}\\times 10^{${2 * zeros}}} = ${1 / (a * a)}\\times 10^{-${2 * zeros}}$.</div></div>`;
           return mk('Puissances & Sci.', `Pour $x = ${a}\\times 10^{${zeros}}$, donner l'écriture scientifique de l'inverse du carré de $x$.`, ['Format `a e k` (ex: 2.5e-4)'], expected, corr, { placeholder: 'Ex : 2.5e-4' });
         } else {
           const base = pick([-5, -3, -2, 2, 3, 5]);
@@ -8123,7 +8136,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
           return mk('Écriture scientifique', `Donner l'écriture scientifique de : $$${N}$$`, ['Format `a e k` (ex: 4.6e5).'], `${a / 10}e${k + 1}`, corr, { placeholder: 'Ex : 4.6e5' });
         } else {
           const kOrdre = (a / 10 >= 5) ? k + 2 : k + 1;
-          const corr = `<div class="step"><div class="step-label">Écriture sc.</div><div class="step-content">L'écriture scientifique est ${a / 10} $\\times 10^{${k + 1}}$.</div></div><div class="step result"><div class="step-label">Ordre</div><div class="step-content">Comme ${(a / 10)} ${a / 10 >= 5 ? `\\ge 5` : `< 5`}, l'ordre de grandeur est $10^{${kOrdre}}$. L'exposant est donc $\\boxed{${kOrdre}}$.</div></div>`;
+          const corr = `<div class="step"><div class="step-label">Écriture sc.</div><div class="step-content">l'écriture scientifique est ${a / 10} $\\times 10^{${k + 1}}$.</div></div><div class="step result"><div class="step-label">Ordre</div><div class="step-content">Comme ${(a / 10)} ${a / 10 >= 5 ? `\\ge 5` : `< 5`}, l'ordre de grandeur est $10^{${kOrdre}}$. l'exposant est donc $\\boxed{${kOrdre}}$.</div></div>`;
           return mk('Ordre de grandeur', `Quel est l'exposant $k$ pour que $10^k$ soit l'ordre de grandeur de $${N}$ ?`, ['Valeur numérique entière de $k$.'], `${kOrdre}`, corr, { placeholder: 'Ex : 6' });
         }
       }
@@ -8229,7 +8242,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
       if (type === 'tableauxSignes') {
         const p = nonZeroSigned(), q = nonZeroSigned();
         if (p === q) return genAutomatismes(); // relancer si racines identiques
-        const corr = `<div class="step"><div class="step-label">Racines</div><div class="step-content">Les racines des deux facteurs sont ${-p} et ${-q}.</div></div><div class="step result"><div class="step-label">Signe d'un produit affine</div><div class="step-content">Le coefficient dominant de $(x${p > 0 ? `+${p}` : p})(x${q > 0 ? `+${q}` : q})$ est $1 \\times 1 = 1 > 0$. Le produit est donc négatif entre ses racines. L'intervalle solution est $\\boxed{[${Math.min(-p, -q)}; ${Math.max(-p, -q)}]}$.</div></div>`;
+        const corr = `<div class="step"><div class="step-label">Racines</div><div class="step-content">Les racines des deux facteurs sont ${-p} et ${-q}.</div></div><div class="step result"><div class="step-label">Signe d'un produit affine</div><div class="step-content">Le coefficient dominant de $(x${p > 0 ? `+${p}` : p})(x${q > 0 ? `+${q}` : q})$ est $1 \\times 1 = 1 > 0$. Le produit est donc négatif entre ses racines. l'intervalle solution est $\\boxed{[${Math.min(-p, -q)}; ${Math.max(-p, -q)}]}$.</div></div>`;
         const expected = `[${Math.min(-p, -q)};${Math.max(-p, -q)}]`;
         return mk('Inéquations et Signe', `Résoudre : $$(x${p > 0 ? `+${p}` : p})(x${q > 0 ? `+${q}` : q}) \\le 0$$`, ['Donner l\'intervalle sous la forme `[a;b]`.'], expected, corr, { placeholder: 'Ex : [-2;5]' });
       }
@@ -8240,7 +8253,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
         const num = randInt(1, den - 1);
         const expected = (budget * num) / den;
         const corr = `<div class="step result"><div class="step-label">Proportion</div><div class="step-content">Prendre les $\\frac{${num}}{${den}}$ de $${budget}$ revient à calculer :<br/>$${budget} \\times \\frac{${num}}{${den}} = \\boxed{${expected}}$</div></div>`;
-        return mk('Problèmes (Proportions)', `Un budget est de $${budget}$ €. L'État finance les $\\dfrac{${num}}{${den}}$ de cette somme.<br/>Quel est le montant financé par l'État ?`, ['Valeur en € numérique.'], `${expected}`, corr, { placeholder: 'Ex : 120' });
+        return mk('Problèmes (Proportions)', `Un budget est de $${budget}$ €. l'État finance les $\\dfrac{${num}}{${den}}$ de cette somme.<br/>Quel est le montant financé par l'État ?`, ['Valeur en € numérique.'], `${expected}`, corr, { placeholder: 'Ex : 120' });
       }
 
       // =========================================================================
@@ -8337,10 +8350,10 @@ print(n)                 # Affiche l'année de dépassement</pre>
             `Exprimer ces deux résultats en pourcentage arrondis à $0{,}1\\%$.`
           ],
           correction: `<div class="step"><div class="step-label">Proportion globale</div>
-          <div class="step-content">L'effectif total est de ${total}. L'effectif des ${categories.row[0].toLowerCase()} est de ${row1Tot}.<br/>
+          <div class="step-content">l'effectif total est de ${total}. l'effectif des ${categories.row[0].toLowerCase()} est de ${row1Tot}.<br/>
           $p_1 = \\dfrac{${row1Tot}}{${total}} \\approx ${+(row1Tot / total).toFixed(3)}$ soit approx. $\\boxed{${+(row1Tot / total * 100).toFixed(1)}\\,\\%}$.</div></div>
           <div class="step result"><div class="step-label">Proportion sous-population</div>
-          <div class="step-content">On se restreint aux ${categories.row[1].toLowerCase()} (total de la ligne = $${row2Tot}$). L'effectif des ${categories.col[1].toLowerCase()} dans cette catégorie est de $${d}$.<br/>
+          <div class="step-content">On se restreint aux ${categories.row[1].toLowerCase()} (total de la ligne = $${row2Tot}$). l'effectif des ${categories.col[1].toLowerCase()} dans cette catégorie est de $${d}$.<br/>
           $p_2 = \\dfrac{${d}}{${row2Tot}} \\approx ${+(d / row2Tot).toFixed(3)}$ soit approx. $\\boxed{${+(d / row2Tot * 100).toFixed(1)}\\,\\%}$.</div></div>`
         };
       }
@@ -8375,7 +8388,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
         const evR = +((cmR - 1) * 100).toFixed(2);
         return {
           title: "Évolution réciproque",
-          enonce: `L'action d'une entreprise a subi une ${ev > 0 ? 'hausse' : 'baisse'} de ${Math.abs(ev)}%.`,
+          enonce: `l'action d'une entreprise a subi une ${ev > 0 ? 'hausse' : 'baisse'} de ${Math.abs(ev)}%.`,
           questions: [
             `Quel est le coefficient multiplicateur associé à cette évolution ?`,
             `Calculer le coefficient multiplicateur de l'évolution réciproque (arrondi à $10^{-4}$).`,
@@ -8384,7 +8397,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
           correction: `<div class="step"><div class="step-label">Coefficient initial</div>
         <div class="step-content">$CM = 1 ${ev > 0 ? '+' : '-'} \\dfrac{${Math.abs(ev)}}{100} = ${cm}$</div></div>
         <div class="step"><div class="step-label">Coefficient réciproque</div>
-        <div class="step-content">Pour compenser, on divise par $CM$. L'évolution réciproque a pour coefficient :<br/>$CM_{rec} = \\dfrac{1}{CM} = \\dfrac{1}{${cm}} \\approx ${cmR}$</div></div>
+        <div class="step-content">Pour compenser, on divise par $CM$. l'évolution réciproque a pour coefficient :<br/>$CM_{rec} = \\dfrac{1}{CM} = \\dfrac{1}{${cm}} \\approx ${cmR}$</div></div>
         <div class="step result"><div class="step-label">Taux réciproque</div>
         <div class="step-content">$T_{rec} = CM_{rec} - 1 = ${cmR} - 1 = ${cmR - 1}$.<br/>Il faut appliquer une ${evR > 0 ? '<strong>hausse</strong>' : '<strong>baisse</strong>'} d'environ <strong>${Math.abs(evR)}%</strong> pour revenir à la valeur de départ.</div></div>`
         };
@@ -8430,7 +8443,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
           title: "Lecture graphique d'une fonction affine",
           enonce: `La droite ci-dessous représente une fonction $f(x) = ax + b$.<br/>
           <div style="margin: 15px 0;">${svg}</div>
-          L'objectif est de trouver l'expression de $f(x)$ : $\\boxed{f(x) = ax + b}$`,
+          l'objectif est de trouver l'expression de $f(x)$ : $\\boxed{f(x) = ax + b}$`,
           questions: [
             `Lire graphiquement l'ordonnée à l'origine $b$.`,
             `Déterminer graphiquement le coefficient directeur $a$.`,
@@ -8439,7 +8452,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
           interactiveAnswer: `${a}x${b >= 0 ? '+' + b : b}`,
           answerPlaceholder: `${a}x+${b}`,
           correction: `<div class="step"><div class="step-label">Ordonnée à l'origine</div>
-          <div class="step-content">L'ordonnée à l'origine $b$ est l'ordonnée du point où la droite coupe l'axe vertical. On lit <strong>$b = ${b}$</strong>.</div></div>
+          <div class="step-content">l'ordonnée à l'origine $b$ est l'ordonnée du point où la droite coupe l'axe vertical. On lit <strong>$b = ${b}$</strong>.</div></div>
           <div class="step"><div class="step-label">Coefficient directeur</div>
           <div class="step-content">On part d'un point de la grille (ex: l'ordonnée à l'origine). On avance de 1 vers la droite. Pour retomber sur la droite, on doit ${a > 0 ? 'monter' : 'descendre'} de ${Math.abs(a)}. Donc <strong>$a = ${a}$</strong>.</div></div>
           <div class="step result"><div class="step-label">Equation</div>
@@ -8475,7 +8488,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
         const val = rand(4, 10);
         return {
           title: "Modélisation par une fonction affine",
-          enonce: `Un artisan plombier facture ses interventions selon un modèle affine : des frais de déplacement fixes de ${cf} €, plus ${ch} € par heure de travail. On note $x$ la durée de l'intervention en heures et $P(x)$ le prix total. L'objectif est de trouver l'expression de $P(x)$ : $\\boxed{P(x) = ax + b}$`,
+          enonce: `Un artisan plombier facture ses interventions selon un modèle affine : des frais de déplacement fixes de ${cf} €, plus ${ch} € par heure de travail. On note $x$ la durée de l'intervention en heures et $P(x)$ le prix total. l'objectif est de trouver l'expression de $P(x)$ : $\\boxed{P(x) = ax + b}$`,
           questions: [
             `Donner l'expression de $P(x)$ en fonction de $x$. Quel est le coefficient directeur ?`,
             `Combien coûtera une intervention de ${val} heures ?`,
@@ -8507,7 +8520,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
         correction: `<div class="step"><div class="step-label">Coefficient directeur</div>
       <div class="step-content">$a = \\dfrac{y_B - y_A}{x_B - x_A} = \\dfrac{${yB} - ${yA < 0 ? '(' + yA + ')' : yA}}{${xB} - ${xA < 0 ? '(' + xA + ')' : xA}} = \\dfrac{${yB - yA}}{${xB - xA}} = \\boxed{${a}}$.</div></div>
       <div class="step"><div class="step-label">Ordonnée à l'origine</div>
-      <div class="step-content">L'équation est de la forme $y = ${a}x + b$. On utilise le point $A$ :<br/>
+      <div class="step-content">l'équation est de la forme $y = ${a}x + b$. On utilise le point $A$ :<br/>
       $${yA} = ${a} \\times (${xA}) + b \\iff ${yA} = ${a * xA} + b \\iff b = ${yA} - (${a * xA}) = \\boxed{${b}}$.</div></div>
       <div class="step result"><div class="step-label">Expression de $f$</div>
       <div class="step-content">$$f(x) = ${a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}$$</div></div>`
@@ -8556,7 +8569,7 @@ print(n)                 # Affiche l'année de dépassement</pre>
             `Combien l'application aura-t-elle d'utilisateurs au bout de 2 ans ($n=24$) ?`
           ],
           correction: `<div class="step"><div class="step-label">Modélisation</div>
-        <div class="step-content">L'augmentation est d'une valeur fixe (additive) : c'est une <strong>suite arithmétique</strong>.<br/>Premier terme $u_1 = ${u1}$, raison $r = ${r}$.</div></div>
+        <div class="step-content">l'augmentation est d'une valeur fixe (additive) : c'est une <strong>suite arithmétique</strong>.<br/>Premier terme $u_1 = ${u1}$, raison $r = ${r}$.</div></div>
         <div class="step"><div class="step-label">Formule explicite</div>
         <div class="step-content">Attention, le premier terme est $u_1$. La formule est $u_n = u_1 + (n-1)r$.<br/>
         $u_n = ${u1} + (n-1) \\times ${r} = ${u1} + ${r}n - ${r} = ${r}n + ${u1 - r}$.</div></div>
@@ -8721,42 +8734,53 @@ print(n)                 # Affiche l'année de dépassement</pre>
       }
 
       // Arbre classique simple
-      const pA = 0.6, pBsA = 0.7, pBsnA = 0.4;
+      const pA = pick([0.5, 0.6, 0.7]);
+      const pBsA = pick([0.6, 0.7, 0.8]);
+      const pBsnA = pick([0.2, 0.3, 0.4]);
+
+      // Calculs intermédiaires pour l'énoncé et la correction
+      const pNotA = +(1 - pA).toFixed(1);
+      const pNotBsA = +(1 - pBsA).toFixed(1);
+      const pNotBsnA = +(1 - pBsnA).toFixed(1);
+
+      const pA_inter_B = +(pA * pBsA).toFixed(2);
+      const pNotA_inter_B = +(pNotA * pBsnA).toFixed(2);
+      const pB = +(pA_inter_B + pNotA_inter_B).toFixed(2);
+
       return {
-        title: "Probabilités conditionnelles via un Arbre",
-        enonce: `Dans un club sportif, 60% des membres pratiquent la compétition ($C$).<br/>
-    - Parmi ceux qui font de la compétition, 70% font de la musculation ($M$).<br/>
-    - Parmi ceux qui ne font pas de compétition, 40% font de la musculation.`,
+        title: "Probabilités conditionnelles (Arbre)",
+        enonce: `On donne les probabilités suivantes : $P(A) = ${pA}$, $P_A(B) = ${pBsA}$ et $P_{\\overline{A}}(B) = ${pBsnA}$.`,
         questions: [
-          `Dresser un arbre de probabilités avec les événements $C$ et $M$.`,
-          `Traduire l'énoncé en termes de probabilités : $P(C)$, $P_C(M)$, $P_{\\overline{C}}(M)$.`,
-          `Calculer la probabilité qu'un membre pratique la compétition ET la musculation ($C \\cap M$).`,
-          `Calculer la probabilité $P(M)$ de faire de la musculation.`
+          `Construire un arbre de probabilités complet.`,
+          `Calculer la probabilité $P(A \\cap B)$.`,
+          `Calculer la probabilité $P(B)$.`
         ],
-        correction: `<div class="step"><div class="step-label">Données</div>
-      <div class="step-content">$P(C) = ${pA}$, $P_C(M) = ${pBsA}$, $P_{\\overline{C}}(M) = ${pBsnA}$ (donc $P_{\\overline{C}}(\\overline{M}) = 1 - ${pBsnA} = 0.6$).</div></div>
-      <div class="step"><div class="step-label">Intersection</div>
-      <div class="step-content">$P(C \\cap M) = P(C) \\times P_C(M) = ${pA} \\times ${pBsA} = \\boxed{${+(pA * pBsA).toFixed(2)}}$.</div></div>
-      <div class="step result"><div class="step-label">Probabilités totales</div>
-      <div class="step-content">D'après la loi des probabilités totales :<br/>
-      $P(M) = P(C \\cap M) + P(\\overline{C} \\cap M) = ${+(pA * pBsA).toFixed(2)} + (0.4 \\times 0.4) = ${+(pA * pBsA).toFixed(2)} + 0.16 = \\boxed{${+(pA * pBsA + 0.16).toFixed(2)}}$.</div></div>`
+        correction: `<div class="step"><div class="step-label">Arbre</div>
+        <div class="step-content">On place $P(A)=${pA}$, donc $P(\\overline{A})=${pNotA}$.<br/>
+        Ensuite $P_A(B)=${pBsA}$ donc $P_A(\\overline{B})=${pNotBsA}$.<br/>
+        Enfin $P_{\\overline{A}}(B)=${pBsnA}$ donc $P_{\\overline{A}}(\\overline{B})=${pNotBsnA}$.</div></div>
+        <div class="step"><div class="step-label">Calcul de $P(A \\cap B)$</div>
+        <div class="step-content">$P(A \\cap B) = P(A) \\times P_A(B) = ${pA} \\times ${pBsA} = ${pA_inter_B}$.</div></div>
+        <div class="step result"><div class="step-label">Calcul de $P(B)$</div>
+        <div class="step-content">D'après la formule des probabilités totales :<br/>
+        $P(B) = P(A \\cap B) + P(\\overline{A} \\cap B) = ${pA_inter_B} + (${pNotA} \\times ${pBsnA}) = ${pA_inter_B} + ${pNotA_inter_B} = \\boxed{${pB}}$.</div></div>`
       };
-    }
 
-    // ══════════════════════════════════════════════════════════════════
-    // CH.5 TC — SUITES GÉOMÉTRIQUES (Croissance exponentielle)
-    // ══════════════════════════════════════════════════════════════════
-    function genTC_SuitesGeom() {
-      const type = pickD(['terme_general'], ['contexte', 'somme'], ['algorithme', 'contexte']);
+      // ══════════════════════════════════════════════════════════════════
+      // CH.5 TC — SUITES GÉOMÉTRIQUES (Croissance exponentielle)
+      // ══════════════════════════════════════════════════════════════════
+      function genTC_SuitesGeom() {
+        const type = pickD(['terme_general'], ['contexte', 'somme'], ['algorithme', 'contexte']);
+        const fr = (n) => String(n).replace('.', '{,}');
 
-      if (type === 'algorithme') {
-        const q = pick([1.05, 1.10, 1.20]);
-        const p = Math.round((q - 1) * 100);
-        const u0 = pick([1000, 2000]);
-        const seuil = u0 * 2;
-        return {
-          title: "Suite géométrique et Seuil via Algorithmique",
-          enonce: `Le prix d'un terrain de ${u0} € augmente de ${p}% par an. On modélise ce prix par une suite $(v_n)$. On cherche à savoir en quelle année le prix aura doublé (dépassera ${seuil} €).<br/>
+        if (type === 'algorithme') {
+          const q = pick([1.05, 1.10, 1.20]);
+          const p = Math.round((q - 1) * 100);
+          const u0 = pick([1000, 2000]);
+          const seuil = u0 * 2;
+          return {
+            title: "Suite géométrique et Seuil via Algorithmique",
+            enonce: `Le prix d'un terrain de ${u0} € augmente de ${p}% par an. On modélise ce prix par une suite $(v_n)$. On cherche à savoir en quelle année le prix aura doublé (dépassera ${seuil} €).<br/>
       On propose l'algorithme Python suivant :
 <pre style="background:#111; padding:10px; border-radius:5px; color:#fff; font-family:monospace; margin-top:10px;">
 def seuil():
@@ -8767,12 +8791,12 @@ def seuil():
         n = n + 1
     return n
 </pre>`,
-          questions: [
-            `Justifier que l'augmentation de ${p}% correspond au coefficient multiplicateur $q = ${q}$.`,
-            `Que représente la variable <code>n</code> dans ce programme ?`,
-            `Résoudre manuellement ou à la calculatrice le problème posé en calculant les termes successifs.`
-          ],
-          correction: `<div class="step"><div class="step-label">Coefficient multiplicateur</div>
+            questions: [
+              `Justifier que l'augmentation de ${p}% correspond au coefficient multiplicateur $q = ${q}$.`,
+              `Que représente la variable <code>n</code> dans ce programme ?`,
+              `Résoudre manuellement ou à la calculatrice le problème posé en calculant les termes successifs.`
+            ],
+            correction: `<div class="step"><div class="step-label">Coefficient multiplicateur</div>
         <div class="step-content">Une hausse de ${p}\\,\\%$ correspond à un coefficient $CM = 1 + \\dfrac{${p}}{100} = \\boxed{${q}}$. C'est la raison de la suite géométrique.</div></div>
         <div class="step"><div class="step-label">Algorithme</div>
         <div class="step-content">La variable <code>n</code> sert de compteur d'années. La boucle <code>while</code> s'arrête dès que le prix $v$ dépasse le double du prix initial ($${seuil}\\text{ €}$).</div></div>
@@ -8782,53 +8806,53 @@ def seuil():
         $v_7 = ${u0} \\times ${q}^7 \\approx ${+(u0 * Math.pow(q, 7)).toFixed(0)}$<br/>
         $v_8 = ${u0} \\times ${q}^8 \\approx ${+(u0 * Math.pow(q, 8)).toFixed(0)}$<br/>
         C'est au bout de $\\boxed{${Math.ceil(Math.log(2) / Math.log(q))}}$ ans que le prix aura doublé.</div></div>`
-        };
-      }
+          };
+        }
 
-      if (type === 'contexte') {
-        const q = pick([0.80, 0.85, 0.90]);
-        const baisse = Math.round((1 - q) * 100);
-        const u0 = pick([50, 100, 200]);
-        return {
-          title: "Croissance exponentielle – Décroissance",
-          enonce: `Lors d'un traitement médical, la quantité de principe actif présente dans le sang diminue de ${baisse}% par heure. À $t=0$, on injecte une dose de $${u0}$ mg. On note $u_n$ la quantité restante après $n$ heures : $$\\boxed{u_0 = ${u0}}$$`,
-          questions: [
-            `Justifier que $(u_n)$ est une suite géométrique dont on donnera la raison.`,
-            `Exprimer $u_n$ en fonction de $n$.`,
-            `Quelle est la limite de cette suite lorsque $n$ tend vers l'infini ? Interpréter biologiquement.`
-          ],
-          correction: `<div class="step"><div class="step-label">Raison</div>
+        if (type === 'contexte') {
+          const q = pick([0.80, 0.85, 0.90]);
+          const baisse = Math.round((1 - q) * 100);
+          const u0 = pick([50, 100, 200]);
+          return {
+            title: "Croissance exponentielle – Décroissance",
+            enonce: `Lors d'un traitement médical, la quantité de principe actif présente dans le sang diminue de ${baisse}% par heure. À $t=0$, on injecte une dose de $${u0}$ mg. On note $u_n$ la quantité restante après $n$ heures : $$\\boxed{u_0 = ${u0}}$$`,
+            questions: [
+              `Justifier que $(u_n)$ est une suite géométrique dont on donnera la raison.`,
+              `Exprimer $u_n$ en fonction de $n$.`,
+              `Quelle est la limite de cette suite lorsque $n$ tend vers l'infini ? Interpréter biologiquement.`
+            ],
+            correction: `<div class="step"><div class="step-label">Raison</div>
         <div class="step-content">Baisser de $${baisse}\\,\\%$ correspond à un coefficient multiplicateur $q = 1 - 0.${baisse} = ${q}$.<br/>$u_{n+1} = ${q} \\times u_n$. La suite est géométrique de raison $\\boxed{${q}}$.</div></div>
         <div class="step"><div class="step-label">Terme général</div>
         <div class="step-content">$$u_n = u_0 \\times q^n = ${u0} \\times ${q}^n$$</div></div>
         <div class="step result"><div class="step-label">Limite</div>
         <div class="step-content">Comme $0 < ${q} < 1$, on a $\\lim_{n \\to +\\infty} ${q}^n = 0$.<br/>Donc $\\lim_{n \\to +\\infty} u_n = 0$. À long terme, le produit disparaît totalement de l'organisme.</div></div>`
-        };
-      }
+          };
+        }
 
-      // Terme général basique + somme
-      const u0 = rand(2, 5);
-      const q = pick([2, 3]);
-      const n = rand(4, 6);
-      const un = u0 * Math.pow(q, n);
-      const sum = u0 * (Math.pow(q, n + 1) - 1) / (q - 1);
-      return {
-        title: "Propriétés d'une suite géométrique",
-        enonce: `Soit $(u_n)$ la suite géométrique de premier terme $u_0 = ${u0}$ et de raison $q = ${q}$.`,
-        questions: [
-          `Exprimer $u_n$ en fonction de $n$.`,
-          `Calculer $u_{${n}}$.`,
-          `Rappeler la formule de la somme des termes d'une suite géométrique, puis calculer $S = u_0 + u_1 + \\dots + u_{${n}}$.`
-        ],
-        correction: `<div class="step"><div class="step-label">Terme général</div>
+        // Terme général basique + somme
+        const u0 = rand(2, 5);
+        const q = pick([2, 3]);
+        const n = rand(4, 6);
+        const un = u0 * Math.pow(q, n);
+        const sum = u0 * (Math.pow(q, n + 1) - 1) / (q - 1);
+        return {
+          title: "Propriétés d'une suite géométrique",
+          enonce: `Soit $(u_n)$ la suite géométrique de premier terme $u_0 = ${u0}$ et de raison $q = ${q}$.`,
+          questions: [
+            `Exprimer $u_n$ en fonction de $n$.`,
+            `Calculer $u_{${n}}$.`,
+            `Rappeler la formule de la somme des termes d'une suite géométrique, puis calculer $S = u_0 + u_1 + \\dots + u_{${n}}$.`
+          ],
+          correction: `<div class="step"><div class="step-label">Terme général</div>
       <div class="step-content">La formule est $u_n = u_0 \\times q^n$. Ici : $u_n = ${u0} \\times ${q}^n$.<br/>
       $u_{${n}} = ${u0} \\times ${q}^{${n}} = ${u0} \\times ${Math.pow(q, n)} = \\boxed{${un}}$.</div></div>
       <div class="step result"><div class="step-label">Somme</div>
       <div class="step-content">La formule est $S = \\text{Premier terme} \\times \\dfrac{q^{\\text{Nb termes}} - 1}{q - 1}$.<br/>
       Il y a $${n + 1}$ termes. $S = ${u0} \\times \\dfrac{${q}^{${n + 1}} - 1}{${q} - 1} = ${u0} \\times \\dfrac{${Math.pow(q, n + 1)} - 1}{${q - 1}} = \\boxed{${sum}}$.</div></div>`
-      };
+        };
+      }
     }
-
 
     // ══════════════════════════════════════════════════════════════════
     // CH.6 TC — AUTOMATISMES (Fractions, Équations, Pourcentages)
@@ -8886,7 +8910,7 @@ def seuil():
           interactiveAnswer: res,
           answerPlaceholder: "Ex: 2x+3",
           correction: `<div class="step"><div class="step-label">Lecture de b</div>
-        <div class="step-content">L'ordonnée à l'origine (quand $x=0$) est $\\boxed{b = ${b}}$.</div></div>
+        <div class="step-content">l'ordonnée à l'origine (quand $x=0$) est $\\boxed{b = ${b}}$.</div></div>
         <div class="step result"><div class="step-label">Calcul de a</div>
         <div class="step-content">Quand $x$ augmente de $1$, $y$ augmente de ${a}. Donc $\\boxed{a = ${a}}$.<br/>
         On a donc $f(x) = \\boxed{${res}}$.</div></div>`
@@ -9029,7 +9053,7 @@ def seuil():
             `Donner l'ensemble des solutions sous forme d'intervalle.`
           ],
           correction: `<div class="step"><div class="step-label">Analyse visuelle</div>
-          <div class="step-content">L'inéquation $${fn.name}(x) \\ge ${k}$ signifie qu'on cherche les valeurs de $x$ pour lesquelles la courbe est <strong>au-dessus de la droite horizontale $y = ${k}$</strong> (ou posée dessus).</div></div>
+          <div class="step-content">l'inéquation $${fn.name}(x) \\ge ${k}$ signifie qu'on cherche les valeurs de $x$ pour lesquelles la courbe est <strong>au-dessus de la droite horizontale $y = ${k}$</strong> (ou posée dessus).</div></div>
           <div class="step result"><div class="step-label">Ensemble de solutions</div>
           <div class="step-content">En relevant les abscisses des points de la courbe situés dans cette zone, on obtient l'intervalle solution. <br/>Par exemple, si la courbe coupe $y=${k}$ en $x_1$ et $x_2$ et reste au-dessus entre les deux, la solution est $[x_1 ; x_2]$.</div></div>`
         };
@@ -9050,7 +9074,7 @@ def seuil():
           correction: `<div class="step"><div class="step-label">Lecture des sommets</div>
           <div class="step-content">Le <strong>maximum</strong> est l'ordonnée du point le plus haut de la courbe. Le <strong>minimum</strong> est l'ordonnée du point le plus bas de la courbe sur l'intervalle considéré.</div></div>
           <div class="step result"><div class="step-label">Extremums</div>
-          <div class="step-content">On lit les valeurs sur l'axe des ordonnées. L'abscisse du point donne la valeur en laquelle l'extremum est atteint.</div></div>`
+          <div class="step-content">On lit les valeurs sur l'axe des ordonnées. l'abscisse du point donne la valeur en laquelle l'extremum est atteint.</div></div>`
         };
       }
     }
@@ -9241,7 +9265,7 @@ def seuil():
     <em>(Si la suite commence à $u_1$, la formule devient $u_n = u_1 + (n-1) \\times r$).</em>
   </div>
   <div class="course-thm"><span class="block-title">Sens de variation</span>
-    L'évolution dépend uniquement du signe de la raison $r$ :<br/>
+    l'évolution dépend uniquement du signe de la raison $r$ :<br/>
     • Si $r > 0$, on ajoute du positif, la suite est <strong>croissante</strong>.<br/>
     • Si $r < 0$, on enlève de la valeur, la suite est <strong>décroissante</strong>.
   </div>
@@ -9266,7 +9290,7 @@ def seuil():
   </div>
   <div class="course-ex"><span class="block-title">Exemple concret</span>
     On tire au sort une carte dans un jeu. <br/>Quelle est la probabilité de tirer un "Roi" ($B$) <strong>sachant</strong> qu'on a tiré une carte "Rouge" ($A$) ?<br/>
-    L'univers s'est réduit aux seules cartes rouges ($16$ cartes). Parmi elles, il n'y a que $2$ Rois. Donc $P_A(B) = \\frac{2}{16} = \\frac{1}{8}$.
+    l'univers s'est réduit aux seules cartes rouges ($16$ cartes). Parmi elles, il n'y a que $2$ Rois. Donc $P_A(B) = \\frac{2}{16} = \\frac{1}{8}$.
   </div>
 </div>
 
@@ -9303,7 +9327,7 @@ def seuil():
   <div class="course-section-title">1) Images et Antécédents</div>
   <div class="course-def"><span class="block-title">Lecture graphique</span>
     Pour une fonction $f$ représentée par une courbe $\\mathcal{C}_f$ :<br/>
-    • L'<b>image</b> de $x$ par $f$ est l'ordonnée du point de la courbe d'abscisse $x$. On la lit sur l'axe vertical ($Y$).<br/>
+    • l'<b>image</b> de $x$ par $f$ est l'ordonnée du point de la courbe d'abscisse $x$. On la lit sur l'axe vertical ($Y$).<br/>
     • Un <b>antécédent</b> de $y$ par $f$ est l'abscisse d'un point de la courbe d'ordonnée $y$. On le lit sur l'axe horizontal ($X$). Une valeur $y$ peut avoir zéro, un ou plusieurs antécédents.
   </div>
   <div class="course-method"><span class="block-title">Résoudre $f(x) = k$</span>
@@ -9352,7 +9376,7 @@ def seuil():
     <em>Rappel : les puissances se calculent avant les multiplications !</em>
   </div>
   <div class="course-thm"><span class="block-title">Sens de variation (en supposant $u_0 > 0$)</span>
-    L'évolution dépend du fait que la raison soit supérieure ou inférieure à $1$ :<br/>
+    l'évolution dépend du fait que la raison soit supérieure ou inférieure à $1$ :<br/>
     • Si $q > 1$, on multiplie par "plus que $1$", la valeur grossit : la suite est <strong>croissante</strong> et s'envole vers l'infini (croissance exponentielle).<br/>
     • Si $0 < q < 1$, on multiplie par "moins que $1$" (ex: $0{,}8$), la valeur rétrécit : la suite est <strong>décroissante</strong> et tendra lentement vers zéro (analogue à une décroissance exponentielle).
   </div>
@@ -9396,7 +9420,7 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
   <div class="course-section-title">2) Résolution d'équations du 1er degré</div>
   <div class="course-prop"><span class="block-title">Isoler l'inconnue $x$</span>
     Le but est de se retrouver avec "$x = ...$" en utilisant les opérations inverses de chaque côté du signe égal.<br/>
-    L'ordre classique des opérations est : 1) Addition/Soustraction, 2) Multiplication/Division.<br/>
+    l'ordre classique des opérations est : 1) Addition/Soustraction, 2) Multiplication/Division.<br/>
     <em>Exemple :</em> $4x - 7 = 5$<br/>
     On ajoute 7 des deux côtés : $4x = 5 + 7 \\implies 4x = 12$<br/>
     On divise par 4 : $x = \\frac{12}{4} = 3$.
