@@ -5307,7 +5307,7 @@
 
       const corr = `
     <div class="step">
-      <div class="step-label">a) Données de l'énoncé</div>
+      <div class="step-label">1) Données de l'énoncé</div>
       <div class="step-content">
         D'après les valeurs de l'énoncé :<br/>
         $P(M)=${pctRaw(prev)}, donc $P(\\overline{M})=1 - ${pctRaw(prev)} = ${pctRaw(100 - prev)}.<br/>
@@ -5316,13 +5316,13 @@
       </div>
     </div>
     <div class="step">
-      <div class="step-label">b) Calcul de l'intersection</div>
+      <div class="step-label">2) Calcul de l'intersection</div>
       <div class="step-content">
         $$P(M\\cap T)=P(M)\\times P_{M}(T)=${pctRaw(prev)}\\times ${pctRaw(sens)}= \\boxed{${+(pMcapT).toFixed(4)}}$$
       </div>
     </div>
     <div class="step">
-      <div class="step-label">c) Loi des probabilités totales</div>
+      <div class="step-label">3) Loi des probabilités totales</div>
       <div class="step-content">
         Le test positif $T$ peut être obtenu avec les malades ou les non-malades :<br/>
         $P(T)=P(M \\cap T) + P(\\overline{M} \\cap T) = P(M) \\times P_{M}(T) + P(\\overline{M}) \\times P_{\\overline{M}}(T)$<br/>
@@ -5331,7 +5331,7 @@
       </div>
     </div>
     <div class="step result">
-      <div class="step-label">d) Calcul de la probabilité inversée (Bayes)</div>
+      <div class="step-label">4) Calcul de la probabilité inversée (Bayes)</div>
       <div class="step-content">
         On cherche $P_{T}(M)$, la probabilité d'être malade sachant que le test est positif :<br/>
         $$P_{T}(M)=\\frac{P(M\\cap T)}{P(T)}=\\frac{${+(pMcapT).toFixed(4)}}{${+(pT).toFixed(4)}}\\approx \\boxed{${(pM_given_T).toFixed(4)}}$$
@@ -5374,10 +5374,14 @@
       </div>
     </div>
     <div class="step">
-      <div class="step-label">2) Expression de l’aire</div>
+      <div class="step-label">2) Démonstration de l'expression de l'aire</div>
       <div class="step-content">
-        (Par découpage en triangles / résultat donné) :
-        $$A(x)=2x^2-2\\times ${L}x+${L * L}.$$
+        On découpe les 4 triangles rectangles aux coins du carré.<br/>
+        Chaque triangle a ses deux cathètes de longueur $x$ et $(${L}-x)$, donc son aire vaut $\\frac{1}{2}\\times x\\times(${L}-x)$.<br/>
+        Aire totale des 4 triangles :
+        $$4\\times\\frac{x(${L}-x)}{2}=2x(${L}-x)=2\\times ${L}x-2x^2.$$
+        Aire du quadrilatère $MNPQ$ = Aire du carré $-$ Aire des 4 triangles :
+        $$A(x)=${L * L}-(2\\times ${L}x-2x^2)=2x^2-2\\times ${L}x+${L * L}.\\quad\\blacksquare$$
       </div>
     </div>
     <div class="step result">
@@ -5853,9 +5857,9 @@
         title: '📈 Lecture graphique des Tangentes',
         enonce: `On donne la courbe $\\mathcal{C}_f$ représentative d'une fonction $f$ et sa tangente au point $A$ d'abscisse $${xA}$.<br/>${svg}`,
         questions: [
-          `1. Donner par lecture graphique la valeur de $f(${xA})$.`,
-          `2. Déterminer par calcul graphique le nombre dérivé $f'(${xA})$.`,
-          `3. En déduire l'équation de la tangente tracée.`
+          `Donner par lecture graphique la valeur de $f(${xA})$.`,
+          `Déterminer par calcul graphique le nombre dérivé $f'(${xA})$.`,
+          `En déduire l'équation de la tangente tracée.`
         ],
         interactiveAnswer: `${slopeA}`,
         interactivePrompt: `Donner la valeur de la pente $f'(${xA})$ :`,
@@ -6052,9 +6056,30 @@
         $(${d})' = 0$
       </div>
     </div>
-    <div class="step result">
+    <div class="step">
       <div class="step-label">Résultat $f'(x)$</div>
       <div class="step-content">$$f'(x) = ${fpStr}$$</div>
+    </div>
+    <div class="step result">
+      <div class="step-label">Signe de $f'(x)$ et variations de $f$</div>
+      <div class="step-content">
+        ${deg === 2
+          ? (2 * b === 0
+              ? `$f'(x) = ${c}$, constante ${c > 0 ? 'strictement positive' : c < 0 ? 'strictement négative' : 'nulle'}.<br/>
+                 Donc $f$ est ${c > 0 ? 'strictement croissante' : c < 0 ? 'strictement décroissante' : 'constante'} sur $\\mathbb{R}$.`
+              : `On résout $f'(x)=0$ : $${fpStr}=0 \\Rightarrow x = ${fracInput(-c, 2*b)}$.<br/>
+                 Comme le coefficient de $x$ est $${2*b}$ (${2*b > 0 ? 'positif' : 'négatif'}), $f'$ est ${2*b > 0 ? 'négative avant puis positive après' : 'positive avant puis négative après'} ce zéro.<br/>
+                 Donc $f$ est ${2*b > 0 ? 'décroissante sur $\\left]-\\infty\\,;\\,'+fracInput(-c,2*b)+'\\right]$ puis croissante sur $\\left['+fracInput(-c,2*b)+'\\,;\\,+\\infty\\right[$' : 'croissante sur $\\left]-\\infty\\,;\\,'+fracInput(-c,2*b)+'\\right]$ puis décroissante sur $\\left['+fracInput(-c,2*b)+'\\,;\\,+\\infty\\right[$'}.`)
+          : `$f'(x) = ${fpStr}$ est un trinôme du second degré (coefficient dominant $${3*a}$).<br/>
+             On calcule son discriminant : $\\Delta = (${2*b})^2 - 4\\times ${3*a}\\times ${c} = ${(2*b)*(2*b) - 4*(3*a)*c}$.<br/>
+             ${((2*b)*(2*b) - 4*(3*a)*c) < 0
+               ? `$\\Delta < 0$ : $f'(x)$ est du signe de $${3*a}$ sur $\\mathbb{R}$, donc $f$ est ${3*a > 0 ? 'strictement croissante' : 'strictement décroissante'} sur $\\mathbb{R}$.`
+               : ((2*b)*(2*b) - 4*(3*a)*c) === 0
+               ? `$\\Delta = 0$ : $f'$ s'annule une fois sans changer de signe ; $f$ est ${3*a > 0 ? 'croissante' : 'décroissante'} sur $\\mathbb{R}$.`
+               : `$\\Delta > 0$ : $f'$ possède deux racines réelles distinctes $x_1$ et $x_2$. Entre ces racines $f'$ est du signe opposé à celui de $${3*a}$, donc $f$ possède un ${3*a > 0 ? 'minimum local puis un maximum local' : 'maximum local puis un minimum local'}.`
+             }`
+        }
+      </div>
     </div>`;
 
       return {
@@ -6574,7 +6599,7 @@
       return {
         title: '🔢 Somme arithmétique',
         enonce: `Soit $(u_n)$ la suite arithmétique de premier terme $u_1 = ${u1}$ et de raison $r = ${r}$.`,
-        questions: [`Calculer $S = u_1 + u_2 + \\cdots + u_{${n}}$.`, `Calculer $u_{${n}}$.`],
+        questions: [`Calculer $u_{${n}}$.`, `Calculer $S = u_1 + u_2 + \\cdots + u_{${n}}$.`],
         interactiveAnswer: `${SInput}`,
         answerPlaceholder: 'Ex : 5 ou 7/2',
         correction: corr
@@ -6605,7 +6630,7 @@
       return {
         title: '🔢 Somme géométrique',
         enonce: `Soit $(u_n)$ la suite géométrique de premier terme $u_1 = ${u1}$ et de raison $q = ${q}$.`,
-        questions: [`Calculer $S = u_1 + u_2 + \\cdots + u_{${n}}$.`, `Exprimer $u_n$ en fonction de $n$.`],
+        questions: [`Exprimer $u_n$ en fonction de $n$.`, `Calculer $S = u_1 + u_2 + \\cdots + u_{${n}}$.`],
         interactiveAnswer: `${S}`,
         answerPlaceholder: 'Ex : 24',
         correction: corr
@@ -7067,6 +7092,20 @@
       const pBStr = frac(an, dn);
       const pBInput = fracInput(an, dn);
 
+      // Bayes : P_B(A) = P(A∩B) / P(B) = (pN/pD * qN/qD) / (an/dn)
+      const bayesRawN = pN * qN * dn;
+      const bayesRawD = pD * qD * an;
+      const gB = gcd(Math.abs(bayesRawN), Math.abs(bayesRawD));
+      const baN = bayesRawN / gB;
+      const baD = bayesRawD / gB;
+      const bayesStr = frac(baN, baD);
+
+      // P(A∩B) simplified
+      const intN = pN * qN;
+      const intD = pD * qD;
+      const gI = gcd(Math.abs(intN), intD);
+      const pAcapBStr = frac(intN / gI, intD / gI);
+
       const corr = `
     <div class="step">
       <div class="step-label">1) Modèle</div>
@@ -7082,8 +7121,12 @@
       </div>
     </div>
     <div class="step result">
-      <div class="step-label">Résultat</div>
-      <div class="step-content">$$P(B)=${pBStr}$$</div>
+      <div class="step-label">Résultat + Bayes</div>
+      <div class="step-content">
+        $$P(B)=${pBStr}$$
+        Formule de Bayes :<br/>
+        $$P_B(A)=\\frac{P(A\\cap B)}{P(B)}=\\frac{P(A)\\cdot P_A(B)}{P(B)}=\\frac{${pAcapBStr}}{${pBStr}}=${bayesStr}$$
+      </div>
     </div>`;
 
       return {
@@ -7091,7 +7134,7 @@
         enonce: `On a deux événements $A$ et $B$.<br/>
     $$P(A)=${pStr},\\;P_A(B)=${qStr},\\;P_{\\overline A}(B)=${rStr}$$<br/>
     Calculer $P(B)$ à l'aide d'un arbre ou de la loi des probabilités totales.`,
-        questions: ['Calculer $P(B)$.', `Vérifier le résultat en utilisant $P(B)=P(A)P_A(B)+(1-P(A))P_{\\overline A}(B)$.`],
+        questions: ['Calculer $P(B)$.', `Calculer $P_B(A)$ à l'aide de la formule de Bayes.`],
         interactiveAnswer: `${pBInput}`,
         answerPlaceholder: 'Ex : 3/4 ou 0,75',
         correction: corr
@@ -7388,7 +7431,7 @@
       const questions = [
         `Justifier que le signe de $f'(x)$ dépend uniquement de l'expression $${a2}x ${(b2 >= 0) ? '+ ' + b2 : '- ' + (-b2)}$ sur le domaine de définition.`,
         `Résoudre $${a2}x ${(b2 >= 0) ? '+ ' + b2 : '- ' + (-b2)} = 0$.`,
-        `Dresser le tableau de signes de $f'(x)$ sur son ensemble de définition (attention à la racine carrée et à la double barre).`,
+        `Dresser le tableau de signes de $f'(x)$ sur son ensemble de définition (attention au carré $(x-${x1})^2$ qui s'annule sans changer de signe, et à la valeur interdite avec une double barre).`,
         `En déduire les variations de la fonction $f$.`
       ];
 
@@ -8065,9 +8108,9 @@
             </tbody>
           </table>`,
           questions: [
-            `Quelle est la proportion de ${categories.row[0].toLowerCase()} parmi l'ensemble des personnes interrogées ?`,
-            `Quelle est la proportion de ${categories.col[1].toLowerCase()} parmi les ${categories.row[1].toLowerCase()} ?`,
-            `Exprimer ces deux résultats en pourcentage arrondis à 0.1%.`
+            `Calculer la proportion de ${categories.row[0].toLowerCase()} parmi l'ensemble des personnes interrogées (donner le résultat sous forme décimale arrondie à $10^{-3}$).`,
+            `Calculer la proportion de ${categories.col[1].toLowerCase()} parmi les ${categories.row[1].toLowerCase()} (donner le résultat sous forme décimale arrondie à $10^{-3}$).`,
+            `Exprimer ces deux résultats en pourcentage arrondis à $0{,}1\\%$.`
           ],
           correction: `<div class="step"><div class="step-label">Proportion globale</div>
           <div class="step-content">L'effectif total est de ${total}. L'effectif des ${categories.row[0].toLowerCase()} est de ${row1Tot}.<br/>
