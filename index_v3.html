@@ -4777,7 +4777,7 @@
       }
 
       contentEl.innerHTML = html;
-      setTimeout(() => renderKatex(contentEl), 50);
+      setTimeout(() => renderKatex(contentEl), 150);
     }
 
 
@@ -5022,7 +5022,7 @@
           `;
       }).join('');
 
-      setTimeout(() => renderKatex(bacContentEl), 50);
+      setTimeout(() => renderKatex(bacContentEl), 150);
     }
 
     function showBacCorrection() {
@@ -6075,19 +6075,19 @@
       <div class="step-content">
         ${deg === 2
           ? (2 * b === 0
-              ? `$f'(x) = ${c}$, constante ${c > 0 ? 'strictement positive' : c < 0 ? 'strictement négative' : 'nulle'}.<br/>
+            ? `$f'(x) = ${c}$, constante ${c > 0 ? 'strictement positive' : c < 0 ? 'strictement négative' : 'nulle'}.<br/>
                  Donc $f$ est ${c > 0 ? 'strictement croissante' : c < 0 ? 'strictement décroissante' : 'constante'} sur $\\mathbb{R}$.`
-              : `On résout $f'(x)=0$ : $${fpStr}=0 \\Rightarrow x = ${fracInput(-c, 2*b)}$.<br/>
-                 Comme le coefficient de $x$ est $${2*b}$ (${2*b > 0 ? 'positif' : 'négatif'}), $f'$ est ${2*b > 0 ? 'négative avant puis positive après' : 'positive avant puis négative après'} ce zéro.<br/>
-                 Donc $f$ est ${2*b > 0 ? 'décroissante sur $\\left]-\\infty\\,;\\,'+fracInput(-c,2*b)+'\\right]$ puis croissante sur $\\left['+fracInput(-c,2*b)+'\\,;\\,+\\infty\\right[$' : 'croissante sur $\\left]-\\infty\\,;\\,'+fracInput(-c,2*b)+'\\right]$ puis décroissante sur $\\left['+fracInput(-c,2*b)+'\\,;\\,+\\infty\\right[$'}.`)
-          : `$f'(x) = ${fpStr}$ est un trinôme du second degré (coefficient dominant $${3*a}$).<br/>
-             On calcule son discriminant : $\\Delta = (${2*b})^2 - 4\\times ${3*a}\\times ${c} = ${(2*b)*(2*b) - 4*(3*a)*c}$.<br/>
-             ${((2*b)*(2*b) - 4*(3*a)*c) < 0
-               ? `$\\Delta < 0$ : $f'(x)$ est du signe de $${3*a}$ sur $\\mathbb{R}$, donc $f$ est ${3*a > 0 ? 'strictement croissante' : 'strictement décroissante'} sur $\\mathbb{R}$.`
-               : ((2*b)*(2*b) - 4*(3*a)*c) === 0
-               ? `$\\Delta = 0$ : $f'$ s'annule une fois sans changer de signe ; $f$ est ${3*a > 0 ? 'croissante' : 'décroissante'} sur $\\mathbb{R}$.`
-               : `$\\Delta > 0$ : $f'$ possède deux racines réelles distinctes $x_1$ et $x_2$. Entre ces racines $f'$ est du signe opposé à celui de $${3*a}$, donc $f$ possède un ${3*a > 0 ? 'minimum local puis un maximum local' : 'maximum local puis un minimum local'}.`
-             }`
+            : `On résout $f'(x)=0$ : $${fpStr}=0 \\Rightarrow x = ${fracInput(-c, 2 * b)}$.<br/>
+                 Comme le coefficient de $x$ est $${2 * b}$ (${2 * b > 0 ? 'positif' : 'négatif'}), $f'$ est ${2 * b > 0 ? 'négative avant puis positive après' : 'positive avant puis négative après'} ce zéro.<br/>
+                 Donc $f$ est ${2 * b > 0 ? 'décroissante sur $\\left]-\\infty\\,;\\,' + fracInput(-c, 2 * b) + '\\right]$ puis croissante sur $\\left[' + fracInput(-c, 2 * b) + '\\,;\\,+\\infty\\right[$' : 'croissante sur $\\left]-\\infty\\,;\\,' + fracInput(-c, 2 * b) + '\\right]$ puis décroissante sur $\\left[' + fracInput(-c, 2 * b) + '\\,;\\,+\\infty\\right[$'}.`)
+          : `$f'(x) = ${fpStr}$ est un trinôme du second degré (coefficient dominant $${3 * a}$).<br/>
+             On calcule son discriminant : $\\Delta = (${2 * b})^2 - 4\\times ${3 * a}\\times ${c} = ${(2 * b) * (2 * b) - 4 * (3 * a) * c}$.<br/>
+             ${((2 * b) * (2 * b) - 4 * (3 * a) * c) < 0
+            ? `$\\Delta < 0$ : $f'(x)$ est du signe de $${3 * a}$ sur $\\mathbb{R}$, donc $f$ est ${3 * a > 0 ? 'strictement croissante' : 'strictement décroissante'} sur $\\mathbb{R}$.`
+            : ((2 * b) * (2 * b) - 4 * (3 * a) * c) === 0
+              ? `$\\Delta = 0$ : $f'$ s'annule une fois sans changer de signe ; $f$ est ${3 * a > 0 ? 'croissante' : 'décroissante'} sur $\\mathbb{R}$.`
+              : `$\\Delta > 0$ : $f'$ possède deux racines réelles distinctes $x_1$ et $x_2$. Entre ces racines $f'$ est du signe opposé à celui de $${3 * a}$, donc $f$ possède un ${3 * a > 0 ? 'minimum local puis un maximum local' : 'maximum local puis un minimum local'}.`
+          }`
         }
       </div>
     </div>`;
@@ -7404,8 +7404,8 @@ print(n)                 # Affiche l'année de dépassement</pre>
       // Helper to render sign cell
       function signCell(type) {
         if (type === 'zero') return `<td class="zero">0</td>`;
-        if (type === 'dbl')  return `<td style="border-left:3px solid var(--red);border-right:3px solid var(--red);color:var(--red)">∥</td>`;
-        if (type === 'pos')  return `<td class="pos">+</td>`;
+        if (type === 'dbl') return `<td style="border-left:3px solid var(--red);border-right:3px solid var(--red);color:var(--red)">∥</td>`;
+        if (type === 'pos') return `<td class="pos">+</td>`;
         return `<td class="neg">−</td>`;
       }
       // Compute sign for each zone (4 zones between ±∞ and the 3 vals)
@@ -8694,20 +8694,20 @@ print(n)                 # Affiche l'année de dépassement</pre>
             <text x="340" y="32" font-size="11">$T$ → $P(M\\cap T)=${pMcapT}$</text>
             <!-- M ∩ T̄ -->
             <line x1="205" y1="56" x2="335" y2="76" stroke="var(--blue-lt)" stroke-width="1.5"/>
-            <text x="255" y="75" fill="var(--text-dim)" font-size="11">$${(1-pT_M).toFixed(2)}$</text>
+            <text x="255" y="75" fill="var(--text-dim)" font-size="11">$${(1 - pT_M).toFixed(2)}$</text>
             <text x="340" y="80" font-size="11">$\\overline{T}$</text>
             <!-- M̄ branch -->
             <line x1="65" y1="115" x2="195" y2="165" stroke="var(--blue-lt)" stroke-width="1.5"/>
-            <text x="105" y="160" fill="var(--text-dim)" font-size="11">$P(\\overline{M})=${1-pM}$</text>
+            <text x="105" y="160" fill="var(--text-dim)" font-size="11">$P(\\overline{M})=${1 - pM}$</text>
             <circle cx="200" cy="168" r="5" fill="var(--blue-lt)"/>
             <text x="207" y="172" font-size="11">$\\overline{M}$</text>
             <!-- M̄ ∩ T -->
             <line x1="205" y1="164" x2="335" y2="144" stroke="var(--blue-lt)" stroke-width="1.5"/>
             <text x="248" y="143" fill="var(--red)" font-size="11">$P_{\\overline{M}}(T)=${pT_nM}$</text>
-            <text x="340" y="148" font-size="11">$T$ → $P(\\overline{M}\\cap T)=${+((1-pM)*pT_nM).toFixed(4)}$</text>
+            <text x="340" y="148" font-size="11">$T$ → $P(\\overline{M}\\cap T)=${+((1 - pM) * pT_nM).toFixed(4)}$</text>
             <!-- M̄ ∩ T̄ -->
             <line x1="205" y1="172" x2="335" y2="192" stroke="var(--blue-lt)" stroke-width="1.5"/>
-            <text x="255" y="196" fill="var(--text-dim)" font-size="11">$${(1-pT_nM).toFixed(2)}$</text>
+            <text x="255" y="196" fill="var(--text-dim)" font-size="11">$${(1 - pT_nM).toFixed(2)}$</text>
             <text x="340" y="196" font-size="11">$\\overline{T}$</text>
           </svg>
           </div>
@@ -9113,7 +9113,7 @@ def seuil():
       <ul class="question-list">${qHTML}</ul>
     </div>`;
       }).join('');
-      setTimeout(() => renderKatex(bacContentEl), 50);
+      setTimeout(() => renderKatex(bacContentEl), 150);
     }
 
 
@@ -9198,12 +9198,13 @@ def seuil():
 
 <div class="course-section">
   <div class="course-section-title">3) Variations et Tableau de Signes</div>
-  <div class="course-thm"><span class="block-title">Sens de variation</span>
-    Le sens d'une droite affine dépend uniquement du signe de $a$ :<br/>
-    • Si $a > 0$ : la droite "monte", la fonction est <strong>strictement croissante</strong>.<br/>
-    • Si $a < 0$ : la droite "descend", la fonction est <strong>strictement décroissante</strong>.<br/>
-    • Si $a = 0$ : la droite est horizontale, la fonction est <strong>constante</strong>.
-  </div>
+  <div class="course-thm"><span class="block-title">Sens de variation (en supposant $u_0 > 0$)</span>
+  • Si $q > 1$ : la suite est <strong>croissante</strong> (croissance exponentielle).<br/>
+  • Si $0 &lt; q &lt; 1$ : la suite est <strong>décroissante</strong> et tend vers zéro.<br/>
+  • Si $q = 1$ : la suite est <strong>constante</strong>.<br/>
+  • Si $q &lt; 0$ : la suite est <strong>alternée en signe</strong> (ni croissante ni décroissante).<br/>
+  <em>Remarque : si $u_0 &lt; 0$, les sens de variation sont inversés pour les cas $q &gt; 1$ et $0 &lt; q &lt; 1$.</em>
+</div>
   <div class="course-method"><span class="block-title">Faire un tableau de signes</span>
     1. On cherche d'abord la racine (l'endroit où la droite coupe l'axe des abscisses) en résolvant $ax + b = 0$, ce qui donne $x = -\\frac{b}{a}$.<br/>
     2. On trace le tableau : la fonction est du <strong>signe contraire de $a$</strong> avant la racine, et du <strong>signe de $a$</strong> après la racine.
@@ -9353,14 +9354,14 @@ def seuil():
   <div class="course-thm"><span class="block-title">Sens de variation (en supposant $u_0 > 0$)</span>
     L'évolution dépend du fait que la raison soit supérieure ou inférieure à $1$ :<br/>
     • Si $q > 1$, on multiplie par "plus que $1$", la valeur grossit : la suite est <strong>croissante</strong> et s'envole vers l'infini (croissance exponentielle).<br/>
-    • Si $0 < q < 1$, on multiplie par "moins que $1$" (ex: $0{,}8$), la valeur rétrécit : la suite est <strong>décroissante</strong> et tendra lentement vers zéro (décroissance radioactive).
+    • Si $0 < q < 1$, on multiplie par "moins que $1$" (ex: $0{,}8$), la valeur rétrécit : la suite est <strong>décroissante</strong> et tendra lentement vers zéro (analogue à une décroissance exponentielle).
   </div>
 </div>
 
 <div class="course-section">
   <div class="course-section-title">3) Algorithmique de Seuil (Le "Tant Que")</div>
   <div class="course-method"><span class="block-title">Trouver une année de dépassement</span>
-    Très souvent au Bac, on te demande en quelle année une population ou un capital dépassera une certaine valeur (le seuil). On utilise une boucle <code>while</code> (Tant Que) en Python :
+    Très souvent au Bac, on demande en quelle année une population ou un capital dépassera une certaine valeur (le seuil). On utilise une boucle <code>while</code> (Tant Que) en Python :
     <pre style="background:rgba(255,255,255,0.05); padding:10px; border-radius:5px; font-family:monospace; margin-top:8px;">
 n = 0
 u = u0
@@ -9369,6 +9370,8 @@ while u < Seuil:
     n = n + 1    # On ajoute 1 au compteur d'années
 print(n)         # Affiche l'année où le seuil est enfin dépassé
     </pre>
+    <em>⚠️ Attention : cet algorithme suppose que la suite dépasse effectivement le seuil.
+    Si $q \leq 0$ ou si $u_0 \geq \text{Seuil}$ dès le départ, la boucle ne s'exécute pas (ou boucle infiniment) — à vérifier avant d'utiliser.</em>
   </div>
 </div>`;
 
@@ -9378,10 +9381,12 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
   <div class="course-method"><span class="block-title">Addition et Soustraction</span>
     On ne peut additionner ou soustraire deux fractions que si elles ont <strong>le même dénominateur</strong>.<br/>
     $$\\frac{a}{c} + \\frac{b}{c} = \\frac{a+b}{c}$$
-    <em>Exemple :</em> $\\frac{2}{3} + \\frac{5}{4}$. On choisit un dénominateur commun ($12$). $\\frac{2 \\times 4}{3 \\times 4} + \\frac{5 \\times 3}{4 \\times 3} = \\frac{8}{12} + \\frac{15}{12} = \\frac{23}{12}$.
+    <em>Exemple :</em> $\\frac{2}{3} + \\frac{5}{4}$ — on choisit le dénominateur commun $12$ :
+    $$\\frac{2 \\times 4}{3 \\times 4} + \\frac{5 \\times 3}{4 \\times 3} = \\frac{8}{12} + \\frac{15}{12} = \\frac{23}{12}$$
   </div>
   <div class="course-method"><span class="block-title">Multiplication et Division</span>
     • <strong>Multiplication :</strong> On multiplie les numérateurs entre eux, et les dénominateurs entre eux (pas besoin de dénominateur commun !).<br/>
+    $$\\frac{a}{b} \\times \\frac{c}{d} = \\frac{a \\times c}{b \\times d}$$
     • <strong>Division :</strong> Diviser par une fraction, c'est multiplier par son inverse.<br/>
     $$\\frac{a}{b} \\div \\frac{c}{d} = \\frac{a}{b} \\times \\frac{d}{c}$$
   </div>
@@ -9391,7 +9396,7 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
   <div class="course-section-title">2) Résolution d'équations du 1er degré</div>
   <div class="course-prop"><span class="block-title">Isoler l'inconnue $x$</span>
     Le but est de se retrouver avec "$x = ...$" en utilisant les opérations inverses de chaque côté du signe égal.<br/>
-    L'ordre de nettoyage classique est : 1) Addition/Soustraction, 2) Multiplication/Division.<br/>
+    L'ordre classique des opérations est : 1) Addition/Soustraction, 2) Multiplication/Division.<br/>
     <em>Exemple :</em> $4x - 7 = 5$<br/>
     On ajoute 7 des deux côtés : $4x = 5 + 7 \\implies 4x = 12$<br/>
     On divise par 4 : $x = \\frac{12}{4} = 3$.
@@ -9417,9 +9422,9 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
     • Double : $(a+b)(c+d) = ac + ad + bc + bd$<br/>
   </div>
   <div class="course-thm"><span class="block-title">Identités Remarquables (à savoir par cœur)</span>
-    1. Le carré d'une somme : $(a+b)^2 = a^2 + 2ab + b^2$<br/>
-    2. Le carré d'une différence : $(a-b)^2 = a^2 - 2ab + b^2$ (Attention au double produit !)<br/>
-    3. La différence de deux carrés : $(a-b)(a+b) = a^2 - b^2$
+    1. Le carré d'une somme : $$(a+b)^2 = a^2 + 2ab + b^2$$
+    2. Le carré d'une différence : $$(a-b)^2 = a^2 - 2ab + b^2$ (Attention au double produit !)<br/>
+    3. La différence de deux carrés : $$(a-b)(a+b) = a^2 - b^2$$
   </div>
 </div>`;
 
@@ -9428,7 +9433,7 @@ print(n)         # Affiche l'année où le seuil est enfin dépassé
       }
 
       courseEl.innerHTML = html;
-      setTimeout(() => renderKatex(courseEl), 50);
+      setTimeout(() => renderKatex(courseEl), 150);
     }
 
   </script>
