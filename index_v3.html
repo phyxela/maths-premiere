@@ -5052,23 +5052,41 @@
 
       bacCorrBtn.style.display = 'none';
 
-      bacCorrEl.innerHTML = `
-          <div class="correction-card visible" >
+      // 1. On initialise le bloc de correction
+      let correctionHTML = `
+          <div class="correction-card visible">
             <div class="corr-header">
               <span class="corr-icon">✅</span>
               <span class="corr-title">Corrigé du Bac Blanc — étape par étape</span>
-            </div>
-      ${currentBacExercises.map((ex, idx) => {
-        return `
-          <div class="bac-corr-ex">
-            <div class="bac-corr-ex-title">Exercice ${idx + 1}</div>
+            </div>`;
+
+      // 2. On boucle sur les exercices pour créer l'affichage en cascade
+      currentBacExercises.forEach((ex, index) => {
+        const isFirst = (index === 0);
+        const displayStyle = isFirst ? 'block' : 'none'; // Seul le 1er exo est visible
+
+        correctionHTML += `
+          <div class="bac-corr-ex" id="corr-exo-${index}" style="display: ${displayStyle}; padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: ${index < currentBacExercises.length - 1 ? '1px dashed var(--border)' : 'none'};">
+            <div class="bac-corr-ex-title">Exercice ${index + 1}</div>
             ${ex.correction || ''}
+            
+            ${index < currentBacExercises.length - 1 ? `
+              <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-ghost" 
+                        onclick="document.getElementById('corr-exo-${index + 1}').style.display='block'; this.parentElement.style.display='none';">
+                  Voir la correction de l'exercice ${index + 2} ↓
+                </button>
+              </div>
+            ` : `<div style="text-align: center; margin-top: 2rem; color: var(--green); font-family: 'JetBrains Mono', monospace; font-size: 13px;">✨ Fin de la correction ✨</div>`}
           </div>
         `;
-      }).join('')
-        }
-    </div>
-          `;
+      });
+
+      // 3. On referme la div globale
+      correctionHTML += `</div>`;
+
+      // 4. On injecte le tout et on lance KaTeX
+      bacCorrEl.innerHTML = correctionHTML;
 
       updateMath(bacCorrEl);
     }
